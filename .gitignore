@@ -40,6 +40,7 @@ proguard/
 
 # Gradle generated files
 .gradle/
+build.gradle
 
 # Signing files
 .signing/
