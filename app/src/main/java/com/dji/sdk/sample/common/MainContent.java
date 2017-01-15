@@ -13,7 +13,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dji.sdk.sample.R;
-import com.dji.sdk.sample.utils.DJIDialog;
 
 import dji.common.error.DJIError;
 import dji.sdk.base.DJIBaseProduct;
@@ -57,7 +56,6 @@ public class MainContent extends RelativeLayout
 //        mButtonHoverNow.setOnClickListener(new OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                if(Utils.isFastDoubleClick()) return;
 //                mProduct = DJISampleApplication.getProductInstance();
 //                DJIFlightController flightController = ((DJIAircraft) mProduct).getFlightController();
 //                flightController.takeOff(null);
@@ -67,7 +65,6 @@ public class MainContent extends RelativeLayout
 //        mButtonLand.setOnClickListener(new OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                if(Utils.isFastDoubleClick()) return;
 //                mProduct = DJISampleApplication.getProductInstance();
 //                final DJIFlightController flightController = ((DJIAircraft) mProduct).getFlightController();
 //                flightController.autoLanding(new DJICompletionCallback() {
