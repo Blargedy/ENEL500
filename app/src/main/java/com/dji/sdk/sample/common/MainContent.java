@@ -4,22 +4,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dji.sdk.sample.R;
-
-import dji.common.error.DJIError;
 import dji.sdk.base.DJIBaseProduct;
-import dji.sdk.products.DJIAircraft;
-import dji.sdk.flightcontroller.DJIFlightController;
-import dji.common.util.DJICommonCallbacks.DJICompletionCallback;
-import dji.thirdparty.eventbus.EventBus;
 
 /**
  * Created by dji on 15/12/18.
@@ -52,29 +44,6 @@ public class MainContent extends RelativeLayout
         mTextConnectionStatus = (TextView) findViewById(R.id.text_connection_status);
         mButtonHoverNow = (Button) findViewById(R.id.btn_hover);
         mButtonLand = (Button) findViewById(R.id.btn_land);
-
-//        mButtonHoverNow.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mProduct = DJISampleApplication.getProductInstance();
-//                DJIFlightController flightController = ((DJIAircraft) mProduct).getFlightController();
-//                flightController.takeOff(null);
-//            }
-//        });
-//
-//        mButtonLand.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mProduct = DJISampleApplication.getProductInstance();
-//                final DJIFlightController flightController = ((DJIAircraft) mProduct).getFlightController();
-//                flightController.autoLanding(new DJICompletionCallback() {
-//                    @Override
-//                    public void onResult(DJIError error) {
-//                        flightController.turnOffMotors(null);
-//                    }
-//                });
-//            }
-//        });
     }
 
     @Override

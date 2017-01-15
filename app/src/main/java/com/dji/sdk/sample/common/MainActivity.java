@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Alex", "Comes into the onCreate");
+
         // When the compile and target version is higher than 22, please request the following permissions at runtime to ensure the SDK work well.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ActivityCompat.requestPermissions(this,
@@ -57,21 +57,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     , 1);
         }
-        /**
-         * each time the USB from the RC is connected/disconnected,
-         * the phone will prompt the user to select the app they want
-         * to connect
-         */
-//        Intent aoaIntent = getIntent();
-//        if (aoaIntent!=null) {
-//            String action = aoaIntent.getAction();
-//            if (action== UsbManager.ACTION_USB_ACCESSORY_ATTACHED) {
-//                Intent attachedIntent=new Intent();
-//
-//                attachedIntent.setAction(DJISDKManager.USB_ACCESSORY_ATTACHED);
-//                sendBroadcast(attachedIntent);
-//            }
-//        }
 
         setContentView(R.layout.activity_main);
 
@@ -198,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
         mPopInAnimator.start();
 
         refreshTitle();
-
     }
 
     @Override
@@ -220,11 +204,5 @@ public class MainActivity extends AppCompatActivity {
             popView();
         }
 
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig){
-        Log.d("Alex", "Comes into the onConfigruation");
-        super.onConfigurationChanged(newConfig);
     }
 }

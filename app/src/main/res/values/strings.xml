@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DJI SDK Sample</string>
+    <string name="app_name">Hydra Lite</string>
 
     <!-- Main activity UI string -->
     <string name="connection_loose">Status: No Product Connected</string>

@@ -122,7 +122,7 @@ public class DJISampleApplication extends Application {
         }
 
         private DJIBaseProduct.DJIBaseProductListener mDJIBaseProductListener = new DJIBaseProduct.DJIBaseProductListener() {
-
+            //TODO Extract this into its own class BaseProductChangeNotifier
             @Override
             public void onComponentChange(DJIBaseProduct.DJIComponentKey key, DJIBaseComponent oldComponent, DJIBaseComponent newComponent) {
 
@@ -136,9 +136,7 @@ public class DJISampleApplication extends Application {
 
             @Override
             public void onProductConnectivityChanged(boolean isConnected) {
-
                 Log.d("Alex", "onProductConnectivityChanged: " + isConnected);
-
                 notifyStatusChange();
             }
 
