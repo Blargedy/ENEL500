@@ -49,6 +49,6 @@ public class SimpleDemoView extends RelativeLayout
     {
         connectionStatusText_ = (TextView) findViewById(R.id.text_connection_status);
         hoverNowButton_ = (Button) findViewById(R.id.btn_hover);
-        landButton_ = (Button) findViewById(R.id.btn_land);
+        landButton_ = (Button) findViewById(R.id.btn_execute_mission);
     }
 }

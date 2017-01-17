@@ -1,50 +1,60 @@
 package com.dji.sdk.sample.common;
 
 import android.Manifest;
-import android.animation.AnimatorInflater;
-import android.animation.LayoutTransition;
-import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.dji.sdk.sample.R;
-
-import java.util.Stack;
+import com.dji.sdk.sample.common.mission.MissionGenerator;
 import dji.sdk.base.DJIBaseProduct;
-import dji.thirdparty.eventbus.EventBus;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity implements View.OnClickListener
+{
     public static final String TAG = MainActivity.class.getName();
 
-    private FrameLayout mContentFrameLayout;
+    private TextView connectionStatusText_;
+    private Button hoverNowButton_;
+    private Button executeMissionButton_;
 
-    private ObjectAnimator mPushInAnimator;
-    private ObjectAnimator mPushOutAnimator;
-    private ObjectAnimator mPopInAnimator;
-    private LayoutTransition mPopOutTransition;
+    private MissionGenerator missionGenerator_;
 
-    private Stack<SetViewWrapper> mStack;
-
-    private TextView mTitleTextView;
+    protected BroadcastReceiver receiver_;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
-        // When the compile and target version is higher than 22, please request the following permissions at runtime to ensure the SDK work well.
+        requestPermissions();
+        setContentView(R.layout.activity_main);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(DJISampleApplication.FLAG_CONNECTION_CHANGE);
+
+        receiver_  = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                onProductConnectionChange();
+            }
+        };
+
+        registerReceiver(receiver_, filter);
+
+        initUI();
+    }
+
+    private void requestPermissions()
+    {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.VIBRATE,
@@ -57,152 +67,66 @@ public class MainActivity extends AppCompatActivity {
                     }
                     , 1);
         }
+    }
 
-        setContentView(R.layout.activity_main);
+    private void onProductConnectionChange()
+    {
+        updateUiOnConnectionChange();
+//        initMissionManager();
+//        initFlightController();
+    }
 
-        setupActionBar();
-        mContentFrameLayout = (FrameLayout) findViewById(R.id.framelayout_content);
+    private void initUI()
+    {
+        Log.v(TAG, "initUI");
 
-        initParams();
-        EventBus.getDefault().register(this);
+        connectionStatusText_ = (TextView) findViewById(R.id.text_connection_status);
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(DJISampleApplication.FLAG_CONNECTION_CHANGE);
-        registerReceiver(mReceiver, filter);
+        hoverNowButton_ = (Button) findViewById(R.id.btn_hover);
+        hoverNowButton_.setEnabled(false);
+        hoverNowButton_.setOnClickListener(this);
 
+        executeMissionButton_ = (Button) findViewById(R.id.btn_execute_mission);
+        executeMissionButton_.setEnabled(false);
+        executeMissionButton_.setOnClickListener(this);
+    }
+
+    private void updateUiOnConnectionChange()
+    {
+        DJIBaseProduct product = DJISampleApplication.getProductInstance();
+
+        if (product != null && product.isConnected())
+        {
+            connectionStatusText_.setText("Status: Connected");
+            executeMissionButton_.setEnabled(true);
+        }
+        else
+        {
+            connectionStatusText_.setText("Status: No Product Connected");
+            executeMissionButton_.setEnabled(false);
+        }
     }
 
     @Override
-    protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        unregisterReceiver(mReceiver);
-        super.onDestroy();
-    }
+    public void onClick(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.btn_hover:
+            {
 
-    private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (null != actionBar) {
-            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-            actionBar.setCustomView(R.layout.actionbar_custom);
-
-            mTitleTextView = (TextView)(actionBar.getCustomView().findViewById(R.id.title_tv));
-        }
-    }
-
-    private void setupInAnimations() {
-        mPushInAnimator = (ObjectAnimator) AnimatorInflater.loadAnimator(this, R.animator.slide_in_right);
-        mPushOutAnimator = (ObjectAnimator) AnimatorInflater.loadAnimator(this, R.animator.fade_out);
-        mPopInAnimator = (ObjectAnimator) AnimatorInflater.loadAnimator(this, R.animator.fade_in);
-        ObjectAnimator popOutAnimator = (ObjectAnimator) AnimatorInflater.loadAnimator(this, R.animator.slide_out_right);
-
-        mPushOutAnimator.setStartDelay(100);
-
-        mPopOutTransition = new LayoutTransition();
-        mPopOutTransition.setAnimator(LayoutTransition.DISAPPEARING, popOutAnimator);
-        mPopOutTransition.setDuration(popOutAnimator.getDuration());
-    }
-
-    private void initParams() {
-        setupInAnimations();
-
-        mStack = new Stack<SetViewWrapper>();
-        View view = mContentFrameLayout.getChildAt(0);
-        mStack.push(new SetViewWrapper(view, R.string.activity_component_list));
-    }
-
-    private void pushView(SetViewWrapper wrapper) {
-        if (mStack.size() <= 0) return;
-
-        mContentFrameLayout.setLayoutTransition(null);
-
-        int titleId = wrapper.getTitleId();
-        View showView = wrapper.getView();
-
-        int preTitleId = mStack.peek().getTitleId();
-        View preView = mStack.peek().getView();
-
-        mStack.push(wrapper);
-
-        mContentFrameLayout.addView(showView);
-
-        mPushOutAnimator.setTarget(preView);
-        mPushOutAnimator.start();
-
-        mPushInAnimator.setTarget(showView);
-        mPushInAnimator.setFloatValues(mContentFrameLayout.getWidth(), 0);
-        mPushInAnimator.start();
-
-        refreshTitle();
-    }
-
-    protected BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            refreshTitle();
-        }
-
-    };
-
-    private void refreshTitle() {
-        if(mStack.size() > 1) {
-            SetViewWrapper wrapper = mStack.peek();
-            mTitleTextView.setText(wrapper.getTitleId());
-        } else if(mStack.size() == 1) {
-            DJIBaseProduct product = DJISampleApplication.getProductInstance();
-            if(product != null && product.getModel() != null) {
-                mTitleTextView.setText("" + product.getModel().getDisplayName());
-            } else {
-                mTitleTextView.setText(R.string.app_name);
+                break;
             }
+            case R.id.btn_execute_mission:
+            {
+//                missionGenerator_.generateMissionWithOneWaypoint(
+//                        DJISampleApplication.getProductInstance().getMissionManager());
+
+
+                break;
+            }
+            default:
+                break;
         }
-    }
-
-    private void popView() {
-
-        if (mStack.size() <= 1) {
-            finish();
-            return;
-        }
-
-        SetViewWrapper removeWrapper = mStack.pop();
-
-        View showView = mStack.peek().getView();
-        View removeView = removeWrapper.getView();
-
-        int titleId = mStack.peek().getTitleId();
-        int preTitleId = 0;
-        if (mStack.size() > 1) {
-            preTitleId = mStack.get(mStack.size() - 2).getTitleId();
-        }
-
-        mContentFrameLayout.setLayoutTransition(mPopOutTransition);
-        mContentFrameLayout.removeView(removeView);
-
-        mPopInAnimator.setTarget(showView);
-        mPopInAnimator.start();
-
-        refreshTitle();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mStack.size() > 1) {
-            popView();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    public void onEventMainThread(SetViewWrapper wrapper) {
-        pushView(wrapper);
-    }
-
-    public void onEventMainThread(SetViewWrapper.Remove wrapper) {
-
-        if (mStack.peek().getView() == wrapper.getView()) {
-            popView();
-        }
-
     }
 }
