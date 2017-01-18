@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,12 +16,29 @@ import com.dji.sdk.sample.R;
 public class SimpleDemoView extends RelativeLayout
 {
     private TextView connectionStatusText_;
-    private Button hoverNowButton_;
+    private Button takeOffButton_;
     private Button landButton_;
+    private Button executeMissionButton_;
 
-    public SimpleDemoView(Context context, AttributeSet attrs)
-    {
+    public SimpleDemoView(
+            Context context) {
+        super(context);
+        initUI();
+    }
+
+    public SimpleDemoView(
+            Context context,
+            AttributeSet attrs) {
         super(context, attrs);
+        initUI();
+    }
+
+    public SimpleDemoView(
+            Context context,
+            AttributeSet attrs,
+            int defStyle) {
+        super(context, attrs, defStyle);
+        initUI();
     }
 
     public TextView connectionStatusText()
@@ -28,9 +46,9 @@ public class SimpleDemoView extends RelativeLayout
         return connectionStatusText_;
     }
 
-    public Button hoverNowButton()
+    public Button takeOffButton()
     {
-        return hoverNowButton_;
+        return takeOffButton_;
     }
 
     public Button landButton()
@@ -38,17 +56,24 @@ public class SimpleDemoView extends RelativeLayout
         return landButton_;
     }
 
-    @Override
-    protected void onFinishInflate()
+    public Button executeMissionButton()
     {
-        super.onFinishInflate();
-        initUI();
+        return executeMissionButton_;
     }
 
     private void initUI()
     {
+        inflate(getContext(), R.layout.simple_demo, this);
+
         connectionStatusText_ = (TextView) findViewById(R.id.text_connection_status);
-        hoverNowButton_ = (Button) findViewById(R.id.btn_hover);
-        landButton_ = (Button) findViewById(R.id.btn_execute_mission);
+
+        takeOffButton_ = (Button) findViewById(R.id.btn_takeoff);
+        takeOffButton_.setEnabled(false);
+
+        landButton_ = (Button) findViewById(R.id.btn_land);
+        landButton_.setVisibility(View.GONE);
+
+        executeMissionButton_ = (Button) findViewById(R.id.btn_execute_mission);
+        executeMissionButton_.setEnabled(false);
     }
 }
