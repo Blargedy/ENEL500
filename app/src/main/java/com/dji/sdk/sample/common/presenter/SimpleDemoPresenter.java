@@ -1,10 +1,9 @@
 package com.dji.sdk.sample.common.presenter;
 
-import android.content.Context;
 import android.view.View;
 
 import com.dji.sdk.sample.R;
-import com.dji.sdk.sample.common.DJISampleApplication;
+import com.dji.sdk.sample.common.utility.DJISampleApplication;
 import com.dji.sdk.sample.common.mission.FlightController;
 import com.dji.sdk.sample.common.view.SimpleDemoView;
 
@@ -37,7 +36,7 @@ public class SimpleDemoPresenter implements
     {
         view_.takeOffButton().setOnClickListener(this);
         view_.landButton().setOnClickListener(this);
-        view_.executeMissionButton().setOnClickListener(this);
+        view_.shootPhotoButton().setOnClickListener(this);
     }
 
     public void productConnectionChanged()
@@ -48,6 +47,7 @@ public class SimpleDemoPresenter implements
         {
             view_.connectionStatusText().setText("Status: Connected");
             view_.takeOffButton().setEnabled(true);
+            view_.shootPhotoButton().setEnabled(true);
         }
         else
         {
@@ -73,7 +73,7 @@ public class SimpleDemoPresenter implements
 
                 break;
 
-            case R.id.btn_execute_mission:
+            case R.id.btn_shoot_photo:
 
             default:
                 break;

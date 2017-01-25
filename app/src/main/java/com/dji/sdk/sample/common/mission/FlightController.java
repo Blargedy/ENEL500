@@ -1,6 +1,6 @@
 package com.dji.sdk.sample.common.mission;
 
-import com.dji.sdk.sample.common.DJISampleApplication;
+import com.dji.sdk.sample.common.utility.DJISampleApplication;
 
 import dji.common.flightcontroller.DJIFlightControllerCurrentState;
 import dji.common.util.DJICommonCallbacks;

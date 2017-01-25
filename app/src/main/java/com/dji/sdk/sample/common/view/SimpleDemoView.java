@@ -13,12 +13,14 @@ import com.dji.sdk.sample.R;
  * Created by Julia on 2017-01-15.
  */
 
-public class SimpleDemoView extends RelativeLayout
+public class SimpleDemoView
+        extends RelativeLayout
+        implements I_ShootPhotoView, I_BasicFlightControlView, I_AircraftConnectionView
 {
     private TextView connectionStatusText_;
     private Button takeOffButton_;
     private Button landButton_;
-    private Button executeMissionButton_;
+    private Button shootPhotoButton_;
 
     public SimpleDemoView(
             Context context) {
@@ -41,24 +43,28 @@ public class SimpleDemoView extends RelativeLayout
         initUI();
     }
 
+    @Override
     public TextView connectionStatusText()
     {
         return connectionStatusText_;
     }
 
+    @Override
     public Button takeOffButton()
     {
         return takeOffButton_;
     }
 
+    @Override
     public Button landButton()
     {
         return landButton_;
     }
 
-    public Button executeMissionButton()
+    @Override
+    public Button shootPhotoButton()
     {
-        return executeMissionButton_;
+        return shootPhotoButton_;
     }
 
     private void initUI()
@@ -73,7 +79,7 @@ public class SimpleDemoView extends RelativeLayout
         landButton_ = (Button) findViewById(R.id.btn_land);
         landButton_.setVisibility(View.GONE);
 
-        executeMissionButton_ = (Button) findViewById(R.id.btn_execute_mission);
-        executeMissionButton_.setEnabled(false);
+        shootPhotoButton_ = (Button) findViewById(R.id.btn_shoot_photo);
+        shootPhotoButton_.setEnabled(false);
     }
 }

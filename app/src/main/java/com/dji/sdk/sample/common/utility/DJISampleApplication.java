@@ -1,12 +1,11 @@
-package com.dji.sdk.sample.common;
+package com.dji.sdk.sample.common.utility;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.dji.sdk.sample.R;
@@ -15,6 +14,7 @@ import dji.common.error.DJIError;
 import dji.common.error.DJISDKError;
 import dji.sdk.base.DJIBaseComponent;
 import dji.sdk.base.DJIBaseProduct;
+import dji.sdk.camera.DJICamera;
 import dji.sdk.products.DJIAircraft;
 import dji.sdk.products.DJIHandHeld;
 import dji.sdk.sdkmanager.DJIBluetoothProductConnector;
@@ -27,15 +27,11 @@ public class DJISampleApplication extends Application {
 
     private static final String TAG = DJISampleApplication.class.getName();
 
-    public static final String FLAG_CONNECTION_CHANGE = "com_example_dji_sdkdemo3_connection_change";
-
     private static DJIBaseProduct mProduct;
 
     private static DJIBluetoothProductConnector bluetoothConnector = null;
 
     private Handler mHandler;
-
-    private static boolean connected = false;
 
     /**
      * Gets instance of the specific product connected after the
@@ -161,7 +157,7 @@ public class DJISampleApplication extends Application {
 
             @Override
             public void run() {
-                Intent intent = new Intent(FLAG_CONNECTION_CHANGE);
+                Intent intent = new Intent(BroadcastIntentNames.DJI_AIRCRAFT_CONNECTION_CHANGED);
                 sendBroadcast(intent);
             }
         };
