@@ -1,8 +1,11 @@
 package com.dji.sdk.sample.common.presenter;
 
+import android.content.Intent;
 import android.view.View;
 
 import com.dji.sdk.sample.R;
+import com.dji.sdk.sample.common.Activities.FlightControlActivity;
+import com.dji.sdk.sample.common.SimpleDemoActivity;
 import com.dji.sdk.sample.common.utility.DJISampleApplication;
 import com.dji.sdk.sample.common.mission.FlightController;
 import com.dji.sdk.sample.common.view.SimpleDemoView;
@@ -19,13 +22,16 @@ public class SimpleDemoPresenter implements
         View.OnClickListener,
         DJICommonCallbacks.DJICompletionCallback
 {
+    private SimpleDemoActivity mainActivity_;
     private SimpleDemoView view_;
     private FlightController flightController_;
 
     public SimpleDemoPresenter(
+            SimpleDemoActivity activity,
             SimpleDemoView view,
             FlightController flightController)
     {
+        mainActivity_ = activity;
         view_ = view;
         flightController_ = flightController;
 
@@ -61,19 +67,20 @@ public class SimpleDemoPresenter implements
     {
         switch (view.getId())
         {
-            case R.id.btn_takeoff:
-                view_.takeOffButton().setEnabled(false);
-                flightController_.takeoff(this);
+            case R.id.btn_open_flight_control:
+//                view_.takeOffButton().setEnabled(false);
+//                flightController_.takeoff(this);
+                mainActivity_.openFlightControlActivity();
 
                 break;
 
-            case R.id.btn_land:
-                view_.landButton().setEnabled(false);
-                flightController_.land(this);
-
-                break;
-
-            case R.id.btn_shoot_photo:
+//            case R.id.btn_land:
+//                view_.landButton().setEnabled(false);
+//                flightController_.land(this);
+//
+//                break;
+//
+//            case R.id.btn_shoot_photo:
 
             default:
                 break;

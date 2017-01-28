@@ -73,7 +73,7 @@ public class SimpleDemoView
 
         connectionStatusText_ = (TextView) findViewById(R.id.text_connection_status);
 
-        takeOffButton_ = (Button) findViewById(R.id.btn_takeoff);
+        takeOffButton_ = (Button) findViewById(R.id.btn_open_flight_control);
         takeOffButton_.setEnabled(false);
 
         landButton_ = (Button) findViewById(R.id.btn_land);

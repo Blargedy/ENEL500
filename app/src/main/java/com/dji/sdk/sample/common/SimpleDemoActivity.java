@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.dji.sdk.sample.common.Activities.FlightControlActivity;
 import com.dji.sdk.sample.common.mission.FlightController;
 import com.dji.sdk.sample.common.presenter.ShootPhotoButtonListener;
 import com.dji.sdk.sample.common.presenter.ShootPhotoPresenter;
@@ -32,12 +33,23 @@ public class SimpleDemoActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        //request permissions
         permissionRequester_ = new UserPermissionRequester();
+
+        //setup context
         contextManager_ = new ApplicationContextManager(this);
+
+        //set view
         simpleDemoView_ = new SimpleDemoView(this);
+
+        //set controller
         flightController_ = new FlightController();
-        simpleDemoPresenter_ = new SimpleDemoPresenter(simpleDemoView_, flightController_);
+
+        //set presenters
+        simpleDemoPresenter_ = new SimpleDemoPresenter(this,simpleDemoView_, flightController_);
         shootPhotoPresenter_ = new ShootPhotoPresenter(contextManager_, simpleDemoView_);
+
         shootPhotoButtonListener_ = new ShootPhotoButtonListener(contextManager_, simpleDemoView_);
 
         permissionRequester_.requestPermissions(this);
@@ -57,5 +69,8 @@ public class SimpleDemoActivity extends AppCompatActivity
         registerReceiver(receiver_, filter);
     }
 
-
+    public void openFlightControlActivity(){
+        Intent intent = new Intent(this, FlightControlActivity.class);
+        startActivity(intent);
+    }
 }

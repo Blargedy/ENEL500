@@ -19,14 +19,14 @@
         android:textStyle="bold"/>
 
     <Button
-        android:id="@+id/btn_takeoff"
+        android:id="@+id/btn_open_flight_control"
         android:layout_width="150dp"
         android:layout_height="55dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="280dp"
         android:background="@drawable/round_btn"
         android:textAllCaps="false"
-        android:text="Take Off"
+        android:text="Open Flight Control"
         android:textColor="@color/common_text_color"
         android:textSize="15dp"
         />
