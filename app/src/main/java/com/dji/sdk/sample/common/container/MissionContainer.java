@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.container;
 
+import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
+import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.mission.MissionGenerator;
 import com.dji.sdk.sample.common.presenter.MissionGenerationPresenter;
 import com.dji.sdk.sample.common.presenter.MissionOperationPresenter;
@@ -13,6 +15,9 @@ import com.dji.sdk.sample.common.view.SimpleDemoView;
 
 public class MissionContainer
 {
+    private InitialMissionModel initialMissionModel_;
+    private GeneratedMissionModel generatedMissionModel_;
+
     private MissionGenerator missionGenerator_;
     private MissionGenerationPresenter missionGenerationPresenter_;
     private MissionOperationPresenter missionOperationPresenter_;
@@ -22,6 +27,9 @@ public class MissionContainer
             SimpleDemoView simpleDemoView,
             I_ApplicationContextManager contextManager)
     {
+        initialMissionModel_ = new InitialMissionModel();
+        generatedMissionModel_ = new GeneratedMissionModel();
+
         missionGenerator_ = new MissionGenerator();
         missionGenerationPresenter_ = new MissionGenerationPresenter(
                 simpleDemoView.generateMissionButton(),

@@ -12,20 +12,22 @@ import com.dji.sdk.sample.common.mission.MissionGenerator;
 public class MissionOperationPresenter implements View.OnClickListener
 {
     private Button startMissionButton_;
+    // Image transfer service
+    // Periodically pause the mission, trigger a transfer and restart the mission
 
     public MissionOperationPresenter(
             Button startMissionButton)
     {
         startMissionButton_ = startMissionButton;
         startMissionButton_.setOnClickListener(this);
-
     }
 
     @Override
     public void onClick(View view) {
         if(view.getId() == startMissionButton_.getId())
         {
-
+            // Prepare mission
+            // start mission
         }
     }
 }

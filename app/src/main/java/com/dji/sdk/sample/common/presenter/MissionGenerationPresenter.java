@@ -3,6 +3,8 @@ package com.dji.sdk.sample.common.presenter;
 import android.view.View;
 import android.widget.Button;
 
+import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
+import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.mission.MissionGenerator;
 
 /**
@@ -24,6 +26,7 @@ public class MissionGenerationPresenter implements View.OnClickListener
         generateMissionButton_.setOnClickListener(this);
 
         startMissionButton_ = startMissionButton;
+        startMissionButton_.setEnabled(false);
 
         missionGenerator_ = missionGenerator;
     }

@@ -5,6 +5,18 @@ package com.dji.sdk.sample.common.mission;
  */
 
 public class Coordinate {
-    double latitude;
-    double longitude;
+    double latitude_;
+    double longitude_;
+
+    public Coordinate()
+    {
+        latitude_ = 0.0;
+        longitude_ = 0.0;
+    }
+
+    public Coordinate(double latitude, double longitude)
+    {
+        latitude_ = latitude;
+        longitude_ = longitude;
+    }
 }

@@ -5,8 +5,28 @@ package com.dji.sdk.sample.common.mission;
  */
 
 public class MissionBoundary {
-    public Coordinate topRight;
-    public Coordinate topLeft;
-    public Coordinate bottomRight;
-    public Coordinate bottomLeft;
+    private Coordinate topRight_;
+    private Coordinate bottomLeft_;
+
+    public MissionBoundary()
+    {
+        topRight_ = new Coordinate();
+        bottomLeft_ = new Coordinate();
+    }
+
+    public MissionBoundary(Coordinate topRight, Coordinate bottomLeft)
+    {
+        topRight_ = topRight;
+        bottomLeft_ = bottomLeft;
+    }
+
+    Coordinate topRight()
+    {
+        return topRight_;
+    }
+
+    Coordinate bottomLeft()
+    {
+        return bottomLeft_;
+    }
 }
