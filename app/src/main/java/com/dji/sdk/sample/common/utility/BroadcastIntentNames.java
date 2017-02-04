@@ -5,6 +5,6 @@ package com.dji.sdk.sample.common.utility;
  */
 
 public interface BroadcastIntentNames {
-    static public final String SHOOT_PHOTO_BUTTON_PRESSED = "SHOOT_PHOTO_BUTTON_PRESSED";
-    static public final String DJI_AIRCRAFT_CONNECTION_CHANGED = "DJI_AIRCRAFT_CONNECTION_CHANGED";
+    static final String SHOOT_PHOTO_BUTTON_PRESSED = "SHOOT_PHOTO_BUTTON_PRESSED";
+    static final String DJI_AIRCRAFT_CONNECTION_CHANGED = "DJI_AIRCRAFT_CONNECTION_CHANGED";
 }

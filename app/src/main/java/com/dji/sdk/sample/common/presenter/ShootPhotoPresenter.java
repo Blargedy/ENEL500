@@ -5,17 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.utility.DJISampleApplication;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
-import com.dji.sdk.sample.common.view.I_ShootPhotoView;
-
-import java.io.File;
 
 import dji.common.camera.DJICameraSettingsDef;
-import dji.common.error.DJICameraError;
 import dji.common.error.DJIError;
 import dji.common.util.DJICommonCallbacks;
 import dji.sdk.camera.DJICamera;
@@ -30,22 +27,22 @@ public class ShootPhotoPresenter
         implements DJIPlaybackManager.CameraFileDownloadCallback
 {
     I_ApplicationContextManager contextManager_;
-    I_ShootPhotoView view_;
+    Button shootPhotoButton_;
 
     public ShootPhotoPresenter(
             I_ApplicationContextManager contextManager,
-            I_ShootPhotoView view)
+            Button shootPhotoButton)
     {
         LocalBroadcastManager.getInstance(contextManager.getApplicationContext()).registerReceiver(
                 this, new IntentFilter(BroadcastIntentNames.SHOOT_PHOTO_BUTTON_PRESSED));
         contextManager_ = contextManager;
-        view_ = view;
+        shootPhotoButton_ = shootPhotoButton;
     }
 
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        view_.shootPhotoButton().setEnabled(false);
+        shootPhotoButton_.setEnabled(false);
         shootPhoto();
         //downloadPhoto();
     }

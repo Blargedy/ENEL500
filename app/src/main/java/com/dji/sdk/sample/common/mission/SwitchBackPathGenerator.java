@@ -8,8 +8,8 @@ import java.util.Vector;
  */
 
 public class SwitchBackPathGenerator {
-    public static List<MissionGenerator.Coordinate> generateSwitchback(MissionGenerator.Boundary boundary, double altitude){
-        List<MissionGenerator.Coordinate> switchbackPoints= new Vector<MissionGenerator.Coordinate>();
+    public static List<Coordinate> generateSwitchback(MissionBoundary boundary, double altitude){
+        List<Coordinate> switchbackPoints= new Vector<Coordinate>();
         return switchbackPoints;
     }
 }

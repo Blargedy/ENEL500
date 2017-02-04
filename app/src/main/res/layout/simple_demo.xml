@@ -19,30 +19,30 @@
         android:textStyle="bold"/>
 
     <Button
-        android:id="@+id/btn_takeoff"
+        android:id="@+id/btn_generate_mission"
         android:layout_width="150dp"
         android:layout_height="55dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="280dp"
         android:background="@drawable/round_btn"
         android:textAllCaps="false"
-        android:text="Take Off"
+        android:text="Generate Mission"
         android:textColor="@color/common_text_color"
         android:textSize="15dp"
         />
 
     <Button
-        android:id="@+id/btn_land"
+        android:id="@+id/btn_start_mission"
         android:layout_width="150dp"
         android:layout_height="55dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="280dp"
+        android:layout_below="@+id/btn_generate_mission"
         android:background="@drawable/round_btn"
         android:textAllCaps="false"
-        android:text="Land"
+        android:layout_marginTop="25dp"
+        android:text="Start Mission"
         android:textColor="@color/common_text_color"
         android:textSize="15dp"
-        android:visibility="gone"
         />
 
     <Button
@@ -50,7 +50,7 @@
         android:layout_width="150dp"
         android:layout_height="55dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/btn_takeoff"
+        android:layout_below="@+id/btn_start_mission"
         android:background="@drawable/round_btn"
         android:textAllCaps="false"
         android:layout_marginTop="25dp"

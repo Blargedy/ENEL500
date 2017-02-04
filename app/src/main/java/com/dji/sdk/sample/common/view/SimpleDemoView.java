@@ -15,11 +15,10 @@ import com.dji.sdk.sample.R;
 
 public class SimpleDemoView
         extends RelativeLayout
-        implements I_ShootPhotoView, I_BasicFlightControlView, I_AircraftConnectionView
 {
     private TextView connectionStatusText_;
-    private Button takeOffButton_;
-    private Button landButton_;
+    private Button generateMissionButton_;
+    private Button startMissionButton_;
     private Button shootPhotoButton_;
 
     public SimpleDemoView(
@@ -43,25 +42,21 @@ public class SimpleDemoView
         initUI();
     }
 
-    @Override
     public TextView connectionStatusText()
     {
         return connectionStatusText_;
     }
 
-    @Override
-    public Button takeOffButton()
+    public Button generateMissionButton()
     {
-        return takeOffButton_;
+        return generateMissionButton_;
     }
 
-    @Override
-    public Button landButton()
+    public Button startMissionButton()
     {
-        return landButton_;
+        return startMissionButton_;
     }
 
-    @Override
     public Button shootPhotoButton()
     {
         return shootPhotoButton_;
@@ -72,14 +67,8 @@ public class SimpleDemoView
         inflate(getContext(), R.layout.simple_demo, this);
 
         connectionStatusText_ = (TextView) findViewById(R.id.text_connection_status);
-
-        takeOffButton_ = (Button) findViewById(R.id.btn_takeoff);
-        takeOffButton_.setEnabled(false);
-
-        landButton_ = (Button) findViewById(R.id.btn_land);
-        landButton_.setVisibility(View.GONE);
-
+        generateMissionButton_ = (Button) findViewById(R.id.btn_generate_mission);
+        startMissionButton_ = (Button) findViewById(R.id.btn_start_mission);
         shootPhotoButton_ = (Button) findViewById(R.id.btn_shoot_photo);
-        shootPhotoButton_.setEnabled(false);
     }
 }

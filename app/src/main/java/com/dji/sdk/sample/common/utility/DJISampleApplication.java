@@ -125,14 +125,12 @@ public class DJISampleApplication extends Application {
                 if(newComponent != null) {
                     newComponent.setDJIComponentListener(mDJIComponentListener);
                 }
-                Log.d("Alex", String.format("onComponentChange key:%s, oldComponent:%s, newComponent:%s", key, oldComponent, newComponent));
 
                 notifyStatusChange();
             }
 
             @Override
             public void onProductConnectivityChanged(boolean isConnected) {
-                Log.d("Alex", "onProductConnectivityChanged: " + isConnected);
                 notifyStatusChange();
             }
 
@@ -142,7 +140,6 @@ public class DJISampleApplication extends Application {
 
             @Override
             public void onComponentConnectivityChanged(boolean isConnected) {
-                Log.d("Alex", "onComponentConnectivityChanged: " + isConnected);
                 notifyStatusChange();
             }
 
