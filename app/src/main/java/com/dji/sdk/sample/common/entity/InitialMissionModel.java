@@ -14,7 +14,7 @@ public class InitialMissionModel
     public InitialMissionModel()
     {
         missionBoundary_ = new MissionBoundary();
-        altitude_ = 5.0f;
+        altitude_ = 15.0f;
     }
 
     public MissionBoundary missionBoundary()

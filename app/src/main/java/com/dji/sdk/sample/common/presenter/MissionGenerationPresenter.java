@@ -35,7 +35,7 @@ public class MissionGenerationPresenter implements View.OnClickListener
     public void onClick(View view) {
         if(view.getId() == generateMissionButton_.getId())
         {
-            //missionGenerator_.generateMission()
+            missionGenerator_.generateMission();
             startMissionButton_.setEnabled(true);
         }
     }
