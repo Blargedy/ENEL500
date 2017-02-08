@@ -19,6 +19,7 @@ public class MissionContainer
     private GeneratedMissionModel generatedMissionModel_;
 
     private MissionGenerator missionGenerator_;
+
     private MissionGenerationPresenter missionGenerationPresenter_;
     private MissionOperationPresenter missionOperationPresenter_;
     private ShootPhotoPresenter shootPhotoPresenter_;
