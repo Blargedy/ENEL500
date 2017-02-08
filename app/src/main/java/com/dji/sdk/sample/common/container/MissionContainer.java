@@ -44,7 +44,8 @@ public class MissionContainer
                 contextManager,
                 generatedMissionModel_);
         missionControllerPresenter_ = new MissionControllerPresenter(
-                simpleDemoView.startMissionButton());
+                simpleDemoView.startMissionButton(),
+                mssionController_);
 
         shootPhotoPresenter_ = new ShootPhotoPresenter(
                 contextManager,
