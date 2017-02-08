@@ -2,9 +2,10 @@ package com.dji.sdk.sample.common.container;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
+import com.dji.sdk.sample.common.mission.MissionController;
 import com.dji.sdk.sample.common.mission.MissionGenerator;
 import com.dji.sdk.sample.common.presenter.MissionGenerationPresenter;
-import com.dji.sdk.sample.common.presenter.MissionOperationPresenter;
+import com.dji.sdk.sample.common.presenter.MissionControllerPresenter;
 import com.dji.sdk.sample.common.presenter.ShootPhotoPresenter;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 import com.dji.sdk.sample.common.view.SimpleDemoView;
@@ -19,9 +20,11 @@ public class MissionContainer
     private GeneratedMissionModel generatedMissionModel_;
 
     private MissionGenerator missionGenerator_;
-
     private MissionGenerationPresenter missionGenerationPresenter_;
-    private MissionOperationPresenter missionOperationPresenter_;
+
+    private MissionController mssionController_;
+    private MissionControllerPresenter missionControllerPresenter_;
+
     private ShootPhotoPresenter shootPhotoPresenter_;
 
     public MissionContainer(
@@ -37,7 +40,10 @@ public class MissionContainer
                 simpleDemoView.startMissionButton(),
                 missionGenerator_);
 
-        missionOperationPresenter_ = new MissionOperationPresenter(
+        mssionController_ = new MissionController(
+                contextManager,
+                generatedMissionModel_);
+        missionControllerPresenter_ = new MissionControllerPresenter(
                 simpleDemoView.startMissionButton());
 
         shootPhotoPresenter_ = new ShootPhotoPresenter(

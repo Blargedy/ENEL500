@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 public class TestMissionGenerator
 {
     private Random randomGenerator = new Random();
-    private MissionGenerator missionGenerator = new MissionGenerator();
+//    private MissionGenerator missionGenerator = new MissionGenerator();
 
     @Test
     public void willSetTheFinishedActionForTheMission() throws Exception {
