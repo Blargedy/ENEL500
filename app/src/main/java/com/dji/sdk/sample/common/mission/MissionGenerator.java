@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.mission;
 
+import android.widget.Toast;
+
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 
@@ -7,10 +9,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import dji.common.error.DJIError;
+import dji.common.util.DJICommonCallbacks;
 import dji.sdk.missionmanager.DJICustomMission;
 import dji.sdk.missionmanager.DJIWaypoint;
 import dji.sdk.missionmanager.DJIWaypointMission;
 import dji.sdk.missionmanager.missionstep.DJIMissionStep;
+import dji.sdk.missionmanager.missionstep.DJIWaypointStep;
 
 /**
  * Created by Julia on 2017-01-15.
@@ -75,7 +80,23 @@ public class MissionGenerator implements I_MissionGenerator
                 wayPointMissionIndex++;
             }
         }
-        
+
+        Iterator waypointMissionIter = waypointMissions.iterator();
+
+        while(waypointMissionIter.hasNext()){
+            missionSteps.add(new DJIWaypointStep((DJIWaypointMission) waypointMissionIter.next(), new DJICommonCallbacks.DJICompletionCallback(){
+                @Override
+                public void onResult(DJIError error) {
+                    if (error == null) {
+//                        Toast.makeText(contextManager_.getApplicationContext(),
+//                                "take photo: success", Toast.LENGTH_SHORT).show();
+                    } else {
+//                        Toast.makeText(contextManager_.getApplicationContext(),
+//                                error.getDescription(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }));
+        }
 
         //set entity
         generatedMissionModel.djiMission_ =  new DJICustomMission(missionSteps);
