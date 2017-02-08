@@ -6,6 +6,7 @@ import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 import dji.common.error.DJIError;
 import dji.common.util.DJICommonCallbacks;
+import dji.sdk.flightcontroller.DJIFlightController;
 import dji.sdk.missionmanager.DJIMission;
 import dji.sdk.missionmanager.DJIMissionManager;
 import dji.sdk.base.DJIBaseProduct;
@@ -27,6 +28,62 @@ public class MissionController implements I_MissionController {
     {
         contextManager_ = contextManager;
         missionModel_ = missionModel;
+    }
+
+    public void takeOff()
+    {
+        DJIBaseProduct baseProduct = DJISDKManager.getInstance().getDJIProduct();
+        DJIAircraft aircraft = null;
+        if(null != baseProduct)
+        {
+            if(baseProduct instanceof DJIAircraft)
+            {
+                aircraft = (DJIAircraft) baseProduct;
+            }
+            else
+            {
+                Toast.makeText(contextManager_.getApplicationContext(),
+                        "no instance of DJIAircaft", Toast.LENGTH_LONG).show();
+            }
+        }
+        else
+        {
+            Toast.makeText(contextManager_.getApplicationContext(),
+                    "baseProduct is null", Toast.LENGTH_LONG).show();
+        }
+
+        if(aircraft != null)
+        {
+            DJIFlightController controller = aircraft.getFlightController();
+
+            if(controller != null)
+            {
+                controller.takeOff(new DJICommonCallbacks.DJICompletionCallback()
+                {
+                    @Override
+                    public void onResult(DJIError error) {
+                        if (error == null)
+                        {
+                            Toast.makeText(contextManager_.getApplicationContext(), "Taking off Successfully", Toast.LENGTH_LONG).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(contextManager_.getApplicationContext(), "Failed to Takeoff", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+            else
+            {
+                Toast.makeText(contextManager_.getApplicationContext(),
+                        "Flight Controller is null", Toast.LENGTH_LONG).show();
+            }
+        }
+        else
+        {
+            Toast.makeText(contextManager_.getApplicationContext(),
+                    "Aircraft is null", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void startMission()
