@@ -1,13 +1,10 @@
 package dji.developer.sample;
 
-import android.content.Context;
 import android.test.mock.MockContext;
 import android.util.AttributeSet;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-import com.dji.sdk.sample.common.view.SimpleDemoView;
-import static org.mockito.Mockito.*;
 
 /**
  * Created by Julia on 2017-01-16.

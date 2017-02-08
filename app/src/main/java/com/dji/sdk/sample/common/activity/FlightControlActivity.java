@@ -7,14 +7,14 @@ import com.dji.sdk.sample.common.container.MissionContainer;
 import com.dji.sdk.sample.common.presenter.ProductConnectionPresenter;
 import com.dji.sdk.sample.common.utility.ApplicationContextManager;
 import com.dji.sdk.sample.common.utility.UserPermissionRequester;
-import com.dji.sdk.sample.common.view.SimpleDemoView;
+import com.dji.sdk.sample.common.view.FlightControlView;
 
-public class SimpleDemoActivity extends AppCompatActivity
+public class FlightControlActivity extends AppCompatActivity
 {
     private UserPermissionRequester permissionRequester_;
     private ApplicationContextManager contextManager_;
 
-    private SimpleDemoView simpleDemoView_;
+    private FlightControlView flightControlView_;
 
     private MissionContainer missionContainer_;
 
@@ -26,17 +26,17 @@ public class SimpleDemoActivity extends AppCompatActivity
         permissionRequester_ = new UserPermissionRequester();
         contextManager_ = new ApplicationContextManager(this);
 
-        simpleDemoView_ = new SimpleDemoView(this);
+        flightControlView_ = new FlightControlView(this);
 
-        missionContainer_ = new MissionContainer(simpleDemoView_, contextManager_);
+        missionContainer_ = new MissionContainer(flightControlView_, contextManager_);
 
         productConnectionPresenter_ = new ProductConnectionPresenter(
-                simpleDemoView_.connectionStatusText(),
+                flightControlView_.connectionStatusText(),
                 contextManager_);
 
         permissionRequester_.requestPermissions(this);
 
-        setContentView(simpleDemoView_);
+        setContentView(flightControlView_);
     }
 
 

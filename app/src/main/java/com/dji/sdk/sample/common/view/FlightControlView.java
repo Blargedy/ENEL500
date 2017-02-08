@@ -13,7 +13,7 @@ import com.dji.sdk.sample.R;
  * Created by Julia on 2017-01-15.
  */
 
-public class SimpleDemoView
+public class FlightControlView
         extends RelativeLayout
 {
     private TextView connectionStatusText_;
@@ -21,20 +21,20 @@ public class SimpleDemoView
     private Button startMissionButton_;
     private Button shootPhotoButton_;
 
-    public SimpleDemoView(
+    public FlightControlView(
             Context context) {
         super(context);
         initUI();
     }
 
-    public SimpleDemoView(
+    public FlightControlView(
             Context context,
             AttributeSet attrs) {
         super(context, attrs);
         initUI();
     }
 
-    public SimpleDemoView(
+    public FlightControlView(
             Context context,
             AttributeSet attrs,
             int defStyle) {
