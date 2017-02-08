@@ -29,7 +29,6 @@ public class MissionControllerPresenter implements View.OnClickListener
     public void onClick(View view) {
         if(view.getId() == startMissionButton_.getId())
         {
-            controller_.takeOff();
             controller_.startMission();
         }
     }

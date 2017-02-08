@@ -110,6 +110,20 @@ public class MissionController implements I_MissionController {
 
         if(aircraft != null)
         {
+            if(!aircraft.getFlightController().getCurrentState().isFlying())
+            {
+                Toast.makeText(contextManager_.getApplicationContext(),
+                        "Aircraft not taken off. Attempting to take off.", Toast.LENGTH_LONG).show();
+                takeOff();
+                return;
+            }
+            else
+            {
+                Toast.makeText(contextManager_.getApplicationContext(),
+                        "Attempting to launch mission", Toast.LENGTH_LONG).show();
+            }
+
+
             DJIMissionManager missionManager = aircraft.getMissionManager();
 
             if (missionManager != null)
