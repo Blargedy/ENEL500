@@ -8,6 +8,6 @@ import dji.sdk.missionmanager.DJICustomMission;
 
 public interface I_MissionGenerator {
 
-    public DJICustomMission generateMission(MissionBoundary boundary, double altitude);
+    public void generateMission(MissionBoundary boundary, double altitude);
 
 }

@@ -1,9 +1,13 @@
 package com.dji.sdk.sample.common.mission;
 
+import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
+import com.dji.sdk.sample.common.entity.InitialMissionModel;
+
 import java.util.List;
 import java.util.Vector;
 
 import dji.sdk.missionmanager.DJICustomMission;
+import dji.sdk.missionmanager.DJIWaypoint;
 import dji.sdk.missionmanager.missionstep.DJIMissionStep;
 
 /**
@@ -13,7 +17,8 @@ import dji.sdk.missionmanager.missionstep.DJIMissionStep;
 public class MissionGenerator implements I_MissionGenerator
 {
     private float altitude = 1.0f;
-
+    private InitialMissionModel initialMissionModel;
+    private GeneratedMissionModel generatedMissionModel;
 //    public DJIWaypointMission generateMissionWithOneWaypoint(double latitude, double longitude)
 //    {
 //        DJIWaypointMission waypointMission = new DJIWaypointMission();
@@ -30,9 +35,22 @@ public class MissionGenerator implements I_MissionGenerator
 //        return waypointMission;
 //    }
 
-    public DJICustomMission generateMission(MissionBoundary boundary, double altitude){
-        List<DJIMissionStep> missionPoints = new Vector<DJIMissionStep>();
+    public MissionGenerator(InitialMissionModel initialMissionModel_, GeneratedMissionModel generatedMissionModel_){
+        initialMissionModel = initialMissionModel_;
+        generatedMissionModel = generatedMissionModel_;
+    }
+    public void generateMission(MissionBoundary boundary, double altitude){
         List<Coordinate> switchbackVector= SwitchBackPathGenerator.generateSwitchback(boundary,altitude);
-        return new DJICustomMission(missionPoints);
+
+        //produce List of waypoints
+        Vector<DJIWaypoint> waypoints_ = new Vector<DJIWaypoint>();
+
+        //Add waypoints to Steps
+        List<DJIMissionStep> missionPoints = new Vector<DJIMissionStep>();
+
+        //set entity
+        generatedMissionModel.djiMission_ =  new DJICustomMission(missionPoints);
+        generatedMissionModel.waypoints_ = waypoints_;
+
     }
 }
