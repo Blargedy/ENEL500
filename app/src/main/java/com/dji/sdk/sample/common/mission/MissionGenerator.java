@@ -10,7 +10,7 @@ import dji.sdk.missionmanager.missionstep.DJIMissionStep;
  * Created by Julia on 2017-01-15.
  */
 
-public class MissionGenerator
+public class MissionGenerator implements I_MissionGenerator
 {
     private float altitude = 1.0f;
 
@@ -30,7 +30,7 @@ public class MissionGenerator
 //        return waypointMission;
 //    }
 
-    public DJICustomMission generateMissionWithMultipleWaypoints(MissionBoundary boundary, double altitude){
+    public DJICustomMission generateMission(MissionBoundary boundary, double altitude){
         List<DJIMissionStep> missionPoints = new Vector<DJIMissionStep>();
         List<Coordinate> switchbackVector= SwitchBackPathGenerator.generateSwitchback(boundary,altitude);
         return new DJICustomMission(missionPoints);

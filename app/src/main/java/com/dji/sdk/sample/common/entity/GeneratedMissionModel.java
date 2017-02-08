@@ -13,5 +13,4 @@ public class GeneratedMissionModel
 {
     public DJICustomMission djiMission_;
     public Vector<DJIWaypoint> waypoints_;
-
 }
