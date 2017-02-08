@@ -1,7 +1,5 @@
 package com.dji.sdk.sample.common.mission;
 
-import android.widget.Toast;
-
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 
@@ -23,8 +21,8 @@ import dji.sdk.missionmanager.missionstep.DJIWaypointStep;
 
 public class MissionGenerator implements I_MissionGenerator
 {
-    private InitialMissionModel initialMissionModel;
-    private GeneratedMissionModel generatedMissionModel;
+    private InitialMissionModel initialMissionModel_;
+    private GeneratedMissionModel generatedMissionModel_;
 
 //    public DJIWaypointMission generateMissionWithOneWaypoint(double latitude, double longitude)
 //    {
@@ -42,13 +40,13 @@ public class MissionGenerator implements I_MissionGenerator
 //        return waypointMission;
 //    }
 
-    public MissionGenerator(InitialMissionModel initialMissionModel_, GeneratedMissionModel generatedMissionModel_){
-        initialMissionModel = initialMissionModel_;
-        generatedMissionModel = generatedMissionModel_;
+    public MissionGenerator(InitialMissionModel initialMissionModel, GeneratedMissionModel generatedMissionModel){
+        initialMissionModel_ = initialMissionModel;
+        generatedMissionModel_ = generatedMissionModel;
     }
     public void generateMission(){
-        List<Coordinate> switchbackVector= SwitchBackPathGenerator.generateSwitchback(initialMissionModel.missionBoundary().bottomLeft(),
-                initialMissionModel.missionBoundary().topRight(),initialMissionModel.altitude());
+        List<Coordinate> switchbackVector= SwitchBackPathGenerator.generateSwitchback(initialMissionModel_.missionBoundary().bottomLeft(),
+                initialMissionModel_.missionBoundary().topRight(), initialMissionModel_.altitude());
 
         //produce List of waypoints
         Vector<DJIWaypoint> waypoints = new Vector<DJIWaypoint>();
@@ -58,7 +56,7 @@ public class MissionGenerator implements I_MissionGenerator
         Iterator switchBackIter = switchbackVector.iterator();
         while(switchBackIter.hasNext()){
             Coordinate nextPoint = (Coordinate) switchBackIter.next();
-            waypoints.add(new DJIWaypoint(nextPoint.latitude_, nextPoint.latitude_, initialMissionModel.altitude()));
+            waypoints.add(new DJIWaypoint(nextPoint.latitude_, nextPoint.latitude_, initialMissionModel_.altitude()));
         }
 
         Iterator waypointIter = waypoints.iterator();
@@ -99,8 +97,8 @@ public class MissionGenerator implements I_MissionGenerator
         }
 
         //set entity
-        generatedMissionModel.djiMission_ =  new DJICustomMission(missionSteps);
-        generatedMissionModel.waypoints_ = waypoints;
+        generatedMissionModel_.djiMission_ =  new DJICustomMission(missionSteps);
+        generatedMissionModel_.waypoints_ = waypoints;
 
     }
 }
