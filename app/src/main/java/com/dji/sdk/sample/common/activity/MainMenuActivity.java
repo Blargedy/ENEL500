@@ -1,31 +1,31 @@
 package com.dji.sdk.sample.common.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 
-import com.dji.sdk.sample.R;
+import com.dji.sdk.sample.common.presenter.MainMenuPresenter;
+import com.dji.sdk.sample.common.utility.ApplicationContextManager;
+import com.dji.sdk.sample.common.view.MainMenuView;
 
-public class MainMenuActivity extends AppCompatActivity {
+public class MainMenuActivity extends AppCompatActivity
+{
+    private ApplicationContextManager contextManager_;
+    private MainMenuView mainMenuView_;
+    private MainMenuPresenter mainMenuPresenter_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        contextManager_ = new ApplicationContextManager(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        mainMenuView_ = new MainMenuView(this);
+
+        mainMenuPresenter_ = new MainMenuPresenter(
+                mainMenuView_.reconstructLiveButton(),
+                mainMenuView_.reconstructLaterButton(),
+                contextManager_);
+
+        setContentView(mainMenuView_);
     }
 
 }
