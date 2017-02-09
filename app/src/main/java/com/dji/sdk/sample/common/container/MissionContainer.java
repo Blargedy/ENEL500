@@ -34,7 +34,11 @@ public class MissionContainer
         initialMissionModel_ = new InitialMissionModel();
         generatedMissionModel_ = new GeneratedMissionModel();
 
-        missionGenerator_ = new MissionGenerator(initialMissionModel_, generatedMissionModel_);
+        missionGenerator_ = new MissionGenerator(
+                contextManager,
+                initialMissionModel_,
+                generatedMissionModel_);
+
         missionGenerationPresenter_ = new MissionGenerationPresenter(
                 simpleDemoView.generateMissionButton(),
                 simpleDemoView.startMissionButton(),

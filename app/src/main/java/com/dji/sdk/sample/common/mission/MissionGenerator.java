@@ -1,7 +1,10 @@
 package com.dji.sdk.sample.common.mission;
 
+import android.widget.Toast;
+
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
+import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +26,7 @@ public class MissionGenerator implements I_MissionGenerator
 {
     private InitialMissionModel initialMissionModel_;
     private GeneratedMissionModel generatedMissionModel_;
+    private I_ApplicationContextManager contextManager_;
 
 //    public DJIWaypointMission generateMissionWithOneWaypoint(double latitude, double longitude)
 //    {
@@ -40,9 +44,10 @@ public class MissionGenerator implements I_MissionGenerator
 //        return waypointMission;
 //    }
 
-    public MissionGenerator(InitialMissionModel initialMissionModel, GeneratedMissionModel generatedMissionModel){
+    public MissionGenerator(I_ApplicationContextManager contextManager, InitialMissionModel initialMissionModel, GeneratedMissionModel generatedMissionModel){
         initialMissionModel_ = initialMissionModel;
         generatedMissionModel_ = generatedMissionModel;
+        contextManager_ = contextManager;
     }
     public void generateMission(){
         List<Coordinate> switchbackVector= SwitchBackPathGenerator.generateSwitchback(initialMissionModel_.missionBoundary().bottomLeft(),
@@ -86,11 +91,11 @@ public class MissionGenerator implements I_MissionGenerator
                 @Override
                 public void onResult(DJIError error) {
                     if (error == null) {
-//                        Toast.makeText(contextManager_.getApplicationContext(),
-//                                "take photo: success", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(contextManager_.getApplicationContext(),
+                                "Successfully Generated Mission", Toast.LENGTH_SHORT).show();
                     } else {
-//                        Toast.makeText(contextManager_.getApplicationContext(),
-//                                error.getDescription(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(contextManager_.getApplicationContext(),
+                                error.getDescription(), Toast.LENGTH_LONG).show();
                     }
                 }
             }));
