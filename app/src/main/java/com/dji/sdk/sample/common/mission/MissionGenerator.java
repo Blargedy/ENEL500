@@ -69,18 +69,22 @@ public class MissionGenerator implements I_MissionGenerator
         int wayPointMissionIndex = -1;
 
         while(waypointIter.hasNext()) {
-            if(wayPointMissionIndex == -1){
-                waypointMissions.add(new DJIWaypointMission());
+            if(wayPointMissionIndex == -1 || waypointCount >= 100){
+                DJIWaypointMission waypointMission = new DJIWaypointMission();
+                waypointMission.autoFlightSpeed = 30;
+                waypointMission.goFirstWaypointMode = DJIWaypointMission.DJIWaypointMissionGotoWaypointMode.PointToPoint;
+                waypointMission.needExitMissionOnRCSignalLost = true;
+                waypointMission.needRotateGimbalPitch = false;
+                waypointMission.maxFlightSpeed = 30;
+
+
+                waypointMissions.add(waypointMission);
                 wayPointMissionIndex++;
                 waypointMissions.elementAt(waypointCount).addWaypoint((DJIWaypoint) waypointIter.next());
             }
-            else if(waypointCount < 100){
+            else {
                 waypointMissions.elementAt(waypointCount).addWaypoint((DJIWaypoint) waypointIter.next());
                 waypointCount++;
-            }
-            else{
-                waypointMissions.add(new DJIWaypointMission());
-                wayPointMissionIndex++;
             }
         }
 
