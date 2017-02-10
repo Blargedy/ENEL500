@@ -8,7 +8,7 @@ import com.dji.sdk.sample.common.presenter.MissionGenerationPresenter;
 import com.dji.sdk.sample.common.presenter.MissionControllerPresenter;
 import com.dji.sdk.sample.common.presenter.ShootPhotoPresenter;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
-import com.dji.sdk.sample.common.view.SimpleDemoView;
+import com.dji.sdk.sample.common.view.FlightControlView;
 
 /**
  * Created by Julia on 2017-02-04.
@@ -28,7 +28,7 @@ public class MissionContainer
     private ShootPhotoPresenter shootPhotoPresenter_;
 
     public MissionContainer(
-            SimpleDemoView simpleDemoView,
+            FlightControlView flightControlView,
             I_ApplicationContextManager contextManager)
     {
         initialMissionModel_ = new InitialMissionModel();
@@ -40,19 +40,19 @@ public class MissionContainer
                 generatedMissionModel_);
 
         missionGenerationPresenter_ = new MissionGenerationPresenter(
-                simpleDemoView.generateMissionButton(),
-                simpleDemoView.startMissionButton(),
+                flightControlView.generateMissionButton(),
+                flightControlView.startMissionButton(),
                 missionGenerator_);
 
         mssionController_ = new MissionController(
                 contextManager,
                 generatedMissionModel_);
         missionControllerPresenter_ = new MissionControllerPresenter(
-                simpleDemoView.startMissionButton(),
+                flightControlView.startMissionButton(),
                 mssionController_);
 
         shootPhotoPresenter_ = new ShootPhotoPresenter(
                 contextManager,
-                simpleDemoView.shootPhotoButton());
+                flightControlView.shootPhotoButton());
     }
 }

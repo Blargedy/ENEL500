@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/live_reconstruction_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
+        android:text="Would you like to do a live reconstruction?"
+        android:textColor="@android:color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
+
+    <Button
+        android:id="@+id/btn_reconstruct_live"
+        android:layout_width="150dp"
+        android:layout_height="55dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="280dp"
+        android:background="@drawable/round_btn"
+        android:textAllCaps="false"
+        android:text="Yes"
+        android:textColor="@color/common_text_color"
+        android:textSize="15dp"
+        />
+
+    <Button
+        android:id="@+id/btn_reconstruct_later"
+        android:layout_width="150dp"
+        android:layout_height="55dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/btn_reconstruct_live"
+        android:background="@drawable/round_btn"
+        android:textAllCaps="false"
+        android:layout_marginTop="25dp"
+        android:text="No"
+        android:textColor="@color/common_text_color"
+        android:textSize="15dp"
+        />
+
+</RelativeLayout>
+
