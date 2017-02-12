@@ -37,7 +37,7 @@ public class MainMenuPresenter implements View.OnClickListener
     {
         if(view.getId() == reconstructLiveButton_.getId())
         {
-    
+
         }
         else if (view.getId() == reconstructLaterButton_.getId())
         {

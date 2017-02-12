@@ -39,7 +39,6 @@ public class ShootPhotoPresenter implements View.OnClickListener
     public void onClick(View view) {
         if(view.getId() == shootPhotoButton_.getId())
         {
-            //shootPhoto();
             downloadMediaList();
         }
     }
@@ -56,32 +55,13 @@ public class ShootPhotoPresenter implements View.OnClickListener
                     if (djiError != null)
                     {
                         message = "Camera: could not switch to camera mode " + cameraMode.toString();
-                        Toast.makeText(contextManager_.getApplicationContext(), message, Toast.LENGTH_LONG).show();
                     }
-                }
-            });
-        }
-    }
-
-    private void shootPhoto()
-    {
-        changeCameraMode(DJICameraSettingsDef.CameraMode.ShootPhoto);
-
-        DJICamera camera = DJISampleApplication.getProductInstance().getCamera();
-        if (camera != null)
-        {
-            DJICameraSettingsDef.CameraShootPhotoMode photoMode = DJICameraSettingsDef.CameraShootPhotoMode.Single;
-            camera.startShootPhoto(photoMode, new DJICommonCallbacks.DJICompletionCallback() {
-                @Override
-                public void onResult(DJIError error) {
-                    if (error == null) {
-                        Toast.makeText(contextManager_.getApplicationContext(),
-                                "Take photo: success", Toast.LENGTH_SHORT).show();
-                        //downloadPhoto();
-                    } else {
-                        Toast.makeText(contextManager_.getApplicationContext(),
-                                "Take photo: failure", Toast.LENGTH_LONG).show();
+                    else
+                    {
+                        message = "Success: switched to camera mode " + cameraMode.toString();
                     }
+                    Toast.makeText(contextManager_.getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
                 }
             });
         }
