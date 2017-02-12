@@ -6,15 +6,9 @@ import com.dji.sdk.sample.common.imageTransfer.I_DroneToAndroidImageDownloader;
 import com.dji.sdk.sample.common.imageTransfer.I_NewImageDetector;
 
 import static org.mockito.Mockito.*;
-
-import org.mockito.ArgumentMatcher;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Matchers.*;
-
 import org.junit.Test;
-import org.mockito.Matchers;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import dji.sdk.camera.DJIMedia;
