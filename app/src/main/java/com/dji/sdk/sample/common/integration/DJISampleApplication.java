@@ -28,8 +28,6 @@ public class DJISampleApplication extends Application {
 
     private static DJIBaseProduct mProduct;
 
-    private static DJIBluetoothProductConnector bluetoothConnector = null;
-
     private Handler mHandler;
 
     /**
@@ -44,29 +42,13 @@ public class DJISampleApplication extends Application {
         return mProduct;
     }
 
-    public static synchronized DJIBluetoothProductConnector getBluetoothProductConnector(){
-        if(null == bluetoothConnector){
-            bluetoothConnector = DJISDKManager.getInstance().getDJIBluetoothProductConnector();
-        }
-        return bluetoothConnector;
-    }
-
     public static boolean isAircraftConnected() {
         return getProductInstance() != null && getProductInstance() instanceof DJIAircraft;
-    }
-
-    public static boolean isHandHeldConnected() {
-        return getProductInstance() != null && getProductInstance() instanceof DJIHandHeld;
     }
 
     public static synchronized DJIAircraft getAircraftInstance() {
         if (!isAircraftConnected()) return null;
         return (DJIAircraft) getProductInstance();
-    }
-
-    public static synchronized DJIHandHeld getHandHeldInstance() {
-        if (!isHandHeldConnected()) return null;
-        return (DJIHandHeld) getProductInstance();
     }
 
     @Override
