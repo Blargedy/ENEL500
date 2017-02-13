@@ -1,7 +1,6 @@
-package com.dji.sdk.sample.common.utility;
+package com.dji.sdk.sample.common.integration;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,12 +8,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.dji.sdk.sample.R;
+import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 
 import dji.common.error.DJIError;
 import dji.common.error.DJISDKError;
 import dji.sdk.base.DJIBaseComponent;
 import dji.sdk.base.DJIBaseProduct;
-import dji.sdk.camera.DJICamera;
 import dji.sdk.products.DJIAircraft;
 import dji.sdk.products.DJIHandHeld;
 import dji.sdk.sdkmanager.DJIBluetoothProductConnector;

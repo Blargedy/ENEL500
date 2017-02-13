@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.dji.sdk.sample.common.utility.DJISampleApplication;
+import com.dji.sdk.sample.common.integration.DJISampleApplication;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 import java.io.File;

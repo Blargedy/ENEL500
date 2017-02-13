@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.dji.sdk.sample.common.utility.ApplicationContextManager;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
-import com.dji.sdk.sample.common.utility.DJISampleApplication;
+import com.dji.sdk.sample.common.integration.DJISampleApplication;
 
 import dji.sdk.base.DJIBaseProduct;
 
