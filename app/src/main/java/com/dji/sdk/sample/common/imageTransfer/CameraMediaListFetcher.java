@@ -6,32 +6,55 @@ import com.dji.sdk.sample.common.integration.I_MediaManagerSource;
 
 import java.util.ArrayList;
 
+import dji.common.error.DJIError;
 import dji.sdk.camera.DJIMedia;
 
 /**
  * Created by Julia on 2017-02-12.
  */
 
-public class CameraMediaListFetcher implements I_CameraMediaListFetcher
+public class CameraMediaListFetcher implements
+        I_CameraMediaListFetcher,
+        I_CameraMediaListDownloadListener
 {
-    I_MediaManagerSource mediaManagerSource_;
-    I_CameraMediaListDownloadListener downloadListener_;
+    private I_MediaManagerSource mediaManagerSource_;
+    private I_DroneImageDownloadSelector downloadSelector_;
+    private I_DroneToAndroidImageDownloader imageDownloader_;
 
     public CameraMediaListFetcher(
             I_MediaManagerSource mediaManagerSource,
-            I_CameraMediaListDownloadListener downloadListener)
+            I_DroneImageDownloadSelector downloadSelector,
+            I_DroneToAndroidImageDownloader imageDownloader)
     {
         mediaManagerSource_ = mediaManagerSource;
-        downloadListener_ = downloadListener;
+        downloadSelector_ = downloadSelector;
+        imageDownloader_ = imageDownloader;
     }
 
     @Override
-    public ArrayList<DJIMedia> fetchMediaListFromCamera()
+    public void fetchMediaListFromCamera()
     {
         I_MediaManager mediaManager = mediaManagerSource_.getMediaManager();
-
-        mediaManager.fetchMediaList(downloadListener_);
-
-        return null;
+        mediaManager.fetchMediaList(this);
     }
+
+    @Override
+    public void onSuccess(ArrayList<DJIMedia> mediaList)
+    {
+        ArrayList<DJIMedia> imagesToDownload = downloadSelector_
+                .determineImagesForDownloadFromMediaList(mediaList);
+        imageDownloader_.downloadImagesFromDrone(imagesToDownload);
+    }
+
+    @Override
+    public void onStart() {}
+
+    @Override
+    public void onRateUpdate(long total, long current, long persize) {}
+
+    @Override
+    public void onProgress(long total, long current) {}
+
+    @Override
+    public void onFailure(DJIError error) {}
 }

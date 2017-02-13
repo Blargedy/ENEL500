@@ -1,7 +1,10 @@
 package com.dji.sdk.sample.common.imageTransfer;
 
+import com.dji.sdk.sample.common.integration.I_CompletionCallback;
+
 import java.util.ArrayList;
 
+import dji.common.error.DJIError;
 import dji.sdk.camera.DJIMedia;
 
 /**
@@ -10,5 +13,5 @@ import dji.sdk.camera.DJIMedia;
 
 public interface I_CameraMediaListFetcher
 {
-    ArrayList<DJIMedia> fetchMediaListFromCamera();
+    void fetchMediaListFromCamera();
 }

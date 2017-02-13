@@ -1,12 +1,17 @@
 package dji.developer.sample.imageTransfer;
 
 import com.dji.sdk.sample.common.imageTransfer.CameraMediaListFetcher;
+import com.dji.sdk.sample.common.imageTransfer.I_DroneImageDownloadSelector;
+import com.dji.sdk.sample.common.imageTransfer.I_DroneToAndroidImageDownloader;
 import com.dji.sdk.sample.common.integration.I_CameraMediaListDownloadListener;
 import com.dji.sdk.sample.common.integration.I_MediaManager;
 import com.dji.sdk.sample.common.integration.I_MediaManagerSource;
 
 import static org.mockito.Mockito.*;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 
@@ -18,30 +23,75 @@ import dji.sdk.camera.DJIMedia;
 
 public class TestCameraMediaListFetcher
 {
-    I_MediaManagerSource mediaManagerSource_ = mock(I_MediaManagerSource.class);
-    I_CameraMediaListDownloadListener downloadListener_ = mock(I_CameraMediaListDownloadListener.class);
+    private I_MediaManagerSource mediaManagerSource_ = mock(I_MediaManagerSource.class);
+    private I_DroneImageDownloadSelector downloadSelector_ =
+            mock(I_DroneImageDownloadSelector.class);
+    private I_DroneToAndroidImageDownloader imageDownloader_ =
+            mock (I_DroneToAndroidImageDownloader.class);
 
-    I_MediaManager mediaManager_ = mock(I_MediaManager.class);
-
-    CameraMediaListFetcher patient_ = new CameraMediaListFetcher(
+    private CameraMediaListFetcher patient_ = new CameraMediaListFetcher(
             mediaManagerSource_,
-            downloadListener_);
+            downloadSelector_,
+            imageDownloader_);
+
+    private I_MediaManager mediaManager_ = mock(I_MediaManager.class);
 
     @Test
-    public void willRetrieveMediaMangerUsingTheSource()
+    public void willRetrieveMediaMangerUsingMediaManagerSource()
     {
-        ArrayList<DJIMedia> mediaList = patient_.fetchMediaListFromCamera();
+        when(mediaManagerSource_.getMediaManager()).thenReturn(mediaManager_);
+
+        patient_.fetchMediaListFromCamera();
 
         verify(mediaManagerSource_).getMediaManager();
     }
 
     @Test
-    public void willRequestMediaListFromMediaManager()
+    public void willFetchMediaListUsingMediaManager()
     {
         when(mediaManagerSource_.getMediaManager()).thenReturn(mediaManager_);
 
-        ArrayList<DJIMedia> mediaList = patient_.fetchMediaListFromCamera();
+        patient_.fetchMediaListFromCamera();
 
-        verify(mediaManager_).fetchMediaList(downloadListener_);
+        verify(mediaManager_).fetchMediaList(patient_);
+    }
+
+    @Test
+    public void willDetermineWhichNeedToBeDownloadedAfterMediaListHasBeenFetchedSuccessfully()
+    {
+        final ArrayList<DJIMedia> mediaList = new ArrayList<>();
+        makeMediaManagerCallOnSuccessCallbackWithMediaList(mediaList);
+        when(mediaManagerSource_.getMediaManager()).thenReturn(mediaManager_);
+
+        patient_.fetchMediaListFromCamera();
+
+        verify(downloadSelector_).determineImagesForDownloadFromMediaList(mediaList);
+    }
+
+    @Test
+    public void willDownloadSelectedImages()
+    {
+        final ArrayList<DJIMedia> mediaList = new ArrayList<>();
+        ArrayList<DJIMedia> imagesToDownload = new ArrayList<>();
+        makeMediaManagerCallOnSuccessCallbackWithMediaList(mediaList);
+        when(mediaManagerSource_.getMediaManager()).thenReturn(mediaManager_);
+        when(downloadSelector_.determineImagesForDownloadFromMediaList(mediaList))
+                .thenReturn(imagesToDownload);
+
+        patient_.fetchMediaListFromCamera();
+
+        verify(imageDownloader_).downloadImagesFromDrone(imagesToDownload);
+    }
+
+    private void makeMediaManagerCallOnSuccessCallbackWithMediaList(
+            final ArrayList<DJIMedia> mediaList)
+    {
+        doAnswer(new Answer() {
+            public Object answer(InvocationOnMock invocation) {
+                Object[] args = invocation.getArguments();
+                ((I_CameraMediaListDownloadListener)args[0]).onSuccess(mediaList);
+                return null;
+            }})
+                .when(mediaManager_).fetchMediaList(patient_);
     }
 }

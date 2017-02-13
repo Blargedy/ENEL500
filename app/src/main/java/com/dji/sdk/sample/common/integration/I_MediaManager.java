@@ -1,9 +1,6 @@
 package com.dji.sdk.sample.common.integration;
 
-import java.util.ArrayList;
-
-import dji.sdk.camera.DJIMedia;
-import dji.sdk.camera.DJIMediaManager;
+import dji.common.util.DJICommonCallbacks;
 
 /**
  * Created by Julia on 2017-02-12.
@@ -12,4 +9,5 @@ import dji.sdk.camera.DJIMediaManager;
 public interface I_MediaManager
 {
     void fetchMediaList(I_CameraMediaListDownloadListener downloadListener);
+    void setCameraModeMediaDownload(I_CompletionCallback callback);
 }

@@ -10,5 +10,5 @@ import dji.sdk.camera.DJIMedia;
 
 public interface I_DroneToAndroidImageDownloader
 {
-    void downloadImagesFromDrone(ArrayList<DJIMedia> mediaList);
+    void downloadImagesFromDrone(ArrayList<DJIMedia> imagesToDownload);
 }

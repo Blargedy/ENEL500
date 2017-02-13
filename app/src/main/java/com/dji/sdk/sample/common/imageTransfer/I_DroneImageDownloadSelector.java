@@ -8,7 +8,7 @@ import dji.sdk.camera.DJIMedia;
  * Created by Julia on 2017-02-12.
  */
 
-public interface I_NewImageDetector
+public interface I_DroneImageDownloadSelector
 {
-    ArrayList<DJIMedia> determineNewImagesFromFullListOfCameraMedia(ArrayList<DJIMedia> mediaList);
+    ArrayList<DJIMedia> determineImagesForDownloadFromMediaList(ArrayList<DJIMedia> mediaList);
 }
