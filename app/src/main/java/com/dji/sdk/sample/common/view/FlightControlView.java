@@ -2,7 +2,6 @@ package com.dji.sdk.sample.common.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,6 +19,7 @@ public class FlightControlView
     private Button generateMissionButton_;
     private Button startMissionButton_;
     private Button shootPhotoButton_;
+    private Button goToMapButton_;
 
     public FlightControlView(
             Context context) {
@@ -62,6 +62,11 @@ public class FlightControlView
         return shootPhotoButton_;
     }
 
+    public Button goToMapButton()
+    {
+        return goToMapButton_;
+    }
+
     private void initUI()
     {
         inflate(getContext(), R.layout.simple_demo, this);
@@ -70,5 +75,6 @@ public class FlightControlView
         generateMissionButton_ = (Button) findViewById(R.id.btn_generate_mission);
         startMissionButton_ = (Button) findViewById(R.id.btn_start_mission);
         shootPhotoButton_ = (Button) findViewById(R.id.btn_shoot_photo);
+        goToMapButton_ = (Button) findViewById(R.id.btn_go_to_map);
     }
 }
