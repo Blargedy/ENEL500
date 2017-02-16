@@ -5,6 +5,7 @@ import android.widget.Toast;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
+import com.dji.sdk.sample.common.values.Coordinate;
 
 import java.util.Iterator;
 import java.util.List;

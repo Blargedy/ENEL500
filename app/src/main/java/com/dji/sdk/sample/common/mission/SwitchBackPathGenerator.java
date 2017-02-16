@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.mission;
 
+import com.dji.sdk.sample.common.values.Coordinate;
+
 import java.util.List;
 import java.util.Vector;
 
@@ -8,7 +10,7 @@ import dji.sdk.sdkmanager.DJISDKManager;
 
 /**
  * Created by eric on 2017-01-23.
- * Edited by Bill Skinner on 2017-02-08
+ * Edited by Bill Skinner on 2017-02-15
  */
 
 public class SwitchBackPathGenerator {

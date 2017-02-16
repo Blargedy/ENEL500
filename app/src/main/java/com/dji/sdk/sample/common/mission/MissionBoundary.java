@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.mission;
 
+import com.dji.sdk.sample.common.values.Coordinate;
+
 /**
  * Created by Julia on 2017-02-04.
  */
