@@ -9,7 +9,7 @@ env:
 android:
   components:
     - tools
-    # - platform-tools
+    - platform-tools
 
     # The BuildTools version used by your project
     - build-tools-23.0.1
