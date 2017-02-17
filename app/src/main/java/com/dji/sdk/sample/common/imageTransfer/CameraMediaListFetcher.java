@@ -39,10 +39,10 @@ public class CameraMediaListFetcher implements
     }
 
     @Override
-    public void onSuccess(ArrayList<DJIMedia> mediaList)
+    public void onSuccess(ArrayList<DJIMedia> currentMediaList)
     {
         ArrayList<DJIMedia> imagesToDownload = downloadSelector_
-                .determineImagesForDownloadFromMediaList(mediaList);
+                .determineImagesForDownloadFromMediaList(currentMediaList);
         imageDownloader_.downloadImagesFromDrone(imagesToDownload);
     }
 

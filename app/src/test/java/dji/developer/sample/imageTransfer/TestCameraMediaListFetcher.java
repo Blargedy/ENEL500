@@ -71,8 +71,8 @@ public class TestCameraMediaListFetcher
     @Test
     public void willDownloadSelectedImages()
     {
-        final ArrayList<DJIMedia> mediaList = new ArrayList<>();
-        ArrayList<DJIMedia> imagesToDownload = new ArrayList<>();
+        final ArrayList<DJIMedia> mediaList = makeMediaList(2);
+        ArrayList<DJIMedia> imagesToDownload = makeMediaList(3);
         makeMediaManagerCallOnSuccessCallbackWithMediaList(mediaList);
         when(mediaManagerSource_.getMediaManager()).thenReturn(mediaManager_);
         when(downloadSelector_.determineImagesForDownloadFromMediaList(mediaList))
@@ -93,5 +93,15 @@ public class TestCameraMediaListFetcher
                 return null;
             }})
                 .when(mediaManager_).fetchMediaList(patient_);
+    }
+
+    private ArrayList<DJIMedia> makeMediaList(int size)
+    {
+        ArrayList<DJIMedia> currentMediaList = new ArrayList<>();
+        for (int i = 0; i < size; i++)
+        {
+            currentMediaList.add(new DJIMedia());
+        }
+        return currentMediaList;
     }
 }

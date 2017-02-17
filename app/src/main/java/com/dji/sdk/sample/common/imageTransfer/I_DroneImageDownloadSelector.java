@@ -10,5 +10,5 @@ import dji.sdk.camera.DJIMedia;
 
 public interface I_DroneImageDownloadSelector
 {
-    ArrayList<DJIMedia> determineImagesForDownloadFromMediaList(ArrayList<DJIMedia> mediaList);
+    ArrayList<DJIMedia> determineImagesForDownloadFromMediaList(ArrayList<DJIMedia> currentMediaList);
 }
