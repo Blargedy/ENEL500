@@ -5,6 +5,7 @@ import android.widget.Toast;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 import dji.common.error.DJIError;
+import dji.common.flightcontroller.DJILocationCoordinate2D;
 import dji.common.util.DJICommonCallbacks;
 import dji.sdk.flightcontroller.DJIFlightController;
 import dji.sdk.missionmanager.DJIMission;
@@ -86,6 +87,7 @@ public class MissionController implements I_MissionController {
         }
     }
 
+
     public void startMission()
     {
         DJIBaseProduct baseProduct = DJISDKManager.getInstance().getDJIProduct();
@@ -115,6 +117,8 @@ public class MissionController implements I_MissionController {
                 Toast.makeText(contextManager_.getApplicationContext(),
                         "Aircraft not taken off. Attempting to take off.", Toast.LENGTH_LONG).show();
                 takeOff();
+
+                aircraft.getFlightController().getFlightLimitation().setMaxFlightRadiusLimitationEnabled(false, null);
                 return;
             }
             else
@@ -126,7 +130,7 @@ public class MissionController implements I_MissionController {
 
             DJIMissionManager missionManager = aircraft.getMissionManager();
 
-            if (missionManager != null)
+            if (missionManager != null && aircraft.getFlightController().getCurrentState().isFlying())
             {
                 try
                 {
@@ -137,21 +141,18 @@ public class MissionController implements I_MissionController {
                     };
 
 
-                    missionManager.prepareMission(missionModel_.djiMission_, progressHandler, new DJICommonCallbacks.DJICompletionCallback()
-                    {
+                    aircraft.getFlightController().getHomeLocation(new DJICommonCallbacks.DJICompletionCallbackWith<DJILocationCoordinate2D>() {
                         @Override
-                        public void onResult(DJIError error) {
-                            if (error == null)
-                            {
-                                Toast.makeText(contextManager_.getApplicationContext(), "Prepared Mission Successfully", Toast.LENGTH_LONG).show();
-                            }
-                            else
-                            {
-                                Toast.makeText(contextManager_.getApplicationContext(), "Failed to Prepare Mission", Toast.LENGTH_LONG).show();
-                            }
+                        public void onSuccess(DJILocationCoordinate2D djiLocationCoordinate2D) {
+                            Toast.makeText(contextManager_.getApplicationContext(), "Home location "+ djiLocationCoordinate2D.getLatitude() +
+                                    ", " + djiLocationCoordinate2D.getLongitude(), Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onFailure(DJIError djiError) {
+                            Toast.makeText(contextManager_.getApplicationContext(), "Could not get home location " + djiError.getDescription(), Toast.LENGTH_LONG).show();
                         }
                     });
-
 
                     missionManager.startMissionExecution(new DJICommonCallbacks.DJICompletionCallback()
                     {
@@ -159,11 +160,11 @@ public class MissionController implements I_MissionController {
                         public void onResult(DJIError error) {
                             if (error == null)
                             {
-                                Toast.makeText(contextManager_.getApplicationContext(), "Started Mission Successfully", Toast.LENGTH_LONG).show();
+                                Toast.makeText(contextManager_.getApplicationContext(), "Started Mission Successfully ", Toast.LENGTH_LONG).show();
                             }
                             else
                             {
-                                Toast.makeText(contextManager_.getApplicationContext(), "Failed to Start Mission", Toast.LENGTH_LONG).show();
+                                Toast.makeText(contextManager_.getApplicationContext(), "Failed to Start Mission " + error.getDescription(), Toast.LENGTH_LONG).show();
                             }
                         }
                     });
