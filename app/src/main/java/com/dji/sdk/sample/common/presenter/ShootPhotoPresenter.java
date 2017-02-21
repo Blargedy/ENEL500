@@ -1,5 +1,6 @@
 package com.dji.sdk.sample.common.presenter;
 
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -130,7 +131,7 @@ public class ShootPhotoPresenter implements View.OnClickListener
             if (!found && media.getMediaType() == DJIMedia.MediaType.JPG)
             {
                 found = true;
-                File destination = contextManager_.getApplicationContext().getExternalFilesDir(null);
+                File destination = contextManager_.getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
                 Toast.makeText(contextManager_.getApplicationContext(),
                         "Destination=" + destination.getAbsolutePath(), Toast.LENGTH_LONG).show();

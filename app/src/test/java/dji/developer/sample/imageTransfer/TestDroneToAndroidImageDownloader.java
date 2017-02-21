@@ -1,15 +1,16 @@
 package dji.developer.sample.imageTransfer;
 
 import com.dji.sdk.sample.common.imageTransfer.DroneToAndroidImageDownloader;
-import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferPathSource;
-import com.dji.sdk.sample.common.integration.I_CameraMediaListDownloadListener;
+import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferPathsSource;
 import com.dji.sdk.sample.common.integration.I_MediaDataFetcher;
 import com.dji.sdk.sample.common.integration.I_MediaDownloadListener;
+import com.dji.sdk.sample.common.mission.I_MissionController;
 
 import dji.sdk.camera.DJIMedia;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -27,12 +28,14 @@ import java.util.ArrayList;
 
 public class TestDroneToAndroidImageDownloader
 {
-    private I_ImageTransferPathSource pathSource_ = mock(I_ImageTransferPathSource.class);
+    private I_ImageTransferPathsSource pathSource_ = mock(I_ImageTransferPathsSource.class);
     private I_MediaDataFetcher mediaDataFetcher_ = mock(I_MediaDataFetcher.class);
+    private I_MissionController missionController_ = mock(I_MissionController.class);
 
     private DroneToAndroidImageDownloader patient_ = new DroneToAndroidImageDownloader(
             pathSource_,
-            mediaDataFetcher_);
+            mediaDataFetcher_,
+            missionController_);
 
     @Test
     public void willRequestAndroidImagePathFromPathSource()
@@ -57,6 +60,23 @@ public class TestDroneToAndroidImageDownloader
         patient_.downloadImagesFromDrone(imagesToDownload);
 
         verifyEachImageWasDownloaded(expectedImagesToDownload, expectedImagePath);
+    }
+
+    @Test
+    public void willResumeMissionAfterImagesHaveBeenDownloaded()
+    {
+        int size = 3;
+        File imagePath = new File("pathname");
+        ArrayList<DJIMedia> imagesToDownload = makeListOfImages(size);
+        when(pathSource_.androidDeviceImagePath()).thenReturn(imagePath);
+        makeMediaDataFetcherCallOnSuccessCallback();
+
+        patient_.downloadImagesFromDrone(imagesToDownload);
+
+        InOrder inOrder = inOrder(mediaDataFetcher_, missionController_);
+        inOrder.verify(mediaDataFetcher_, times(size)).fetchMediaData(
+                any(DJIMedia.class), any(File.class), any(I_MediaDownloadListener.class));
+        inOrder.verify(missionController_).resumeMission();
     }
 
     private ArrayList<DJIMedia> makeListOfImages(int size)

@@ -5,5 +5,6 @@ package com.dji.sdk.sample.common.mission;
  */
 
 public interface I_MissionController {
-    public void startMission();
+    void startMission();
+    void resumeMission();
 }

@@ -87,7 +87,7 @@ public class MissionController implements I_MissionController {
         }
     }
 
-
+    @Override
     public void startMission()
     {
         DJIBaseProduct baseProduct = DJISDKManager.getInstance().getDJIProduct();
@@ -188,4 +188,10 @@ public class MissionController implements I_MissionController {
         }
 
     }//end startMission
+
+    @Override
+    public void resumeMission()
+    {
+
+    }
 }

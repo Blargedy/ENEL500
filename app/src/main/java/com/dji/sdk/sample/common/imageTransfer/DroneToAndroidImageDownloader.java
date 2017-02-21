@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.imageTransfer;
 
 import com.dji.sdk.sample.common.integration.I_MediaDataFetcher;
 import com.dji.sdk.sample.common.integration.I_MediaDownloadListener;
+import com.dji.sdk.sample.common.mission.I_MissionController;
 
 import java.util.ArrayList;
 
@@ -16,16 +17,20 @@ public class DroneToAndroidImageDownloader implements
         I_DroneToAndroidImageDownloader,
         I_MediaDownloadListener
 {
-    private I_ImageTransferPathSource pathSource_;
+    private I_ImageTransferPathsSource pathSource_;
     private I_MediaDataFetcher mediaDataFetcher_;
+    private I_MissionController missionController_;
+
     private ArrayList<DJIMedia> imagesLeftToDownload_;
 
     public DroneToAndroidImageDownloader(
-            I_ImageTransferPathSource pathSource,
-            I_MediaDataFetcher mediaDataFetcher)
+            I_ImageTransferPathsSource pathSource,
+            I_MediaDataFetcher mediaDataFetcher,
+            I_MissionController missionController)
     {
         pathSource_ = pathSource;
         mediaDataFetcher_ = mediaDataFetcher;
+        missionController_ = missionController;
     }
 
     @Override
@@ -43,6 +48,10 @@ public class DroneToAndroidImageDownloader implements
                     imagesLeftToDownload_.remove(0),
                     pathSource_.androidDeviceImagePath(),
                     this);
+        }
+        else
+        {
+            missionController_.resumeMission();
         }
     }
 
