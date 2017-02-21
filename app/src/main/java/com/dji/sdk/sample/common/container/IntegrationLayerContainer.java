@@ -14,7 +14,7 @@ public class IntegrationLayerContainer
     MediaManagerSource mediaManagerSource_;
     MediaDataFetcher mediaDataFetcher_;
 
-    public void IntegrationLayerContainer()
+    public IntegrationLayerContainer()
     {
         mediaManagerSource_ = new MediaManagerSource();
 

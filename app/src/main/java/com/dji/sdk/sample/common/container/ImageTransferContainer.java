@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.container;
 
+import android.util.Log;
+
 import com.dji.sdk.sample.common.imageTransfer.CameraMediaDownloadModeChanger;
 import com.dji.sdk.sample.common.imageTransfer.CameraMediaListFetcher;
 import com.dji.sdk.sample.common.imageTransfer.DroneImageDownloadSelector;
@@ -19,6 +21,8 @@ import com.dji.sdk.sample.common.view.FlightControlView;
 
 public class ImageTransferContainer
 {
+    private static final String TAG = "ImageTransferContainer";
+
     private ImageTransferPathsSource pathsSource_;
     private DroneToAndroidImageDownloader droneToAndroidImageDownloader_;
     private DroneImageDownloadSelector downloadSelector_;

@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.imageTransfer;
 
+import android.util.Log;
+
 import com.dji.sdk.sample.common.integration.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.I_MediaManager;
 import com.dji.sdk.sample.common.integration.I_MediaManagerSource;
@@ -14,6 +16,8 @@ public class CameraMediaDownloadModeChanger implements
         I_CameraMediaDownloadModeChanger,
         I_CompletionCallback
 {
+    private static final String TAG = "DownloadModeChanger";
+
     private I_MediaManagerSource mediaManagerSource_;
     private I_CameraMediaListFetcher mediaListFetcher_;
 
@@ -28,6 +32,7 @@ public class CameraMediaDownloadModeChanger implements
     @Override
     public void changeCameraModeForMediaDownload()
     {
+        Log.d(TAG, "changeCameraModeForMediaDownload");
         I_MediaManager mediaManager = mediaManagerSource_.getMediaManager();
         mediaManager.setCameraModeMediaDownload(this);
     }
@@ -37,7 +42,12 @@ public class CameraMediaDownloadModeChanger implements
     {
         if (error == null)
         {
+            Log.d(TAG, "Successfully changed camera mode");
             mediaListFetcher_.fetchMediaListFromCamera();
+        }
+        else
+        {
+            Log.d(TAG, "Failed to changed camera mode");
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.imageTransfer;
 
+import android.util.Log;
+
 import com.dji.sdk.sample.common.integration.I_CameraMediaListDownloadListener;
 import com.dji.sdk.sample.common.integration.I_MediaManager;
 import com.dji.sdk.sample.common.integration.I_MediaManagerSource;
@@ -17,6 +19,8 @@ public class CameraMediaListFetcher implements
         I_CameraMediaListFetcher,
         I_CameraMediaListDownloadListener
 {
+    private static final String TAG = "CameraMediaListFetcher";
+
     private I_MediaManagerSource mediaManagerSource_;
     private I_DroneImageDownloadSelector downloadSelector_;
     private I_DroneToAndroidImageDownloader imageDownloader_;
@@ -34,6 +38,7 @@ public class CameraMediaListFetcher implements
     @Override
     public void fetchMediaListFromCamera()
     {
+        Log.d(TAG, "fetchMediaListFromCamera");
         I_MediaManager mediaManager = mediaManagerSource_.getMediaManager();
         mediaManager.fetchMediaList(this);
     }
@@ -41,6 +46,8 @@ public class CameraMediaListFetcher implements
     @Override
     public void onSuccess(ArrayList<DJIMedia> currentMediaList)
     {
+        Log.d(TAG, "Successfully fetched media list" + currentMediaList.size());
+
         ArrayList<DJIMedia> imagesToDownload = downloadSelector_
                 .determineImagesForDownloadFromMediaList(currentMediaList);
         imageDownloader_.downloadImagesFromDrone(imagesToDownload);
@@ -56,5 +63,8 @@ public class CameraMediaListFetcher implements
     public void onProgress(long total, long current) {}
 
     @Override
-    public void onFailure(DJIError error) {}
+    public void onFailure(DJIError error)
+    {
+        Log.d(TAG, "Failed to fetched media list");
+    }
 }

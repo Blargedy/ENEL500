@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.dji.sdk.sample.common.container.ImageTransferContainer;
 import com.dji.sdk.sample.common.container.IntegrationLayerContainer;
@@ -31,6 +32,7 @@ public class FlightControlActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         permissionRequester_ = new UserPermissionRequester();
         contextManager_ = new ApplicationContextManager(this);
+        sendLogsToFile();
 
         flightControlView_ = new FlightControlView(this);
 
@@ -54,7 +56,18 @@ public class FlightControlActivity extends AppCompatActivity
         permissionRequester_.requestPermissions(this);
 
         setContentView(flightControlView_);
+
+
     }
 
-
+    private void sendLogsToFile()
+    {
+        try {
+            Process process = Runtime.getRuntime().exec("logcat -d");
+            process = Runtime.getRuntime().exec( "logcat -f " + "/storage/emulated/0/"+"Logging.txt");
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 }

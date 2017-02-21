@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.imageTransfer;
 
+import android.util.Log;
+
 import com.dji.sdk.sample.common.integration.I_MediaDataFetcher;
 import com.dji.sdk.sample.common.integration.I_MediaDownloadListener;
 import com.dji.sdk.sample.common.mission.I_MissionController;
@@ -17,6 +19,8 @@ public class DroneToAndroidImageDownloader implements
         I_DroneToAndroidImageDownloader,
         I_MediaDownloadListener
 {
+    private static final String TAG = "ImageDownloader";
+
     private I_ImageTransferPathsSource pathSource_;
     private I_MediaDataFetcher mediaDataFetcher_;
     private I_MissionController missionController_;
@@ -36,6 +40,8 @@ public class DroneToAndroidImageDownloader implements
     @Override
     public void downloadImagesFromDrone(ArrayList<DJIMedia> imagesToDownload)
     {
+        Log.d(TAG, "downloadImagesFromDrone");
+
         imagesLeftToDownload_ = imagesToDownload;
         downloadNextImage();
     }
@@ -71,5 +77,8 @@ public class DroneToAndroidImageDownloader implements
     public void onProgress(long total, long current) {}
 
     @Override
-    public void onFailure(DJIError error) {}
+    public void onFailure(DJIError error)
+    {
+        Log.d(TAG, "Failed to download an image");
+    }
 }
