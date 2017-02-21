@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.dji.sdk.sample.common.imageTransfer.I_DroneToAndroidImageDownloader;
+import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferer;
 import com.dji.sdk.sample.common.integration.DJISampleApplication;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
@@ -24,23 +26,28 @@ import dji.sdk.camera.DJIMediaManager;
 
 public class ShootPhotoPresenter implements View.OnClickListener
 {
-    I_ApplicationContextManager contextManager_;
-    Button shootPhotoButton_;
+    private I_ApplicationContextManager contextManager_;
+    private Button shootPhotoButton_;
+    private I_ImageTransferer imageTransferer_;
+
 
     public ShootPhotoPresenter(
             I_ApplicationContextManager contextManager,
-            Button shootPhotoButton)
+            Button shootPhotoButton,
+            I_ImageTransferer imageTransferer)
     {
         contextManager_ = contextManager;
         shootPhotoButton_ = shootPhotoButton;
         shootPhotoButton_.setOnClickListener(this);
+        imageTransferer_ = imageTransferer;
     }
 
     @Override
     public void onClick(View view) {
         if(view.getId() == shootPhotoButton_.getId())
         {
-            downloadMediaList();
+            imageTransferer_.transferNewImagesFromDrone();
+            //downloadMediaList();
         }
     }
 

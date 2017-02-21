@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.container;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
+import com.dji.sdk.sample.common.mission.I_MissionController;
 import com.dji.sdk.sample.common.mission.MissionController;
 import com.dji.sdk.sample.common.mission.MissionGenerator;
 import com.dji.sdk.sample.common.presenter.MapPresenter;
@@ -23,7 +24,7 @@ public class MissionContainer
     private MissionGenerator missionGenerator_;
     private MissionGenerationPresenter missionGenerationPresenter_;
 
-    private MissionController mssionController_;
+    private MissionController missionController_;
     private MissionControllerPresenter missionControllerPresenter_;
 
     private ShootPhotoPresenter shootPhotoPresenter_;
@@ -47,19 +48,20 @@ public class MissionContainer
                 flightControlView.startMissionButton(),
                 missionGenerator_);
 
-        mssionController_ = new MissionController(
+        missionController_ = new MissionController(
                 contextManager,
                 generatedMissionModel_);
         missionControllerPresenter_ = new MissionControllerPresenter(
                 flightControlView.startMissionButton(),
-                mssionController_);
-
-        shootPhotoPresenter_ = new ShootPhotoPresenter(
-                contextManager,
-                flightControlView.shootPhotoButton());
+                missionController_);
 
         mapPresenter_ = new MapPresenter(
                 contextManager,
                 flightControlView.goToMapButton());
+    }
+
+    public I_MissionController missionController()
+    {
+        return missionController_;
     }
 }

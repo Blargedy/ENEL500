@@ -3,6 +3,8 @@ package com.dji.sdk.sample.common.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.dji.sdk.sample.common.container.ImageTransferContainer;
+import com.dji.sdk.sample.common.container.IntegrationLayerContainer;
 import com.dji.sdk.sample.common.container.MissionContainer;
 import com.dji.sdk.sample.common.presenter.ProductConnectionPresenter;
 import com.dji.sdk.sample.common.utility.ApplicationContextManager;
@@ -16,7 +18,11 @@ public class FlightControlActivity extends AppCompatActivity
 
     private FlightControlView flightControlView_;
 
+    private IntegrationLayerContainer integrationLayerContainer_;
+
     private MissionContainer missionContainer_;
+
+    private ImageTransferContainer imageTransferContainer_;
 
     private ProductConnectionPresenter productConnectionPresenter_;
 
@@ -28,7 +34,18 @@ public class FlightControlActivity extends AppCompatActivity
 
         flightControlView_ = new FlightControlView(this);
 
-        missionContainer_ = new MissionContainer(flightControlView_, contextManager_);
+        integrationLayerContainer_ = new IntegrationLayerContainer();
+
+        missionContainer_ = new MissionContainer(
+                flightControlView_,
+                contextManager_);
+
+        imageTransferContainer_ = new ImageTransferContainer(
+                contextManager_,
+                integrationLayerContainer_.mediaManagerSource(),
+                integrationLayerContainer_.mediaDataFetcher(),
+                missionContainer_.missionController(),
+                flightControlView_);
 
         productConnectionPresenter_ = new ProductConnectionPresenter(
                 flightControlView_.connectionStatusText(),
