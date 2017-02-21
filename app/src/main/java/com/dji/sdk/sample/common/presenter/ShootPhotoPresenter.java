@@ -155,7 +155,7 @@ public class ShootPhotoPresenter implements View.OnClickListener
                     @Override
                     public void onSuccess(String s) {
                         Toast.makeText(contextManager_.getApplicationContext(),
-                                "Success: Downloaded image", Toast.LENGTH_SHORT).show();
+                                "Success: Downloaded image: " + s, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
