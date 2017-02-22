@@ -13,7 +13,6 @@ import java.lang.Math;
 /**
  * Created by eric on 2017-01-23.
  * Edited by Bill Skinner on 2017-02-15
- * Edited by Eric Born on 2017-02-21 20:32 at 5224 32nd Ave NW Calgary T3B 0J6
  */
 
 public class SwitchBackPathGenerator {
