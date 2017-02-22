@@ -33,32 +33,17 @@ public class MissionGenerator implements I_MissionGenerator
     private InitialMissionModel initialMissionModel_;
     private GeneratedMissionModel generatedMissionModel_;
     private I_ApplicationContextManager contextManager_;
-    //
-    public DJIWaypointMission generateNonCustomMission()
-    {
-        List<Coordinate> switchbackVector= SwitchBackPathGenerator.generateSwitchback(initialMissionModel_.missionBoundary().bottomLeft(),
-                initialMissionModel_.missionBoundary().topRight(), initialMissionModel_.altitude());
-        DJIWaypointMission waypointMission = new DJIWaypointMission();
-        waypointMission.headingMode = DJIWaypointMission.DJIWaypointMissionHeadingMode.Auto;
-        waypointMission.autoFlightSpeed = 10.0f;
-
-        Iterator switchBackIter = switchbackVector.iterator();
-        while(switchBackIter.hasNext()){
-            Coordinate nextPoint = (Coordinate) switchBackIter.next();
-            DJIWaypoint wp = new DJIWaypoint(nextPoint.latitude_, nextPoint.longitude_, initialMissionModel_.altitude());
-            waypointMission.addWaypoint(wp);
-        }
-        return waypointMission;
-    }
 
     public MissionGenerator(I_ApplicationContextManager contextManager, InitialMissionModel initialMissionModel, GeneratedMissionModel generatedMissionModel){
         initialMissionModel_ = initialMissionModel;
         generatedMissionModel_ = generatedMissionModel;
         contextManager_ = contextManager;
     }
+
     public void generateMission(){
         List<Coordinate> switchbackVector= SwitchBackPathGenerator.generateSwitchback(initialMissionModel_.missionBoundary().bottomLeft(),
                 initialMissionModel_.missionBoundary().topRight(), initialMissionModel_.altitude());
+
 
         //produce List of waypoints
         Vector<DJIWaypoint> waypoints = new Vector<DJIWaypoint>();
@@ -77,6 +62,7 @@ public class MissionGenerator implements I_MissionGenerator
 
         while(waypointIter.hasNext()) {
             if(wayPointMissionIndex == -1 || waypointCount >= 100){
+                waypointCount = 0;
                 DJIWaypointMission waypointMission = new DJIWaypointMission();
                 waypointMission.autoFlightSpeed = 10;
 
@@ -85,7 +71,7 @@ public class MissionGenerator implements I_MissionGenerator
                 waypointMissions.elementAt(waypointCount).addWaypoint((DJIWaypoint) waypointIter.next());
             }
             else {
-                waypointMissions.elementAt(waypointCount).addWaypoint((DJIWaypoint) waypointIter.next());
+                waypointMissions.elementAt(wayPointMissionIndex).addWaypoint((DJIWaypoint) waypointIter.next());
                 waypointCount++;
             }
         }
@@ -101,7 +87,7 @@ public class MissionGenerator implements I_MissionGenerator
                                 "Successfully reached Waypoint", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(contextManager_.getApplicationContext(),
-                                error.getDescription(), Toast.LENGTH_LONG).show();
+                                "could not reach waypoint", Toast.LENGTH_LONG).show();
                     }
                 }
             });
