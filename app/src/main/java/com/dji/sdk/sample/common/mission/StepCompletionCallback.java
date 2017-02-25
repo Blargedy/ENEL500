@@ -44,6 +44,21 @@ public class StepCompletionCallback implements I_CompletionCallback{
                 }
             });
 
+            missionManager_.resumeMissionExecution(new DJICommonCallbacks.DJICompletionCallback() {
+                @Override
+                public void onResult(DJIError djiError) {
+                    if(djiError == null){
+                        Toast.makeText(contextManager_.getApplicationContext(),
+                                "resumed mission ", Toast.LENGTH_SHORT).show();
+                    }
+
+                    else{
+                        Toast.makeText(contextManager_.getApplicationContext(),
+                                "Could not resume mission: " + djiError.getDescription(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
         } else {
             Toast.makeText(contextManager_.getApplicationContext(),
                     "could not reach waypoint", Toast.LENGTH_LONG).show();
