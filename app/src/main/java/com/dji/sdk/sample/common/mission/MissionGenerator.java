@@ -5,6 +5,7 @@ import android.widget.Toast;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferer;
+import com.dji.sdk.sample.common.integration.I_MissionManager;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 import dji.common.error.DJIError;
@@ -25,7 +26,6 @@ public class MissionGenerator implements I_MissionGenerator
     private I_ApplicationContextManager contextManager_;
     private CustomMissionBuilder customMissionBuilder_;
     private StepCompletionCallback stepCompletionCallback_;
-    private DJIMissionManager missionManager_;
     private I_ImageTransferer imageTransferer_;
 
     public MissionGenerator(I_ApplicationContextManager contextManager,
@@ -36,10 +36,6 @@ public class MissionGenerator implements I_MissionGenerator
         generatedMissionModel_ = generatedMissionModel;
         contextManager_ = contextManager;
         stepCompletionCallback_ = stepCompletionCallback;
-        //temporary
-        DJIAircraft aircraft = (DJIAircraft) DJISDKManager.getInstance().getDJIProduct();
-        missionManager_ = aircraft.getMissionManager();
-
         customMissionBuilder_ = new CustomMissionBuilder(initialMissionModel, generatedMissionModel, contextManager, stepCompletionCallback_);
     }
 
