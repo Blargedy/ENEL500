@@ -27,7 +27,7 @@ public class FlightControllerSource implements I_FlightControllerSource{
 
             if(flightController != null)
             {
-                Log.d(TAG, "Mission manager not null");
+                Log.d(TAG, "Flight Controller not null");
 
                 return new FlightController(flightController);
             }

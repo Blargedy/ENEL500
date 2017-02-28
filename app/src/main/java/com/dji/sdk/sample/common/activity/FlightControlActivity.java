@@ -40,6 +40,7 @@ public class FlightControlActivity extends AppCompatActivity
 
         missionContainer_ = new MissionContainer(
                 integrationLayerContainer_.missionManagerSource(),
+                integrationLayerContainer_.flightControllerSource(),
                 flightControlView_,
                 contextManager_);
 

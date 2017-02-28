@@ -2,6 +2,8 @@ package com.dji.sdk.sample.common.container;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
+import com.dji.sdk.sample.common.integration.I_FlightController;
+import com.dji.sdk.sample.common.integration.I_FlightControllerSource;
 import com.dji.sdk.sample.common.integration.I_MissionManager;
 import com.dji.sdk.sample.common.integration.I_MissionManagerSource;
 import com.dji.sdk.sample.common.mission.I_MissionController;
@@ -30,6 +32,7 @@ public class MissionContainer
     private StepCompletionCallback stepCompletionCallback_;
 
     private I_MissionManagerSource missionManagerSource_;
+    private I_FlightControllerSource flightControllerSource_;
 
     private MissionGenerator missionGenerator_;
     private MissionGenerationPresenter missionGenerationPresenter_;
@@ -42,6 +45,7 @@ public class MissionContainer
 
     public MissionContainer(
             I_MissionManagerSource missionManagerSource,
+            I_FlightControllerSource flightControllerSource,
             FlightControlView flightControlView,
             I_ApplicationContextManager contextManager)
     {
@@ -50,9 +54,11 @@ public class MissionContainer
         generatedMissionModel_ = new GeneratedMissionModel();
 
         missionManagerSource_ = missionManagerSource;
+        flightControllerSource_ = flightControllerSource;
 
         missionController_ = new MissionController(
                 missionManagerSource,
+                flightControllerSource,
                 contextManager,
                 generatedMissionModel_);
         missionControllerPresenter_ = new MissionControllerPresenter(
