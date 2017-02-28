@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.mission;
 
 import android.widget.Toast;
 
+import com.dji.sdk.sample.common.integration.I_CompletionCallback;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 import dji.common.error.DJIError;
@@ -11,11 +12,11 @@ import dji.common.util.DJICommonCallbacks;
  * Created by Matthew on 2017-02-27.
  */
 
-public class MissionHelper {
+public class MissionHelper{
 
-    public static DJICommonCallbacks.DJICompletionCallback completionCallback(final I_ApplicationContextManager context, final String success, final String failure)
+    public static I_CompletionCallback completionCallback(final I_ApplicationContextManager context, final String success, final String failure)
     {
-        return new DJICommonCallbacks.DJICompletionCallback()
+        return new I_CompletionCallback()
         {
             @Override
             public void onResult(DJIError error) {

@@ -27,4 +27,9 @@ public class MissionManager implements I_MissionManager{
     {
         missionManager_.resumeMissionExecution(callback);
     }
+
+    @Override
+    public void startMissionExecution(I_CompletionCallback callback){
+        missionManager_.startMissionExecution(callback);
+    }
 }

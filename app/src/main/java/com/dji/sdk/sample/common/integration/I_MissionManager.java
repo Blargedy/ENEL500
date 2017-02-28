@@ -10,5 +10,6 @@ public interface I_MissionManager {
 
     public void pauseMissionExecution(I_CompletionCallback callback);
     public void resumeMissionExecution(I_CompletionCallback callback);
+    public void startMissionExecution(I_CompletionCallback callback);
 
 }

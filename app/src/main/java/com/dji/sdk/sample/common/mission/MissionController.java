@@ -133,7 +133,8 @@ public class MissionController implements I_MissionController {
             }
 
 
-            DJIMissionManager missionManager = aircraft.getMissionManager();
+            //DJIMissionManager missionManager = aircraft.getMissionManager();
+            I_MissionManager missionManager = missionManagerSource_.getMissionManager();
 
             if (missionManager != null && aircraft.getFlightController().getCurrentState().isFlying())
             {
