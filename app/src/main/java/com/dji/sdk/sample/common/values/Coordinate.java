@@ -22,13 +22,29 @@ public class Coordinate {
         longitude_ = longitude;
     }
 
+//    public double distanceApproximationInMeters(Coordinate coordinate)
+//    {
+//        double deltaLatitude = coordinate.latitude_ - latitude_;
+//        double deltaLongitude = coordinate.longitude_ - longitude_;
+//        double deltaDegrees = Math.sqrt(deltaLatitude*deltaLatitude + deltaLongitude*deltaLongitude);
+//        double deltaRadians = MathUtilities.degreesToRadians(deltaDegrees);
+//        double radiusOfEarthInMeters = 6371008;
+//        return deltaRadians*radiusOfEarthInMeters;
+//    }
+
+    //using the haversine method https://en.wikipedia.org/wiki/Haversine_formula
     public double distanceApproximationInMeters(Coordinate coordinate)
     {
-        double deltaLatitude = coordinate.latitude_ - latitude_;
-        double deltaLongitude = coordinate.longitude_ - longitude_;
-        double deltaDegrees = Math.sqrt(deltaLatitude*deltaLatitude + deltaLongitude*deltaLongitude);
-        double deltaRadians = MathUtilities.degreesToRadians(deltaDegrees);
+        double deltaLatitude = MathUtilities.degreesToRadians(coordinate.latitude_ - latitude_);
+        double deltaLongitude = MathUtilities.degreesToRadians(coordinate.longitude_ - longitude_);
         double radiusOfEarthInMeters = 6371008;
-        return deltaRadians*radiusOfEarthInMeters;
+
+        double latitude1 = MathUtilities.degreesToRadians(latitude_);
+        double latitude2 = MathUtilities.degreesToRadians(coordinate.latitude_);
+
+        double a = Math.sin(deltaLatitude/2) * Math.sin(deltaLatitude/2) +
+                Math.sin(deltaLongitude/2) * Math.sin(deltaLongitude/2) * Math.cos(latitude1) * Math.cos(latitude2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return radiusOfEarthInMeters * c;
     }
 }
