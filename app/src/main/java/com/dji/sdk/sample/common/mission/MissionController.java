@@ -31,6 +31,16 @@ public class MissionController implements I_MissionController {
         missionModel_ = missionModel;
     }
 
+    public void handleWaypointReached()
+    {
+
+    }
+
+    public void resumeMission()
+    {
+
+    }
+
     public void takeOff()
     {
         DJIBaseProduct baseProduct = DJISDKManager.getInstance().getDJIProduct();
@@ -59,20 +69,7 @@ public class MissionController implements I_MissionController {
 
             if(controller != null)
             {
-                controller.takeOff(new DJICommonCallbacks.DJICompletionCallback()
-                {
-                    @Override
-                    public void onResult(DJIError error) {
-                        if (error == null)
-                        {
-                            Toast.makeText(contextManager_.getApplicationContext(), "Taking off Successfully", Toast.LENGTH_LONG).show();
-                        }
-                        else
-                        {
-                            Toast.makeText(contextManager_.getApplicationContext(), "Failed to Takeoff", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+                controller.takeOff(MissionHelper.completionCallback(contextManager_, "Taking off Successfully", "Failed to Takeoff"));
             }
             else
             {
@@ -154,21 +151,8 @@ public class MissionController implements I_MissionController {
                         }
                     });
 
-                    missionManager.startMissionExecution(new DJICommonCallbacks.DJICompletionCallback()
-                    {
-                        @Override
-                        public void onResult(DJIError error) {
-                            if (error == null)
-                            {
-                                Toast.makeText(contextManager_.getApplicationContext(), "Started Mission Successfully ", Toast.LENGTH_LONG).show();
-                            }
-                            else
-                            {
-                                Toast.makeText(contextManager_.getApplicationContext(), "Failed to Start Mission " + error.getDescription(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-
+                    missionManager.startMissionExecution(MissionHelper.completionCallback(
+                            contextManager_, "Started Mission Successfully ","Failed to Prepare Mission. Exiting"));
 
                 } catch (Throwable e)
                 {
@@ -189,9 +173,4 @@ public class MissionController implements I_MissionController {
 
     }//end startMission
 
-    @Override
-    public void resumeMission()
-    {
-
-    }
 }

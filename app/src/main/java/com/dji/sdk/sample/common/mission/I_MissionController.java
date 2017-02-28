@@ -7,4 +7,5 @@ package com.dji.sdk.sample.common.mission;
 public interface I_MissionController {
     void startMission();
     void resumeMission();
+    void handleWaypointReached();
 }

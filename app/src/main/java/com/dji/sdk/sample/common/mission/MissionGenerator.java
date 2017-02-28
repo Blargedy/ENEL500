@@ -28,15 +28,18 @@ public class MissionGenerator implements I_MissionGenerator
     private DJIMissionManager missionManager_;
     private I_ImageTransferer imageTransferer_;
 
-    public MissionGenerator(I_ApplicationContextManager contextManager, InitialMissionModel initialMissionModel, GeneratedMissionModel generatedMissionModel){
+    public MissionGenerator(I_ApplicationContextManager contextManager,
+                            InitialMissionModel initialMissionModel,
+                            GeneratedMissionModel generatedMissionModel,
+                            StepCompletionCallback stepCompletionCallback){
         initialMissionModel_ = initialMissionModel;
         generatedMissionModel_ = generatedMissionModel;
         contextManager_ = contextManager;
+        stepCompletionCallback_ = stepCompletionCallback;
         //temporary
         DJIAircraft aircraft = (DJIAircraft) DJISDKManager.getInstance().getDJIProduct();
         missionManager_ = aircraft.getMissionManager();
 
-        stepCompletionCallback_ = new StepCompletionCallback(contextManager_, missionManager_, imageTransferer_);
         customMissionBuilder_ = new CustomMissionBuilder(initialMissionModel, generatedMissionModel, contextManager, stepCompletionCallback_);
     }
 
