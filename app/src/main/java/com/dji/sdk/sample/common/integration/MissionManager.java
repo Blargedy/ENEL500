@@ -27,10 +27,4 @@ public class MissionManager implements I_MissionManager{
     {
         missionManager_.resumeMissionExecution(callback);
     }
-
-    @Override
-    public DJIFlightController getFlightController()
-    {
-        missionManager_.getFlightController();
-    }
 }
