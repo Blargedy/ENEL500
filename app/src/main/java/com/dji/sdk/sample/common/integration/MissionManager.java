@@ -1,6 +1,7 @@
 package com.dji.sdk.sample.common.integration;
 
 
+import dji.sdk.flightcontroller.DJIFlightController;
 import dji.sdk.missionmanager.DJIMissionManager;
 
 /**
@@ -25,5 +26,11 @@ public class MissionManager implements I_MissionManager{
     public void resumeMissionExecution(I_CompletionCallback callback)
     {
         missionManager_.resumeMissionExecution(callback);
+    }
+
+    @Override
+    public DJIFlightController getFlightController()
+    {
+        missionManager_.getFlightController();
     }
 }

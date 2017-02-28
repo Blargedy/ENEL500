@@ -26,12 +26,15 @@ import dji.sdk.sdkmanager.DJISDKManager;
 
 public class MissionController implements I_MissionController {
     private GeneratedMissionModel missionModel_;
+    private MissionManagerSource missionManagerSource_;
     private I_ApplicationContextManager contextManager_;
 
     public MissionController(
+            MissionManagerSource missionManagerSource,
             I_ApplicationContextManager contextManager,
             GeneratedMissionModel missionModel)
     {
+        missionManagerSource_ = missionManagerSource;
         contextManager_ = contextManager;
         missionModel_ = missionModel;
     }

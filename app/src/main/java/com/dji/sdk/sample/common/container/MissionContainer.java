@@ -52,6 +52,7 @@ public class MissionContainer
         missionManagerSource_ = missionManagerSource;
 
         missionController_ = new MissionController(
+                missionManagerSource,
                 contextManager,
                 generatedMissionModel_);
         missionControllerPresenter_ = new MissionControllerPresenter(
