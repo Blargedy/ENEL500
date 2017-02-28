@@ -3,6 +3,11 @@ package com.dji.sdk.sample.common.mission;
 import android.widget.Toast;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
+import com.dji.sdk.sample.common.integration.I_CompletionCallback;
+import com.dji.sdk.sample.common.integration.I_MissionManager;
+import com.dji.sdk.sample.common.integration.I_MissionManagerSource;
+import com.dji.sdk.sample.common.integration.MissionManager;
+import com.dji.sdk.sample.common.integration.MissionManagerSource;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 import dji.common.error.DJIError;
 import dji.common.flightcontroller.DJILocationCoordinate2D;
