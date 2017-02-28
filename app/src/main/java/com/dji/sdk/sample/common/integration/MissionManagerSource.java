@@ -31,7 +31,7 @@ public class MissionManagerSource implements I_MissionManagerSource{
             {
                 Log.d(TAG, "Mission manager not null");
 
-                //return new MissionManager(missionManager);
+                return new MissionManager(missionManager);
             }
         }
         return null;

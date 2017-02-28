@@ -7,7 +7,7 @@ import dji.sdk.missionmanager.DJIMissionManager;
  * Created by eric7 on 2017-02-21.
  */
 
-public class MissionManager {
+public class MissionManager implements I_MissionManager{
     DJIMissionManager missionManager_;
 
     MissionManager(DJIMissionManager missionManager)
@@ -15,15 +15,15 @@ public class MissionManager {
         missionManager_ = missionManager;
     }
 
-//    @Override
-//    public void fetchMediaList(I_CameraMediaListDownloadListener downloadListener)
-//    {
-//        mediaManager_.fetchMediaList(downloadListener);
-//    }
-//
-//    @Override
-//    public void setCameraModeMediaDownload(I_CompletionCallback callback)
-//    {
-//        mediaManager_.setCameraModeMediaDownload(callback);
-//    }
+    @Override
+    public void pauseMissionExecution(I_CompletionCallback callback)
+    {
+        missionManager_.pauseMissionExecution(callback);
+    }
+
+    @Override
+    public void resumeMissionExecution(I_CompletionCallback callback)
+    {
+        missionManager_.resumeMissionExecution(callback);
+    }
 }
