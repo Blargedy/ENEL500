@@ -18,6 +18,8 @@ public class MainMenuActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         contextManager_ = new ApplicationContextManager(this);
 
+        sendLogsToFile();
+
         mainMenuView_ = new MainMenuView(this);
 
         mainMenuPresenter_ = new MainMenuPresenter(
@@ -26,6 +28,19 @@ public class MainMenuActivity extends AppCompatActivity
                 contextManager_);
 
         setContentView(mainMenuView_);
+
+
+    }
+
+    private void sendLogsToFile()
+    {
+        try {
+            Process process = Runtime.getRuntime().exec("logcat -d");
+            process = Runtime.getRuntime().exec( "logcat -f " + "/storage/emulated/0/"+"Logging.txt");
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
 }

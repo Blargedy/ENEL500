@@ -1,6 +1,7 @@
 package dji.developer.sample.imageTransfer;
 
 import com.dji.sdk.sample.common.imageTransfer.DroneToAndroidImageDownloader;
+import com.dji.sdk.sample.common.imageTransfer.I_AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferPathsSource;
 import com.dji.sdk.sample.common.integration.I_MediaDataFetcher;
 import com.dji.sdk.sample.common.integration.I_MediaDownloadListener;
@@ -31,11 +32,13 @@ public class TestDroneToAndroidImageDownloader
     private I_ImageTransferPathsSource pathSource_ = mock(I_ImageTransferPathsSource.class);
     private I_MediaDataFetcher mediaDataFetcher_ = mock(I_MediaDataFetcher.class);
     private I_MissionController missionController_ = mock(I_MissionController.class);
+    private I_AndroidToPcImageCopier androidToPcImageCopier_ = mock(I_AndroidToPcImageCopier.class);
 
     private DroneToAndroidImageDownloader patient_ = new DroneToAndroidImageDownloader(
             pathSource_,
             mediaDataFetcher_,
-            missionController_);
+            missionController_,
+            androidToPcImageCopier_);
 
     @Test
     public void willRequestAndroidImagePathFromPathSource()
@@ -60,6 +63,20 @@ public class TestDroneToAndroidImageDownloader
         patient_.downloadImagesFromDrone(imagesToDownload);
 
         verifyEachImageWasDownloaded(expectedImagesToDownload, expectedImagePath);
+    }
+
+    @Test
+    public void willCopyImageFromAndroidToPcAfterItHasBeenRetrievedFromDrone()
+    {
+        int size = 3;
+        File expectedImagePath = new File("pathname");
+        ArrayList<DJIMedia> imagesToDownload = makeListOfImages(size);
+        when(pathSource_.androidDeviceImagePath()).thenReturn(expectedImagePath);
+        makeMediaDataFetcherCallOnSuccessCallback();
+
+        patient_.downloadImagesFromDrone(imagesToDownload);
+
+        verify(androidToPcImageCopier_, times(size)).copyImageToPc(expectedImagePath.toString());
     }
 
     @Test
@@ -93,7 +110,8 @@ public class TestDroneToAndroidImageDownloader
     {
         doAnswer(new Answer() {
             public Object answer(InvocationOnMock invocation) {
-                patient_.onSuccess(null);
+                Object[] args = invocation.getArguments();
+                patient_.onSuccess(args[1].toString());
                 return null;
             }})
                 .when(mediaDataFetcher_).fetchMediaData(

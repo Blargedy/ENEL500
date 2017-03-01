@@ -32,7 +32,6 @@ public class FlightControlActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         permissionRequester_ = new UserPermissionRequester();
         contextManager_ = new ApplicationContextManager(this);
-        sendLogsToFile();
 
         flightControlView_ = new FlightControlView(this);
 
@@ -60,16 +59,5 @@ public class FlightControlActivity extends AppCompatActivity
         setContentView(flightControlView_);
 
 
-    }
-
-    private void sendLogsToFile()
-    {
-        try {
-            Process process = Runtime.getRuntime().exec("logcat -d");
-            process = Runtime.getRuntime().exec( "logcat -f " + "/storage/emulated/0/"+"Logging.txt");
-        }catch(Exception e)
-        {
-            e.printStackTrace();
-        }
     }
 }

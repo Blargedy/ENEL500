@@ -24,17 +24,20 @@ public class DroneToAndroidImageDownloader implements
     private I_ImageTransferPathsSource pathSource_;
     private I_MediaDataFetcher mediaDataFetcher_;
     private I_MissionController missionController_;
+    private I_AndroidToPcImageCopier androidToPcImageCopier_;
 
     private ArrayList<DJIMedia> imagesLeftToDownload_;
 
     public DroneToAndroidImageDownloader(
             I_ImageTransferPathsSource pathSource,
             I_MediaDataFetcher mediaDataFetcher,
-            I_MissionController missionController)
+            I_MissionController missionController,
+            I_AndroidToPcImageCopier androidToPcImageCopier)
     {
         pathSource_ = pathSource;
         mediaDataFetcher_ = mediaDataFetcher;
         missionController_ = missionController;
+        androidToPcImageCopier_ = androidToPcImageCopier;
     }
 
     @Override
@@ -63,6 +66,7 @@ public class DroneToAndroidImageDownloader implements
     public void onSuccess(String path)
     {
         downloadNextImage();
+        androidToPcImageCopier_.copyImageToPc(path);
     }
 
     @Override

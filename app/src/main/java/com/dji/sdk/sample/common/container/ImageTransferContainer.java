@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.container;
 
 import android.util.Log;
 
+import com.dji.sdk.sample.common.imageTransfer.AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.imageTransfer.CameraMediaDownloadModeChanger;
 import com.dji.sdk.sample.common.imageTransfer.CameraMediaListFetcher;
 import com.dji.sdk.sample.common.imageTransfer.DroneImageDownloadSelector;
@@ -24,6 +25,7 @@ public class ImageTransferContainer
     private static final String TAG = "ImageTransferContainer";
 
     private ImageTransferPathsSource pathsSource_;
+    private AndroidToPcImageCopier androidToPcImageCopier_;
     private DroneToAndroidImageDownloader droneToAndroidImageDownloader_;
     private DroneImageDownloadSelector downloadSelector_;
     private CameraMediaListFetcher mediaListFetcher_;
@@ -43,10 +45,14 @@ public class ImageTransferContainer
         pathsSource_ = new ImageTransferPathsSource(
                 contextManager);
 
+        androidToPcImageCopier_ = new AndroidToPcImageCopier(
+                pathsSource_);
+
         droneToAndroidImageDownloader_ = new DroneToAndroidImageDownloader(
                 pathsSource_,
                 mediaDataFetcher,
-                missionController);
+                missionController,
+                androidToPcImageCopier_);
 
         downloadSelector_ = new DroneImageDownloadSelector();
 
