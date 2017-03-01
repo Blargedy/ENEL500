@@ -9,7 +9,6 @@ import com.dji.sdk.sample.common.integration.I_MediaManagerSource;
 
 import static org.mockito.Mockito.*;
 import org.junit.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -27,7 +26,7 @@ public class TestCameraMediaListFetcher
     private I_DroneImageDownloadSelector downloadSelector_ =
             mock(I_DroneImageDownloadSelector.class);
     private I_DroneToAndroidImageDownloader imageDownloader_ =
-            mock (I_DroneToAndroidImageDownloader.class);
+            mock(I_DroneToAndroidImageDownloader.class);
 
     private CameraMediaListFetcher patient_ = new CameraMediaListFetcher(
             mediaManagerSource_,

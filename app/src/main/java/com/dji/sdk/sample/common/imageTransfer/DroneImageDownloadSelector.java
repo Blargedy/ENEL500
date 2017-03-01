@@ -3,7 +3,6 @@ package com.dji.sdk.sample.common.imageTransfer;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Hashtable;
 
 import dji.sdk.camera.DJIMedia;
 

@@ -16,7 +16,7 @@ public class CameraMediaDownloadModeChanger implements
         I_CameraMediaDownloadModeChanger,
         I_CompletionCallback
 {
-    private static final String TAG = "DownloadModeChanger";
+    private static final String TAG = "CameraMediaDownloadModeChanger";
 
     private I_MediaManagerSource mediaManagerSource_;
     private I_CameraMediaListFetcher mediaListFetcher_;
@@ -32,7 +32,6 @@ public class CameraMediaDownloadModeChanger implements
     @Override
     public void changeCameraModeForMediaDownload()
     {
-        Log.d(TAG, "changeCameraModeForMediaDownload");
         I_MediaManager mediaManager = mediaManagerSource_.getMediaManager();
         mediaManager.setCameraModeMediaDownload(this);
     }
@@ -42,12 +41,11 @@ public class CameraMediaDownloadModeChanger implements
     {
         if (error == null)
         {
-            Log.d(TAG, "Successfully changed camera mode");
             mediaListFetcher_.fetchMediaListFromCamera();
         }
         else
         {
-            Log.d(TAG, "Failed to changed camera mode");
+            Log.e(TAG, "Failed to changed camera mode");
         }
     }
 }

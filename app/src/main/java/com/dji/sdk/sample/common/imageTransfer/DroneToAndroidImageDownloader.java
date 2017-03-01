@@ -19,7 +19,7 @@ public class DroneToAndroidImageDownloader implements
         I_DroneToAndroidImageDownloader,
         I_MediaDownloadListener
 {
-    private static final String TAG = "ImageDownloader";
+    private static final String TAG = "DroneToAndroidImageDownloader";
 
     private I_ImageTransferPathsSource pathSource_;
     private I_MediaDataFetcher mediaDataFetcher_;
@@ -40,8 +40,6 @@ public class DroneToAndroidImageDownloader implements
     @Override
     public void downloadImagesFromDrone(ArrayList<DJIMedia> imagesToDownload)
     {
-        Log.d(TAG, "downloadImagesFromDrone");
-
         imagesLeftToDownload_ = imagesToDownload;
         downloadNextImage();
     }
@@ -79,6 +77,6 @@ public class DroneToAndroidImageDownloader implements
     @Override
     public void onFailure(DJIError error)
     {
-        Log.d(TAG, "Failed to download an image");
+        Log.e(TAG, "Failed to download an image");
     }
 }

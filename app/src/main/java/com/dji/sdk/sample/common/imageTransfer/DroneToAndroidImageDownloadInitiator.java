@@ -8,8 +8,6 @@ import android.util.Log;
 
 public class DroneToAndroidImageDownloadInitiator implements I_ImageTransferer
 {
-    private static final String TAG = "ImageDownloadInitiator";
-
     private I_CameraMediaDownloadModeChanger modeChanger_;
 
     public DroneToAndroidImageDownloadInitiator(I_CameraMediaDownloadModeChanger modeChanger)
@@ -20,7 +18,6 @@ public class DroneToAndroidImageDownloadInitiator implements I_ImageTransferer
     @Override
     public void transferNewImagesFromDrone()
     {
-        Log.d(TAG, "transferNewImagesFromDrone");
         modeChanger_.changeCameraModeForMediaDownload();
     }
 }

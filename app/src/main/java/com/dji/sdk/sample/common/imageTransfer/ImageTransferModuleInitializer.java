@@ -12,42 +12,43 @@ import dji.common.error.DJIError;
 import dji.sdk.camera.DJIMedia;
 
 /**
- * Created by Julia on 2017-02-12.
+ * Created by Julia on 2017-02-21.
  */
 
-public class CameraMediaListFetcher implements
-        I_CameraMediaListFetcher,
+public class ImageTransferModuleInitializer implements
+        I_ImageTransferModuleInitializer,
         I_CameraMediaListDownloadListener
 {
-    private static final String TAG = "CameraMediaListFetcher";
+    private static final String TAG = "ImageTransferModuleInitializer";
 
     private I_MediaManagerSource mediaManagerSource_;
-    private I_DroneImageDownloadSelector downloadSelector_;
-    private I_DroneToAndroidImageDownloader imageDownloader_;
+    private I_DroneMediaListInitializer mediaListInitializer_;
 
-    public CameraMediaListFetcher(
+    public ImageTransferModuleInitializer(
             I_MediaManagerSource mediaManagerSource,
-            I_DroneImageDownloadSelector downloadSelector,
-            I_DroneToAndroidImageDownloader imageDownloader)
+            I_DroneMediaListInitializer mediaListInitializer)
     {
         mediaManagerSource_ = mediaManagerSource;
-        downloadSelector_ = downloadSelector;
-        imageDownloader_ = imageDownloader;
+        mediaListInitializer_ = mediaListInitializer;
     }
 
     @Override
-    public void fetchMediaListFromCamera()
+    public void initalizeImageTransferModulePriorToFlight()
     {
         I_MediaManager mediaManager = mediaManagerSource_.getMediaManager();
         mediaManager.fetchMediaList(this);
     }
 
     @Override
-    public void onSuccess(ArrayList<DJIMedia> currentMediaList)
+    public void onSuccess(ArrayList<DJIMedia> mediaList)
     {
-        ArrayList<DJIMedia> imagesToDownload = downloadSelector_
-                .determineImagesForDownloadFromMediaList(currentMediaList);
-        imageDownloader_.downloadImagesFromDrone(imagesToDownload);
+        mediaListInitializer_.initializeDroneMediaList(mediaList);
+    }
+
+    @Override
+    public void onFailure(DJIError error)
+    {
+        Log.e(TAG, "Failed to fetched media list");
     }
 
     @Override
@@ -59,9 +60,5 @@ public class CameraMediaListFetcher implements
     @Override
     public void onProgress(long total, long current) {}
 
-    @Override
-    public void onFailure(DJIError error)
-    {
-        Log.e(TAG, "Failed to fetched media list");
-    }
+
 }

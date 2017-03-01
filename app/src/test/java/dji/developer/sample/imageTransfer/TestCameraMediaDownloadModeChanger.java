@@ -10,8 +10,6 @@ import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import dji.common.error.DJIError;
-
 import static org.mockito.Mockito.*;
 
 /**
