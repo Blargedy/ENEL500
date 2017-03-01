@@ -34,7 +34,6 @@ public class MissionController implements I_MissionController {
     private I_ImageTransferer imageTransferer_;
     private I_ApplicationContextManager contextManager_;
     private GeneratedMissionModel missionModel_;
-    private int counter_;
 
     public MissionController(
             I_MissionManagerSource missionManagerSource,
@@ -48,16 +47,22 @@ public class MissionController implements I_MissionController {
         imageTransferer_ = imageTransferer;
         contextManager_ = contextManager;
         missionModel_ = missionModel;
-        counter_ = 0;
+
     }
 
-    public void handleWaypointReached()
+    public void handleWaypointReached(int waypoint)
     {
         //pause the mission every 5 waypoints
-        counter_++;
-        if(counter_%5 ==0)
+        if(waypoint%5 == 0)
         {
             pauseMission();
+
+            /*
+            Designed with the following expected to block until finished.
+             */
+            imageTransferer_.transferNewImagesFromDrone();
+
+            resumeMission();
         }
     }
 
@@ -71,7 +76,7 @@ public class MissionController implements I_MissionController {
     public void resumeMission()
     {
         missionManager_.resumeMissionExecution(MissionHelper.completionCallback(
-                contextManager_,"resumed mission","Could not resume mission:"));
+                contextManager_,"Resumed mission","Could not resume mission:"));
     }
 
     public void takeOff()
