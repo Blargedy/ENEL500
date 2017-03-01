@@ -15,8 +15,8 @@ public class InitialMissionModel
     public InitialMissionModel()
     {
         //temporary
-        Coordinate topRight = new Coordinate(51.077176, -114.131086);
-        Coordinate bottomLeft = new Coordinate(51.074446, -114.138085);
+        Coordinate topRight = new Coordinate(50.796276, -114.205159);
+        Coordinate bottomLeft = new Coordinate(50.795906, -114.206540);
 
         missionBoundary_ = new MissionBoundary(topRight, bottomLeft);
         altitude_ = 15.0f;

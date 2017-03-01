@@ -60,7 +60,7 @@ public class MissionController implements I_MissionController {
             /*
             Designed with the following expected to block until finished.
              */
-            imageTransferer_.transferNewImagesFromDrone();
+            //imageTransferer_.transferNewImagesFromDrone();
 
             resumeMission();
         }

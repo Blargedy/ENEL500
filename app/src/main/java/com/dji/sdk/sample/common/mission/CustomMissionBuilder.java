@@ -60,14 +60,15 @@ public class CustomMissionBuilder implements I_CustomMissionBuilder {
         int wayPointMissionIndex = -1;
 
         while (waypointIter.hasNext()) {
-            if (wayPointMissionIndex == -1 || waypointCount >= 100) {
+            if (wayPointMissionIndex == -1 || waypointCount >= 99) {
                 waypointCount = 0;
                 DJIWaypointMission waypointMission = new DJIWaypointMission();
                 waypointMission.autoFlightSpeed = 10;
 
                 waypointMissions.add(waypointMission);
                 wayPointMissionIndex++;
-                waypointMissions.elementAt(waypointCount).addWaypoint((DJIWaypoint) waypointIter.next());
+                waypointMissions.elementAt(wayPointMissionIndex).addWaypoint((DJIWaypoint) waypointIter.next());
+                waypointCount++;
             } else {
                 waypointMissions.elementAt(wayPointMissionIndex).addWaypoint((DJIWaypoint) waypointIter.next());
                 waypointCount++;
