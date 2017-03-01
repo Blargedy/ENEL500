@@ -73,6 +73,8 @@ public class MissionContainer
                 contextManager,
                 initialMissionModel_,
                 generatedMissionModel_,
+                missionManagerSource_,
+                flightControllerSource_,
                 stepCompletionCallback_);
 
         missionGenerationPresenter_ = new MissionGenerationPresenter(

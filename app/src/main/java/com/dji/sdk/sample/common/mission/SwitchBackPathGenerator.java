@@ -65,7 +65,7 @@ public class SwitchBackPathGenerator {
         insertLinearlyDistributedCoordinates(topPathCoordinates, 0, numberOfSwaths - 2);
         insertLinearlyDistributedCoordinates(bottomPathCoordinates, 0, numberOfSwaths - 2);
 
-        for (int i = 0; i < (numberOfSwaths + 2); i++) {
+        for (int i = 0; i < (numberOfSwaths); i++) {
             switch (i % 2) {
                 case 0: { // Even Swaths - Bottom to Top
                     Coordinate firstCoordinate = bottomPathCoordinates.get(i);
