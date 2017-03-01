@@ -14,4 +14,5 @@ public interface I_FlightController {
     public DJIFlightControllerCurrentState getCurrentState();
     public void getHomeLocation(DJICommonCallbacks.DJICompletionCallbackWith<DJILocationCoordinate2D> callback);
     public DJIFlightLimitation getFlightLimitation();
+    public void setHomeLocationUsingAircraftCurrentLocation(I_CompletionCallback callback);
 }

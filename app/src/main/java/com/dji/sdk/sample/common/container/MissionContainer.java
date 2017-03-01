@@ -51,6 +51,7 @@ public class MissionContainer
     {
 
         initialMissionModel_ = new InitialMissionModel();
+
         generatedMissionModel_ = new GeneratedMissionModel();
 
         missionManagerSource_ = missionManagerSource;

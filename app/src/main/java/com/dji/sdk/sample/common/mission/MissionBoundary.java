@@ -22,13 +22,17 @@ public class MissionBoundary {
         bottomLeft_ = bottomLeft;
     }
 
-    Coordinate topRight()
+    public Coordinate topRight()
     {
         return topRight_;
     }
 
-    Coordinate bottomLeft()
+    public Coordinate bottomLeft()
     {
         return bottomLeft_;
     }
+
+    public void setTopRight(Coordinate topRight) { topRight_ = topRight; }
+
+    public void setBottomLeft(Coordinate bottomLeft) {topRight_ = bottomLeft;}
 }

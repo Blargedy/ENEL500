@@ -40,4 +40,10 @@ public class FlightController implements I_FlightController {
     {
         return flightController_.getFlightLimitation();
     }
+
+    @Override
+    public void setHomeLocationUsingAircraftCurrentLocation(I_CompletionCallback callback)
+    {
+        flightController_.setHomeLocationUsingAircraftCurrentLocation(callback);
+    }
 }

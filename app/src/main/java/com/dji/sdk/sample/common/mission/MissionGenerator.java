@@ -5,7 +5,10 @@ import android.widget.Toast;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferer;
+import com.dji.sdk.sample.common.integration.I_CompletionCallback;
+import com.dji.sdk.sample.common.integration.I_FlightControllerSource;
 import com.dji.sdk.sample.common.integration.I_MissionManager;
+import com.dji.sdk.sample.common.integration.I_MissionManagerSource;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 import dji.common.error.DJIError;
@@ -26,14 +29,20 @@ public class MissionGenerator implements I_MissionGenerator
     private I_ApplicationContextManager contextManager_;
     private CustomMissionBuilder customMissionBuilder_;
     private StepCompletionCallback stepCompletionCallback_;
+    private I_MissionManagerSource missionManagerSource_;
+    private I_FlightControllerSource flightControllerSource_;
     private I_ImageTransferer imageTransferer_;
 
     public MissionGenerator(I_ApplicationContextManager contextManager,
                             InitialMissionModel initialMissionModel,
                             GeneratedMissionModel generatedMissionModel,
+                            I_MissionManagerSource missionManagerSource,
+                            I_FlightControllerSource flightControllerSource,
                             StepCompletionCallback stepCompletionCallback){
         initialMissionModel_ = initialMissionModel;
         generatedMissionModel_ = generatedMissionModel;
+        missionManagerSource_ = missionManagerSource;
+        flightControllerSource_ = flightControllerSource;
         contextManager_ = contextManager;
         stepCompletionCallback_ = stepCompletionCallback;
         customMissionBuilder_ = new CustomMissionBuilder(initialMissionModel, generatedMissionModel, contextManager, stepCompletionCallback_);
@@ -43,8 +52,9 @@ public class MissionGenerator implements I_MissionGenerator
 
         customMissionBuilder_.buildCustomMission();
 
-        DJIAircraft aircraft = (DJIAircraft) DJISDKManager.getInstance().getDJIProduct();
-        DJIMissionManager missionManager = aircraft.getMissionManager();
+//        DJIAircraft aircraft = (DJIAircraft) DJISDKManager.getInstance().getDJIProduct();
+//        DJIMissionManager missionManager = aircraft.getMissionManager();
+
 
         DJIMission.DJIMissionProgressHandler progressHandler = new DJIMission.DJIMissionProgressHandler()
         {
@@ -52,7 +62,7 @@ public class MissionGenerator implements I_MissionGenerator
             public void onProgress(DJIMission.DJIProgressType type, float progress) {}
         };
 
-        aircraft.getFlightController().setHomeLocationUsingAircraftCurrentLocation(new DJICommonCallbacks.DJICompletionCallback() {
+        flightControllerSource_.getFlightController().setHomeLocationUsingAircraftCurrentLocation(new I_CompletionCallback() {
             @Override
             public void onResult(DJIError djiError) {
                 if (djiError == null)
@@ -66,7 +76,7 @@ public class MissionGenerator implements I_MissionGenerator
             }
         });
 
-        missionManager.prepareMission(generatedMissionModel_.djiMission_, progressHandler, new DJICommonCallbacks.DJICompletionCallback()
+        missionManagerSource_.getMissionManager().prepareMission(generatedMissionModel_.djiMission_, progressHandler, new I_CompletionCallback()
         {
             @Override
             public void onResult(DJIError error) {

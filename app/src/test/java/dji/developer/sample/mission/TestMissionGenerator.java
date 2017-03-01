@@ -6,6 +6,7 @@ import java.util.Random;
 import dji.sdk.missionmanager.DJIWaypointMission;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
 
 /**
  * Created by Julia on 2017-01-16.

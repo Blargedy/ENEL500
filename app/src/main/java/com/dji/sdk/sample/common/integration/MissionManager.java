@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.integration;
 
 
 import dji.sdk.flightcontroller.DJIFlightController;
+import dji.sdk.missionmanager.DJIMission;
 import dji.sdk.missionmanager.DJIMissionManager;
 
 /**
@@ -32,4 +33,11 @@ public class MissionManager implements I_MissionManager{
     public void startMissionExecution(I_CompletionCallback callback){
         missionManager_.startMissionExecution(callback);
     }
+
+    @Override
+    public void prepareMission(DJIMission mission, DJIMission.DJIMissionProgressHandler progressHandler, I_CompletionCallback callback)
+    {
+        missionManager_.prepareMission(mission, progressHandler, callback);
+    }
+
 }
