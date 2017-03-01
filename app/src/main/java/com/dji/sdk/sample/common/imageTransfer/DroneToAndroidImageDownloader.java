@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.dji.sdk.sample.common.integration.I_MediaDataFetcher;
 import com.dji.sdk.sample.common.integration.I_MediaDownloadListener;
-import com.dji.sdk.sample.common.mission.I_MissionController;
 
 import java.util.ArrayList;
 
@@ -23,7 +22,6 @@ public class DroneToAndroidImageDownloader implements
 
     private I_ImageTransferPathsSource pathSource_;
     private I_MediaDataFetcher mediaDataFetcher_;
-    private I_MissionController missionController_;
     private I_AndroidToPcImageCopier androidToPcImageCopier_;
 
     private ArrayList<DJIMedia> imagesLeftToDownload_;
@@ -31,12 +29,10 @@ public class DroneToAndroidImageDownloader implements
     public DroneToAndroidImageDownloader(
             I_ImageTransferPathsSource pathSource,
             I_MediaDataFetcher mediaDataFetcher,
-            I_MissionController missionController,
             I_AndroidToPcImageCopier androidToPcImageCopier)
     {
         pathSource_ = pathSource;
         mediaDataFetcher_ = mediaDataFetcher;
-        missionController_ = missionController;
         androidToPcImageCopier_ = androidToPcImageCopier;
     }
 
@@ -58,7 +54,11 @@ public class DroneToAndroidImageDownloader implements
         }
         else
         {
-            missionController_.resumeMission();
+            /*
+            We need to block rather than resume the mission due to
+            circular dependency.
+             */
+//            missionController_.resumeMission();
         }
     }
 

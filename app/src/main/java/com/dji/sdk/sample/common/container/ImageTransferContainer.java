@@ -8,6 +8,7 @@ import com.dji.sdk.sample.common.imageTransfer.CameraMediaListFetcher;
 import com.dji.sdk.sample.common.imageTransfer.DroneImageDownloadSelector;
 import com.dji.sdk.sample.common.imageTransfer.DroneToAndroidImageDownloadInitiator;
 import com.dji.sdk.sample.common.imageTransfer.DroneToAndroidImageDownloader;
+import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.ImageTransferPathsSource;
 import com.dji.sdk.sample.common.integration.I_MediaDataFetcher;
 import com.dji.sdk.sample.common.integration.I_MediaManagerSource;
@@ -39,7 +40,6 @@ public class ImageTransferContainer
             I_ApplicationContextManager contextManager,
             I_MediaManagerSource mediaManagerSource,
             I_MediaDataFetcher mediaDataFetcher,
-            I_MissionController missionController,
             FlightControlView flightControlView)
     {
         pathsSource_ = new ImageTransferPathsSource(
@@ -51,7 +51,6 @@ public class ImageTransferContainer
         droneToAndroidImageDownloader_ = new DroneToAndroidImageDownloader(
                 pathsSource_,
                 mediaDataFetcher,
-                missionController,
                 androidToPcImageCopier_);
 
         downloadSelector_ = new DroneImageDownloadSelector();
@@ -72,5 +71,10 @@ public class ImageTransferContainer
                 contextManager,
                 flightControlView.shootPhotoButton(),
                 downloadInitiator_);
+    }
+
+    public I_ImageTransferer imageTransferer()
+    {
+        return downloadInitiator_;
     }
 }

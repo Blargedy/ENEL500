@@ -3,6 +3,7 @@ package com.dji.sdk.sample.common.mission;
 import android.widget.Toast;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
+import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferer;
 import com.dji.sdk.sample.common.integration.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.I_FlightController;
 import com.dji.sdk.sample.common.integration.I_FlightControllerSource;
@@ -27,51 +28,68 @@ import dji.sdk.sdkmanager.DJISDKManager;
  */
 
 public class MissionController implements I_MissionController {
-    private GeneratedMissionModel missionModel_;
-    private I_MissionManagerSource missionManagerSource_;
-    private I_FlightControllerSource flightControllerSource_;
+
+    private I_MissionManager missionManager_;
+    private I_FlightController flightController_;
+    private I_ImageTransferer imageTransferer_;
     private I_ApplicationContextManager contextManager_;
+    private GeneratedMissionModel missionModel_;
+    private int counter_;
 
     public MissionController(
             I_MissionManagerSource missionManagerSource,
-            I_FlightControllerSource flightControllerSource_,
+            I_FlightControllerSource flightControllerSource,
+            I_ImageTransferer imageTransferer,
             I_ApplicationContextManager contextManager,
             GeneratedMissionModel missionModel)
     {
-        missionManagerSource_ = missionManagerSource;
-        flightControllerSource_ = flightControllerSource_;
+        missionManager_ = missionManagerSource.getMissionManager();
+        flightController_ = flightControllerSource.getFlightController();
+        imageTransferer_ = imageTransferer;
         contextManager_ = contextManager;
         missionModel_ = missionModel;
+        counter_ = 0;
     }
 
     public void handleWaypointReached()
     {
+        //pause the mission every 5 waypoints
+        counter_++;
+        if(counter_%5 ==0)
+        {
+            pauseMission();
+        }
+    }
 
+    public void pauseMission()
+    {
+        missionManager_.pauseMissionExecution(MissionHelper.completionCallback(
+                contextManager_, "Paused mission to transfer photos",
+                "Could not pause mission to transfer photos: "));
     }
 
     public void resumeMission()
     {
-
+        missionManager_.resumeMissionExecution(MissionHelper.completionCallback(
+                contextManager_,"resumed mission","Could not resume mission:"));
     }
 
     public void takeOff()
     {
-        I_FlightController controller = flightControllerSource_.getFlightController();
-        controller.takeOff(MissionHelper.completionCallback(contextManager_, "Taking off Successfully", "Failed to Takeoff"));
+        flightController_.takeOff(MissionHelper.completionCallback(contextManager_,
+                "Taking off Successfully", "Failed to Takeoff"));
     }
 
     @Override
     public void startMission()
     {
-        I_FlightController controller = flightControllerSource_.getFlightController();
-
-        if(!controller.getCurrentState().isFlying())
+        if(!flightController_.getCurrentState().isFlying())
         {
             Toast.makeText(contextManager_.getApplicationContext(),
                     "Aircraft not taken off. Attempting to take off.", Toast.LENGTH_LONG).show();
             takeOff();
 
-            controller.getFlightLimitation().setMaxFlightRadiusLimitationEnabled(false, null);
+            flightController_.getFlightLimitation().setMaxFlightRadiusLimitationEnabled(false, null);
             return;
         }
         else
@@ -80,9 +98,7 @@ public class MissionController implements I_MissionController {
                     "Attempting to launch mission", Toast.LENGTH_LONG).show();
         }
 
-        I_MissionManager missionManager = missionManagerSource_.getMissionManager();
-
-        if (missionManager != null && controller.getCurrentState().isFlying())
+        if (missionManager_ != null && flightController_.getCurrentState().isFlying())
         {
             try
             {
@@ -93,7 +109,7 @@ public class MissionController implements I_MissionController {
                 };
 
 
-                controller.getHomeLocation(new DJICommonCallbacks.DJICompletionCallbackWith<DJILocationCoordinate2D>() {
+                flightController_.getHomeLocation(new DJICommonCallbacks.DJICompletionCallbackWith<DJILocationCoordinate2D>() {
                     @Override
                     public void onSuccess(DJILocationCoordinate2D djiLocationCoordinate2D) {
                         Toast.makeText(contextManager_.getApplicationContext(), "Home location "+ djiLocationCoordinate2D.getLatitude() +
@@ -106,7 +122,7 @@ public class MissionController implements I_MissionController {
                     }
                 });
 
-                missionManager.startMissionExecution(MissionHelper.completionCallback(
+                missionManager_.startMissionExecution(MissionHelper.completionCallback(
                         contextManager_, "Started Mission Successfully ","Failed to Prepare Mission. Exiting"));
 
             } catch (Throwable e)
@@ -121,5 +137,4 @@ public class MissionController implements I_MissionController {
         }
 
     }//end startMission
-
 }

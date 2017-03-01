@@ -27,7 +27,6 @@ public class StepCompletionCallback implements I_CompletionCallback{
     {
         controller_ = controller;
         contextManager_ = contextManager;
-        counter_ = 0;
     }
 
     public void onResult(DJIError error) {
@@ -54,7 +53,7 @@ public class StepCompletionCallback implements I_CompletionCallback{
 
         } else {
             Toast.makeText(contextManager_.getApplicationContext(),
-                    "could not reach waypoint", Toast.LENGTH_LONG).show();
+                    "could not reach waypoint. "+error.getDescription(), Toast.LENGTH_LONG).show();
         }
     }
 

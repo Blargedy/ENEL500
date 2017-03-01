@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.container;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
+import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferer;
 import com.dji.sdk.sample.common.integration.I_FlightController;
 import com.dji.sdk.sample.common.integration.I_FlightControllerSource;
 import com.dji.sdk.sample.common.integration.I_MissionManager;
@@ -37,8 +38,6 @@ public class MissionContainer
     private MissionGenerator missionGenerator_;
     private MissionGenerationPresenter missionGenerationPresenter_;
 
-
-
     private ShootPhotoPresenter shootPhotoPresenter_;
 
     private MapPresenter mapPresenter_;
@@ -47,6 +46,7 @@ public class MissionContainer
             I_MissionManagerSource missionManagerSource,
             I_FlightControllerSource flightControllerSource,
             FlightControlView flightControlView,
+            I_ImageTransferer imageTransferer,
             I_ApplicationContextManager contextManager)
     {
 
@@ -60,6 +60,7 @@ public class MissionContainer
         missionController_ = new MissionController(
                 missionManagerSource,
                 flightControllerSource,
+                imageTransferer,
                 contextManager,
                 generatedMissionModel_);
         missionControllerPresenter_ = new MissionControllerPresenter(
