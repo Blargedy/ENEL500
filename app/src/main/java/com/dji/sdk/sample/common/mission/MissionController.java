@@ -27,10 +27,10 @@ import dji.sdk.sdkmanager.DJISDKManager;
  * Created by Matthew on 2017-02-08.
  */
 
-public class MissionController implements I_MissionController {
-
-    private I_MissionManager missionManager_;
-    private I_FlightController flightController_;
+public class MissionController implements I_MissionController
+{
+    private I_MissionManagerSource missionManagerSource_;
+    private I_FlightControllerSource flightControllerSource_;
     private I_ApplicationContextManager contextManager_;
     private GeneratedMissionModel missionModel_;
 
@@ -40,41 +40,47 @@ public class MissionController implements I_MissionController {
             I_ApplicationContextManager contextManager,
             GeneratedMissionModel missionModel)
     {
-        missionManager_ = missionManagerSource.getMissionManager();
-        flightController_ = flightControllerSource.getFlightController();
+        missionManagerSource_ = missionManagerSource;
+        flightControllerSource_ = flightControllerSource;
         contextManager_ = contextManager;
         missionModel_ = missionModel;
     }
 
     public void pauseMission()
     {
-        missionManager_.pauseMissionExecution(MissionHelper.completionCallback(
-                contextManager_, "Paused mission to transfer photos",
-                "Could not pause mission to transfer photos: "));
+        missionManagerSource_.getMissionManager().pauseMissionExecution(
+                MissionHelper.completionCallback(
+                    contextManager_, "Paused mission to transfer photos",
+                    "Could not pause mission to transfer photos: "));
     }
 
     public void resumeMission()
     {
-        missionManager_.resumeMissionExecution(MissionHelper.completionCallback(
+        missionManagerSource_.getMissionManager().resumeMissionExecution(
+                MissionHelper.completionCallback(
                 contextManager_,"Resumed mission","Could not resume mission:"));
     }
 
     public void takeOff()
     {
-        flightController_.takeOff(MissionHelper.completionCallback(contextManager_,
-                "Taking off Successfully", "Failed to Takeoff"));
+        flightControllerSource_.getFlightController().takeOff(
+                MissionHelper.completionCallback(contextManager_,
+                    "Taking off Successfully", "Failed to Takeoff"));
     }
 
     @Override
     public void startMission()
     {
-        if(!flightController_.getCurrentState().isFlying())
+        I_FlightController flightController = flightControllerSource_.getFlightController();
+        I_MissionManager missionManager = missionManagerSource_.getMissionManager();
+
+        if(!flightController.getCurrentState().isFlying())
         {
             Toast.makeText(contextManager_.getApplicationContext(),
                     "Aircraft not taken off. Attempting to take off.", Toast.LENGTH_LONG).show();
             takeOff();
 
-            flightController_.getFlightLimitation().setMaxFlightRadiusLimitationEnabled(false, null);
+            flightController.getFlightLimitation().setMaxFlightRadiusLimitationEnabled(false, null);
             return;
         }
         else
@@ -83,11 +89,11 @@ public class MissionController implements I_MissionController {
                     "Attempting to launch mission", Toast.LENGTH_LONG).show();
         }
 
-        if (missionManager_ != null && flightController_.getCurrentState().isFlying())
+        if (missionManager != null && flightController.getCurrentState().isFlying())
         {
             try
             {
-                flightController_.getHomeLocation(new DJICommonCallbacks.DJICompletionCallbackWith<DJILocationCoordinate2D>() {
+                flightController.getHomeLocation(new DJICommonCallbacks.DJICompletionCallbackWith<DJILocationCoordinate2D>() {
                     @Override
                     public void onSuccess(DJILocationCoordinate2D djiLocationCoordinate2D) {
                         Toast.makeText(contextManager_.getApplicationContext(), "Home location "+ djiLocationCoordinate2D.getLatitude() +
@@ -100,7 +106,7 @@ public class MissionController implements I_MissionController {
                     }
                 });
 
-                missionManager_.startMissionExecution(MissionHelper.completionCallback(
+                missionManager.startMissionExecution(MissionHelper.completionCallback(
                         contextManager_, "Started Mission Successfully ","Failed to Prepare Mission. Exiting"));
 
             } catch (Throwable e)
