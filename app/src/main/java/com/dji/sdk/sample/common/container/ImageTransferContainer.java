@@ -40,6 +40,7 @@ public class ImageTransferContainer
             I_ApplicationContextManager contextManager,
             I_MediaManagerSource mediaManagerSource,
             I_MediaDataFetcher mediaDataFetcher,
+            I_MissionController missionController,
             FlightControlView flightControlView)
     {
         pathsSource_ = new ImageTransferPathsSource(
@@ -51,6 +52,7 @@ public class ImageTransferContainer
         droneToAndroidImageDownloader_ = new DroneToAndroidImageDownloader(
                 pathsSource_,
                 mediaDataFetcher,
+                missionController,
                 androidToPcImageCopier_);
 
         downloadSelector_ = new DroneImageDownloadSelector();

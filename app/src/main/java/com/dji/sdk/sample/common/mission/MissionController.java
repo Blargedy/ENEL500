@@ -31,39 +31,19 @@ public class MissionController implements I_MissionController {
 
     private I_MissionManager missionManager_;
     private I_FlightController flightController_;
-    private I_ImageTransferer imageTransferer_;
     private I_ApplicationContextManager contextManager_;
     private GeneratedMissionModel missionModel_;
 
     public MissionController(
             I_MissionManagerSource missionManagerSource,
             I_FlightControllerSource flightControllerSource,
-            I_ImageTransferer imageTransferer,
             I_ApplicationContextManager contextManager,
             GeneratedMissionModel missionModel)
     {
         missionManager_ = missionManagerSource.getMissionManager();
         flightController_ = flightControllerSource.getFlightController();
-        imageTransferer_ = imageTransferer;
         contextManager_ = contextManager;
         missionModel_ = missionModel;
-
-    }
-
-    public void handleWaypointReached(int waypoint)
-    {
-        //pause the mission every 5 waypoints
-        if(waypoint%5 == 0)
-        {
-            pauseMission();
-
-            /*
-            Designed with the following expected to block until finished.
-             */
-            //imageTransferer_.transferNewImagesFromDrone();
-
-            resumeMission();
-        }
     }
 
     public void pauseMission()
@@ -107,13 +87,6 @@ public class MissionController implements I_MissionController {
         {
             try
             {
-                DJIMission.DJIMissionProgressHandler progressHandler = new DJIMission.DJIMissionProgressHandler()
-                {
-                    @Override
-                    public void onProgress(DJIMission.DJIProgressType type, float progress) {}
-                };
-
-
                 flightController_.getHomeLocation(new DJICommonCallbacks.DJICompletionCallbackWith<DJILocationCoordinate2D>() {
                     @Override
                     public void onSuccess(DJILocationCoordinate2D djiLocationCoordinate2D) {
@@ -140,6 +113,5 @@ public class MissionController implements I_MissionController {
         {
             Toast.makeText(contextManager_.getApplicationContext(), "Mission manager is null", Toast.LENGTH_LONG).show();
         }
-
-    }//end startMission
+    }
 }

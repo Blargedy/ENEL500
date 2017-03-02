@@ -17,15 +17,16 @@ import dji.sdk.missionmanager.DJIMissionManager;
 public class StepCompletionCallback implements I_CompletionCallback{
     private I_MissionController controller_;
     private I_ApplicationContextManager contextManager_;
-    private DJIMissionManager missionManager_;
     private I_ImageTransferer imageTransferer_;
     private int waypointCounter_;
 
     public StepCompletionCallback(
             I_MissionController controller,
+            I_ImageTransferer imageTransferer,
             I_ApplicationContextManager contextManager)
     {
         controller_ = controller;
+        imageTransferer_ = imageTransferer;
         contextManager_ = contextManager;
         waypointCounter_ = 0;
     }
@@ -34,12 +35,22 @@ public class StepCompletionCallback implements I_CompletionCallback{
         if (error == null) {
             Toast.makeText(contextManager_.getApplicationContext(),
                     "Successfully reached Waypoint "+Integer.toString(waypointCounter_), Toast.LENGTH_SHORT).show();
-            controller_.handleWaypointReached(waypointCounter_);
+            handleWaypointReached(waypointCounter_);
             waypointCounter_++;
 
         } else {
             Toast.makeText(contextManager_.getApplicationContext(),
                     "could not reach waypoint "+Integer.toString(waypointCounter_)+". "+error.getDescription(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    void handleWaypointReached(int waypointCount)
+    {
+        //pause the mission every 5 waypoints
+        if(waypointCount%5 == 0)
+        {
+            controller_.pauseMission();
+            imageTransferer_.transferNewImagesFromDrone();
         }
     }
 

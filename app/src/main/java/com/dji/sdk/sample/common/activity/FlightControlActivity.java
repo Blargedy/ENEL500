@@ -21,8 +21,6 @@ public class FlightControlActivity extends AppCompatActivity
 
     private IntegrationLayerContainer integrationLayerContainer_;
 
-    private ImageTransferContainer imageTransferContainer_;
-
     private MissionContainer missionContainer_;
 
     private ProductConnectionPresenter productConnectionPresenter_;
@@ -37,17 +35,9 @@ public class FlightControlActivity extends AppCompatActivity
 
         integrationLayerContainer_ = new IntegrationLayerContainer();
 
-        imageTransferContainer_ = new ImageTransferContainer(
-                contextManager_,
-                integrationLayerContainer_.mediaManagerSource(),
-                integrationLayerContainer_.mediaDataFetcher(),
-                flightControlView_);
-
         missionContainer_ = new MissionContainer(
-                integrationLayerContainer_.missionManagerSource(),
-                integrationLayerContainer_.flightControllerSource(),
+                integrationLayerContainer_,
                 flightControlView_,
-                imageTransferContainer_.imageTransferer(),
                 contextManager_);
 
         productConnectionPresenter_ = new ProductConnectionPresenter(
