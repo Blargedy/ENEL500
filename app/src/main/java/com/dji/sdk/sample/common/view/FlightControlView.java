@@ -18,7 +18,7 @@ public class FlightControlView
     private TextView connectionStatusText_;
     private Button generateMissionButton_;
     private Button startMissionButton_;
-    private Button shootPhotoButton_;
+    private Button transferImagesButton_;
     private Button goToMapButton_;
 
     public FlightControlView(
@@ -57,9 +57,9 @@ public class FlightControlView
         return startMissionButton_;
     }
 
-    public Button shootPhotoButton()
+    public Button transferImagesButton()
     {
-        return shootPhotoButton_;
+        return transferImagesButton_;
     }
 
     public Button goToMapButton()
@@ -74,7 +74,7 @@ public class FlightControlView
         connectionStatusText_ = (TextView) findViewById(R.id.text_connection_status);
         generateMissionButton_ = (Button) findViewById(R.id.btn_generate_mission);
         startMissionButton_ = (Button) findViewById(R.id.btn_start_mission);
-        shootPhotoButton_ = (Button) findViewById(R.id.btn_shoot_photo);
+        transferImagesButton_ = (Button) findViewById(R.id.btn_transfer_images);
         goToMapButton_ = (Button) findViewById(R.id.btn_go_to_map);
     }
 }

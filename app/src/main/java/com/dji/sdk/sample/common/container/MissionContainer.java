@@ -2,11 +2,6 @@ package com.dji.sdk.sample.common.container;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
-import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferer;
-import com.dji.sdk.sample.common.integration.I_FlightController;
-import com.dji.sdk.sample.common.integration.I_FlightControllerSource;
-import com.dji.sdk.sample.common.integration.I_MissionManager;
-import com.dji.sdk.sample.common.integration.I_MissionManagerSource;
 import com.dji.sdk.sample.common.mission.I_MissionController;
 import com.dji.sdk.sample.common.mission.MissionController;
 import com.dji.sdk.sample.common.mission.MissionGenerator;
@@ -14,7 +9,6 @@ import com.dji.sdk.sample.common.mission.StepCompletionCallback;
 import com.dji.sdk.sample.common.presenter.MapPresenter;
 import com.dji.sdk.sample.common.presenter.MissionGenerationPresenter;
 import com.dji.sdk.sample.common.presenter.MissionControllerPresenter;
-import com.dji.sdk.sample.common.presenter.ShootPhotoPresenter;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 import com.dji.sdk.sample.common.view.FlightControlView;
 
