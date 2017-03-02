@@ -87,7 +87,7 @@ public class SwitchBackPathGenerator {
         } // end for loop
     }
 
-    private static void insertLinearlyDistributedCoordinates(List<Coordinate> coordinateList, int startIndex, int numberOfCoordinatesToInsert) {
+    public static void insertLinearlyDistributedCoordinates(List<Coordinate> coordinateList, int startIndex, int numberOfCoordinatesToInsert) {
         double deltaLatitude = coordinateList.get(startIndex + 1).latitude_ - coordinateList.get(startIndex).latitude_;
         double deltaLongitude = coordinateList.get(startIndex + 1).longitude_ - coordinateList.get(startIndex).longitude_;
         int divisor = 1 + numberOfCoordinatesToInsert;
@@ -99,7 +99,7 @@ public class SwitchBackPathGenerator {
             double newLatitude = coordinateList.get(startIndex).latitude_ + (i + 1) * latitudeStep;
             double newLongitude = coordinateList.get(startIndex).longitude_ + (i + 1) * longitudeStep;
             Coordinate newCoordinate = new Coordinate(newLatitude, newLongitude);
-            coordinateList.add(startIndex + i, newCoordinate);
+            coordinateList.add(startIndex + i + 1, newCoordinate);
         }
     }
 
