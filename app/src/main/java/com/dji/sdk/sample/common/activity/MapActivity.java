@@ -219,7 +219,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                         break;
                     case RDYTOBEGIN: // Waypoints are on the map, User Pressed 'START SURVEYING' (FLYING)
                         enum_menuStatesVar = enum_menuStatesVar.INFLIGHT;
-                        txt_console.setText("Console: Waypoint progress " + wayPointsTotal + "/" + wayPointsCompleted + " (0%) (Drone In-flight)");
+                        txt_console.setText("Console: Waypoint progress " + wayPointsCompleted + "/" +   wayPointsTotal +  " (0%) (Drone In-flight)");
                         btn_mainButton.setText("CANCEL MISSION");
                         sw_hoverNow.setEnabled(true); // allow to hover
                         pbar_surveyProgressTracking.setVisibility(View.VISIBLE);
@@ -256,7 +256,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                         break;
                     case INFLIGHT: // Was in Mission but user pressed 'CANCEL MISSION'
                         enum_menuStatesVar = enum_menuStatesVar.ABORTCANCEL;
-                        txt_console.setText("Console: Waypoint progress " + wayPointsTotal + "/" + wayPointsCompleted + " (0%) (Cancelled, Returning home)");
+                        txt_console.setText("Console: Waypoint progress " + wayPointsCompleted + "/" +  wayPointsTotal + " (0%) (Cancelled, Returning home)");
                         btn_mainButton.setVisibility(View.INVISIBLE);
                         sw_hoverNow.setEnabled(false); // no more hover
                         sw_hoverNow.setVisibility(View.INVISIBLE);
@@ -274,7 +274,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                         break;
                     case HOVER: //while hovering user presses cancel mission
                         enum_menuStatesVar = enum_menuStatesVar.ABORTCANCEL;
-                        txt_console.setText("Console: Waypoint progress X/Y (0%) (Cancelled, Returning home)");
+                        txt_console.setText("Console: Waypoint progress " + wayPointsCompleted + "/" +  wayPointsTotal + " (0%) (Cancelled, Returning home)");
                         btn_mainButton.setVisibility(View.INVISIBLE);
                         sw_hoverNow.setEnabled(false); // no more hover
                         sw_hoverNow.setVisibility(View.INVISIBLE);
@@ -463,7 +463,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 if (isChecked) { // user wants to hover now
                     if (enum_menuStatesVar == enum_menuStates.INFLIGHT) {
                         enum_menuStatesVar = enum_menuStatesVar.HOVER;
-                        txt_console.setText("Console: Waypoint progress " + wayPointsTotal + "/" + wayPointsCompleted + " (0%) (Drone Hovering)");
+                        txt_console.setText("Console: Waypoint progress " + wayPointsCompleted + "/" +  wayPointsTotal+ " (0%) (Drone Hovering)");
                         btn_mainButton.setText("CANCEL MISSION");
                         sw_hoverNow.setText("Resume Now");
                         return;
@@ -473,7 +473,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
                     if (enum_menuStatesVar == enum_menuStates.HOVER) { // is resumed from hovering
                         enum_menuStatesVar = enum_menuStatesVar.INFLIGHT;
-                        txt_console.setText("Console: Waypoint progress " + wayPointsTotal + "/" + wayPointsCompleted + " (0%) (Drone In-flight (Resumed))");
+                        txt_console.setText("Console: Waypoint progress " + wayPointsCompleted + "/" +  wayPointsTotal+ " (0%) (Drone In-flight (Resumed))");
                         btn_mainButton.setText("CANCEL MISSION");
                         sw_hoverNow.setText("Hover Now");
                     }
