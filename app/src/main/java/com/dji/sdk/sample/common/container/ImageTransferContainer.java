@@ -51,7 +51,8 @@ public class ImageTransferContainer
                 pathsSource_,
                 mediaDataFetcher,
                 missionController,
-                androidToPcImageCopier_);
+                androidToPcImageCopier_,
+                contextManager);
 
         downloadSelector_ = new DroneImageDownloadSelector();
 
@@ -69,7 +70,8 @@ public class ImageTransferContainer
 
         transferImagesPresenter_ = new TransferImagesPresenter(
                 flightControlView.transferImagesButton(),
-                downloadInitiator_);
+                downloadInitiator_,
+                downloadSelector_);
     }
 
     public I_ImageTransferer imageTransferer()

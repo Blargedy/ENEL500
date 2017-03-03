@@ -62,6 +62,6 @@ public class CameraMediaListFetcher implements
     @Override
     public void onFailure(DJIError error)
     {
-        Log.e(TAG, "Failed to fetched media list");
+        Log.e(TAG, "Failed to fetched media list: " + error.toString());
     }
 }

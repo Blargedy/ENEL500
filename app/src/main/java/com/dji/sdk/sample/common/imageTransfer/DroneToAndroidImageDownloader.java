@@ -1,10 +1,12 @@
 package com.dji.sdk.sample.common.imageTransfer;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.dji.sdk.sample.common.integration.I_MediaDataFetcher;
 import com.dji.sdk.sample.common.integration.I_MediaDownloadListener;
 import com.dji.sdk.sample.common.mission.I_MissionController;
+import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 import java.util.ArrayList;
 
@@ -28,16 +30,22 @@ public class DroneToAndroidImageDownloader implements
 
     private ArrayList<DJIMedia> imagesLeftToDownload_;
 
+    // Temporary for the demo
+    private I_ApplicationContextManager contextManager_;
+
     public DroneToAndroidImageDownloader(
             I_ImageTransferPathsSource pathSource,
             I_MediaDataFetcher mediaDataFetcher,
             I_MissionController missionController,
-            I_AndroidToPcImageCopier androidToPcImageCopier)
+            I_AndroidToPcImageCopier androidToPcImageCopier,
+            I_ApplicationContextManager contextManager)
     {
         pathSource_ = pathSource;
         mediaDataFetcher_ = mediaDataFetcher;
         missionController_ = missionController;
         androidToPcImageCopier_ = androidToPcImageCopier;
+
+        contextManager_ = contextManager;
     }
 
     @Override
@@ -58,6 +66,7 @@ public class DroneToAndroidImageDownloader implements
         }
         else
         {
+            Toast.makeText(contextManager_.getApplicationContext(), "Success: transferred photos" , Toast.LENGTH_SHORT).show();
             missionController_.resumeMission();
         }
     }

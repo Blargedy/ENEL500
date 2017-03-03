@@ -24,6 +24,7 @@ public class DroneImageDownloadSelector implements
     @Override
     public void initializeDroneMediaList(ArrayList<DJIMedia> mediaList)
     {
+        pastMediaFileNames_.clear();
         for (DJIMedia media : mediaList)
         {
             pastMediaFileNames_.add(media.getFileName());

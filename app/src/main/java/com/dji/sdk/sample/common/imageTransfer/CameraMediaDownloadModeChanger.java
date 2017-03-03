@@ -7,6 +7,7 @@ import com.dji.sdk.sample.common.integration.I_MediaManager;
 import com.dji.sdk.sample.common.integration.I_MediaManagerSource;
 
 import dji.common.error.DJIError;
+import dji.internal.version.a;
 
 /**
  * Created by Julia on 2017-02-12.
@@ -45,7 +46,7 @@ public class CameraMediaDownloadModeChanger implements
         }
         else
         {
-            Log.e(TAG, "Failed to changed camera mode");
+            Log.e(TAG, "Failed to changed camera mode" + error.toString());
         }
     }
 }

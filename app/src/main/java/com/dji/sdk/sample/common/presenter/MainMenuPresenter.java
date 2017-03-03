@@ -56,48 +56,26 @@ public class MainMenuPresenter implements View.OnClickListener
 
                 @Override
                 public void run() {
-                    try  {
-                        String user = "Julia";
-                        String pass ="covert";
+                    try {
+                        String user = "Julia:covert";
+                        NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication(user);
 
-                        String sharedFolder="HydraPhotos";
-                        String path="smb://DESKTOP-DUPKRJE/"+sharedFolder+"/test.txt";
-                        NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication("",user, pass);
+                        String sharedFolder = "HydraPhotos";
+                        String path = "smb://192.168.1.1/"+sharedFolder+"/test.txt";
 
+                        SmbFile smbFile = new SmbFile(path, auth);
+                        SmbFileOutputStream smbfos = new SmbFileOutputStream(smbFile);
 
-                        SmbFile smbFile = null;
-                        try {
-                            smbFile = new SmbFile(path,auth);
-                        } catch (MalformedURLException e) {
-                            Log.d("MainMenuPresenter", e.toString());
-                        }
-
-
-                        SmbFileOutputStream smbfos = null;
-                        try {
-                            smbfos = new SmbFileOutputStream(smbFile);
-                        } catch (SmbException e) {
-                            Log.d("MainMenuPresenter", e.toString());
-                        } catch (MalformedURLException e) {
-                            Log.d("MainMenuPresenter", e.toString());
-                        } catch (UnknownHostException e) {
-                            Log.d("MainMenuPresenter", e.toString());
-                        }
-
-
-                        try {
-                            smbfos.write("testing....and writing to a file".getBytes());
-                        } catch (IOException e) {
-                            Log.d("MainMenuPresenter", e.toString());
-                        }
+                        String message = new String("Testing writing...");
+                        smbfos.write(message.getBytes());
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.d("MainMenuPresenter", e.toString());
                     }
                 }
             });
 
             // Unfortunately can't connect to the network using the code above. Needs more work
-            //thread.start();
+            thread.start();
         }
         else if (view.getId() == reconstructLaterButton_.getId())
         {
