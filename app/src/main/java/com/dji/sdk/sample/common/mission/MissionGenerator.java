@@ -51,9 +51,6 @@ public class MissionGenerator implements I_MissionGenerator
     public void generateMission(){
 
         customMissionBuilder_.buildCustomMission();
-//        DJIAircraft aircraft = (DJIAircraft) DJISDKManager.getInstance().getDJIProduct();
-//        DJIMissionManager missionManager = aircraft.getMissionManager();
-
 
         DJIMission.DJIMissionProgressHandler progressHandler = new DJIMission.DJIMissionProgressHandler()
         {

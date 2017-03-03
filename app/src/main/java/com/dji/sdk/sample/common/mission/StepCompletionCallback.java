@@ -3,11 +3,16 @@ package com.dji.sdk.sample.common.mission;
 import android.widget.Toast;
 
 import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferer;
+import com.dji.sdk.sample.common.integration.DJISampleApplication;
 import com.dji.sdk.sample.common.integration.I_CompletionCallback;
+import com.dji.sdk.sample.common.integration.MissionManager;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
+import dji.common.camera.DJICameraSettingsDef;
 import dji.common.error.DJIError;
 import dji.common.util.DJICommonCallbacks;
+import dji.sdk.base.DJIBaseProduct;
+import dji.sdk.camera.DJICamera;
 import dji.sdk.missionmanager.DJIMissionManager;
 
 /**
@@ -46,6 +51,12 @@ public class StepCompletionCallback implements I_CompletionCallback{
 
     void handleWaypointReached(int waypointCount)
     {
+//        DJIBaseProduct product = DJISampleApplication.getProductInstance();
+//        DJICamera camera = product.getCamera();
+//        camera.setCameraMode(DJICameraSettingsDef.CameraMode.ShootPhoto, null);
+//        camera.startShootPhoto(DJICameraSettingsDef.CameraShootPhotoMode.Single, MissionHelper.completionCallback(contextManager_, "Shot photo", "Could not shoot photo"));
+//        camera.stopShootPhoto(null);
+
         //pause the mission every 5 waypoints
         if(waypointCount%5 == 0)
         {

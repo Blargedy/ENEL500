@@ -33,17 +33,20 @@ public class MissionController implements I_MissionController
     private I_FlightControllerSource flightControllerSource_;
     private I_ApplicationContextManager contextManager_;
     private GeneratedMissionModel missionModel_;
+    private I_ImageTransferer imageTransferer_;
 
     public MissionController(
             I_MissionManagerSource missionManagerSource,
             I_FlightControllerSource flightControllerSource,
             I_ApplicationContextManager contextManager,
-            GeneratedMissionModel missionModel)
+            GeneratedMissionModel missionModel,
+            I_ImageTransferer imageTransferer)
     {
         missionManagerSource_ = missionManagerSource;
         flightControllerSource_ = flightControllerSource;
         contextManager_ = contextManager;
         missionModel_ = missionModel;
+        imageTransferer_ = imageTransferer;
     }
 
     public void pauseMission()

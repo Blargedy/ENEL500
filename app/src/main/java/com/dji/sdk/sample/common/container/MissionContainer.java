@@ -42,21 +42,22 @@ public class MissionContainer
         initialMissionModel_ = new InitialMissionModel();
         generatedMissionModel_ = new GeneratedMissionModel();
 
-        missionController_ = new MissionController(
-                integrationLayerContainer.missionManagerSource(),
-                integrationLayerContainer.flightControllerSource(),
-                contextManager,
-                generatedMissionModel_);
-        missionControllerPresenter_ = new MissionControllerPresenter(
-                flightControlView.startMissionButton(),
-                missionController_);
-
         imageTransferContainer_ = new ImageTransferContainer(
                 contextManager,
                 integrationLayerContainer.mediaManagerSource(),
                 integrationLayerContainer.mediaDataFetcher(),
                 missionController_,
                 flightControlView);
+
+        missionController_ = new MissionController(
+                integrationLayerContainer.missionManagerSource(),
+                integrationLayerContainer.flightControllerSource(),
+                contextManager,
+                generatedMissionModel_,
+                imageTransferContainer_.imageTransferer());
+        missionControllerPresenter_ = new MissionControllerPresenter(
+                flightControlView.startMissionButton(),
+                missionController_);
 
         stepCompletionCallback_ = new StepCompletionCallback(
                 missionController_,

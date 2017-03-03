@@ -17,6 +17,7 @@ import dji.sdk.missionmanager.DJICustomMission;
 import dji.sdk.missionmanager.DJIWaypoint;
 import dji.sdk.missionmanager.DJIWaypointMission;
 import dji.sdk.missionmanager.missionstep.DJIMissionStep;
+import dji.sdk.missionmanager.missionstep.DJIShootPhotoStep;
 import dji.sdk.missionmanager.missionstep.DJIWaypointStep;
 
 /**
@@ -80,9 +81,14 @@ public class CustomMissionBuilder implements I_CustomMissionBuilder {
         while (waypointMissionIter.hasNext()) {
             DJIMissionStep nextStep = new DJIWaypointStep((DJIWaypointMission) waypointMissionIter.next(), stepCompletionCallback_);
             missionSteps.add(nextStep);
+
+            DJIShootPhotoStep photoStep = new DJIShootPhotoStep(MissionHelper.completionCallback(contextManager_,"Shot Photo", "Could not shoot photo"));
+            missionSteps.add(photoStep);
+
         }
 
         //set entity
         generatedMissionModel_.djiMission_ = new DJICustomMission(missionSteps);
+        generatedMissionModel_.waypoints_ = waypoints;
     }
 }
