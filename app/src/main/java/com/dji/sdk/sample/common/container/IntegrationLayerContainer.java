@@ -1,14 +1,13 @@
 package com.dji.sdk.sample.common.container;
 
-import com.dji.sdk.sample.common.integration.FlightControllerSource;
-import com.dji.sdk.sample.common.integration.I_FlightControllerSource;
-import com.dji.sdk.sample.common.integration.I_MediaDataFetcher;
-import com.dji.sdk.sample.common.integration.I_MediaManagerSource;
-import com.dji.sdk.sample.common.integration.I_MissionManager;
-import com.dji.sdk.sample.common.integration.I_MissionManagerSource;
-import com.dji.sdk.sample.common.integration.MediaDataFetcher;
-import com.dji.sdk.sample.common.integration.MediaManagerSource;
-import com.dji.sdk.sample.common.integration.MissionManagerSource;
+import com.dji.sdk.sample.common.integration.src.FlightControllerSource;
+import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
+import com.dji.sdk.sample.common.integration.api.I_MediaDataFetcher;
+import com.dji.sdk.sample.common.integration.api.I_MediaManagerSource;
+import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
+import com.dji.sdk.sample.common.integration.src.MediaDataFetcher;
+import com.dji.sdk.sample.common.integration.src.MediaManagerSource;
+import com.dji.sdk.sample.common.integration.src.MissionManagerSource;
 
 /**
  * Created by Julia on 2017-02-21.

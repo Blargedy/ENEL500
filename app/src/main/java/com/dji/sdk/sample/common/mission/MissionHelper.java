@@ -2,11 +2,10 @@ package com.dji.sdk.sample.common.mission;
 
 import android.widget.Toast;
 
-import com.dji.sdk.sample.common.integration.I_CompletionCallback;
+import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 import dji.common.error.DJIError;
-import dji.common.util.DJICommonCallbacks;
 
 /**
  * Created by Matthew on 2017-02-27.

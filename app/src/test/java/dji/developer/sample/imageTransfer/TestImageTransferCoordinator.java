@@ -1,13 +1,13 @@
 package dji.developer.sample.imageTransfer;
 
-import com.dji.sdk.sample.common.imageTransfer.I_CameraMediaDownloadModeChanger;
-import com.dji.sdk.sample.common.imageTransfer.I_CameraMediaListFetcher;
-import com.dji.sdk.sample.common.imageTransfer.I_DroneImageDownloadSelector;
-import com.dji.sdk.sample.common.imageTransfer.I_DroneToAndroidImageDownloader;
-import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferCompletionCallback;
-import com.dji.sdk.sample.common.imageTransfer.ImageTransferCoordinator;
-import com.dji.sdk.sample.common.integration.I_CameraMediaListDownloadListener;
-import com.dji.sdk.sample.common.integration.I_CompletionCallback;
+import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaDownloadModeChanger;
+import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaListFetcher;
+import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadSelector;
+import com.dji.sdk.sample.common.imageTransfer.api.I_DroneToAndroidImageDownloader;
+import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferCompletionCallback;
+import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferCoordinator;
+import com.dji.sdk.sample.common.integration.api.I_CameraMediaListDownloadListener;
+import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;

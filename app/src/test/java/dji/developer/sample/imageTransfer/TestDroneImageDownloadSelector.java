@@ -1,6 +1,6 @@
 package dji.developer.sample.imageTransfer;
 
-import com.dji.sdk.sample.common.imageTransfer.DroneImageDownloadSelector;
+import com.dji.sdk.sample.common.imageTransfer.src.DroneImageDownloadSelector;
 
 import org.junit.Test;
 

@@ -4,10 +4,10 @@ import android.widget.Toast;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
-import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferModuleInitializer;
-import com.dji.sdk.sample.common.integration.I_CompletionCallback;
-import com.dji.sdk.sample.common.integration.I_FlightControllerSource;
-import com.dji.sdk.sample.common.integration.I_MissionManagerSource;
+import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
+import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
+import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
+import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 import dji.common.error.DJIError;

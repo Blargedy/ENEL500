@@ -2,26 +2,14 @@ package com.dji.sdk.sample.common.mission;
 
 import android.widget.Toast;
 
-import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
-import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferModuleInitializer;
-import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferer;
-import com.dji.sdk.sample.common.integration.I_CompletionCallback;
-import com.dji.sdk.sample.common.integration.I_FlightController;
-import com.dji.sdk.sample.common.integration.I_FlightControllerSource;
-import com.dji.sdk.sample.common.integration.I_MissionManager;
-import com.dji.sdk.sample.common.integration.I_MissionManagerSource;
-import com.dji.sdk.sample.common.integration.MissionManager;
-import com.dji.sdk.sample.common.integration.MissionManagerSource;
+import com.dji.sdk.sample.common.integration.api.I_FlightController;
+import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
+import com.dji.sdk.sample.common.integration.api.I_MissionManager;
+import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 import dji.common.error.DJIError;
 import dji.common.flightcontroller.DJILocationCoordinate2D;
 import dji.common.util.DJICommonCallbacks;
-import dji.sdk.flightcontroller.DJIFlightController;
-import dji.sdk.missionmanager.DJIMission;
-import dji.sdk.missionmanager.DJIMissionManager;
-import dji.sdk.base.DJIBaseProduct;
-import dji.sdk.products.DJIAircraft;
-import dji.sdk.sdkmanager.DJISDKManager;
 
 
 /**

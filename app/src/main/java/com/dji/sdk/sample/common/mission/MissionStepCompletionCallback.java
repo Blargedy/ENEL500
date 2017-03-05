@@ -2,18 +2,11 @@ package com.dji.sdk.sample.common.mission;
 
 import android.widget.Toast;
 
-import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferer;
-import com.dji.sdk.sample.common.integration.DJISampleApplication;
-import com.dji.sdk.sample.common.integration.I_CompletionCallback;
-import com.dji.sdk.sample.common.integration.MissionManager;
+import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
+import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
-import dji.common.camera.DJICameraSettingsDef;
 import dji.common.error.DJIError;
-import dji.common.util.DJICommonCallbacks;
-import dji.sdk.base.DJIBaseProduct;
-import dji.sdk.camera.DJICamera;
-import dji.sdk.missionmanager.DJIMissionManager;
 
 /**
  * Created by eric7 on 2017-02-21.

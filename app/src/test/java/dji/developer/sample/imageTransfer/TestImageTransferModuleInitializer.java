@@ -1,11 +1,11 @@
 package dji.developer.sample.imageTransfer;
 
-import com.dji.sdk.sample.common.imageTransfer.AndroidToPcImageCopier;
-import com.dji.sdk.sample.common.imageTransfer.I_DroneMediaListInitializer;
-import com.dji.sdk.sample.common.imageTransfer.ImageTransferModuleInitializer;
-import com.dji.sdk.sample.common.integration.I_CameraMediaListDownloadListener;
-import com.dji.sdk.sample.common.integration.I_MediaManager;
-import com.dji.sdk.sample.common.integration.I_MediaManagerSource;
+import com.dji.sdk.sample.common.imageTransfer.src.AndroidToPcImageCopier;
+import com.dji.sdk.sample.common.imageTransfer.api.I_DroneMediaListInitializer;
+import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferModuleInitializer;
+import com.dji.sdk.sample.common.integration.api.I_CameraMediaListDownloadListener;
+import com.dji.sdk.sample.common.integration.api.I_MediaManager;
+import com.dji.sdk.sample.common.integration.api.I_MediaManagerSource;
 
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;

@@ -1,9 +1,9 @@
 package dji.developer.sample.imageTransfer;
 
-import com.dji.sdk.sample.common.imageTransfer.CameraMediaDownloadModeChanger;
-import com.dji.sdk.sample.common.integration.I_CompletionCallback;
-import com.dji.sdk.sample.common.integration.I_MediaManager;
-import com.dji.sdk.sample.common.integration.I_MediaManagerSource;
+import com.dji.sdk.sample.common.imageTransfer.src.CameraMediaDownloadModeChanger;
+import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
+import com.dji.sdk.sample.common.integration.api.I_MediaManager;
+import com.dji.sdk.sample.common.integration.api.I_MediaManagerSource;
 
 import org.junit.Test;
 
