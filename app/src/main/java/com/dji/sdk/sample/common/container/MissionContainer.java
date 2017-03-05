@@ -55,7 +55,6 @@ public class MissionContainer
                 contextManager,
                 integrationLayerContainer.mediaManagerSource(),
                 integrationLayerContainer.mediaDataFetcher(),
-                missionController_,
                 flightControlView,
                 pcIpAddress);
 

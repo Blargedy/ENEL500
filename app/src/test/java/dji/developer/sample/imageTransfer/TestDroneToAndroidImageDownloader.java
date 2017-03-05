@@ -2,6 +2,7 @@ package dji.developer.sample.imageTransfer;
 
 import com.dji.sdk.sample.common.imageTransfer.DroneToAndroidImageDownloader;
 import com.dji.sdk.sample.common.imageTransfer.I_AndroidToPcImageCopier;
+import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferCompletionCallback;
 import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferPathsSource;
 import com.dji.sdk.sample.common.integration.I_MediaDataFetcher;
 import com.dji.sdk.sample.common.integration.I_MediaDownloadListener;
@@ -32,23 +33,23 @@ public class TestDroneToAndroidImageDownloader
 {
     private I_ImageTransferPathsSource pathSource_ = mock(I_ImageTransferPathsSource.class);
     private I_MediaDataFetcher mediaDataFetcher_ = mock(I_MediaDataFetcher.class);
-    private I_MissionController missionController_ = mock(I_MissionController.class);
     private I_AndroidToPcImageCopier androidToPcImageCopier_ = mock(I_AndroidToPcImageCopier.class);
     private I_ApplicationContextManager contextManager_ = mock(I_ApplicationContextManager.class);
 
     private DroneToAndroidImageDownloader patient_ = new DroneToAndroidImageDownloader(
             pathSource_,
             mediaDataFetcher_,
-            missionController_,
             androidToPcImageCopier_,
             contextManager_);
+
+    private I_ImageTransferCompletionCallback completionCallback_ = mock(I_ImageTransferCompletionCallback.class);
 
     @Test
     public void willRequestAndroidImagePathFromPathSource()
     {
         int imageCount = 3;
 
-        patient_.downloadImagesFromDrone(makeListOfImages(imageCount));
+        patient_.downloadImagesFromDrone(makeListOfImages(imageCount), completionCallback_);
 
         verify(pathSource_, atLeastOnce()).androidDeviceImagePath();
     }
@@ -63,7 +64,7 @@ public class TestDroneToAndroidImageDownloader
         when(pathSource_.androidDeviceImagePath()).thenReturn(expectedImagePath);
         makeMediaDataFetcherCallOnSuccessCallback();
 
-        patient_.downloadImagesFromDrone(imagesToDownload);
+        patient_.downloadImagesFromDrone(imagesToDownload, completionCallback_);
 
         verifyEachImageWasDownloaded(expectedImagesToDownload, expectedImagePath);
     }
@@ -77,13 +78,13 @@ public class TestDroneToAndroidImageDownloader
         when(pathSource_.androidDeviceImagePath()).thenReturn(expectedImagePath);
         makeMediaDataFetcherCallOnSuccessCallback();
 
-        patient_.downloadImagesFromDrone(imagesToDownload);
+        patient_.downloadImagesFromDrone(imagesToDownload, completionCallback_);
 
         verify(androidToPcImageCopier_, times(size)).addImageToPcCopyQueue(expectedImagePath.toString());
     }
 
     @Test
-    public void willResumeMissionAfterImagesHaveBeenDownloaded()
+    public void willCallCompletionCallbackMethodAfterImagesHaveBeenDownloaded()
     {
         int size = 3;
         File imagePath = new File("pathname");
@@ -91,12 +92,12 @@ public class TestDroneToAndroidImageDownloader
         when(pathSource_.androidDeviceImagePath()).thenReturn(imagePath);
         makeMediaDataFetcherCallOnSuccessCallback();
 
-        patient_.downloadImagesFromDrone(imagesToDownload);
+        patient_.downloadImagesFromDrone(imagesToDownload, completionCallback_);
 
-        InOrder inOrder = inOrder(mediaDataFetcher_, missionController_);
+        InOrder inOrder = inOrder(mediaDataFetcher_, completionCallback_);
         inOrder.verify(mediaDataFetcher_, times(size)).fetchMediaData(
                 any(DJIMedia.class), any(File.class), any(I_MediaDownloadListener.class));
-        inOrder.verify(missionController_).resumeMission();
+        inOrder.verify(completionCallback_).onImageTransferCompletion();
     }
 
     private ArrayList<DJIMedia> makeListOfImages(int size)

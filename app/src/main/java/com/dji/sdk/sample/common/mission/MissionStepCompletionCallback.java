@@ -56,7 +56,7 @@ public class MissionStepCompletionCallback implements I_CompletionCallback
         if(waypointCount%5 == 0)
         {
             controller_.pauseMission();
-            imageTransferer_.transferNewImagesFromDrone();
+            //imageTransferer_.transferNewImagesFromDrone();
         }
     }
 

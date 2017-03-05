@@ -25,33 +25,28 @@ public class DroneToAndroidImageDownloader implements
 
     private I_ImageTransferPathsSource pathSource_;
     private I_MediaDataFetcher mediaDataFetcher_;
-    private I_MissionController missionController_;
     private I_AndroidToPcImageCopier androidToPcImageCopier_;
 
     private ArrayList<DJIMedia> imagesLeftToDownload_;
-
-    // Temporary for the demo
-    private I_ApplicationContextManager contextManager_;
+    private I_ImageTransferCompletionCallback completionCallback_;
 
     public DroneToAndroidImageDownloader(
             I_ImageTransferPathsSource pathSource,
             I_MediaDataFetcher mediaDataFetcher,
-            I_MissionController missionController,
-            I_AndroidToPcImageCopier androidToPcImageCopier,
-            I_ApplicationContextManager contextManager)
+            I_AndroidToPcImageCopier androidToPcImageCopier)
     {
         pathSource_ = pathSource;
         mediaDataFetcher_ = mediaDataFetcher;
-        missionController_ = missionController;
         androidToPcImageCopier_ = androidToPcImageCopier;
-
-        contextManager_ = contextManager;
     }
 
     @Override
-    public void downloadImagesFromDrone(ArrayList<DJIMedia> imagesToDownload)
+    public void downloadImagesFromDrone(
+            ArrayList<DJIMedia> imagesToDownload,
+            I_ImageTransferCompletionCallback callback)
     {
         imagesLeftToDownload_ = imagesToDownload;
+        completionCallback_ = callback;
         downloadNextImage();
     }
 
@@ -66,16 +61,15 @@ public class DroneToAndroidImageDownloader implements
         }
         else
         {
-            Toast.makeText(contextManager_.getApplicationContext(), "Success: transferred photos" , Toast.LENGTH_SHORT).show();
-            missionController_.resumeMission();
+            completionCallback_.onImageTransferCompletion();
         }
     }
 
     @Override
     public void onSuccess(String path)
     {
-        downloadNextImage();
         androidToPcImageCopier_.addImageToPcCopyQueue(path);
+        downloadNextImage();
     }
 
     @Override
@@ -90,6 +84,6 @@ public class DroneToAndroidImageDownloader implements
     @Override
     public void onFailure(DJIError error)
     {
-        Log.e(TAG, "Failed to download an image");
+        Log.e(TAG, "Failed to download an image : " + error.getDescription());
     }
 }

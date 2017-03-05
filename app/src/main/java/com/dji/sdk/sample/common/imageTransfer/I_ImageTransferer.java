@@ -8,5 +8,5 @@ import com.dji.sdk.sample.common.integration.I_CameraMediaListDownloadListener;
 
 public interface I_ImageTransferer
 {
-    void transferNewImagesFromDrone();
+    void transferNewImagesFromDrone(I_ImageTransferCompletionCallback callback);
 }

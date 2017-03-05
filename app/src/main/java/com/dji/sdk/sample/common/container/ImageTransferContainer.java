@@ -4,10 +4,10 @@ import com.dji.sdk.sample.common.imageTransfer.AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.imageTransfer.CameraMediaDownloadModeChanger;
 import com.dji.sdk.sample.common.imageTransfer.CameraMediaListFetcher;
 import com.dji.sdk.sample.common.imageTransfer.DroneImageDownloadSelector;
-import com.dji.sdk.sample.common.imageTransfer.DroneToAndroidImageDownloadInitiator;
 import com.dji.sdk.sample.common.imageTransfer.DroneToAndroidImageDownloader;
 import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferer;
+import com.dji.sdk.sample.common.imageTransfer.ImageTransferCoordinator;
 import com.dji.sdk.sample.common.imageTransfer.ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.ImageTransferPathsSource;
 import com.dji.sdk.sample.common.integration.I_MediaDataFetcher;
@@ -25,16 +25,17 @@ public class ImageTransferContainer
 {
     private static final String TAG = "ImageTransferContainer";
 
+    private CameraMediaDownloadModeChanger cameraModeChanger_;
+    private CameraMediaListFetcher mediaListFetcher_;
+    private DroneImageDownloadSelector downloadSelector_;
+
     private ImageTransferPathsSource pathsSource_;
     private AndroidToPcImageCopier androidToPcImageCopier_;
     private DroneToAndroidImageDownloader droneToAndroidImageDownloader_;
-    private DroneImageDownloadSelector downloadSelector_;
-    private CameraMediaListFetcher mediaListFetcher_;
-    private CameraMediaDownloadModeChanger cameraModeChanger_;
+
+    private ImageTransferCoordinator imageTransferCoordinator_;
 
     private ImageTransferModuleInitializer imageTransferModuleInitializer_;
-
-    private DroneToAndroidImageDownloadInitiator downloadInitiator_;
 
     private TransferImagesPresenter transferImagesPresenter_;
 
@@ -42,51 +43,47 @@ public class ImageTransferContainer
             I_ApplicationContextManager contextManager,
             I_MediaManagerSource mediaManagerSource,
             I_MediaDataFetcher mediaDataFetcher,
-            I_MissionController missionController,
             FlightControlView flightControlView,
             String pcIpAddress)
     {
-        pathsSource_ = new ImageTransferPathsSource(
-                contextManager);
-
-        androidToPcImageCopier_ = new AndroidToPcImageCopier(
-                pcIpAddress);
-
-        droneToAndroidImageDownloader_ = new DroneToAndroidImageDownloader(
-                pathsSource_,
-                mediaDataFetcher,
-                missionController,
-                androidToPcImageCopier_,
-                contextManager);
-
-        downloadSelector_ = new DroneImageDownloadSelector();
-
+        cameraModeChanger_ = new CameraMediaDownloadModeChanger(
+                mediaManagerSource);
         mediaListFetcher_ = new CameraMediaListFetcher(
                 mediaManagerSource,
                 downloadSelector_,
                 droneToAndroidImageDownloader_);
+        downloadSelector_ = new DroneImageDownloadSelector();
 
-        cameraModeChanger_ = new CameraMediaDownloadModeChanger(
-                mediaManagerSource,
-                mediaListFetcher_);
+        pathsSource_ = new ImageTransferPathsSource(
+                contextManager);
+        androidToPcImageCopier_ = new AndroidToPcImageCopier(
+                pcIpAddress);
+        droneToAndroidImageDownloader_ = new DroneToAndroidImageDownloader(
+                pathsSource_,
+                mediaDataFetcher,
+                androidToPcImageCopier_);
+
+        imageTransferCoordinator_ = new ImageTransferCoordinator(
+                cameraModeChanger_,
+                mediaListFetcher_,
+                downloadSelector_,
+                droneToAndroidImageDownloader_);
 
         imageTransferModuleInitializer_ = new ImageTransferModuleInitializer(
                 mediaManagerSource,
                 downloadSelector_,
                 androidToPcImageCopier_);
 
-        downloadInitiator_ = new DroneToAndroidImageDownloadInitiator(
-                cameraModeChanger_);
-
         transferImagesPresenter_ = new TransferImagesPresenter(
                 flightControlView.transferImagesButton(),
-                downloadInitiator_,
+                contextManager,
+                imageTransferCoordinator_,
                 downloadSelector_);
     }
 
     public I_ImageTransferer imageTransferer()
     {
-        return downloadInitiator_;
+        return imageTransferCoordinator_;
     }
 
     public I_ImageTransferModuleInitializer imageTransferModuleInitializer()

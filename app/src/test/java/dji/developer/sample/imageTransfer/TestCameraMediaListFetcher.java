@@ -9,12 +9,6 @@ import com.dji.sdk.sample.common.integration.I_MediaManagerSource;
 
 import static org.mockito.Mockito.*;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import java.util.ArrayList;
-
-import dji.sdk.camera.DJIMedia;
 
 /**
  * Created by Julia on 2017-02-12.
@@ -34,13 +28,14 @@ public class TestCameraMediaListFetcher
             imageDownloader_);
 
     private I_MediaManager mediaManager_ = mock(I_MediaManager.class);
+    private I_CameraMediaListDownloadListener listener = mock(I_CameraMediaListDownloadListener.class);
 
     @Test
     public void willRetrieveMediaMangerUsingMediaManagerSource()
     {
         when(mediaManagerSource_.getMediaManager()).thenReturn(mediaManager_);
 
-        patient_.fetchMediaListFromCamera();
+        patient_.fetchMediaListFromCamera(listener);
 
         verify(mediaManagerSource_).getMediaManager();
     }
@@ -50,57 +45,8 @@ public class TestCameraMediaListFetcher
     {
         when(mediaManagerSource_.getMediaManager()).thenReturn(mediaManager_);
 
-        patient_.fetchMediaListFromCamera();
+        patient_.fetchMediaListFromCamera(listener);
 
-        verify(mediaManager_).fetchMediaList(patient_);
-    }
-
-    @Test
-    public void willDetermineWhichNeedToBeDownloadedAfterMediaListHasBeenFetchedSuccessfully()
-    {
-        final ArrayList<DJIMedia> mediaList = new ArrayList<>();
-        makeMediaManagerCallOnSuccessCallbackWithMediaList(mediaList);
-        when(mediaManagerSource_.getMediaManager()).thenReturn(mediaManager_);
-
-        patient_.fetchMediaListFromCamera();
-
-        verify(downloadSelector_).determineImagesForDownloadFromMediaList(mediaList);
-    }
-
-    @Test
-    public void willDownloadSelectedImages()
-    {
-        final ArrayList<DJIMedia> mediaList = makeMediaList(2);
-        ArrayList<DJIMedia> imagesToDownload = makeMediaList(3);
-        makeMediaManagerCallOnSuccessCallbackWithMediaList(mediaList);
-        when(mediaManagerSource_.getMediaManager()).thenReturn(mediaManager_);
-        when(downloadSelector_.determineImagesForDownloadFromMediaList(mediaList))
-                .thenReturn(imagesToDownload);
-
-        patient_.fetchMediaListFromCamera();
-
-        verify(imageDownloader_).downloadImagesFromDrone(imagesToDownload);
-    }
-
-    private void makeMediaManagerCallOnSuccessCallbackWithMediaList(
-            final ArrayList<DJIMedia> mediaList)
-    {
-        doAnswer(new Answer() {
-            public Object answer(InvocationOnMock invocation) {
-                Object[] args = invocation.getArguments();
-                ((I_CameraMediaListDownloadListener)args[0]).onSuccess(mediaList);
-                return null;
-            }})
-                .when(mediaManager_).fetchMediaList(patient_);
-    }
-
-    private ArrayList<DJIMedia> makeMediaList(int size)
-    {
-        ArrayList<DJIMedia> currentMediaList = new ArrayList<>();
-        for (int i = 0; i < size; i++)
-        {
-            currentMediaList.add(new DJIMedia());
-        }
-        return currentMediaList;
+        verify(mediaManager_).fetchMediaList(same(listener));
     }
 }
