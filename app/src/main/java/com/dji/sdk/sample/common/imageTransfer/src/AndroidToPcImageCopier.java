@@ -43,22 +43,36 @@ public class AndroidToPcImageCopier
     @Override
     public void run()
     {
-        while(true)
+        while(!Thread.currentThread().isInterrupted())
         {
-            if (!imagesToTransfer_.isEmpty())
-            {
-                String androidImagePath = imagesToTransfer_.remove();
+            copyNextImageInBuffer();
+        }
+        emptyBuffer();
+    }
 
-                try {
-                    copyFile(androidImagePath);
-                } catch (IOException e) {
-                    Log.e(TAG, "Failed to send " + androidImagePath + ": " + e.toString());
-                }
+    private void copyNextImageInBuffer()
+    {
+        if (!imagesToTransfer_.isEmpty())
+        {
+            String androidImagePath = imagesToTransfer_.remove();
+
+            try {
+                copyFile(androidImagePath);
+            } catch (IOException e) {
+                Log.e(TAG, "Failed to send " + androidImagePath + ": " + e.toString());
             }
-            else
-            {
-                Thread.yield();
-            }
+        }
+        else
+        {
+            Thread.yield();
+        }
+    }
+
+    private void emptyBuffer()
+    {
+        while(!imagesToTransfer_.isEmpty())
+        {
+            copyNextImageInBuffer();
         }
     }
 

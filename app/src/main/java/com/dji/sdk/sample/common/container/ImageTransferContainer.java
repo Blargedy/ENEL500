@@ -88,6 +88,7 @@ public class ImageTransferContainer
                 flightControlView.transferImagesButton(),
                 contextManager,
                 imageTransferer_,
+                androidToPcImageCopier_,
                 downloadSelector_);
     }
 
