@@ -72,7 +72,8 @@ public class ImageTransferContainer
 
         imageTransferModuleInitializer_ = new ImageTransferModuleInitializer(
                 mediaManagerSource,
-                downloadSelector_);
+                downloadSelector_,
+                androidToPcImageCopier_);
 
         downloadInitiator_ = new DroneToAndroidImageDownloadInitiator(
                 cameraModeChanger_);
@@ -81,8 +82,6 @@ public class ImageTransferContainer
                 flightControlView.transferImagesButton(),
                 downloadInitiator_,
                 downloadSelector_);
-
-        startAndroidToPcImageTransferBackgroundThread();
     }
 
     public I_ImageTransferer imageTransferer()
@@ -93,10 +92,5 @@ public class ImageTransferContainer
     public I_ImageTransferModuleInitializer imageTransferModuleInitializer()
     {
         return imageTransferModuleInitializer_;
-    }
-
-    private void startAndroidToPcImageTransferBackgroundThread()
-    {
-        new Thread(androidToPcImageCopier_).start();
     }
 }

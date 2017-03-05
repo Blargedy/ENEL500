@@ -16,9 +16,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Created by Julia on 2017-03-01.
  */
 
-public class AndroidToPcImageCopier implements
-        I_AndroidToPcImageCopier,
-        Runnable
+public class AndroidToPcImageCopier
+        extends Thread
+        implements I_AndroidToPcImageCopier
 {
     private static final String TAG = "DroneToAndroidImageDownloader";
 

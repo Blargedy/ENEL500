@@ -23,18 +23,23 @@ public class ImageTransferModuleInitializer implements
 
     private I_MediaManagerSource mediaManagerSource_;
     private I_DroneMediaListInitializer mediaListInitializer_;
+    private AndroidToPcImageCopier androidToPcImageCopier_;
+
 
     public ImageTransferModuleInitializer(
             I_MediaManagerSource mediaManagerSource,
-            I_DroneMediaListInitializer mediaListInitializer)
+            I_DroneMediaListInitializer mediaListInitializer,
+            AndroidToPcImageCopier androidToPcImageCopier)
     {
         mediaManagerSource_ = mediaManagerSource;
         mediaListInitializer_ = mediaListInitializer;
+        androidToPcImageCopier_ = androidToPcImageCopier;
     }
 
     @Override
-    public void initalizeImageTransferModulePriorToFlight()
+    public void initializeImageTransferModulePriorToFlight()
     {
+        androidToPcImageCopier_.start();
         I_MediaManager mediaManager = mediaManagerSource_.getMediaManager();
         mediaManager.fetchMediaList(this);
     }
@@ -59,6 +64,4 @@ public class ImageTransferModuleInitializer implements
 
     @Override
     public void onProgress(long total, long current) {}
-
-
 }

@@ -1,5 +1,6 @@
 package dji.developer.sample.imageTransfer;
 
+import com.dji.sdk.sample.common.imageTransfer.AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.imageTransfer.I_DroneMediaListInitializer;
 import com.dji.sdk.sample.common.imageTransfer.ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.integration.I_CameraMediaListDownloadListener;
@@ -24,19 +25,31 @@ public class TestImageTransferModuleInitializer
 {
     private I_MediaManagerSource mediaManagerSource_ = mock(I_MediaManagerSource.class);
     private I_DroneMediaListInitializer mediaListInitializer_ = mock(I_DroneMediaListInitializer.class);
+    private AndroidToPcImageCopier androidToPcImageCopier_ = mock(AndroidToPcImageCopier.class);
 
     private ImageTransferModuleInitializer patient_ = new ImageTransferModuleInitializer(
             mediaManagerSource_,
-            mediaListInitializer_);
+            mediaListInitializer_,
+            androidToPcImageCopier_);
 
     private I_MediaManager mediaManager_ = mock(I_MediaManager.class);
+
+    @Test
+    public void willStartTheAndroidToPCImageCopierBackgroundThread()
+    {
+        when(mediaManagerSource_.getMediaManager()).thenReturn(mediaManager_);
+
+        patient_.initializeImageTransferModulePriorToFlight();
+
+        verify(androidToPcImageCopier_).start();
+    }
 
     @Test
     public void willFetchMediaListFromCamera()
     {
         when(mediaManagerSource_.getMediaManager()).thenReturn(mediaManager_);
 
-        patient_.initalizeImageTransferModulePriorToFlight();
+        patient_.initializeImageTransferModulePriorToFlight();
 
         verify(mediaManager_).fetchMediaList(patient_);
     }
@@ -48,7 +61,7 @@ public class TestImageTransferModuleInitializer
         makeMediaManagerCallOnSuccessCallbackWithMediaList(mediaList);
         when(mediaManagerSource_.getMediaManager()).thenReturn(mediaManager_);
 
-        patient_.initalizeImageTransferModulePriorToFlight();
+        patient_.initializeImageTransferModulePriorToFlight();
 
         verify(mediaListInitializer_).initializeDroneMediaList(same(mediaList));
     }

@@ -5,7 +5,6 @@ import android.widget.Toast;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferModuleInitializer;
-import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferer;
 import com.dji.sdk.sample.common.integration.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.I_FlightControllerSource;
 import com.dji.sdk.sample.common.integration.I_MissionManagerSource;
@@ -87,6 +86,6 @@ public class MissionGenerator implements I_MissionGenerator
             }
         });
 
-        imageTransferModuleInitializer_.initalizeImageTransferModulePriorToFlight();
+        imageTransferModuleInitializer_.initializeImageTransferModulePriorToFlight();
     }
 }
