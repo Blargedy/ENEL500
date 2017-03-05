@@ -4,19 +4,15 @@ import android.widget.Toast;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
+import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferer;
 import com.dji.sdk.sample.common.integration.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.I_FlightControllerSource;
-import com.dji.sdk.sample.common.integration.I_MissionManager;
 import com.dji.sdk.sample.common.integration.I_MissionManagerSource;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 import dji.common.error.DJIError;
-import dji.common.util.DJICommonCallbacks;
 import dji.sdk.missionmanager.DJIMission;
-import dji.sdk.missionmanager.DJIMissionManager;
-import dji.sdk.products.DJIAircraft;
-import dji.sdk.sdkmanager.DJISDKManager;
 
 /**
  * Created by Julia on 2017-01-15.
@@ -28,24 +24,27 @@ public class MissionGenerator implements I_MissionGenerator
     private GeneratedMissionModel generatedMissionModel_;
     private I_ApplicationContextManager contextManager_;
     private CustomMissionBuilder customMissionBuilder_;
-    private StepCompletionCallback stepCompletionCallback_;
+    private MissionStepCompletionCallback missionStepCompletionCallback_;
     private I_MissionManagerSource missionManagerSource_;
     private I_FlightControllerSource flightControllerSource_;
-    private I_ImageTransferer imageTransferer_;
+    private I_ImageTransferModuleInitializer imageTransferModuleInitializer_;
 
-    public MissionGenerator(I_ApplicationContextManager contextManager,
-                            InitialMissionModel initialMissionModel,
-                            GeneratedMissionModel generatedMissionModel,
-                            I_MissionManagerSource missionManagerSource,
-                            I_FlightControllerSource flightControllerSource,
-                            StepCompletionCallback stepCompletionCallback){
+    public MissionGenerator(
+            I_ApplicationContextManager contextManager,
+            InitialMissionModel initialMissionModel,
+            GeneratedMissionModel generatedMissionModel,
+            I_MissionManagerSource missionManagerSource,
+            I_FlightControllerSource flightControllerSource,
+            MissionStepCompletionCallback missionStepCompletionCallback,
+            I_ImageTransferModuleInitializer imageTransferModuleInitializer){
         initialMissionModel_ = initialMissionModel;
         generatedMissionModel_ = generatedMissionModel;
         missionManagerSource_ = missionManagerSource;
         flightControllerSource_ = flightControllerSource;
         contextManager_ = contextManager;
-        stepCompletionCallback_ = stepCompletionCallback;
-        customMissionBuilder_ = new CustomMissionBuilder(initialMissionModel, generatedMissionModel, contextManager, stepCompletionCallback_);
+        missionStepCompletionCallback_ = missionStepCompletionCallback;
+        customMissionBuilder_ = new CustomMissionBuilder(initialMissionModel, generatedMissionModel, contextManager, missionStepCompletionCallback_);
+        imageTransferModuleInitializer_ = imageTransferModuleInitializer;
     }
 
     public void generateMission(){
@@ -88,5 +87,6 @@ public class MissionGenerator implements I_MissionGenerator
             }
         });
 
+        imageTransferModuleInitializer_.initalizeImageTransferModulePriorToFlight();
     }
 }

@@ -3,6 +3,7 @@ package com.dji.sdk.sample.common.mission;
 import android.widget.Toast;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
+import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferer;
 import com.dji.sdk.sample.common.integration.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.I_FlightController;
@@ -32,21 +33,15 @@ public class MissionController implements I_MissionController
     private I_MissionManagerSource missionManagerSource_;
     private I_FlightControllerSource flightControllerSource_;
     private I_ApplicationContextManager contextManager_;
-    private GeneratedMissionModel missionModel_;
-    private I_ImageTransferer imageTransferer_;
 
     public MissionController(
             I_MissionManagerSource missionManagerSource,
             I_FlightControllerSource flightControllerSource,
-            I_ApplicationContextManager contextManager,
-            GeneratedMissionModel missionModel,
-            I_ImageTransferer imageTransferer)
+            I_ApplicationContextManager contextManager)
     {
         missionManagerSource_ = missionManagerSource;
         flightControllerSource_ = flightControllerSource;
         contextManager_ = contextManager;
-        missionModel_ = missionModel;
-        imageTransferer_ = imageTransferer;
     }
 
     public void pauseMission()

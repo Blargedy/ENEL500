@@ -6,7 +6,9 @@ import com.dji.sdk.sample.common.imageTransfer.CameraMediaListFetcher;
 import com.dji.sdk.sample.common.imageTransfer.DroneImageDownloadSelector;
 import com.dji.sdk.sample.common.imageTransfer.DroneToAndroidImageDownloadInitiator;
 import com.dji.sdk.sample.common.imageTransfer.DroneToAndroidImageDownloader;
+import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferer;
+import com.dji.sdk.sample.common.imageTransfer.ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.ImageTransferPathsSource;
 import com.dji.sdk.sample.common.integration.I_MediaDataFetcher;
 import com.dji.sdk.sample.common.integration.I_MediaManagerSource;
@@ -29,6 +31,8 @@ public class ImageTransferContainer
     private DroneImageDownloadSelector downloadSelector_;
     private CameraMediaListFetcher mediaListFetcher_;
     private CameraMediaDownloadModeChanger cameraModeChanger_;
+
+    private ImageTransferModuleInitializer imageTransferModuleInitializer_;
 
     private DroneToAndroidImageDownloadInitiator downloadInitiator_;
 
@@ -66,6 +70,10 @@ public class ImageTransferContainer
                 mediaManagerSource,
                 mediaListFetcher_);
 
+        imageTransferModuleInitializer_ = new ImageTransferModuleInitializer(
+                mediaManagerSource,
+                downloadSelector_);
+
         downloadInitiator_ = new DroneToAndroidImageDownloadInitiator(
                 cameraModeChanger_);
 
@@ -80,6 +88,11 @@ public class ImageTransferContainer
     public I_ImageTransferer imageTransferer()
     {
         return downloadInitiator_;
+    }
+
+    public I_ImageTransferModuleInitializer imageTransferModuleInitializer()
+    {
+        return imageTransferModuleInitializer_;
     }
 
     private void startAndroidToPcImageTransferBackgroundThread()

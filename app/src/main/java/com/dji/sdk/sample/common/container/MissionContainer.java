@@ -5,7 +5,7 @@ import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.mission.I_MissionController;
 import com.dji.sdk.sample.common.mission.MissionController;
 import com.dji.sdk.sample.common.mission.MissionGenerator;
-import com.dji.sdk.sample.common.mission.StepCompletionCallback;
+import com.dji.sdk.sample.common.mission.MissionStepCompletionCallback;
 import com.dji.sdk.sample.common.presenter.MapPresenter;
 import com.dji.sdk.sample.common.presenter.MissionGenerationPresenter;
 import com.dji.sdk.sample.common.presenter.MissionControllerPresenter;
@@ -26,7 +26,7 @@ public class MissionContainer
 
     private ImageTransferContainer imageTransferContainer_;
 
-    private StepCompletionCallback stepCompletionCallback_;
+    private MissionStepCompletionCallback missionStepCompletionCallback_;
 
     private MissionGenerator missionGenerator_;
     private MissionGenerationPresenter missionGenerationPresenter_;
@@ -43,6 +43,14 @@ public class MissionContainer
         initialMissionModel_ = new InitialMissionModel();
         generatedMissionModel_ = new GeneratedMissionModel();
 
+        missionController_ = new MissionController(
+                integrationLayerContainer.missionManagerSource(),
+                integrationLayerContainer.flightControllerSource(),
+                contextManager);
+        missionControllerPresenter_ = new MissionControllerPresenter(
+                flightControlView.startMissionButton(),
+                missionController_);
+
         imageTransferContainer_ = new ImageTransferContainer(
                 contextManager,
                 integrationLayerContainer.mediaManagerSource(),
@@ -51,17 +59,7 @@ public class MissionContainer
                 flightControlView,
                 pcIpAddress);
 
-        missionController_ = new MissionController(
-                integrationLayerContainer.missionManagerSource(),
-                integrationLayerContainer.flightControllerSource(),
-                contextManager,
-                generatedMissionModel_,
-                imageTransferContainer_.imageTransferer());
-        missionControllerPresenter_ = new MissionControllerPresenter(
-                flightControlView.startMissionButton(),
-                missionController_);
-
-        stepCompletionCallback_ = new StepCompletionCallback(
+        missionStepCompletionCallback_ = new MissionStepCompletionCallback(
                 missionController_,
                 imageTransferContainer_.imageTransferer(),
                 contextManager);
@@ -72,7 +70,8 @@ public class MissionContainer
                 generatedMissionModel_,
                 integrationLayerContainer.missionManagerSource(),
                 integrationLayerContainer.flightControllerSource(),
-                stepCompletionCallback_);
+                missionStepCompletionCallback_,
+                imageTransferContainer_.imageTransferModuleInitializer());
 
         missionGenerationPresenter_ = new MissionGenerationPresenter(
                 flightControlView.generateMissionButton(),

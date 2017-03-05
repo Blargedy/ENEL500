@@ -13,8 +13,6 @@ public class MissionControllerPresenter implements View.OnClickListener
 {
     private Button startMissionButton_;
     private MissionController controller_;
-    // Image transfer service
-    // Periodically pause the mission, trigger a transfer and restart the mission
 
     public MissionControllerPresenter(
             Button startMissionButton,

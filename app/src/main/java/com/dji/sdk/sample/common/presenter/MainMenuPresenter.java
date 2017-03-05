@@ -43,6 +43,7 @@ public class MainMenuPresenter implements View.OnClickListener
             Intent reconstructLiveIntent = new Intent(
                     context, FlightControlActivity.class);
             reconstructLiveIntent.putExtra(IntentExtraKeys.IS_LIVE_MODE_ENABLED, new Boolean(true));
+            reconstructLiveIntent.putExtra(IntentExtraKeys.PC_IP_ADDRESS, "192.168.1.203");
 
             context.startActivity(reconstructLiveIntent);
         }
