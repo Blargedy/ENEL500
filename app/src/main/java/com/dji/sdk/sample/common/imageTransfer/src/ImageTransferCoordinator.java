@@ -7,7 +7,7 @@ import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaDownloadModeChan
 import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaListFetcher;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadSelector;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneToAndroidImageDownloader;
-import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferCompletionCallback;
+import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
 import com.dji.sdk.sample.common.integration.api.I_CameraMediaListDownloadListener;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;

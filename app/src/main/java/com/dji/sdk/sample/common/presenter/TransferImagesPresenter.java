@@ -4,9 +4,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.dji.sdk.sample.common.imageTransfer.api.I_AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneMediaListInitializer;
-import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferCompletionCallback;
+import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.src.AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;

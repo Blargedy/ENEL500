@@ -2,11 +2,10 @@ package dji.developer.sample.imageTransfer;
 
 import com.dji.sdk.sample.common.imageTransfer.src.DroneToAndroidImageDownloader;
 import com.dji.sdk.sample.common.imageTransfer.api.I_AndroidToPcImageCopier;
-import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferCompletionCallback;
+import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferPathsSource;
 import com.dji.sdk.sample.common.integration.api.I_MediaDataFetcher;
 import com.dji.sdk.sample.common.integration.api.I_MediaDownloadListener;
-import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 import dji.sdk.camera.DJIMedia;
 

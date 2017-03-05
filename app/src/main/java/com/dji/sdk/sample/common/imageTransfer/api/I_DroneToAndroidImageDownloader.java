@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.imageTransfer.api;
 
+import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
+
 import java.util.ArrayList;
 
 import dji.sdk.camera.DJIMedia;

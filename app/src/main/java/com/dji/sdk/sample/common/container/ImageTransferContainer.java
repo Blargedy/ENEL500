@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.container;
 
+import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleEnder;
+import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.src.AndroidToPcImageCopier;
@@ -10,6 +12,7 @@ import com.dji.sdk.sample.common.imageTransfer.src.DroneToAndroidImageDownloader
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferCoordinator;
+import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferPathsSource;
 import com.dji.sdk.sample.common.integration.api.I_MediaDataFetcher;
@@ -37,6 +40,7 @@ public class ImageTransferContainer
     private I_ImageTransferer imageTransferer_;
 
     private I_ImageTransferModuleInitializer imageTransferModuleInitializer_;
+    private I_ImageTransferModuleEnder imageTransferModuleEnder_;
 
     private TransferImagesPresenter transferImagesPresenter_;
 
@@ -77,11 +81,16 @@ public class ImageTransferContainer
                     mediaListFetcher_,
                     downloadSelector_,
                     androidToPcImageCopier_);
+
+            imageTransferModuleEnder_ = new ImageTransferModuleEnder(
+                    imageTransferer_,
+                    androidToPcImageCopier_);
         }
         else
         {
             imageTransferer_ = new InertImageTransferer();
             imageTransferModuleInitializer_ = new InertImageTransferModuleInitializer();
+            imageTransferModuleEnder_ = new InertImageTransferModuleEnder();
         }
 
         transferImagesPresenter_ = new TransferImagesPresenter(
@@ -100,5 +109,10 @@ public class ImageTransferContainer
     public I_ImageTransferModuleInitializer imageTransferModuleInitializer()
     {
         return imageTransferModuleInitializer_;
+    }
+
+    public I_ImageTransferModuleEnder imageTransferModuleEnder()
+    {
+        return imageTransferModuleEnder_;
     }
 }
