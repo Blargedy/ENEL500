@@ -2,10 +2,12 @@ package com.dji.sdk.sample.common.container;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
+import com.dji.sdk.sample.common.mission.CustomMissionBuilder;
 import com.dji.sdk.sample.common.mission.I_MissionController;
 import com.dji.sdk.sample.common.mission.MissionController;
 import com.dji.sdk.sample.common.mission.MissionGenerator;
 import com.dji.sdk.sample.common.mission.MissionStepCompletionCallback;
+import com.dji.sdk.sample.common.mission.src.MissionPreparer;
 import com.dji.sdk.sample.common.presenter.MapPresenter;
 import com.dji.sdk.sample.common.presenter.MissionGenerationPresenter;
 import com.dji.sdk.sample.common.presenter.MissionControllerPresenter;
@@ -26,6 +28,8 @@ public class MissionContainer
 
     private MissionStepCompletionCallback missionStepCompletionCallback_;
 
+    private CustomMissionBuilder customMissionBuilder_;
+    private MissionPreparer missionPreparer_;
     private MissionGenerator missionGenerator_;
     private MissionGenerationPresenter missionGenerationPresenter_;
 
@@ -54,14 +58,20 @@ public class MissionContainer
                 imageTransferContainer.imageTransferer(),
                 contextManager);
 
-        missionGenerator_ = new MissionGenerator(
-                contextManager,
+        customMissionBuilder_ = new CustomMissionBuilder(
                 initialMissionModel_,
                 generatedMissionModel_,
+                contextManager,
+                missionStepCompletionCallback_);
+        missionPreparer_ = new MissionPreparer(
                 integrationLayerContainer.missionManagerSource(),
                 integrationLayerContainer.flightControllerSource(),
-                missionStepCompletionCallback_,
-                imageTransferContainer.imageTransferModuleInitializer());
+                generatedMissionModel_);
+        missionGenerator_ = new MissionGenerator(
+                customMissionBuilder_,
+                missionPreparer_,
+                imageTransferContainer.imageTransferModuleInitializer(),
+                contextManager);
 
         missionGenerationPresenter_ = new MissionGenerationPresenter(
                 flightControlView.generateMissionButton(),

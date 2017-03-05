@@ -61,6 +61,5 @@ public class TransferImagesPresenter implements
             e.printStackTrace();
         }
         Toast.makeText(contextManager_.getApplicationContext(), "Success: transferred photos" , Toast.LENGTH_SHORT).show();
-
     }
 }
