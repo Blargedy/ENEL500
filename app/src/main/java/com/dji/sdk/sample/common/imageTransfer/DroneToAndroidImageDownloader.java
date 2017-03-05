@@ -75,7 +75,7 @@ public class DroneToAndroidImageDownloader implements
     public void onSuccess(String path)
     {
         downloadNextImage();
-        androidToPcImageCopier_.copyImageToPc(path);
+        androidToPcImageCopier_.addImageToPcCopyQueue(path);
     }
 
     @Override

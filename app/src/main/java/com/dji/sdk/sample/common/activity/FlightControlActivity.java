@@ -2,15 +2,15 @@ package com.dji.sdk.sample.common.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
-import com.dji.sdk.sample.common.container.ImageTransferContainer;
 import com.dji.sdk.sample.common.container.IntegrationLayerContainer;
 import com.dji.sdk.sample.common.container.MissionContainer;
 import com.dji.sdk.sample.common.presenter.ProductConnectionPresenter;
 import com.dji.sdk.sample.common.utility.ApplicationContextManager;
 import com.dji.sdk.sample.common.utility.UserPermissionRequester;
 import com.dji.sdk.sample.common.view.FlightControlView;
+
+import static com.dji.sdk.sample.common.utility.IntentExtraKeys.*;
 
 public class FlightControlActivity extends AppCompatActivity
 {
@@ -28,6 +28,10 @@ public class FlightControlActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Boolean isLiveModeEnabled = getIntent().getBooleanExtra(IS_LIVE_MODE_ENABLED, false);
+        String pcIpAddress = getIntent().getStringExtra(PC_IP_ADDRESS);
+
         permissionRequester_ = new UserPermissionRequester();
         contextManager_ = new ApplicationContextManager(this);
 
@@ -38,7 +42,8 @@ public class FlightControlActivity extends AppCompatActivity
         missionContainer_ = new MissionContainer(
                 integrationLayerContainer_,
                 flightControlView_,
-                contextManager_);
+                contextManager_,
+                pcIpAddress);
 
         productConnectionPresenter_ = new ProductConnectionPresenter(
                 flightControlView_.connectionStatusText(),
@@ -47,7 +52,5 @@ public class FlightControlActivity extends AppCompatActivity
         permissionRequester_.requestPermissions(this);
 
         setContentView(flightControlView_);
-
-
     }
 }

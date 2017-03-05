@@ -36,7 +36,8 @@ public class MissionContainer
     public MissionContainer(
             IntegrationLayerContainer integrationLayerContainer,
             FlightControlView flightControlView,
-            I_ApplicationContextManager contextManager)
+            I_ApplicationContextManager contextManager,
+            String pcIpAddress)
     {
 
         initialMissionModel_ = new InitialMissionModel();
@@ -47,7 +48,8 @@ public class MissionContainer
                 integrationLayerContainer.mediaManagerSource(),
                 integrationLayerContainer.mediaDataFetcher(),
                 missionController_,
-                flightControlView);
+                flightControlView,
+                pcIpAddress);
 
         missionController_ = new MissionController(
                 integrationLayerContainer.missionManagerSource(),

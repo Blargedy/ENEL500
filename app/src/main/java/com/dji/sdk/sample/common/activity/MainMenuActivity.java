@@ -7,6 +7,8 @@ import com.dji.sdk.sample.common.presenter.MainMenuPresenter;
 import com.dji.sdk.sample.common.utility.ApplicationContextManager;
 import com.dji.sdk.sample.common.view.MainMenuView;
 
+import java.io.File;
+
 public class MainMenuActivity extends AppCompatActivity
 {
     private ApplicationContextManager contextManager_;
@@ -28,15 +30,16 @@ public class MainMenuActivity extends AppCompatActivity
                 contextManager_);
 
         setContentView(mainMenuView_);
-
-
     }
 
     private void sendLogsToFile()
     {
         try {
+            String path = "/storage/emulated/0/Logging.txt";
+            File file = new File(path);
+            file.delete();
             Process process = Runtime.getRuntime().exec("logcat -d");
-            process = Runtime.getRuntime().exec( "logcat -f " + "/storage/emulated/0/"+"Logging.txt");
+            process = Runtime.getRuntime().exec( "logcat -f " + path);
         }catch(Exception e)
         {
             e.printStackTrace();

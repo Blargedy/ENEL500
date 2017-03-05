@@ -2,26 +2,12 @@ package com.dji.sdk.sample.common.presenter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.dji.sdk.sample.common.activity.FlightControlActivity;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.UnknownHostException;
-import java.nio.channels.FileChannel;
-
-import jcifs.smb.NtlmPasswordAuthentication;
-import jcifs.smb.SmbException;
-import jcifs.smb.SmbFile;
-import jcifs.smb.SmbFileOutputStream;
+import com.dji.sdk.sample.common.utility.IntentExtraKeys;
 
 /**
  * Created by Julia on 2017-02-08.
@@ -52,37 +38,20 @@ public class MainMenuPresenter implements View.OnClickListener
     {
         if(view.getId() == reconstructLiveButton_.getId())
         {
-            Thread thread = new Thread(new Runnable() {
+            // todo with Berni: Add screen with instructions and to test connection
+            Context context = contextManager_.getApplicationContext();
+            Intent reconstructLiveIntent = new Intent(
+                    context, FlightControlActivity.class);
+            reconstructLiveIntent.putExtra(IntentExtraKeys.IS_LIVE_MODE_ENABLED, new Boolean(true));
 
-                @Override
-                public void run() {
-                    try {
-                        String user = "Julia:covert";
-                        NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication(user);
-
-                        String sharedFolder = "HydraPhotos";
-                        String path = "smb://192.168.1.1/"+sharedFolder+"/test.txt";
-
-                        SmbFile smbFile = new SmbFile(path, auth);
-                        SmbFileOutputStream smbfos = new SmbFileOutputStream(smbFile);
-
-                        String message = new String("Testing writing...");
-                        smbfos.write(message.getBytes());
-                    } catch (Exception e) {
-                        Log.d("MainMenuPresenter", e.toString());
-                    }
-                }
-            });
-
-            // Unfortunately can't connect to the network using the code above. Needs more work
-            thread.start();
+            context.startActivity(reconstructLiveIntent);
         }
         else if (view.getId() == reconstructLaterButton_.getId())
         {
             Context context = contextManager_.getApplicationContext();
             Intent reconstructLaterIntent = new Intent(
-                    context,FlightControlActivity.class);
-            reconstructLaterIntent.putExtra("isLiveModeEnabled", new Boolean(false));
+                    context, FlightControlActivity.class);
+            reconstructLaterIntent.putExtra(IntentExtraKeys.IS_LIVE_MODE_ENABLED, new Boolean(false));
 
             context.startActivity(reconstructLaterIntent);
         }

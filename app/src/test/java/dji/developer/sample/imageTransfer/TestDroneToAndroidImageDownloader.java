@@ -6,6 +6,7 @@ import com.dji.sdk.sample.common.imageTransfer.I_ImageTransferPathsSource;
 import com.dji.sdk.sample.common.integration.I_MediaDataFetcher;
 import com.dji.sdk.sample.common.integration.I_MediaDownloadListener;
 import com.dji.sdk.sample.common.mission.I_MissionController;
+import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 import dji.sdk.camera.DJIMedia;
 
@@ -33,12 +34,14 @@ public class TestDroneToAndroidImageDownloader
     private I_MediaDataFetcher mediaDataFetcher_ = mock(I_MediaDataFetcher.class);
     private I_MissionController missionController_ = mock(I_MissionController.class);
     private I_AndroidToPcImageCopier androidToPcImageCopier_ = mock(I_AndroidToPcImageCopier.class);
+    private I_ApplicationContextManager contextManager_ = mock(I_ApplicationContextManager.class);
 
     private DroneToAndroidImageDownloader patient_ = new DroneToAndroidImageDownloader(
             pathSource_,
             mediaDataFetcher_,
             missionController_,
-            androidToPcImageCopier_);
+            androidToPcImageCopier_,
+            contextManager_);
 
     @Test
     public void willRequestAndroidImagePathFromPathSource()
@@ -76,7 +79,7 @@ public class TestDroneToAndroidImageDownloader
 
         patient_.downloadImagesFromDrone(imagesToDownload);
 
-        verify(androidToPcImageCopier_, times(size)).copyImageToPc(expectedImagePath.toString());
+        verify(androidToPcImageCopier_, times(size)).addImageToPcCopyQueue(expectedImagePath.toString());
     }
 
     @Test

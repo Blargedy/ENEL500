@@ -39,13 +39,14 @@ public class ImageTransferContainer
             I_MediaManagerSource mediaManagerSource,
             I_MediaDataFetcher mediaDataFetcher,
             I_MissionController missionController,
-            FlightControlView flightControlView)
+            FlightControlView flightControlView,
+            String pcIpAddress)
     {
         pathsSource_ = new ImageTransferPathsSource(
                 contextManager);
 
         androidToPcImageCopier_ = new AndroidToPcImageCopier(
-                pathsSource_);
+                pcIpAddress);
 
         droneToAndroidImageDownloader_ = new DroneToAndroidImageDownloader(
                 pathsSource_,
@@ -72,10 +73,17 @@ public class ImageTransferContainer
                 flightControlView.transferImagesButton(),
                 downloadInitiator_,
                 downloadSelector_);
+
+        startAndroidToPcImageTransferBackgroundThread();
     }
 
     public I_ImageTransferer imageTransferer()
     {
         return downloadInitiator_;
+    }
+
+    private void startAndroidToPcImageTransferBackgroundThread()
+    {
+        new Thread(androidToPcImageCopier_).start();
     }
 }
