@@ -2,9 +2,13 @@ package com.dji.sdk.sample.common.imageTransfer.src;
 
 import android.util.Log;
 
+import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaDownloadModeChanger;
+import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaListFetcher;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneMediaListInitializer;
+import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializationCallback;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.integration.api.I_CameraMediaListDownloadListener;
+import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_MediaManager;
 import com.dji.sdk.sample.common.integration.api.I_MediaManagerSource;
 
@@ -19,37 +23,57 @@ import dji.sdk.camera.DJIMedia;
 
 public class ImageTransferModuleInitializer implements
         I_ImageTransferModuleInitializer,
+        I_CompletionCallback,
         I_CameraMediaListDownloadListener
 {
     private static final String TAG = "ImageTransferModuleInitializer";
 
-    private I_MediaManagerSource mediaManagerSource_;
+    private I_CameraMediaDownloadModeChanger modeChanger_;
+    private I_CameraMediaListFetcher mediaListFetcher_;
     private I_DroneMediaListInitializer mediaListInitializer_;
     private AndroidToPcImageCopier androidToPcImageCopier_;
 
+    private I_ImageTransferModuleInitializationCallback callback_;
 
     public ImageTransferModuleInitializer(
-            I_MediaManagerSource mediaManagerSource,
+            I_CameraMediaDownloadModeChanger modeChanger,
+            I_CameraMediaListFetcher mediaListFetcher,
             I_DroneMediaListInitializer mediaListInitializer,
             AndroidToPcImageCopier androidToPcImageCopier)
     {
-        mediaManagerSource_ = mediaManagerSource;
+        modeChanger_ = modeChanger;
+        mediaListFetcher_ = mediaListFetcher;
         mediaListInitializer_ = mediaListInitializer;
         androidToPcImageCopier_ = androidToPcImageCopier;
     }
 
     @Override
-    public void initializeImageTransferModulePriorToFlight()
+    public void initializeImageTransferModulePriorToFlight(
+            I_ImageTransferModuleInitializationCallback callback)
     {
+        callback_ = callback;
         androidToPcImageCopier_.start();
-        I_MediaManager mediaManager = mediaManagerSource_.getMediaManager();
-        mediaManager.fetchMediaList(this);
+        modeChanger_.changeCameraModeForMediaDownload(this);
+    }
+
+    @Override
+    public void onResult(DJIError error)
+    {
+        if (error == null)
+        {
+            mediaListFetcher_.fetchMediaListFromCamera(this);
+        }
+        else
+        {
+            Log.e(TAG, "Failed to change camera mode : " + error.getDescription());
+        }
     }
 
     @Override
     public void onSuccess(ArrayList<DJIMedia> mediaList)
     {
         mediaListInitializer_.initializeDroneMediaList(mediaList);
+        callback_.onImageTransferModuleInitializationCompletion();
     }
 
     @Override

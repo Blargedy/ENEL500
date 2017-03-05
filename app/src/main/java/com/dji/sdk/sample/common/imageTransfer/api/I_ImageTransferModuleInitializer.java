@@ -6,5 +6,6 @@ package com.dji.sdk.sample.common.imageTransfer.api;
 
 public interface I_ImageTransferModuleInitializer
 {
-    void initializeImageTransferModulePriorToFlight();
+    void initializeImageTransferModulePriorToFlight(
+            I_ImageTransferModuleInitializationCallback callback);
 }

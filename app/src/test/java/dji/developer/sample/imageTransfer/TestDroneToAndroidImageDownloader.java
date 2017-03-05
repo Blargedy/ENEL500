@@ -33,13 +33,11 @@ public class TestDroneToAndroidImageDownloader
     private I_ImageTransferPathsSource pathSource_ = mock(I_ImageTransferPathsSource.class);
     private I_MediaDataFetcher mediaDataFetcher_ = mock(I_MediaDataFetcher.class);
     private I_AndroidToPcImageCopier androidToPcImageCopier_ = mock(I_AndroidToPcImageCopier.class);
-    private I_ApplicationContextManager contextManager_ = mock(I_ApplicationContextManager.class);
 
     private DroneToAndroidImageDownloader patient_ = new DroneToAndroidImageDownloader(
             pathSource_,
             mediaDataFetcher_,
-            androidToPcImageCopier_,
-            contextManager_);
+            androidToPcImageCopier_);
 
     private I_ImageTransferCompletionCallback completionCallback_ = mock(I_ImageTransferCompletionCallback.class);
 

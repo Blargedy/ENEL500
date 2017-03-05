@@ -69,7 +69,8 @@ public class ImageTransferContainer
                 droneToAndroidImageDownloader_);
 
         imageTransferModuleInitializer_ = new ImageTransferModuleInitializer(
-                mediaManagerSource,
+                cameraModeChanger_,
+                mediaListFetcher_,
                 downloadSelector_,
                 androidToPcImageCopier_);
 

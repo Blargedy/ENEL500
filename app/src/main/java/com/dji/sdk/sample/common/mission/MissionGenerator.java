@@ -86,6 +86,6 @@ public class MissionGenerator implements I_MissionGenerator
             }
         });
 
-        imageTransferModuleInitializer_.initializeImageTransferModulePriorToFlight();
+        imageTransferModuleInitializer_.initializeImageTransferModulePriorToFlight(null);
     }
 }
