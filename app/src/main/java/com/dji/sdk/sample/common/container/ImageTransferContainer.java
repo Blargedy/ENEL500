@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.container;
 
+import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleInitializer;
+import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.src.AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.imageTransfer.src.CameraMediaDownloadModeChanger;
 import com.dji.sdk.sample.common.imageTransfer.src.CameraMediaListFetcher;
@@ -32,23 +34,23 @@ public class ImageTransferContainer
     private AndroidToPcImageCopier androidToPcImageCopier_;
     private DroneToAndroidImageDownloader droneToAndroidImageDownloader_;
 
-    private ImageTransferCoordinator imageTransferCoordinator_;
+    private I_ImageTransferer imageTransferer_;
 
-    private ImageTransferModuleInitializer imageTransferModuleInitializer_;
+    private I_ImageTransferModuleInitializer imageTransferModuleInitializer_;
 
     private TransferImagesPresenter transferImagesPresenter_;
 
     public ImageTransferContainer(
             I_ApplicationContextManager contextManager,
-            I_MediaManagerSource mediaManagerSource,
-            I_MediaDataFetcher mediaDataFetcher,
+            IntegrationLayerContainer integrationLayerContainer,
             FlightControlView flightControlView,
-            String pcIpAddress)
+            String pcIpAddress,
+            boolean isLiveModeEnabled)
     {
         cameraModeChanger_ = new CameraMediaDownloadModeChanger(
-                mediaManagerSource);
+                integrationLayerContainer.mediaManagerSource());
         mediaListFetcher_ = new CameraMediaListFetcher(
-                mediaManagerSource,
+                integrationLayerContainer.mediaManagerSource(),
                 downloadSelector_,
                 droneToAndroidImageDownloader_);
         downloadSelector_ = new DroneImageDownloadSelector();
@@ -59,31 +61,39 @@ public class ImageTransferContainer
                 pcIpAddress);
         droneToAndroidImageDownloader_ = new DroneToAndroidImageDownloader(
                 pathsSource_,
-                mediaDataFetcher,
+                integrationLayerContainer.mediaDataFetcher(),
                 androidToPcImageCopier_);
 
-        imageTransferCoordinator_ = new ImageTransferCoordinator(
-                cameraModeChanger_,
-                mediaListFetcher_,
-                downloadSelector_,
-                droneToAndroidImageDownloader_);
+        if(isLiveModeEnabled)
+        {
+            imageTransferer_ = new ImageTransferCoordinator(
+                    cameraModeChanger_,
+                    mediaListFetcher_,
+                    downloadSelector_,
+                    droneToAndroidImageDownloader_);
 
-        imageTransferModuleInitializer_ = new ImageTransferModuleInitializer(
-                cameraModeChanger_,
-                mediaListFetcher_,
-                downloadSelector_,
-                androidToPcImageCopier_);
+            imageTransferModuleInitializer_ = new ImageTransferModuleInitializer(
+                    cameraModeChanger_,
+                    mediaListFetcher_,
+                    downloadSelector_,
+                    androidToPcImageCopier_);
+        }
+        else
+        {
+            imageTransferer_ = new InertImageTransferer();
+            imageTransferModuleInitializer_ = new InertImageTransferModuleInitializer();
+        }
 
         transferImagesPresenter_ = new TransferImagesPresenter(
                 flightControlView.transferImagesButton(),
                 contextManager,
-                imageTransferCoordinator_,
+                imageTransferer_,
                 downloadSelector_);
     }
 
     public I_ImageTransferer imageTransferer()
     {
-        return imageTransferCoordinator_;
+        return imageTransferer_;
     }
 
     public I_ImageTransferModuleInitializer imageTransferModuleInitializer()

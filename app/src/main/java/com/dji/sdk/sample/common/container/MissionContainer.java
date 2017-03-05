@@ -24,8 +24,6 @@ public class MissionContainer
     private MissionController missionController_;
     private MissionControllerPresenter missionControllerPresenter_;
 
-    private ImageTransferContainer imageTransferContainer_;
-
     private MissionStepCompletionCallback missionStepCompletionCallback_;
 
     private MissionGenerator missionGenerator_;
@@ -35,9 +33,9 @@ public class MissionContainer
 
     public MissionContainer(
             IntegrationLayerContainer integrationLayerContainer,
+            ImageTransferContainer imageTransferContainer,
             FlightControlView flightControlView,
-            I_ApplicationContextManager contextManager,
-            String pcIpAddress)
+            I_ApplicationContextManager contextManager)
     {
 
         initialMissionModel_ = new InitialMissionModel();
@@ -51,16 +49,9 @@ public class MissionContainer
                 flightControlView.startMissionButton(),
                 missionController_);
 
-        imageTransferContainer_ = new ImageTransferContainer(
-                contextManager,
-                integrationLayerContainer.mediaManagerSource(),
-                integrationLayerContainer.mediaDataFetcher(),
-                flightControlView,
-                pcIpAddress);
-
         missionStepCompletionCallback_ = new MissionStepCompletionCallback(
                 missionController_,
-                imageTransferContainer_.imageTransferer(),
+                imageTransferContainer.imageTransferer(),
                 contextManager);
 
         missionGenerator_ = new MissionGenerator(
@@ -70,7 +61,7 @@ public class MissionContainer
                 integrationLayerContainer.missionManagerSource(),
                 integrationLayerContainer.flightControllerSource(),
                 missionStepCompletionCallback_,
-                imageTransferContainer_.imageTransferModuleInitializer());
+                imageTransferContainer.imageTransferModuleInitializer());
 
         missionGenerationPresenter_ = new MissionGenerationPresenter(
                 flightControlView.generateMissionButton(),
