@@ -1,9 +1,10 @@
-package com.dji.sdk.sample.common.mission;
+package com.dji.sdk.sample.common.mission.src;
 
 import android.widget.Toast;
 
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
+import com.dji.sdk.sample.common.mission.api.I_MissionController;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 import dji.common.error.DJIError;

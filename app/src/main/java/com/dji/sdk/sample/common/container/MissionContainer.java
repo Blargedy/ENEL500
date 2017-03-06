@@ -2,11 +2,11 @@ package com.dji.sdk.sample.common.container;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
-import com.dji.sdk.sample.common.mission.CustomMissionBuilder;
-import com.dji.sdk.sample.common.mission.I_MissionController;
-import com.dji.sdk.sample.common.mission.MissionController;
-import com.dji.sdk.sample.common.mission.MissionGenerator;
-import com.dji.sdk.sample.common.mission.MissionStepCompletionCallback;
+import com.dji.sdk.sample.common.mission.src.CustomMissionBuilder;
+import com.dji.sdk.sample.common.mission.api.I_MissionController;
+import com.dji.sdk.sample.common.mission.src.MissionController;
+import com.dji.sdk.sample.common.mission.src.MissionGenerator;
+import com.dji.sdk.sample.common.mission.src.MissionStepCompletionCallback;
 import com.dji.sdk.sample.common.mission.src.MissionPreparer;
 import com.dji.sdk.sample.common.presenter.MapPresenter;
 import com.dji.sdk.sample.common.presenter.MissionGenerationPresenter;
@@ -70,13 +70,13 @@ public class MissionContainer
         missionGenerator_ = new MissionGenerator(
                 customMissionBuilder_,
                 missionPreparer_,
-                imageTransferContainer.imageTransferModuleInitializer(),
-                contextManager);
+                imageTransferContainer.imageTransferModuleInitializer());
 
         missionGenerationPresenter_ = new MissionGenerationPresenter(
                 flightControlView.generateMissionButton(),
                 flightControlView.startMissionButton(),
-                missionGenerator_);
+                missionGenerator_,
+                contextManager);
 
         mapPresenter_ = new MapPresenter(
                 contextManager,

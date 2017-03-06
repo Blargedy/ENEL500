@@ -1,6 +1,6 @@
 package com.dji.sdk.sample.common.entity;
 
-import com.dji.sdk.sample.common.mission.MissionBoundary;
+import com.dji.sdk.sample.common.mission.src.MissionBoundary;
 import com.dji.sdk.sample.common.values.Coordinate;
 
 /**

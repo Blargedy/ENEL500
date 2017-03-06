@@ -1,6 +1,6 @@
 package dji.developer.sample.mission;
 
-import com.dji.sdk.sample.common.mission.SwitchBackPathGenerator;
+import com.dji.sdk.sample.common.mission.src.SwitchBackPathGenerator;
 import com.dji.sdk.sample.common.values.Coordinate;
 
 import org.junit.Test;

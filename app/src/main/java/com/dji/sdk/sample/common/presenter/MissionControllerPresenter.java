@@ -3,7 +3,7 @@ package com.dji.sdk.sample.common.presenter;
 import android.view.View;
 import android.widget.Button;
 
-import com.dji.sdk.sample.common.mission.MissionController;
+import com.dji.sdk.sample.common.mission.src.MissionController;
 
 /**
  * Created by Julia on 2017-02-04.

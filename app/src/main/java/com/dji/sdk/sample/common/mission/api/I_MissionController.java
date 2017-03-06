@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.mission;
+package com.dji.sdk.sample.common.mission.api;
 
 /**
  * Created by Matthew on 2017-02-08.

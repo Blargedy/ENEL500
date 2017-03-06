@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.mission;
+package com.dji.sdk.sample.common.mission.src;
 
 import com.dji.sdk.sample.common.values.Coordinate;
 
