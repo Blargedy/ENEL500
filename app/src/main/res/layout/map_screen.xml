@@ -60,6 +60,120 @@
         android:visibility="invisible"
         android:max="100" />
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.38">
+
+            <TextView
+                android:text="Bottom Left Corner          "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lbl_bottomLeftCorner"
+                android:layout_weight="0.38" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.24">
+
+                <TextView
+                    android:text="Latitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lbl_bottomLeftCornerLat" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.38">
+
+                </LinearLayout>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:text="0.00 deg"
+                    android:ems="10"
+                    android:id="@+id/txt_bottomLeftCornerLong"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:text="Longitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lbl_bottomLeftCornerLong" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:text="0.00 deg"
+                    android:ems="10"
+                    android:id="@+id/txt_bottomLeftCornerLong"
+                    tools:textAlignment="center" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.38">
+
+            <TextView
+                android:text="Top Right Corner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lbl_topRightCorner"
+                android:layout_weight="0.38" />
+
+            <TextView
+                android:text="Latitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lbl_topRightCornerLat"
+                android:layout_weight="0.70" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:text="0.00 deg"
+                android:ems="10"
+                android:id="@+id/txt_topRightCornerLat"
+                android:layout_weight="0.38"
+                android:textAlignment="center" />
+
+            <TextView
+                android:text="Longitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/lbl_topRightCornerLong"
+                android:layout_weight="0.38" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:text="0.00 deg"
+                android:ems="10"
+                android:id="@+id/txt_topRightCornerLong"
+                android:layout_weight="0.38"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+    </LinearLayout>
+
     <Switch
         android:text="Hover Now "
         android:layout_width="wrap_content"
@@ -82,13 +196,50 @@
         android:layout_width="match_parent"
         android:layout_height="105dp">
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:text="Generate Mission"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/btn_generateMission"
+                android:layout_weight="0.19"
+                android:background="@drawable/round_btn"
+                android:textColor="@color/common_text_color" />
+
+            <Button
+                android:text="Start Mission"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/btn_startMission"
+                android:layout_weight="0.19"
+                android:background="@drawable/round_btn"
+                android:textColor="@color/common_text_color" />
+
+            <Button
+                android:text="Transfer Images"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/btn_transferImages"
+                android:layout_weight="0.19"
+                android:background="@drawable/round_btn"
+                android:textColor="@color/common_text_color" />
+        </LinearLayout>
+
         <Button
             android:text="Select Survey Area"
             android:layout_width="match_parent"
             android:layout_height="106dp"
             android:id="@+id/btn_mainButton"
             android:layout_weight="1"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:background="@drawable/round_btn"
+            android:textColor="@color/common_text_color" />
+
     </LinearLayout>
 
 </LinearLayout>
