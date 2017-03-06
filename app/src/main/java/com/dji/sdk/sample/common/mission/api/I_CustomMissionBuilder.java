@@ -5,5 +5,5 @@ package com.dji.sdk.sample.common.mission.api;
  */
 
 public interface I_CustomMissionBuilder {
-    public void buildCustomMission();
+    void buildCustomMission();
 }

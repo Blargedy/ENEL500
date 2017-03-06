@@ -79,14 +79,8 @@ public class CustomMissionBuilder implements I_CustomMissionBuilder
 
         for (DJIWaypointMission waypointMission : waypointMissions)
         {
-            DJIMissionStep nextStep = new DJIWaypointStep(
-                    waypointMission,
-                    missionStepCompletionCallback_);
-            missionSteps.add(nextStep);
-
-            DJIShootPhotoStep photoStep = new DJIShootPhotoStep(MissionHelper.completionCallback(
-                    contextManager_,"Shot Photo", "Could not shoot photo"));
-            missionSteps.add(photoStep);
+            missionSteps.add(new DJIWaypointStep(waypointMission,missionStepCompletionCallback_));
+            missionSteps.add(new DJIShootPhotoStep(null));
         }
 
         generatedMissionModel_.djiMission_ = new DJICustomMission(missionSteps);

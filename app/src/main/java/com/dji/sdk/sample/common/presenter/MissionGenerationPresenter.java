@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
-import com.dji.sdk.sample.common.mission.src.MissionGenerator;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 /**

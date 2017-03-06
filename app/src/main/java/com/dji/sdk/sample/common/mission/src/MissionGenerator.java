@@ -1,7 +1,6 @@
 package com.dji.sdk.sample.common.mission.src;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleInitializationCallback;
@@ -10,7 +9,6 @@ import com.dji.sdk.sample.common.mission.api.I_CustomMissionBuilder;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
 import com.dji.sdk.sample.common.mission.api.I_MissionPreparer;
-import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 import dji.common.error.DJIError;
 

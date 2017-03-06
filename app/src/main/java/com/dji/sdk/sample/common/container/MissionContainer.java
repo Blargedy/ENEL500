@@ -8,6 +8,7 @@ import com.dji.sdk.sample.common.mission.src.MissionController;
 import com.dji.sdk.sample.common.mission.src.MissionGenerator;
 import com.dji.sdk.sample.common.mission.src.MissionStepCompletionCallback;
 import com.dji.sdk.sample.common.mission.src.MissionPreparer;
+import com.dji.sdk.sample.common.mission.src.WaypointReachedHandler;
 import com.dji.sdk.sample.common.presenter.MapPresenter;
 import com.dji.sdk.sample.common.presenter.MissionGenerationPresenter;
 import com.dji.sdk.sample.common.presenter.MissionControllerPresenter;
@@ -26,6 +27,7 @@ public class MissionContainer
     private MissionController missionController_;
     private MissionControllerPresenter missionControllerPresenter_;
 
+    private WaypointReachedHandler waypointReachedHandler_;
     private MissionStepCompletionCallback missionStepCompletionCallback_;
 
     private CustomMissionBuilder customMissionBuilder_;
@@ -51,12 +53,14 @@ public class MissionContainer
                 contextManager);
         missionControllerPresenter_ = new MissionControllerPresenter(
                 flightControlView.startMissionButton(),
-                missionController_);
-
-        missionStepCompletionCallback_ = new MissionStepCompletionCallback(
                 missionController_,
-                imageTransferContainer.imageTransferer(),
                 contextManager);
+
+        waypointReachedHandler_ = new WaypointReachedHandler(
+                missionController_,
+                imageTransferContainer.imageTransferer());
+        missionStepCompletionCallback_ = new MissionStepCompletionCallback(
+                waypointReachedHandler_);
 
         customMissionBuilder_ = new CustomMissionBuilder(
                 initialMissionModel_,
