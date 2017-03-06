@@ -5,9 +5,6 @@ import com.dji.sdk.sample.common.values.Coordinate;
 import java.util.List;
 import java.util.Vector;
 
-import dji.sdk.products.DJIAircraft;
-import dji.sdk.sdkmanager.DJISDKManager;
-
 import java.lang.Math;
 
 /**

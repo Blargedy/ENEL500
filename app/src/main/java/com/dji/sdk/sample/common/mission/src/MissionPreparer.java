@@ -3,7 +3,6 @@ package com.dji.sdk.sample.common.mission.src;
 import android.util.Log;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
-import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
 import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
