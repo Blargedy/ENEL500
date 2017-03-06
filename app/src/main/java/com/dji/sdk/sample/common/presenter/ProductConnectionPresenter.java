@@ -40,18 +40,23 @@ public class ProductConnectionPresenter
         receiver_ = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                DJIBaseProduct product = DJISampleApplication.getProductInstance();
-                if (product != null && product.isConnected())
-                {
-                    connectionStatusText_.setText("Status: Connected");
-                }
-                else
-                {
-                    connectionStatusText_.setText("Status: Not Connected");
-                }
+                updateText();
             }
         };
 
         contextManager_.getApplicationContext().registerReceiver(receiver_, filter);
+    }
+
+    private void updateText()
+    {
+        DJIBaseProduct product = DJISampleApplication.getProductInstance();
+        if (product != null && product.isConnected())
+        {
+            connectionStatusText_.setText("Status: Connected");
+        }
+        else
+        {
+            connectionStatusText_.setText("Status: Not Connected");
+        }
     }
 }
