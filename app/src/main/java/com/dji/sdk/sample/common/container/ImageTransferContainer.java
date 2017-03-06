@@ -16,11 +16,7 @@ import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferCoordinator;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferPathsSource;
-import com.dji.sdk.sample.common.integration.api.I_MediaDataFetcher;
-import com.dji.sdk.sample.common.integration.api.I_MediaManagerSource;
-import com.dji.sdk.sample.common.presenter.TransferImagesPresenter;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
-import com.dji.sdk.sample.common.view.FlightControlView;
 
 /**
  * Created by Julia on 2017-02-21.

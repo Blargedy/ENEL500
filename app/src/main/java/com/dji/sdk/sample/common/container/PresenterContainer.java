@@ -7,9 +7,9 @@ import com.dji.sdk.sample.common.presenter.MissionControllerPresenter;
 import com.dji.sdk.sample.common.presenter.MissionGenerationPresenter;
 import com.dji.sdk.sample.common.presenter.ProductConnectionPresenter;
 import com.dji.sdk.sample.common.presenter.TransferImagesPresenter;
+import com.dji.sdk.sample.common.utility.GoogleMapsConnectionHandler;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
-import com.dji.sdk.sample.common.view.FlightControlView;
-import com.dji.sdk.sample.common.view.MapView;
+import com.dji.sdk.sample.common.view.src.MapView;
 
 /**
  * Created by Julia on 2017-03-05.
@@ -25,35 +25,36 @@ public class PresenterContainer
 
     public PresenterContainer(
             MapView mapView,
-            FlightControlView flightControlView,
             MissionContainer missionContainer,
             ImageTransferContainer imageTransferContainer,
             I_ApplicationContextManager contextManager,
+            GoogleMapsConnectionHandler googleMapsConnectionHandler,
             FragmentActivity fragmentActivity)
     {
         mapPresenter_ = new MapPresenter(
                 mapView,
+                googleMapsConnectionHandler.googleApiClient(),
                 fragmentActivity,
                 missionContainer.missionGenerator(),
                 missionContainer.initialMissionModel(),
                 missionContainer.generatedMissionModel());
 
         missionControllerPresenter_ = new MissionControllerPresenter(
-                flightControlView,
+                mapView,
                 missionContainer.missionController(),
                 contextManager);
 
         missionGenerationPresenter_ = new MissionGenerationPresenter(
-                flightControlView,
+                mapView,
                 missionContainer.missionGenerator(),
                 contextManager);
 
         productConnectionPresenter_ = new ProductConnectionPresenter(
-                flightControlView,
+                mapView,
                 contextManager);
 
         transferImagesPresenter_ = new TransferImagesPresenter(
-                flightControlView,
+                mapView,
                 contextManager,
                 imageTransferContainer.imageTransferer(),
                 imageTransferContainer.androidToPcImageCopier(),

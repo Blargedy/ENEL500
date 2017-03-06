@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.view;
+package com.dji.sdk.sample.common.view.src;
 
 import android.content.Context;
 import android.util.AttributeSet;

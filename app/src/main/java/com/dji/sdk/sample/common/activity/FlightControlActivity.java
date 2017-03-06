@@ -8,11 +8,9 @@ import com.dji.sdk.sample.common.container.IntegrationLayerContainer;
 import com.dji.sdk.sample.common.container.MissionContainer;
 import com.dji.sdk.sample.common.container.PresenterContainer;
 import com.dji.sdk.sample.common.utility.ApplicationContextManager;
+import com.dji.sdk.sample.common.utility.GoogleMapsConnectionHandler;
 import com.dji.sdk.sample.common.utility.UserPermissionRequester;
-import com.dji.sdk.sample.common.view.FlightControlView;
-import com.dji.sdk.sample.common.view.MapView;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.dji.sdk.sample.common.view.src.MapView;
 
 import static com.dji.sdk.sample.common.utility.IntentExtraKeys.*;
 
@@ -20,8 +18,8 @@ public class FlightControlActivity extends FragmentActivity
 {
     private UserPermissionRequester permissionRequester_;
     private ApplicationContextManager contextManager_;
+    private GoogleMapsConnectionHandler googleMapsConnectionHandler_;
 
-    private FlightControlView flightControlView_;
     private MapView mapView_;
 
     private IntegrationLayerContainer integrationLayerContainer_;
@@ -30,7 +28,8 @@ public class FlightControlActivity extends FragmentActivity
     private PresenterContainer presenterContainer_;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         Boolean isLiveModeEnabled = getIntent().getBooleanExtra(IS_LIVE_MODE_ENABLED, false);
@@ -39,8 +38,8 @@ public class FlightControlActivity extends FragmentActivity
         permissionRequester_ = new UserPermissionRequester();
         permissionRequester_.requestPermissions(this);
         contextManager_ = new ApplicationContextManager(this);
+        googleMapsConnectionHandler_ = new GoogleMapsConnectionHandler(this);
 
-        flightControlView_ = new FlightControlView(this);
         mapView_ = new MapView(this);
 
         integrationLayerContainer_ = new IntegrationLayerContainer();
@@ -55,40 +54,26 @@ public class FlightControlActivity extends FragmentActivity
                 contextManager_);
         presenterContainer_ = new PresenterContainer(
                 mapView_,
-                flightControlView_,
                 missionContainer_,
                 imageTransferContainer_,
                 contextManager_,
+                googleMapsConnectionHandler_,
                 this);
 
-        //Replace with
-        //        setContentView(mapView_);
-        setContentView(flightControlView_);
+        setContentView(mapView_);
     }
 
     @Override
-    public void onStart() {
+    public void onStart()
+    {
         super.onStart();
-
-        GoogleApiClient googleApiClient = presenterContainer_.mapPresenter().googleApiClient();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        googleApiClient.connect();
-        AppIndex.AppIndexApi.start(
-                googleApiClient, presenterContainer_.mapPresenter().getIndexApiAction());
+        googleMapsConnectionHandler_.startConnection();
     }
 
     @Override
-    public void onStop() {
+    public void onStop()
+    {
         super.onStop();
-
-        GoogleApiClient googleApiClient = presenterContainer_.mapPresenter().googleApiClient();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(
-                googleApiClient, presenterContainer_.mapPresenter().getIndexApiAction());
-        googleApiClient.disconnect();
+        googleMapsConnectionHandler_.endConnection();
     }
 }

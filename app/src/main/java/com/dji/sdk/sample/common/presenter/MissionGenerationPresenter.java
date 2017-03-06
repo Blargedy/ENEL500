@@ -7,7 +7,7 @@ import android.widget.Toast;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
-import com.dji.sdk.sample.common.view.FlightControlView;
+import com.dji.sdk.sample.common.view.api.I_MissionControlView;
 
 /**
  * Created by Julia on 2017-02-04.
@@ -23,7 +23,7 @@ public class MissionGenerationPresenter implements
     private I_ApplicationContextManager contextManager_;
 
     public MissionGenerationPresenter(
-            FlightControlView view,
+            I_MissionControlView view,
             I_MissionGenerator missionGenerator,
             I_ApplicationContextManager contextManager)
     {

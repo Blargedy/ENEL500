@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.dji.sdk.sample.common.presenter.MainMenuPresenter;
 import com.dji.sdk.sample.common.utility.ApplicationContextManager;
-import com.dji.sdk.sample.common.view.MainMenuView;
+import com.dji.sdk.sample.common.view.src.MainMenuView;
 
 import java.io.File;
 

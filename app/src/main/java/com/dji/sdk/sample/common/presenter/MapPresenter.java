@@ -1,8 +1,6 @@
 package com.dji.sdk.sample.common.presenter;
 
-
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -17,12 +15,8 @@ import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
 import com.dji.sdk.sample.common.mission.src.MissionBoundary;
-import com.dji.sdk.sample.common.mission.src.SwitchBackPathGenerator;
 import com.dji.sdk.sample.common.values.Coordinate;
-import com.dji.sdk.sample.common.view.MapView;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
+import com.dji.sdk.sample.common.view.src.MapView;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -60,10 +54,6 @@ public class MapPresenter implements
     InitialMissionModel initialMissionModel_;
     GeneratedMissionModel generatedMissionModel_;
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
     private GoogleApiClient client;
 
     // Map specific variables
@@ -109,7 +99,6 @@ public class MapPresenter implements
     private double dbl_HeightSeek = dbl_InitialSurveyBoxSeekValue / dbl_SurveyBoxScaler;
     private double dbl_WidthSeek = dbl_InitialSurveyBoxSeekValue / dbl_SurveyBoxScaler;
 
-
     // Google map Waypoint List
     private ArrayList<Circle> waypointCircleList;
 
@@ -130,6 +119,7 @@ public class MapPresenter implements
 
     public MapPresenter(
             MapView mapView,
+            GoogleApiClient googleApiClient,
             FragmentActivity fragmentActivity,
             I_MissionGenerator missionGenerator,
             InitialMissionModel initialMissionModel,
@@ -139,10 +129,10 @@ public class MapPresenter implements
         initialMissionModel_ = initialMissionModel;
         generatedMissionModel_ = generatedMissionModel;
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment)fragmentActivity.
                 getSupportFragmentManager().findFragmentById(map);
         mapFragment.getMapAsync(this);
+        client = googleApiClient;
 
         // Get control handles:
         btn_mainButton = mapView.btn_mainButton();
@@ -153,19 +143,6 @@ public class MapPresenter implements
         pbar_surveyAreaHeight = mapView.pbar_surveyAreaHeight();
         pbar_surveyAreaWidth = mapView.pbar_surveyAreaWidth();
         pbar_surveyProgressTracking = mapView.pbar_surveyProgressTracking();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(fragmentActivity).addApi(AppIndex.API).build();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(fragmentActivity).addApi(AppIndex.API).build();
-    }
-
-    public GoogleApiClient googleApiClient()
-    {
-        return client;
     }
 
     @Override
@@ -219,7 +196,7 @@ public class MapPresenter implements
         mMap = googleMap;
         initializeEnvironment();
         enum_menuStatesVar = MapPresenter.enum_menuStates.MAPREADY;
-        txt_console.setText("Console: Ready.");
+        //txt_console.setText("Console: Ready.");
         // Add a marker in Sydney and move the camera
         final LatLng calgaryLatLng = new LatLng(51.076674, -114.134972); // GPS coordinates of U of C
         LatLng calgaryLatLngUpSlightly = new LatLng((51.076674 + 0.005), -114.134972); // Drone starting
@@ -563,21 +540,5 @@ public class MapPresenter implements
         waypointPolylineList.clear();
 
         sw_hoverNow.setChecked(false);
-    }
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("Map Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
     }
 }

@@ -10,11 +10,7 @@ import com.dji.sdk.sample.common.mission.src.MissionGenerator;
 import com.dji.sdk.sample.common.mission.src.MissionStepCompletionCallback;
 import com.dji.sdk.sample.common.mission.src.MissionPreparer;
 import com.dji.sdk.sample.common.mission.src.WaypointReachedHandler;
-import com.dji.sdk.sample.common.presenter.MapPresenter;
-import com.dji.sdk.sample.common.presenter.MissionGenerationPresenter;
-import com.dji.sdk.sample.common.presenter.MissionControllerPresenter;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
-import com.dji.sdk.sample.common.view.FlightControlView;
 
 /**
  * Created by Julia on 2017-02-04.

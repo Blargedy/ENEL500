@@ -104,7 +104,7 @@
                     android:inputType="textPersonName"
                     android:text="0.00 deg"
                     android:ems="10"
-                    android:id="@+id/txt_bottomLeftCornerLong"
+                    android:id="@+id/txt_bottomLeftCornerLat"
                     android:textAlignment="center" />
 
                 <TextView
