@@ -1,5 +1,6 @@
 package com.dji.sdk.sample.common.container;
 
+import com.dji.sdk.sample.common.imageTransfer.api.I_DroneMediaListInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleInitializer;
@@ -42,12 +43,9 @@ public class ImageTransferContainer
     private I_ImageTransferModuleInitializer imageTransferModuleInitializer_;
     private I_ImageTransferModuleEnder imageTransferModuleEnder_;
 
-    private TransferImagesPresenter transferImagesPresenter_;
-
     public ImageTransferContainer(
             I_ApplicationContextManager contextManager,
             IntegrationLayerContainer integrationLayerContainer,
-            FlightControlView flightControlView,
             String pcIpAddress,
             boolean isLiveModeEnabled)
     {
@@ -92,13 +90,6 @@ public class ImageTransferContainer
             imageTransferModuleInitializer_ = new InertImageTransferModuleInitializer();
             imageTransferModuleEnder_ = new InertImageTransferModuleEnder();
         }
-
-        transferImagesPresenter_ = new TransferImagesPresenter(
-                flightControlView.transferImagesButton(),
-                contextManager,
-                imageTransferer_,
-                androidToPcImageCopier_,
-                downloadSelector_);
     }
 
     public I_ImageTransferer imageTransferer()
@@ -114,5 +105,17 @@ public class ImageTransferContainer
     public I_ImageTransferModuleEnder imageTransferModuleEnder()
     {
         return imageTransferModuleEnder_;
+    }
+
+    // Temporary - remove after imageTransferPresenter is deleted
+    public AndroidToPcImageCopier androidToPcImageCopier()
+    {
+        return androidToPcImageCopier_;
+    }
+
+    // Temporary - remove after imageTransferPresenter is deleted
+    public I_DroneMediaListInitializer droneMediaListInitializer()
+    {
+        return downloadSelector_;
     }
 }

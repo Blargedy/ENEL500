@@ -12,8 +12,7 @@ import com.dji.sdk.sample.R;
  * Created by Julia on 2017-01-15.
  */
 
-public class FlightControlView
-        extends RelativeLayout
+public class FlightControlView extends RelativeLayout
 {
     private TextView connectionStatusText_;
     private Button generateMissionButton_;

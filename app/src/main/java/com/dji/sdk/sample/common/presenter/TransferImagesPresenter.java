@@ -9,6 +9,7 @@ import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompleti
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.src.AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
+import com.dji.sdk.sample.common.view.FlightControlView;
 
 import java.util.ArrayList;
 
@@ -29,13 +30,13 @@ public class TransferImagesPresenter implements
     private I_DroneMediaListInitializer mediaListInitializer_;
 
     public TransferImagesPresenter(
-            Button shootPhotoButton,
+            FlightControlView view,
             I_ApplicationContextManager contextManager,
             I_ImageTransferer imageTransferer,
             AndroidToPcImageCopier copier,
             I_DroneMediaListInitializer mediaListInitializer)
     {
-        transferImagesButton_ = shootPhotoButton;
+        transferImagesButton_ = view.transferImagesButton();
         transferImagesButton_.setOnClickListener(this);
         contextManager_ = contextManager;
         imageTransferer_ = imageTransferer;

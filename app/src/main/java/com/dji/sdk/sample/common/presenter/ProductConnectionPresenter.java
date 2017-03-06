@@ -6,9 +6,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.widget.TextView;
 
-import com.dji.sdk.sample.common.utility.ApplicationContextManager;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.integration.src.DJISampleApplication;
+import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
+import com.dji.sdk.sample.common.view.FlightControlView;
 
 import dji.sdk.base.DJIBaseProduct;
 
@@ -19,14 +20,14 @@ import dji.sdk.base.DJIBaseProduct;
 public class ProductConnectionPresenter
 {
     private TextView connectionStatusText_;
-    private ApplicationContextManager contextManager_;
+    private I_ApplicationContextManager contextManager_;
     private BroadcastReceiver receiver_;
 
     public ProductConnectionPresenter(
-            TextView connectionStatusText,
-            ApplicationContextManager contextManager)
+            FlightControlView view,
+            I_ApplicationContextManager contextManager)
     {
-        connectionStatusText_ = connectionStatusText;
+        connectionStatusText_ = view.connectionStatusText();
         contextManager_ = contextManager;
 
         registerConnectionChangedReceiver();

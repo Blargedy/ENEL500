@@ -6,10 +6,7 @@ import android.os.Bundle;
 
 import com.dji.sdk.sample.R;
 import com.dji.sdk.sample.common.mission.src.SwitchBackPathGenerator;
-import com.dji.sdk.sample.common.utility.ApplicationContextManager;
-import com.dji.sdk.sample.common.utility.UserPermissionRequester;
 import com.dji.sdk.sample.common.values.Coordinate;
-import com.dji.sdk.sample.common.view.MapView;
 
 import android.os.CountDownTimer;
 import android.support.v4.app.FragmentActivity;
@@ -44,18 +41,13 @@ import java.util.List;
 
 import static com.dji.sdk.sample.R.id.map;
 
-
+//TODO delete after intgeration with the rest of the app is complete
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
-
-    // Context and view items
-    private ApplicationContextManager contextManager_;
-    private UserPermissionRequester permissionRequester_;
-    private MapView mapView_;
 
     // Map specific variables
     private GoogleMap mMap;
@@ -122,12 +114,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        permissionRequester_ = new UserPermissionRequester();
-        contextManager_ = new ApplicationContextManager(this);
-
-        mapView_ = new MapView(this);
-        permissionRequester_.requestPermissions(this);
-        setContentView(mapView_);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(map);
@@ -170,7 +156,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         txt_console.setTextSize(20);
         waypointPolylineList = new ArrayList<Polyline>();
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

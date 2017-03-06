@@ -27,6 +27,11 @@ public class InitialMissionModel
         return missionBoundary_;
     }
 
+    public void setMissionBoundary(MissionBoundary missionBoundary)
+    {
+        missionBoundary_ = missionBoundary;
+    }
+
     public float altitude()
     {
         return altitude_;

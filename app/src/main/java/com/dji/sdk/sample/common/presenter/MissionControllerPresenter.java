@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionController;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
+import com.dji.sdk.sample.common.view.FlightControlView;
 
 import dji.common.error.DJIError;
 
@@ -23,11 +24,11 @@ public class MissionControllerPresenter implements
     private I_ApplicationContextManager contextManager_;
 
     public MissionControllerPresenter(
-            Button startMissionButton,
+            FlightControlView view,
             I_MissionController controller,
             I_ApplicationContextManager contextManager)
     {
-        startMissionButton_ = startMissionButton;
+        startMissionButton_ = view.startMissionButton();
         startMissionButton_.setOnClickListener(this);
 
         controller_ = controller;
