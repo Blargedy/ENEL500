@@ -66,14 +66,14 @@ public class ProductConnectionPresenter
             connectionStatusText_.setText("Status: Product Connected");
             generateMissionButton_.setEnabled(true);
             transferImagesButton_.setEnabled(true);
-            selectSurveyAreaButton_.setEnabled(true);
+            //selectSurveyAreaButton_.setEnabled(true);
         }
         else
         {
             connectionStatusText_.setText("Status: Product Not Connected");
             generateMissionButton_.setEnabled(false);
             transferImagesButton_.setEnabled(false);
-            selectSurveyAreaButton_.setEnabled(false);
+            //selectSurveyAreaButton_.setEnabled(false);
         }
     }
 }
