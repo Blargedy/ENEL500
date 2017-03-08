@@ -16,7 +16,6 @@ import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallba
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.view.api.I_MapView;
-import com.dji.sdk.sample.common.view.api.I_MissionView;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
 
 /**

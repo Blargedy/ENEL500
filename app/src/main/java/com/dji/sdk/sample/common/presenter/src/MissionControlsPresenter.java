@@ -1,105 +1,50 @@
-package com.dji.sdk.sample.common.view.src;
+package com.dji.sdk.sample.common.presenter.src;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
-import com.dji.sdk.sample.R;
+import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
-import com.dji.sdk.sample.common.view.api.I_MissionView;
+import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
 
 /**
  * Created by Julia on 2017-03-08.
  */
 
-public class MissionView extends RelativeLayout implements
-        I_MissionView,
+public class MissionControlsPresenter implements
         View.OnClickListener,
         CompoundButton.OnCheckedChangeListener
 {
-    private MissionStateEnum currentState_;
-
     private Button acceptAreaButton_;
     private Button startMissionButton_;
     private Button cancelButton_;
     private ToggleButton hoverNowToggleButton_;
 
-    public MissionView(
-            Context context) {
-        super(context);
-        initUI();
-    }
+    private MissionStateEntity missionState_;
+    private BroadcastReceiver receiver_;
 
-    public MissionView(
+    public MissionControlsPresenter(
             Context context,
-            AttributeSet attrs) {
-        super(context, attrs);
-        initUI();
-    }
-
-    public MissionView(
-            Context context,
-            AttributeSet attrs,
-            int defStyle) {
-        super(context, attrs, defStyle);
-        initUI();
-    }
-
-    private void initUI()
+            I_MissionControlsView view,
+            MissionStateEntity missionState)
     {
-        inflate(getContext(), R.layout.mission_controls, this);
+        acceptAreaButton_ = view.acceptAreaButton();
+        startMissionButton_ = view.startMissionButton();
+        cancelButton_ = view.cancelButton();
+        hoverNowToggleButton_ = view.hoverNowToggleButton();
+        missionState_ = missionState;
 
-        acceptAreaButton_ = (Button) findViewById(R.id.btn_accept_area);
-        startMissionButton_ = (Button) findViewById(R.id.btn_start_mission);
-        cancelButton_ = (Button) findViewById(R.id.btn_cancel);
-        hoverNowToggleButton_ = (ToggleButton) findViewById(R.id.btn_toggle_hover_now);
         setButtonOnClickListeners();
-
-        currentState_ = MissionStateEnum.SELECT_AREA;
-        currentMissionStateChanged();
-    }
-
-    @Override
-    public MissionStateEnum currentMissionState()
-    {
-        return currentState_;
-    }
-
-    @Override
-    public void setCurrentMissionState(MissionStateEnum state)
-    {
-        currentState_ = state;
-        currentMissionStateChanged();
-    }
-
-    @Override
-    public void onClick(View v)
-    {
-        if (v.getId() == acceptAreaButton_.getId()) {
-            currentState_ = MissionStateEnum.VIEW_MISSION;
-        } else if (v.getId() == startMissionButton_.getId()) {
-            currentState_ = MissionStateEnum.EXECUTE_MISSION;
-        } else if (v.getId() == cancelButton_.getId()) {
-            cancelButtonPressed();
-        }
-        currentMissionStateChanged();
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-    {
-        if (buttonView.getId() == hoverNowToggleButton_.getId())
-        {
-            hoverNowToggleButtonPressed(isChecked);
-        }
-        currentMissionStateChanged();
+        registerMissionStateChangedReceiver(context);
+        setViewBasedOnMissionState();
     }
 
     private void setButtonOnClickListeners()
@@ -110,20 +55,56 @@ public class MissionView extends RelativeLayout implements
         hoverNowToggleButton_.setOnCheckedChangeListener(this);
     }
 
+    private void registerMissionStateChangedReceiver(Context context)
+    {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BroadcastIntentNames.MISSION_STATE_CHANGED);
+
+        receiver_ = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                setViewBasedOnMissionState();
+            }
+        };
+
+        LocalBroadcastManager.getInstance(context).registerReceiver(receiver_, filter);
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        if (v.getId() == acceptAreaButton_.getId()) {
+            missionState_.setCurrentMissionState(MissionStateEnum.VIEW_MISSION);
+        } else if (v.getId() == startMissionButton_.getId()) {
+            missionState_.setCurrentMissionState(MissionStateEnum.EXECUTE_MISSION);
+        } else if (v.getId() == cancelButton_.getId()) {
+            cancelButtonPressed();
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+    {
+        if (buttonView.getId() == hoverNowToggleButton_.getId())
+        {
+            hoverNowToggleButtonPressed();
+        }
+    }
+
     private void cancelButtonPressed()
     {
-        switch (currentState_)
+        switch (missionState_.getCurrentMissionState())
         {
             case VIEW_MISSION:
-                currentState_ = MissionStateEnum.SELECT_AREA;
+                missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
                 break;
 
             case EXECUTE_MISSION:
-                currentState_ = MissionStateEnum.CANCEL_MISSION;
+                missionState_.setCurrentMissionState(MissionStateEnum.CANCEL_MISSION);
                 break;
 
             case PAUSE_MISSION:
-                currentState_ = MissionStateEnum.CANCEL_MISSION;
+                missionState_.setCurrentMissionState(MissionStateEnum.CANCEL_MISSION);
                 break;
 
             default:
@@ -131,42 +112,34 @@ public class MissionView extends RelativeLayout implements
         }
     }
 
-    private void hoverNowToggleButtonPressed(boolean isChecked)
+    private void hoverNowToggleButtonPressed()
     {
-        switch (currentState_)
+        switch (missionState_.getCurrentMissionState())
         {
             case EXECUTE_MISSION:
-                currentState_ = MissionStateEnum.PAUSE_MISSION;
+                missionState_.setCurrentMissionState(MissionStateEnum.PAUSE_MISSION);
                 break;
 
             case PAUSE_MISSION:
-                currentState_ = MissionStateEnum.EXECUTE_MISSION;
+                missionState_.setCurrentMissionState(MissionStateEnum.EXECUTE_MISSION);
                 break;
 
             case CANCEL_MISSION:
-                currentState_ = MissionStateEnum.PAUSE_CANCEL_MISSION;
+                missionState_.setCurrentMissionState(MissionStateEnum.PAUSE_CANCEL_MISSION);
                 break;
 
             case PAUSE_CANCEL_MISSION:
-                currentState_ = MissionStateEnum.CANCEL_MISSION;
+                missionState_.setCurrentMissionState(MissionStateEnum.CANCEL_MISSION);
                 break;
 
             default:
                 break;
         }
-    }
-
-    private void currentMissionStateChanged()
-    {
-        Intent intent = new Intent(BroadcastIntentNames.MISSION_STATE_CHANGED);
-        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
-
-        setViewBasedOnMissionState();
     }
 
     private void setViewBasedOnMissionState()
     {
-        switch (currentState_)
+        switch (missionState_.getCurrentMissionState())
         {
             case SELECT_AREA:
                 acceptAreaButton_.setVisibility(View.VISIBLE);
