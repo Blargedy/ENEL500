@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
 import com.dji.sdk.sample.R;
+import com.dji.sdk.sample.common.entity.MissionStateEnum;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.view.api.I_MissionView;
 
@@ -23,7 +24,7 @@ public class MissionView extends RelativeLayout implements
         View.OnClickListener,
         CompoundButton.OnCheckedChangeListener
 {
-    private MissionState currentState_;
+    private MissionStateEnum currentState_;
 
     private Button acceptAreaButton_;
     private Button startMissionButton_;
@@ -61,18 +62,18 @@ public class MissionView extends RelativeLayout implements
         hoverNowToggleButton_ = (ToggleButton) findViewById(R.id.btn_toggle_hover_now);
         setButtonOnClickListeners();
 
-        currentState_ = MissionState.SELECT_AREA;
+        currentState_ = MissionStateEnum.SELECT_AREA;
         currentMissionStateChanged();
     }
 
     @Override
-    public MissionState currentMissionState()
+    public MissionStateEnum currentMissionState()
     {
         return currentState_;
     }
 
     @Override
-    public void setCurrentMissionState(MissionState state)
+    public void setCurrentMissionState(MissionStateEnum state)
     {
         currentState_ = state;
         currentMissionStateChanged();
@@ -82,9 +83,9 @@ public class MissionView extends RelativeLayout implements
     public void onClick(View v)
     {
         if (v.getId() == acceptAreaButton_.getId()) {
-            currentState_ = MissionState.VIEW_MISSION;
+            currentState_ = MissionStateEnum.VIEW_MISSION;
         } else if (v.getId() == startMissionButton_.getId()) {
-            currentState_ = MissionState.EXECUTE_MISSION;
+            currentState_ = MissionStateEnum.EXECUTE_MISSION;
         } else if (v.getId() == cancelButton_.getId()) {
             cancelButtonPressed();
         }
@@ -114,15 +115,15 @@ public class MissionView extends RelativeLayout implements
         switch (currentState_)
         {
             case VIEW_MISSION:
-                currentState_ = MissionState.SELECT_AREA;
+                currentState_ = MissionStateEnum.SELECT_AREA;
                 break;
 
             case EXECUTE_MISSION:
-                currentState_ = MissionState.CANCEL_MISSION;
+                currentState_ = MissionStateEnum.CANCEL_MISSION;
                 break;
 
             case PAUSE_MISSION:
-                currentState_ = MissionState.CANCEL_MISSION;
+                currentState_ = MissionStateEnum.CANCEL_MISSION;
                 break;
 
             default:
@@ -135,19 +136,19 @@ public class MissionView extends RelativeLayout implements
         switch (currentState_)
         {
             case EXECUTE_MISSION:
-                currentState_ = MissionState.PAUSE_MISSION;
+                currentState_ = MissionStateEnum.PAUSE_MISSION;
                 break;
 
             case PAUSE_MISSION:
-                currentState_ = MissionState.EXECUTE_MISSION;
+                currentState_ = MissionStateEnum.EXECUTE_MISSION;
                 break;
 
             case CANCEL_MISSION:
-                currentState_ = MissionState.PAUSE_CANCEL_MISSION;
+                currentState_ = MissionStateEnum.PAUSE_CANCEL_MISSION;
                 break;
 
             case PAUSE_CANCEL_MISSION:
-                currentState_ = MissionState.CANCEL_MISSION;
+                currentState_ = MissionStateEnum.CANCEL_MISSION;
                 break;
 
             default:

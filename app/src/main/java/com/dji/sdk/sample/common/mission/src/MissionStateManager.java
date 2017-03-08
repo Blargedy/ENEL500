@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
+import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.mission.api.I_MissionCancellationCompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionController;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallback;
@@ -16,7 +17,7 @@ import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.view.api.I_MapView;
 import com.dji.sdk.sample.common.view.api.I_MissionView;
-import com.dji.sdk.sample.common.view.src.MissionState;
+import com.dji.sdk.sample.common.entity.MissionStateEnum;
 
 /**
  * Created by Julia on 2017-03-07.
@@ -29,34 +30,33 @@ public class MissionStateManager implements
     private static final String TAG = "MissionStateManager";
 
     private BroadcastReceiver receiver_;
-    private MissionState oldMissionState_;
 
-    private I_MissionView missionView_;
     private I_MapView mapView_;
 
     private I_MissionGenerator missionGenerator_;
     private I_MissionController missionController_;
     private InitialMissionModel initialMissionModel_;
     private GeneratedMissionModel generatedMissionModel_;
+    private MissionStateEntity missionState_;
 
     public MissionStateManager(
             Context context,
-            I_MissionView missionView,
             I_MapView mapView,
             I_MissionGenerator missionGenerator,
             I_MissionController missionController,
             InitialMissionModel initialMissionModel,
-            GeneratedMissionModel generatedMissionModel)
+            GeneratedMissionModel generatedMissionModel,
+            MissionStateEntity missionState)
     {
-        missionView_ = missionView;
         mapView_ = mapView;
+
         missionGenerator_ = missionGenerator;
         missionController_ = missionController;
         initialMissionModel_ = initialMissionModel;
         generatedMissionModel_ = generatedMissionModel;
+        missionState_ = missionState;
 
         registerMissionStateChangedReceiver(context);
-        oldMissionState_ = missionView_.currentMissionState();
     }
 
     private void registerMissionStateChangedReceiver(Context context)
@@ -76,10 +76,9 @@ public class MissionStateManager implements
 
     private void missionStateChanged()
     {
-        MissionState newMissionState = missionView_.currentMissionState();
-        Log.d(TAG, "Mission state changed: " + newMissionState.name());
-
-        switch (newMissionState)
+        MissionStateEnum currentMissionState = missionState_.getCurrentMissionState();
+        MissionStateEnum previousMissionState = missionState_.getPreviousMissionState();
+        switch (currentMissionState)
         {
             case SELECT_AREA:
                 mapView_.clearMap();
@@ -90,9 +89,9 @@ public class MissionStateManager implements
                 break;
 
             case EXECUTE_MISSION:
-                if (oldMissionState_ == MissionState.VIEW_MISSION){
+                if (previousMissionState == MissionStateEnum.VIEW_MISSION){
                     missionController_.startMission(null);
-                } else if (oldMissionState_ == MissionState.PAUSE_MISSION){
+                } else if (previousMissionState == MissionStateEnum.PAUSE_MISSION){
                     missionController_.resumeMission(null);
                 }
                 break;
@@ -102,10 +101,10 @@ public class MissionStateManager implements
                 break;
 
             case CANCEL_MISSION:
-                if (oldMissionState_ == MissionState.PAUSE_MISSION ||
-                        oldMissionState_ == MissionState.EXECUTE_MISSION){
+                if (previousMissionState == MissionStateEnum.PAUSE_MISSION ||
+                        previousMissionState == MissionStateEnum.EXECUTE_MISSION){
                     missionController_.cancelMission(this);
-                } else if (oldMissionState_ == MissionState.PAUSE_CANCEL_MISSION) {
+                } else if (previousMissionState == MissionStateEnum.PAUSE_CANCEL_MISSION) {
                     missionController_.resumeGoHome();
                 }
                 break;
@@ -118,7 +117,8 @@ public class MissionStateManager implements
                 break;
         }
 
-        oldMissionState_ = newMissionState;
+        Log.d(TAG, "Mission state changed from "
+                + previousMissionState.name() + " to " + currentMissionState.name());
     }
 
     void generateMission()
@@ -137,6 +137,6 @@ public class MissionStateManager implements
     @Override
     public void onMissionCancellationCompletion()
     {
-        missionView_.setCurrentMissionState(MissionState.SELECT_AREA);
+        missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
     }
 }

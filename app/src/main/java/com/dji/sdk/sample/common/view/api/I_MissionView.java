@@ -1,6 +1,6 @@
 package com.dji.sdk.sample.common.view.api;
 
-import com.dji.sdk.sample.common.view.src.MissionState;
+import com.dji.sdk.sample.common.entity.MissionStateEnum;
 
 /**
  * Created by Julia on 2017-03-08.
@@ -8,6 +8,6 @@ import com.dji.sdk.sample.common.view.src.MissionState;
 
 public interface I_MissionView
 {
-    MissionState currentMissionState();
-    void setCurrentMissionState(MissionState state);
+    MissionStateEnum currentMissionState();
+    void setCurrentMissionState(MissionStateEnum state);
 }

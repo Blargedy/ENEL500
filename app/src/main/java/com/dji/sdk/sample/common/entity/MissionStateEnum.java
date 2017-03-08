@@ -1,10 +1,10 @@
-package com.dji.sdk.sample.common.view.src;
+package com.dji.sdk.sample.common.entity;
 
 /**
  * Created by Julia on 2017-03-08.
  */
 
-public enum MissionState
+public enum MissionStateEnum
 {
     SELECT_AREA,
     VIEW_MISSION,
