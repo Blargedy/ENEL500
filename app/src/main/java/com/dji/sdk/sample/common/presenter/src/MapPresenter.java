@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.presenter;
+package com.dji.sdk.sample.common.presenter.src;
 
 import android.graphics.Color;
 import android.os.CountDownTimer;
@@ -10,10 +10,8 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.dji.sdk.sample.common.mission.src.MissionBoundary;
 import com.dji.sdk.sample.common.values.Coordinate;
-import com.dji.sdk.sample.common.view.api.I_MapView;
-import com.dji.sdk.sample.common.view.src.MapView;
+import com.dji.sdk.sample.common.testClasses.MapViewTest;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,9 +30,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
-
-import dji.sdk.missionmanager.DJIWaypoint;
 
 import static com.dji.sdk.sample.R.id.map;
 
@@ -108,7 +103,7 @@ public class MapPresenter implements OnMapReadyCallback
     private CountDownTimer myTimer = null;
 
     public MapPresenter(
-            MapView mapView,
+            MapViewTest mapView,
             GoogleApiClient googleApiClient,
             FragmentActivity fragmentActivity)
     {

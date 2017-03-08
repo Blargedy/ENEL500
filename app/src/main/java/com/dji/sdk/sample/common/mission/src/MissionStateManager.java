@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.presenter;
+package com.dji.sdk.sample.common.mission.src;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,7 +13,6 @@ import com.dji.sdk.sample.common.mission.api.I_MissionCancellationCompletionCall
 import com.dji.sdk.sample.common.mission.api.I_MissionController;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
-import com.dji.sdk.sample.common.mission.src.MissionBoundary;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.view.api.I_MapView;
 import com.dji.sdk.sample.common.view.api.I_MissionView;
@@ -23,11 +22,11 @@ import com.dji.sdk.sample.common.view.src.MissionState;
  * Created by Julia on 2017-03-07.
  */
 
-public class MissionPresenter implements
+public class MissionStateManager implements
         I_MissionGenerationCompletionCallback,
         I_MissionCancellationCompletionCallback
 {
-    private static final String TAG = "MissionPresenter";
+    private static final String TAG = "MissionStateManager";
 
     private BroadcastReceiver receiver_;
     private MissionState oldMissionState_;
@@ -40,7 +39,7 @@ public class MissionPresenter implements
     private InitialMissionModel initialMissionModel_;
     private GeneratedMissionModel generatedMissionModel_;
 
-    public MissionPresenter(
+    public MissionStateManager(
             Context context,
             I_MissionView missionView,
             I_MapView mapView,

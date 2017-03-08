@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.presenter;
+package com.dji.sdk.sample.common.testClasses;
 
 import android.view.View;
 import android.widget.Button;
@@ -7,7 +7,6 @@ import android.widget.Toast;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionController;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
-import com.dji.sdk.sample.common.view.api.I_MissionControlTestView;
 
 import dji.common.error.DJIError;
 
@@ -15,7 +14,7 @@ import dji.common.error.DJIError;
  * Created by Julia on 2017-02-04.
  */
 
-public class MissionControllerPresenter implements
+public class MissionControllerPresenterTest implements
         View.OnClickListener,
         I_CompletionCallback
 {
@@ -23,7 +22,7 @@ public class MissionControllerPresenter implements
     private I_MissionController controller_;
     private I_ApplicationContextManager contextManager_;
 
-    public MissionControllerPresenter(
+    public MissionControllerPresenterTest(
             I_MissionControlTestView view,
             I_MissionController controller,
             I_ApplicationContextManager contextManager)

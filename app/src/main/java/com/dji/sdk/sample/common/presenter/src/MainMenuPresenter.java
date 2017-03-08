@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.presenter;
+package com.dji.sdk.sample.common.presenter.src;
 
 import android.content.Context;
 import android.content.Intent;

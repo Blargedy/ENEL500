@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.presenter;
+package com.dji.sdk.sample.common.presenter.src;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,10 +7,10 @@ import android.content.IntentFilter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.dji.sdk.sample.common.testClasses.MapViewTest;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.integration.src.DJISampleApplication;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
-import com.dji.sdk.sample.common.view.src.MapView;
 
 import dji.sdk.base.DJIBaseProduct;
 
@@ -29,7 +29,7 @@ public class ProductConnectionPresenter
     private BroadcastReceiver receiver_;
 
     public ProductConnectionPresenter(
-            MapView view,
+            MapViewTest view,
             I_ApplicationContextManager contextManager)
     {
         connectionStatusText_ = view.txt_console();

@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.presenter;
+package com.dji.sdk.sample.common.testClasses;
 
 import android.view.View;
 import android.widget.Button;
@@ -9,7 +9,6 @@ import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompleti
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.src.AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
-import com.dji.sdk.sample.common.view.api.I_ImageTransferTestView;
 
 import java.util.ArrayList;
 
@@ -19,7 +18,7 @@ import dji.sdk.camera.DJIMedia;
  * Created by Julia on 2017-01-25.
  */
 
-public class TransferImagesPresenter implements
+public class TransferImagesPresenterTest implements
         View.OnClickListener,
         I_ImageTransferCompletionCallback
 {
@@ -29,7 +28,7 @@ public class TransferImagesPresenter implements
     private AndroidToPcImageCopier copier_;
     private I_DroneMediaListInitializer mediaListInitializer_;
 
-    public TransferImagesPresenter(
+    public TransferImagesPresenterTest(
             I_ImageTransferTestView view,
             I_ApplicationContextManager contextManager,
             I_ImageTransferer imageTransferer,

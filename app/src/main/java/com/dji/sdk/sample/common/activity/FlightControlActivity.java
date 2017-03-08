@@ -7,12 +7,10 @@ import com.dji.sdk.sample.common.container.ImageTransferContainer;
 import com.dji.sdk.sample.common.container.IntegrationLayerContainer;
 import com.dji.sdk.sample.common.container.MissionContainer;
 import com.dji.sdk.sample.common.container.PresenterContainer;
-import com.dji.sdk.sample.common.presenter.MissionPresenter;
 import com.dji.sdk.sample.common.utility.ApplicationContextManager;
 import com.dji.sdk.sample.common.utility.GoogleMapsConnectionHandler;
 import com.dji.sdk.sample.common.utility.UserPermissionRequester;
-import com.dji.sdk.sample.common.view.src.MapView;
-import com.dji.sdk.sample.common.view.src.MissionView;
+import com.dji.sdk.sample.common.testClasses.MapViewTest;
 
 import static com.dji.sdk.sample.common.utility.IntentExtraKeys.*;
 
@@ -22,16 +20,12 @@ public class FlightControlActivity extends FragmentActivity
     private ApplicationContextManager contextManager_;
     private GoogleMapsConnectionHandler googleMapsConnectionHandler_;
 
-    private MapView mapView_;
+    private MapViewTest mapView_;
 
     private IntegrationLayerContainer integrationLayerContainer_;
     private ImageTransferContainer imageTransferContainer_;
     private MissionContainer missionContainer_;
     private PresenterContainer presenterContainer_;
-
-
-    private MissionView missionView_;
-    private MissionPresenter missionPresenter_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,7 +40,7 @@ public class FlightControlActivity extends FragmentActivity
         contextManager_ = new ApplicationContextManager(this);
         googleMapsConnectionHandler_ = new GoogleMapsConnectionHandler(this);
 
-        mapView_ = new MapView(this);
+        mapView_ = new MapViewTest(this);
 
         integrationLayerContainer_ = new IntegrationLayerContainer();
         imageTransferContainer_ = new ImageTransferContainer(

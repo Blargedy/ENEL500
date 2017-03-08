@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.view.api;
+package com.dji.sdk.sample.common.testClasses;
 
 import android.widget.EditText;
 

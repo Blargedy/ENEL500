@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.view.src;
+package com.dji.sdk.sample.common.testClasses;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -10,15 +10,12 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.dji.sdk.sample.R;
-import com.dji.sdk.sample.common.view.api.I_ImageTransferTestView;
-import com.dji.sdk.sample.common.view.api.I_MissionControlTestView;
-import com.dji.sdk.sample.common.view.api.I_SurveyBoundaryCoordinatesTestView;
 
 /**
  * Created by Julia on 2017-01-15.
  */
 
-public class MapView extends RelativeLayout implements
+public class MapViewTest extends RelativeLayout implements
         I_MissionControlTestView,
         I_ImageTransferTestView,
         I_SurveyBoundaryCoordinatesTestView
@@ -42,20 +39,20 @@ public class MapView extends RelativeLayout implements
     private Button startMissionButton_;
     private Button transferImagesButton_;
 
-    public MapView(
+    public MapViewTest(
             Context context) {
         super(context);
         initUI();
     }
 
-    public MapView(
+    public MapViewTest(
             Context context,
             AttributeSet attrs) {
         super(context, attrs);
         initUI();
     }
 
-    public MapView(
+    public MapViewTest(
             Context context,
             AttributeSet attrs,
             int defStyle) {
