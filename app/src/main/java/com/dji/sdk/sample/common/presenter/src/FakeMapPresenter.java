@@ -29,7 +29,7 @@ public class FakeMapPresenter implements I_MapPresenter
     }
 
     @Override
-    public void clearMap() {
+    public void clearWaypointsFromMap() {
 
     }
 }

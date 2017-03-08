@@ -78,7 +78,7 @@ public class MissionStateManager implements
         switch (currentMissionState)
         {
             case SELECT_AREA:
-                mapPresenter_.clearMap();
+                mapPresenter_.clearWaypointsFromMap();
                 break;
 
             case VIEW_MISSION:

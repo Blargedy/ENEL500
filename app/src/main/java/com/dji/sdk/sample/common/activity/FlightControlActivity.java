@@ -10,6 +10,7 @@ import com.dji.sdk.sample.common.container.PresenterContainer;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.mission.src.MissionStateManager;
 import com.dji.sdk.sample.common.presenter.src.FakeMapPresenter;
+import com.dji.sdk.sample.common.presenter.src.MapPresenter;
 import com.dji.sdk.sample.common.presenter.src.MissionControlsPresenter;
 import com.dji.sdk.sample.common.utility.ApplicationContextManager;
 import com.dji.sdk.sample.common.utility.GoogleMapsConnectionHandler;
@@ -25,18 +26,15 @@ public class FlightControlActivity extends FragmentActivity
     private ApplicationContextManager contextManager_;
     private GoogleMapsConnectionHandler googleMapsConnectionHandler_;
 
-    private MapViewTest mapView_;
-
     private IntegrationLayerContainer integrationLayerContainer_;
     private ImageTransferContainer imageTransferContainer_;
     private MissionContainer missionContainer_;
-    private PresenterContainer presenterContainer_;
 
-//    private FlightControlView flightControlView_;
-//    private FakeMapPresenter fakeMapPresenter_;
-//    private MissionStateEntity missionState_;
-//    private MissionControlsPresenter missionControlsPresenter_;
-//    private MissionStateManager missionStateManager_;
+    private FlightControlView flightControlView_;
+    private MapPresenter fakeMapPresenter_;
+    private MissionStateEntity missionState_;
+    private MissionControlsPresenter missionControlsPresenter_;
+    private MissionStateManager missionStateManager_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,8 +49,6 @@ public class FlightControlActivity extends FragmentActivity
         contextManager_ = new ApplicationContextManager(this);
         googleMapsConnectionHandler_ = new GoogleMapsConnectionHandler(this);
 
-        mapView_ = new MapViewTest(this);
-
         integrationLayerContainer_ = new IntegrationLayerContainer();
         imageTransferContainer_ = new ImageTransferContainer(
                 contextManager_,
@@ -63,32 +59,29 @@ public class FlightControlActivity extends FragmentActivity
                 integrationLayerContainer_,
                 imageTransferContainer_,
                 contextManager_);
-        presenterContainer_ = new PresenterContainer(
-                mapView_,
-                missionContainer_,
-                imageTransferContainer_,
-                contextManager_,
-                googleMapsConnectionHandler_,
-                this);
 
-//
-//        flightControlView_ = new FlightControlView(this);
-//        fakeMapPresenter_ = new FakeMapPresenter();
-//        missionState_ = new MissionStateEntity(this);
-//        missionControlsPresenter_ = new MissionControlsPresenter(
-//                this,
-//                flightControlView_,
-//                missionState_);
-//        missionStateManager_ = new MissionStateManager(
-//                this,
-//                fakeMapPresenter_,
-//                missionContainer_.missionGenerator(),
-//                missionContainer_.missionController(),
-//                missionContainer_.initialMissionModel(),
-//                missionContainer_.generatedMissionModel(),
-//                missionState_);
 
-        setContentView(mapView_);
+        // TODO extract to containers
+        flightControlView_ = new FlightControlView(this);
+        fakeMapPresenter_ = new MapPresenter(
+                this,
+                flightControlView_,
+                googleMapsConnectionHandler_.googleApiClient());
+        missionState_ = new MissionStateEntity(this);
+        missionControlsPresenter_ = new MissionControlsPresenter(
+                this,
+                flightControlView_,
+                missionState_);
+        missionStateManager_ = new MissionStateManager(
+                this,
+                fakeMapPresenter_,
+                missionContainer_.missionGenerator(),
+                missionContainer_.missionController(),
+                missionContainer_.initialMissionModel(),
+                missionContainer_.generatedMissionModel(),
+                missionState_);
+
+        setContentView(flightControlView_);
     }
 
     @Override

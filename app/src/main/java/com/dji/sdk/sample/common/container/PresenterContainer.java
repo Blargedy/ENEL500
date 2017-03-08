@@ -2,7 +2,7 @@ package com.dji.sdk.sample.common.container;
 
 import android.support.v4.app.FragmentActivity;
 
-import com.dji.sdk.sample.common.presenter.src.MapPresenter;
+import com.dji.sdk.sample.common.testClasses.MapPresenterTest;
 import com.dji.sdk.sample.common.testClasses.MissionControllerPresenterTest;
 import com.dji.sdk.sample.common.testClasses.MissionGenerationPresenterTest;
 import com.dji.sdk.sample.common.presenter.src.ProductConnectionPresenter;
@@ -17,7 +17,7 @@ import com.dji.sdk.sample.common.testClasses.MapViewTest;
 
 public class PresenterContainer
 {
-    private MapPresenter mapPresenter_;
+    private MapPresenterTest mapPresenter_;
     private MissionControllerPresenterTest missionControllerPresenter_;
     private MissionGenerationPresenterTest missionGenerationPresenter_;
     private ProductConnectionPresenter productConnectionPresenter_;
@@ -31,7 +31,7 @@ public class PresenterContainer
             GoogleMapsConnectionHandler googleMapsConnectionHandler,
             FragmentActivity fragmentActivity)
     {
-        mapPresenter_ = new MapPresenter(
+        mapPresenter_ = new MapPresenterTest(
                 mapView,
                 googleMapsConnectionHandler.googleApiClient(),
                 fragmentActivity);
@@ -58,7 +58,7 @@ public class PresenterContainer
                 imageTransferContainer.droneMediaListInitializer());
     }
 
-    public MapPresenter mapPresenter()
+    public MapPresenterTest mapPresenter()
     {
         return mapPresenter_;
     }

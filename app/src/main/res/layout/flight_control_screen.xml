@@ -1,35 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingTop="20dp"
+    android:gravity="center"
     android:orientation="vertical">
-    android:orientation="vertical"
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="258dp"
+        android:id="@+id/map"
+        tools:context=".FlightControlActivity"
+        android:layout_gravity="center"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_weight="0.82" />
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pbar_surveyProgressTracking"
+        android:progress="0"
+        android:layout_weight="0.05"
+        android:max="100" />
+
+    <TextView
+        android:text="Survey Area Height"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_surveyAreaHeight"
+        android:textStyle="normal|bold" />
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pbar_surveyAreaHeight"
+        android:progress="25"
+        android:layout_weight="0.05"
+        android:max="100" />
+
+    <TextView
+        android:text="Survey Area Width"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_surveyAreaWidth"
+        android:textStyle="normal|bold" />
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pbar_surveyAreaWidth"
+        android:progress="25"
+        android:layout_weight="0.05"
+        android:max="100" />
 
     <Button
         android:id="@+id/btn_accept_area"
         android:layout_width="150dp"
         android:layout_height="55dp"
+        android:layout_gravity="center"
         android:background="@drawable/round_btn"
         android:textAllCaps="false"
         android:text="Accept Survey Area"
         android:textColor="@color/common_text_color"
-        android:textSize="15dp"
-        />
+        android:textSize="15dp"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="20px"
-        android:paddingBottom="20px">
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_start_mission"
             android:layout_width="150dp"
             android:layout_height="55dp"
+            android:layout_gravity="center"
             android:background="@drawable/round_btn"
             android:textAllCaps="false"
             android:text="Start Mission"
@@ -41,6 +86,7 @@
             android:id="@+id/btn_toggle_hover_now"
             android:layout_width="150dp"
             android:layout_height="55dp"
+            android:layout_gravity="center"
             android:background="@drawable/round_btn"
             android:textAllCaps="false"
             android:textOn="Resume"
@@ -53,6 +99,7 @@
             android:id="@+id/btn_cancel"
             android:layout_width="150dp"
             android:layout_height="55dp"
+            android:layout_gravity="center"
             android:background="@drawable/round_btn"
             android:textAllCaps="false"
             android:text="Cancel"

@@ -4,9 +4,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.dji.sdk.sample.R;
+import com.dji.sdk.sample.common.view.api.I_MapView;
 import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
 
 /**
@@ -15,8 +18,15 @@ import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
 
 public class FlightControlView
         extends RelativeLayout
-        implements I_MissionControlsView
+        implements I_MissionControlsView, I_MapView
+
 {
+    private SeekBar surveyProgressBar_;
+    private TextView surveyAreaHeightText_;
+    private SeekBar surveyAreaHeightBar_;
+    private TextView surveyAreaWidthText_;
+    private SeekBar surveyAreaWidthBar_;
+
     private Button acceptAreaButton_;
     private Button startMissionButton_;
     private Button cancelButton_;
@@ -47,6 +57,12 @@ public class FlightControlView
     {
         inflate(getContext(), R.layout.flight_control_screen, this);
 
+        surveyProgressBar_ = (SeekBar) findViewById(R.id.pbar_surveyProgressTracking);
+        surveyAreaHeightText_ = (TextView) findViewById(R.id.txt_surveyAreaHeight);
+        surveyAreaHeightBar_ = (SeekBar) findViewById(R.id.pbar_surveyAreaHeight);
+        surveyAreaWidthText_ = (TextView) findViewById(R.id.txt_surveyAreaWidth);
+        surveyAreaWidthBar_ = (SeekBar) findViewById(R.id.pbar_surveyAreaWidth);
+
         acceptAreaButton_ = (Button) findViewById(R.id.btn_accept_area);
         startMissionButton_ = (Button) findViewById(R.id.btn_start_mission);
         cancelButton_ = (Button) findViewById(R.id.btn_cancel);
@@ -71,5 +87,30 @@ public class FlightControlView
     @Override
     public ToggleButton hoverNowToggleButton() {
         return hoverNowToggleButton_;
+    }
+
+    @Override
+    public SeekBar surveyProgressBar() {
+        return null;
+    }
+
+    @Override
+    public TextView surveyAreaHeightText() {
+        return surveyAreaHeightText_;
+    }
+
+    @Override
+    public SeekBar surveyAreaHeightBar() {
+        return surveyAreaHeightBar_;
+    }
+
+    @Override
+    public TextView surveyAreaWidthText() {
+        return surveyAreaWidthText_;
+    }
+
+    @Override
+    public SeekBar surveyAreaWidthBar() {
+        return surveyAreaWidthBar_;
     }
 }

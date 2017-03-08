@@ -1,10 +1,8 @@
 package com.dji.sdk.sample.common.view.api;
 
-import com.dji.sdk.sample.common.mission.src.MissionBoundary;
 
-import java.util.Vector;
-
-import dji.sdk.missionmanager.DJIWaypoint;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 /**
  * Created by Julia on 2017-03-08.
@@ -12,5 +10,9 @@ import dji.sdk.missionmanager.DJIWaypoint;
 
 public interface I_MapView
 {
-
+    SeekBar surveyProgressBar();
+    TextView surveyAreaHeightText();
+    SeekBar surveyAreaHeightBar();
+    TextView surveyAreaWidthText();
+    SeekBar surveyAreaWidthBar();
 }
