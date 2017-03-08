@@ -12,7 +12,5 @@ import dji.sdk.missionmanager.DJIWaypoint;
 
 public interface I_MapView
 {
-    MissionBoundary getSurveyAreaBoundary();
-    void displayMissionWaypoints(Vector<DJIWaypoint> waypoints);
-    void clearMap();
+
 }

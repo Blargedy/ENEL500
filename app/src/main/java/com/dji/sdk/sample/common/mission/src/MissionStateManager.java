@@ -14,8 +14,8 @@ import com.dji.sdk.sample.common.mission.api.I_MissionCancellationCompletionCall
 import com.dji.sdk.sample.common.mission.api.I_MissionController;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
+import com.dji.sdk.sample.common.presenter.api.I_MapPresenter;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
-import com.dji.sdk.sample.common.view.api.I_MapView;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
 
 /**
@@ -30,8 +30,7 @@ public class MissionStateManager implements
 
     private BroadcastReceiver receiver_;
 
-    private I_MapView mapView_;
-
+    private I_MapPresenter mapPresenter_;
     private I_MissionGenerator missionGenerator_;
     private I_MissionController missionController_;
     private InitialMissionModel initialMissionModel_;
@@ -40,15 +39,14 @@ public class MissionStateManager implements
 
     public MissionStateManager(
             Context context,
-            I_MapView mapView,
+            I_MapPresenter mapPresenter,
             I_MissionGenerator missionGenerator,
             I_MissionController missionController,
             InitialMissionModel initialMissionModel,
             GeneratedMissionModel generatedMissionModel,
             MissionStateEntity missionState)
     {
-        mapView_ = mapView;
-
+        mapPresenter_ = mapPresenter;
         missionGenerator_ = missionGenerator;
         missionController_ = missionController;
         initialMissionModel_ = initialMissionModel;
@@ -80,7 +78,7 @@ public class MissionStateManager implements
         switch (currentMissionState)
         {
             case SELECT_AREA:
-                mapView_.clearMap();
+                mapPresenter_.clearMap();
                 break;
 
             case VIEW_MISSION:
@@ -122,7 +120,7 @@ public class MissionStateManager implements
 
     void generateMission()
     {
-        MissionBoundary boundary = mapView_.getSurveyAreaBoundary();
+        MissionBoundary boundary = mapPresenter_.getSurveyAreaBoundary();
         initialMissionModel_.setMissionBoundary(boundary);
         missionGenerator_.generateMission(this);
     }
@@ -130,7 +128,7 @@ public class MissionStateManager implements
     @Override
     public void onMissionGenerationCompletion()
     {
-        mapView_.displayMissionWaypoints(generatedMissionModel_.waypoints_);
+        mapPresenter_.displayMissionWaypoints(generatedMissionModel_.waypoints_);
     }
 
     @Override

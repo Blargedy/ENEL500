@@ -7,10 +7,15 @@ import com.dji.sdk.sample.common.container.ImageTransferContainer;
 import com.dji.sdk.sample.common.container.IntegrationLayerContainer;
 import com.dji.sdk.sample.common.container.MissionContainer;
 import com.dji.sdk.sample.common.container.PresenterContainer;
+import com.dji.sdk.sample.common.entity.MissionStateEntity;
+import com.dji.sdk.sample.common.mission.src.MissionStateManager;
+import com.dji.sdk.sample.common.presenter.src.FakeMapPresenter;
+import com.dji.sdk.sample.common.presenter.src.MissionControlsPresenter;
 import com.dji.sdk.sample.common.utility.ApplicationContextManager;
 import com.dji.sdk.sample.common.utility.GoogleMapsConnectionHandler;
 import com.dji.sdk.sample.common.utility.UserPermissionRequester;
 import com.dji.sdk.sample.common.testClasses.MapViewTest;
+import com.dji.sdk.sample.common.view.src.FlightControlView;
 
 import static com.dji.sdk.sample.common.utility.IntentExtraKeys.*;
 
@@ -26,6 +31,12 @@ public class FlightControlActivity extends FragmentActivity
     private ImageTransferContainer imageTransferContainer_;
     private MissionContainer missionContainer_;
     private PresenterContainer presenterContainer_;
+
+//    private FlightControlView flightControlView_;
+//    private FakeMapPresenter fakeMapPresenter_;
+//    private MissionStateEntity missionState_;
+//    private MissionControlsPresenter missionControlsPresenter_;
+//    private MissionStateManager missionStateManager_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,6 +70,23 @@ public class FlightControlActivity extends FragmentActivity
                 contextManager_,
                 googleMapsConnectionHandler_,
                 this);
+
+//
+//        flightControlView_ = new FlightControlView(this);
+//        fakeMapPresenter_ = new FakeMapPresenter();
+//        missionState_ = new MissionStateEntity(this);
+//        missionControlsPresenter_ = new MissionControlsPresenter(
+//                this,
+//                flightControlView_,
+//                missionState_);
+//        missionStateManager_ = new MissionStateManager(
+//                this,
+//                fakeMapPresenter_,
+//                missionContainer_.missionGenerator(),
+//                missionContainer_.missionController(),
+//                missionContainer_.initialMissionModel(),
+//                missionContainer_.generatedMissionModel(),
+//                missionState_);
 
         setContentView(mapView_);
     }
