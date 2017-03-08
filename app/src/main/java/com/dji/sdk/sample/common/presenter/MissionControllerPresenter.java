@@ -7,7 +7,7 @@ import android.widget.Toast;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionController;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
-import com.dji.sdk.sample.common.view.api.I_MissionControlView;
+import com.dji.sdk.sample.common.view.api.I_MissionControlTestView;
 
 import dji.common.error.DJIError;
 
@@ -24,7 +24,7 @@ public class MissionControllerPresenter implements
     private I_ApplicationContextManager contextManager_;
 
     public MissionControllerPresenter(
-            I_MissionControlView view,
+            I_MissionControlTestView view,
             I_MissionController controller,
             I_ApplicationContextManager contextManager)
     {

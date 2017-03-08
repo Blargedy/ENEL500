@@ -10,21 +10,21 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.dji.sdk.sample.R;
-import com.dji.sdk.sample.common.view.api.I_ImageTransferView;
-import com.dji.sdk.sample.common.view.api.I_MissionControlView;
-import com.dji.sdk.sample.common.view.api.I_SurveyBoundaryCoordinatesView;
+import com.dji.sdk.sample.common.view.api.I_ImageTransferTestView;
+import com.dji.sdk.sample.common.view.api.I_MissionControlTestView;
+import com.dji.sdk.sample.common.view.api.I_SurveyBoundaryCoordinatesTestView;
 
 /**
  * Created by Julia on 2017-01-15.
  */
 
 public class MapView extends RelativeLayout implements
-        I_MissionControlView,
-        I_ImageTransferView,
-        I_SurveyBoundaryCoordinatesView
+        I_MissionControlTestView,
+        I_ImageTransferTestView,
+        I_SurveyBoundaryCoordinatesTestView
 {
     private Button btn_mainButton_;
-    private Switch sw_hoverNow_;
+    private Switch hoverNowButton_;
     private SeekBar pbar_surveyAreaHeight_;
     private SeekBar pbar_surveyAreaWidth_;
 
@@ -68,9 +68,9 @@ public class MapView extends RelativeLayout implements
         return btn_mainButton_;
     }
     
-    public Switch sw_hoverNow()
+    public Switch hoverNowButton()
     {
-        return sw_hoverNow_;
+        return hoverNowButton_;
     }
     
     public SeekBar pbar_surveyAreaHeight()
@@ -143,7 +143,7 @@ public class MapView extends RelativeLayout implements
         inflate(getContext(), R.layout.map_screen, this);
 
         btn_mainButton_ = (Button) findViewById(R.id.btn_mainButton);
-        sw_hoverNow_ = (Switch) findViewById(R.id.sw_hoverNow);
+        hoverNowButton_ = (Switch) findViewById(R.id.sw_hoverNow);
         txt_console_ = (TextView) findViewById(R.id.txt_console);
         txt_surveyAreaWidth_ = (TextView) findViewById(R.id.txt_surveyAreaWidth);
         txt_surveyAreaHeight_ = (TextView) findViewById(R.id.txt_surveyAreaHeight);

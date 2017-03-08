@@ -11,4 +11,7 @@ public interface I_MissionController
     void startMission(I_CompletionCallback callback);
     void pauseMission(I_CompletionCallback callback);
     void resumeMission(I_CompletionCallback callback);
+    void cancelMission(I_MissionCancellationCompletionCallback callback);
+    void pauseGoHome();
+    void resumeGoHome();
 }

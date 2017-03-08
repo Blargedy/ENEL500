@@ -10,12 +10,9 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
-import com.dji.sdk.sample.common.entity.InitialMissionModel;
-import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallback;
-import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
 import com.dji.sdk.sample.common.mission.src.MissionBoundary;
 import com.dji.sdk.sample.common.values.Coordinate;
+import com.dji.sdk.sample.common.view.api.I_MapView;
 import com.dji.sdk.sample.common.view.src.MapView;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,15 +42,8 @@ import static com.dji.sdk.sample.R.id.map;
  * Created by Peter on 2017-02-13.
  */
 
-public class MapPresenter implements
-        OnMapReadyCallback,
-        I_MissionGenerationCompletionCallback
+public class MapPresenter implements OnMapReadyCallback
 {
-    // Stuff to access the rest of the app
-    I_MissionGenerator missionGenerator_;
-    InitialMissionModel initialMissionModel_;
-    GeneratedMissionModel generatedMissionModel_;
-
     private GoogleApiClient client;
 
     // Map specific variables
@@ -120,15 +110,8 @@ public class MapPresenter implements
     public MapPresenter(
             MapView mapView,
             GoogleApiClient googleApiClient,
-            FragmentActivity fragmentActivity,
-            I_MissionGenerator missionGenerator,
-            InitialMissionModel initialMissionModel,
-            GeneratedMissionModel generatedMissionModel)
+            FragmentActivity fragmentActivity)
     {
-        missionGenerator_ = missionGenerator;
-        initialMissionModel_ = initialMissionModel;
-        generatedMissionModel_ = generatedMissionModel;
-
         SupportMapFragment mapFragment = (SupportMapFragment)fragmentActivity.
                 getSupportFragmentManager().findFragmentById(map);
         mapFragment.getMapAsync(this);
@@ -136,59 +119,13 @@ public class MapPresenter implements
 
         // Get control handles:
         btn_mainButton = mapView.btn_mainButton();
-        sw_hoverNow = mapView.sw_hoverNow();
+        sw_hoverNow = mapView.hoverNowButton();
         txt_console = mapView.txt_console();
         txt_surveyAreaWidth = mapView.txt_surveyAreaWidth();
         txt_surveyAreaHeight = mapView.txt_surveyAreaHeight();
         pbar_surveyAreaHeight = mapView.pbar_surveyAreaHeight();
         pbar_surveyAreaWidth = mapView.pbar_surveyAreaWidth();
         pbar_surveyProgressTracking = mapView.pbar_surveyProgressTracking();
-    }
-
-    @Override
-    public void onMissionGenerationCompletion()
-    {
-        surveyPolygon.remove();
-
-        Vector<DJIWaypoint> waypoints = generatedMissionModel_.waypoints_;
-
-        //TODO need to change this to use DJIWaypoint to get the location of the waypoints
-        txt_console.setText("Console: " + waypointCoordinateList.size() + " Mission waypoints generated. Ready to begin.");
-        waypointPolylineList = new ArrayList<Polyline>();
-        // Connect drone to first waypoint
-        waypointPolylineList.add(mMap.addPolyline(new PolylineOptions()
-                .add(droneMarker.getPosition(), new LatLng(waypointCoordinateList.get(0).latitude_, waypointCoordinateList.get(0).longitude_))
-                .width(5)
-                .color(Color.BLACK)));
-        for (int i = 0; i < waypointCoordinateList.size(); i++) {
-            LatLng waypointLatLng1 = new LatLng(waypointCoordinateList.get(i).latitude_, waypointCoordinateList.get(i).longitude_);
-            if (i == (waypointCoordinateList.size() - 1)) { // the last waypoint polyline goes back to drone starting pos
-                //connect last waypoint to drone
-                waypointPolylineList.add(mMap.addPolyline(new PolylineOptions()
-                        .add(waypointLatLng1, droneMarker.getPosition())
-                        .width(5)
-                        .color(Color.BLACK)));
-                break;
-            }
-            LatLng waypointLatLng2 = new LatLng(waypointCoordinateList.get(i + 1).latitude_, waypointCoordinateList.get(i + 1).longitude_);
-            waypointPolylineList.add(mMap.addPolyline(new PolylineOptions()
-                    .add(waypointLatLng1, waypointLatLng2)
-                    .width(5)
-                    .color(Color.BLACK)));
-        }
-        // Make and save the waypoint circles
-        waypointCircleList = new ArrayList<Circle>();
-        droneNotYetVisitedWaypointList = new ArrayList<Circle>();
-        for (int j = 0; j < waypointCoordinateList.size(); j++) {
-            waypointCircleList.add(mMap.addCircle(new CircleOptions()
-                    .center(new LatLng(waypointCoordinateList.get(j).latitude_, waypointCoordinateList.get(j).longitude_))
-                    .radius(12)
-                    .strokeWidth(1)
-                    .strokeColor(Color.BLACK)
-                    .fillColor(Color.argb(150, 255, 0, 0)))); // transparent red circles
-            droneNotYetVisitedWaypointList.add(waypointCircleList.get(j));
-        }
-        numWaypointsTotal = waypointCoordinateList.size();
     }
 
     @Override
@@ -504,13 +441,46 @@ public class MapPresenter implements
         topRightCorner.latitude_ = surveyPolygon.getPoints().get(2).latitude;
         topRightCorner.longitude_ = surveyPolygon.getPoints().get(2).longitude;
 
-        initialMissionModel_.setMissionBoundary(
-                new MissionBoundary(topRightCorner, bottomLeftCorner));
+        surveyPolygon.remove();
 
-        // CALL MISSIONGENERATOR TO SEND AREA HERE
-        missionGenerator_.generateMission(this);
+        //TODO need to change this to use DJIWaypoint to get the location of the waypoints
+        txt_console.setText("Console: " + waypointCoordinateList.size() + " Mission waypoints generated. Ready to begin.");
+        waypointPolylineList = new ArrayList<Polyline>();
+        // Connect drone to first waypoint
+        waypointPolylineList.add(mMap.addPolyline(new PolylineOptions()
+                .add(droneMarker.getPosition(), new LatLng(waypointCoordinateList.get(0).latitude_, waypointCoordinateList.get(0).longitude_))
+                .width(5)
+                .color(Color.BLACK)));
+        for (int i = 0; i < waypointCoordinateList.size(); i++) {
+            LatLng waypointLatLng1 = new LatLng(waypointCoordinateList.get(i).latitude_, waypointCoordinateList.get(i).longitude_);
+            if (i == (waypointCoordinateList.size() - 1)) { // the last waypoint polyline goes back to drone starting pos
+                //connect last waypoint to drone
+                waypointPolylineList.add(mMap.addPolyline(new PolylineOptions()
+                        .add(waypointLatLng1, droneMarker.getPosition())
+                        .width(5)
+                        .color(Color.BLACK)));
+                break;
+            }
+            LatLng waypointLatLng2 = new LatLng(waypointCoordinateList.get(i + 1).latitude_, waypointCoordinateList.get(i + 1).longitude_);
+            waypointPolylineList.add(mMap.addPolyline(new PolylineOptions()
+                    .add(waypointLatLng1, waypointLatLng2)
+                    .width(5)
+                    .color(Color.BLACK)));
+        }
+        // Make and save the waypoint circles
+        waypointCircleList = new ArrayList<Circle>();
+        droneNotYetVisitedWaypointList = new ArrayList<Circle>();
+        for (int j = 0; j < waypointCoordinateList.size(); j++) {
+            waypointCircleList.add(mMap.addCircle(new CircleOptions()
+                    .center(new LatLng(waypointCoordinateList.get(j).latitude_, waypointCoordinateList.get(j).longitude_))
+                    .radius(12)
+                    .strokeWidth(1)
+                    .strokeColor(Color.BLACK)
+                    .fillColor(Color.argb(150, 255, 0, 0)))); // transparent red circles
+            droneNotYetVisitedWaypointList.add(waypointCircleList.get(j));
+        }
+        numWaypointsTotal = waypointCoordinateList.size();
     }
-
 
     void CancelMission() {
         enum_menuStatesVar = enum_menuStatesVar.MAPREADY;

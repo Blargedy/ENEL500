@@ -9,7 +9,7 @@ import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompleti
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.src.AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
-import com.dji.sdk.sample.common.view.api.I_ImageTransferView;
+import com.dji.sdk.sample.common.view.api.I_ImageTransferTestView;
 
 import java.util.ArrayList;
 
@@ -30,7 +30,7 @@ public class TransferImagesPresenter implements
     private I_DroneMediaListInitializer mediaListInitializer_;
 
     public TransferImagesPresenter(
-            I_ImageTransferView view,
+            I_ImageTransferTestView view,
             I_ApplicationContextManager contextManager,
             I_ImageTransferer imageTransferer,
             AndroidToPcImageCopier copier,

@@ -7,10 +7,12 @@ import com.dji.sdk.sample.common.container.ImageTransferContainer;
 import com.dji.sdk.sample.common.container.IntegrationLayerContainer;
 import com.dji.sdk.sample.common.container.MissionContainer;
 import com.dji.sdk.sample.common.container.PresenterContainer;
+import com.dji.sdk.sample.common.presenter.MissionPresenter;
 import com.dji.sdk.sample.common.utility.ApplicationContextManager;
 import com.dji.sdk.sample.common.utility.GoogleMapsConnectionHandler;
 import com.dji.sdk.sample.common.utility.UserPermissionRequester;
 import com.dji.sdk.sample.common.view.src.MapView;
+import com.dji.sdk.sample.common.view.src.MissionView;
 
 import static com.dji.sdk.sample.common.utility.IntentExtraKeys.*;
 
@@ -26,6 +28,10 @@ public class FlightControlActivity extends FragmentActivity
     private ImageTransferContainer imageTransferContainer_;
     private MissionContainer missionContainer_;
     private PresenterContainer presenterContainer_;
+
+
+    private MissionView missionView_;
+    private MissionPresenter missionPresenter_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

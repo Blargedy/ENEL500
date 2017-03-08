@@ -34,10 +34,7 @@ public class PresenterContainer
         mapPresenter_ = new MapPresenter(
                 mapView,
                 googleMapsConnectionHandler.googleApiClient(),
-                fragmentActivity,
-                missionContainer.missionGenerator(),
-                missionContainer.initialMissionModel(),
-                missionContainer.generatedMissionModel());
+                fragmentActivity);
 
         missionControllerPresenter_ = new MissionControllerPresenter(
                 mapView,

@@ -6,8 +6,7 @@ import android.widget.Button;
  * Created by Julia on 2017-03-06.
  */
 
-public interface I_MissionControlView
+public interface I_ImageTransferTestView
 {
-    Button generateMissionButton();
-    Button startMissionButton();
+    Button transferImagesButton();
 }

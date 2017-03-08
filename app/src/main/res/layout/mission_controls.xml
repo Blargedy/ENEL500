@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="20dp"
+    android:orientation="vertical">
+    android:orientation="vertical"
+
+    <Button
+        android:id="@+id/btn_accept_area"
+        android:layout_width="150dp"
+        android:layout_height="55dp"
+        android:background="@drawable/round_btn"
+        android:textAllCaps="false"
+        android:text="Accept Survey Area"
+        android:textColor="@color/common_text_color"
+        android:textSize="15dp"
+        />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="20px"
+        android:paddingBottom="20px">
+
+        <Button
+            android:id="@+id/btn_start_mission"
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:background="@drawable/round_btn"
+            android:textAllCaps="false"
+            android:text="Start Mission"
+            android:textColor="@color/common_text_color"
+            android:textSize="15dp"
+            />
+
+        <ToggleButton
+            android:id="@+id/btn_toggle_hover_now"
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:background="@drawable/round_btn"
+            android:textAllCaps="false"
+            android:textOn="Resume"
+            android:textOff="Hover Now"
+            android:textColor="@color/common_text_color"
+            android:textSize="15dp"
+            android:checked="false" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:background="@drawable/round_btn"
+            android:textAllCaps="false"
+            android:text="Cancel"
+            android:textColor="@color/common_text_color"
+            android:textSize="15dp"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
