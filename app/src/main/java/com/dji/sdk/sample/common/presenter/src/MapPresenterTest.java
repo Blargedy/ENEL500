@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.testClasses;
+package com.dji.sdk.sample.common.presenter.src;
 
 import android.graphics.Color;
 import android.os.CountDownTimer;
@@ -102,7 +102,6 @@ public class MapPresenterTest implements OnMapReadyCallback
     private CountDownTimer myTimer = null;
 
     public MapPresenterTest(
-            MapViewTest mapView,
             GoogleApiClient googleApiClient,
             FragmentActivity fragmentActivity)
     {
@@ -111,15 +110,14 @@ public class MapPresenterTest implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         client = googleApiClient;
 
-        // Get control handles:
-        btn_mainButton = mapView.btn_mainButton();
-        sw_hoverNow = mapView.hoverNowButton();
-        txt_console = mapView.txt_console();
-        txt_surveyAreaWidth = mapView.txt_surveyAreaWidth();
-        txt_surveyAreaHeight = mapView.txt_surveyAreaHeight();
-        pbar_surveyAreaHeight = mapView.pbar_surveyAreaHeight();
-        pbar_surveyAreaWidth = mapView.pbar_surveyAreaWidth();
-        pbar_surveyProgressTracking = mapView.pbar_surveyProgressTracking();
+//        btn_mainButton = mapView.btn_mainButton();
+//        sw_hoverNow = mapView.hoverNowButton();
+//        txt_console = mapView.txt_console();
+//        txt_surveyAreaWidth = mapView.txt_surveyAreaWidth();
+//        txt_surveyAreaHeight = mapView.txt_surveyAreaHeight();
+//        pbar_surveyAreaHeight = mapView.pbar_surveyAreaHeight();
+//        pbar_surveyAreaWidth = mapView.pbar_surveyAreaWidth();
+//        pbar_surveyProgressTracking = mapView.pbar_surveyProgressTracking();
     }
 
     @Override

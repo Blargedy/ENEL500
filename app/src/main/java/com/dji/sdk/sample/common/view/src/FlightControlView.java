@@ -90,6 +90,24 @@ public class FlightControlView
     }
 
     @Override
+    public void enableAllControls()
+    {
+        acceptAreaButton_.setEnabled(true);
+        startMissionButton_.setEnabled(true);
+        cancelButton_.setEnabled(true);
+        hoverNowToggleButton_.setEnabled(true);
+    }
+
+    @Override
+    public void disableAllControls()
+    {
+        acceptAreaButton_.setEnabled(false);
+        startMissionButton_.setEnabled(false);
+        cancelButton_.setEnabled(false);
+        hoverNowToggleButton_.setEnabled(false);
+    }
+
+    @Override
     public SeekBar surveyProgressBar() {
         return null;
     }

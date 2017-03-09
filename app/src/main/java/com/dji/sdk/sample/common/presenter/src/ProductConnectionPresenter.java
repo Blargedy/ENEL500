@@ -4,13 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.widget.Button;
-import android.widget.TextView;
 
-import com.dji.sdk.sample.common.testClasses.MapViewTest;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.integration.src.DJISampleApplication;
-import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
+import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
 
 import dji.sdk.base.DJIBaseProduct;
 
@@ -20,30 +17,21 @@ import dji.sdk.base.DJIBaseProduct;
 
 public class ProductConnectionPresenter
 {
-    private TextView connectionStatusText_;
-    private Button generateMissionButton_;
-    private Button transferImagesButton_;
-    private Button selectSurveyAreaButton_;
+    private I_MissionControlsView missionControlsView_;
 
-    private I_ApplicationContextManager contextManager_;
     private BroadcastReceiver receiver_;
 
     public ProductConnectionPresenter(
-            MapViewTest view,
-            I_ApplicationContextManager contextManager)
+            Context context,
+            I_MissionControlsView missionControlsView)
     {
-        connectionStatusText_ = view.txt_console();
-        generateMissionButton_ = view.generateMissionButton();
-        transferImagesButton_ = view.transferImagesButton();
-        selectSurveyAreaButton_ = view.btn_mainButton();
+        missionControlsView_ = missionControlsView;
 
-        contextManager_ = contextManager;
-
-        registerConnectionChangedReceiver();
+        registerConnectionChangedReceiver(context);
         updateProgressConnectionStatus();
     }
 
-    private void registerConnectionChangedReceiver()
+    private void registerConnectionChangedReceiver(Context context)
     {
         IntentFilter filter = new IntentFilter();
         filter.addAction(BroadcastIntentNames.DJI_AIRCRAFT_CONNECTION_CHANGED);
@@ -55,7 +43,7 @@ public class ProductConnectionPresenter
             }
         };
 
-        contextManager_.getApplicationContext().registerReceiver(receiver_, filter);
+        context.registerReceiver(receiver_, filter);
     }
 
     private void updateProgressConnectionStatus()
@@ -63,17 +51,11 @@ public class ProductConnectionPresenter
         DJIBaseProduct product = DJISampleApplication.getProductInstance();
         if (product != null && product.isConnected())
         {
-            connectionStatusText_.setText("Status: Product Connected");
-            generateMissionButton_.setEnabled(true);
-            transferImagesButton_.setEnabled(true);
-            //selectSurveyAreaButton_.setEnabled(true);
+            missionControlsView_.enableAllControls();
         }
         else
         {
-            connectionStatusText_.setText("Status: Product Not Connected");
-            generateMissionButton_.setEnabled(false);
-            transferImagesButton_.setEnabled(false);
-            //selectSurveyAreaButton_.setEnabled(false);
+            missionControlsView_.disableAllControls();
         }
     }
 }

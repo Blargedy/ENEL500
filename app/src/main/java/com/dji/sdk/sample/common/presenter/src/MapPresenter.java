@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import com.dji.sdk.sample.common.mission.src.MissionBoundary;
 import com.dji.sdk.sample.common.presenter.api.I_MapPresenter;
-import com.dji.sdk.sample.common.testClasses.MapPresenterTest;
 import com.dji.sdk.sample.common.values.Coordinate;
 import com.dji.sdk.sample.common.view.api.I_MapView;
 import com.google.android.gms.common.api.GoogleApiClient;
