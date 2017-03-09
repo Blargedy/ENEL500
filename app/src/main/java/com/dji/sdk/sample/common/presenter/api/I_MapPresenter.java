@@ -14,5 +14,8 @@ public interface I_MapPresenter
 {
     MissionBoundary getSurveyAreaBoundary();
     void displayMissionWaypoints(Vector<DJIWaypoint> waypoints);
-    void clearWaypointsFromMap();
+    void clearMap();
+
+    void enableAllControls();
+    void disableAllControls();
 }

@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.container;
 
+import android.content.Context;
+
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
@@ -44,6 +46,7 @@ public class MissionContainer
                 contextManager);
 
         waypointReachedHandler_ = new WaypointReachedHandler(
+                contextManager.getApplicationContext(),
                 missionController_,
                 imageTransferContainer.imageTransferer());
         missionStepCompletionCallback_ = new MissionStepCompletionCallback(

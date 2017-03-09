@@ -6,5 +6,5 @@ package com.dji.sdk.sample.common.mission.api;
 
 public interface I_WaypointReachedHandler
 {
-    void handleWaypointReached(int waypointCount);
+    void handleWaypointReached(int waypointIndex);
 }

@@ -30,7 +30,8 @@ public class MissionStepCompletionCallback implements I_CompletionCallback
     {
         if (error == null)
         {
-            waypointReachedHandler_.handleWaypointReached(waypointCounter_++);
+            waypointReachedHandler_.handleWaypointReached(waypointCounter_);
+            waypointCounter_++;
         }
         else {
             Log.e(TAG, "Unable to reach waypoint " + waypointCounter_ + " : " + error.getDescription());

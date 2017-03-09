@@ -1,11 +1,20 @@
 package com.dji.sdk.sample.common.presenter.src;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.dji.sdk.sample.common.mission.api.I_WaypointReachedHandler;
 import com.dji.sdk.sample.common.mission.src.MissionBoundary;
 import com.dji.sdk.sample.common.presenter.api.I_MapPresenter;
+import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
+import com.dji.sdk.sample.common.utility.IntentExtraKeys;
 import com.dji.sdk.sample.common.values.Coordinate;
 import com.dji.sdk.sample.common.view.api.I_MapView;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -25,6 +34,7 @@ import java.util.Vector;
 import dji.sdk.missionmanager.DJIWaypoint;
 
 import static com.dji.sdk.sample.R.id.map;
+import static com.dji.sdk.sample.common.utility.IntentExtraKeys.WAYPOINT_INDEX;
 
 /**
  * Created by Julia on 2017-03-08.
@@ -34,6 +44,8 @@ public class MapPresenter implements
         I_MapPresenter,
         OnMapReadyCallback
 {
+    private BroadcastReceiver receiver_;
+
     private GoogleApiClient client;
     private GoogleMap mMap;
 
@@ -81,12 +93,30 @@ public class MapPresenter implements
         surveyAreaHeightBar = mapView.surveyAreaHeightBar();
         surveyAreaWidthText = mapView.surveyAreaWidthText();
         surveyAreaWidthBar = mapView.surveyAreaWidthBar();
+
+        registerWaypointReachedReceiver(fragmentActivity);
+    }
+
+    void registerWaypointReachedReceiver(Context context)
+    {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BroadcastIntentNames.WAYPOINT_REACHED);
+
+        receiver_ = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int waypointIndex = intent.getIntExtra(WAYPOINT_INDEX, 2000);
+                reachedWaypointAtIndex(waypointIndex);
+            }
+        };
+
+        LocalBroadcastManager.getInstance(context).registerReceiver(receiver_, filter);
     }
 
     @Override
     public MissionBoundary getSurveyAreaBoundary()
     {
-        // TODO replace with actually getting coordinates from map
+        // Replace with actual logic to get the area from the map
         Coordinate topRight = new Coordinate(50.796276, -114.205159);
         Coordinate bottomLeft = new Coordinate(50.795906, -114.206540);
 
@@ -96,18 +126,41 @@ public class MapPresenter implements
     @Override
     public void displayMissionWaypoints(Vector<DJIWaypoint> waypoints)
     {
-
+        // display list of waypoints
+        // Persist this list for looking up the location of the waypoints later
     }
 
     @Override
-    public void clearWaypointsFromMap()
+    public void clearMap()
     {
+        // remove waypoints from the map
+        // Clear any state you have
+        // We are starting a new mission
+    }
 
+    @Override
+    public void enableAllControls()
+    {
+        // enable sliders
+    }
+
+    @Override
+    public void disableAllControls()
+    {
+        // disable sliders
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
+        // Implement map interactions
+        // Seems like most of the map stuff is done through the sliders so I'm not sure
+        // What goes here
+    }
 
+    private void reachedWaypointAtIndex(int waypointIndex)
+    {
+        Log.d("MapPresenter", "Reached waypoint " + waypointIndex);
+        // Implement the colouring of the waypoint at the index corresponding to your list of waypoints
     }
 }
