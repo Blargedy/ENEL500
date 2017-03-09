@@ -45,10 +45,11 @@ public class CustomMissionBuilder implements I_CustomMissionBuilder
     }
     public void buildCustomMission()
     {
-        Vector<Coordinate> waypoints = (Vector<Coordinate>)SwitchBackPathGenerator.generateSwitchback(
+        SwitchBackPathGenerator switchBackPathGenerator = new SwitchBackPathGenerator(
                 initialMissionModel_.missionBoundary().bottomLeft(),
                 initialMissionModel_.missionBoundary().topRight(),
                 initialMissionModel_.altitude());
+        Vector<Coordinate> waypoints = (Vector<Coordinate>)switchBackPathGenerator.generateSwitchback();
 
         Vector<DJIMissionStep> missionSteps = new Vector<>();
 
