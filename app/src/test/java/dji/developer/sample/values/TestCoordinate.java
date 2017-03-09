@@ -15,14 +15,14 @@ public class TestCoordinate
     @Test
     public void willCorrectlyCalculateDistanceBetweenTwoCoordinates()
     {
-        Coordinate c1 = new Coordinate(51.077795, -114.136494);
-        Coordinate c2 = new Coordinate(51.076225, -114.135038);
-        double expectedDistance = 200;
-        double tolerance = 1.0;
+        Coordinate c1 = new Coordinate(51.080873, -114.130272);
+        Coordinate c2 = new Coordinate(51.081239, -114.128617);
+        double expectedDistance = 122.48;
+        double tolerance = 0.1;
 
         double actualDistance = c1.distanceApproximationInMeters(c2);
 
-        //assertEquals(expectedDistance, actualDistance, tolerance);
+        assertEquals(expectedDistance, actualDistance, tolerance);
     }
 
     @Test
