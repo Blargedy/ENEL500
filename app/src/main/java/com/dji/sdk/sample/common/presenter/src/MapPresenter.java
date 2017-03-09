@@ -124,7 +124,7 @@ public class MapPresenter implements
     }
 
     @Override
-    public void displayMissionWaypoints(Vector<DJIWaypoint> waypoints)
+    public void displayMissionWaypoints(Vector<Coordinate> waypoints)
     {
         // display list of waypoints
         // Persist this list for looking up the location of the waypoints later

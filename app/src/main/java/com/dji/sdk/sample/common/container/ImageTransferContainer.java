@@ -1,6 +1,5 @@
 package com.dji.sdk.sample.common.container;
 
-import com.dji.sdk.sample.common.imageTransfer.api.I_DroneMediaListInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleInitializer;
@@ -24,8 +23,6 @@ import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 public class ImageTransferContainer
 {
-    private static final String TAG = "ImageTransferContainer";
-
     private CameraMediaDownloadModeChanger cameraModeChanger_;
     private CameraMediaListFetcher mediaListFetcher_;
     private DroneImageDownloadSelector downloadSelector_;
@@ -101,17 +98,5 @@ public class ImageTransferContainer
     public I_ImageTransferModuleEnder imageTransferModuleEnder()
     {
         return imageTransferModuleEnder_;
-    }
-
-    // Temporary - remove after imageTransferPresenter is deleted
-    public AndroidToPcImageCopier androidToPcImageCopier()
-    {
-        return androidToPcImageCopier_;
-    }
-
-    // Temporary - remove after imageTransferPresenter is deleted
-    public I_DroneMediaListInitializer droneMediaListInitializer()
-    {
-        return downloadSelector_;
     }
 }

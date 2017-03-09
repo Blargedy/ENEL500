@@ -1,6 +1,8 @@
 package com.dji.sdk.sample.common.mission.src;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_WaypointReachedHandler;
@@ -15,12 +17,15 @@ public class MissionStepCompletionCallback implements I_CompletionCallback
 {
     private static final String TAG = "MissionStepCompletionCallback";
 
+    private Context context_;
     private I_WaypointReachedHandler waypointReachedHandler_;
     private int waypointCounter_;
 
     public MissionStepCompletionCallback(
-            I_WaypointReachedHandler waypointReachedHandler)
+            I_WaypointReachedHandler waypointReachedHandler,
+            Context context)
     {
+        context_ = context;
         waypointReachedHandler_ = waypointReachedHandler;
         waypointCounter_ = 0;
     }

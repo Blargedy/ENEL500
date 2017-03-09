@@ -50,7 +50,8 @@ public class MissionContainer
                 missionController_,
                 imageTransferContainer.imageTransferer());
         missionStepCompletionCallback_ = new MissionStepCompletionCallback(
-                waypointReachedHandler_);
+                waypointReachedHandler_,
+                contextManager.getApplicationContext());
         customMissionBuilder_ = new CustomMissionBuilder(
                 initialMissionModel_,
                 generatedMissionModel_,

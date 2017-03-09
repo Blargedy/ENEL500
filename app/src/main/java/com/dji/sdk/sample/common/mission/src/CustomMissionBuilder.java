@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.mission.src;
 
+import android.util.Log;
+
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.mission.api.I_CustomMissionBuilder;
@@ -9,9 +11,12 @@ import com.dji.sdk.sample.common.values.Coordinate;
 import java.util.List;
 import java.util.Vector;
 
+import dji.internal.analytics.listener.DJIMissionManagerEventListener;
 import dji.sdk.missionmanager.DJICustomMission;
 import dji.sdk.missionmanager.DJIWaypoint;
 import dji.sdk.missionmanager.DJIWaypointMission;
+import dji.sdk.missionmanager.missionstep.DJIGoHomeStep;
+import dji.sdk.missionmanager.missionstep.DJIGoToStep;
 import dji.sdk.missionmanager.missionstep.DJIMissionStep;
 import dji.sdk.missionmanager.missionstep.DJIShootPhotoStep;
 import dji.sdk.missionmanager.missionstep.DJIWaypointStep;
@@ -40,48 +45,28 @@ public class CustomMissionBuilder implements I_CustomMissionBuilder
     }
     public void buildCustomMission()
     {
-        List<Coordinate> switchbackVector = SwitchBackPathGenerator.generateSwitchback(
+        Vector<Coordinate> waypoints = (Vector<Coordinate>)SwitchBackPathGenerator.generateSwitchback(
                 initialMissionModel_.missionBoundary().bottomLeft(),
                 initialMissionModel_.missionBoundary().topRight(),
                 initialMissionModel_.altitude());
 
-        Vector<DJIWaypoint> waypoints = new Vector<DJIWaypoint>();
-        Vector<DJIWaypointMission> waypointMissions = new Vector<DJIWaypointMission>();
-        List<DJIMissionStep> missionSteps = new Vector<DJIMissionStep>();
+        Vector<DJIMissionStep> missionSteps = new Vector<>();
 
-        for(Coordinate nextPoint : switchbackVector)
+        for(Coordinate waypoint : waypoints)
         {
-            DJIWaypoint waypoint = new DJIWaypoint(
-                nextPoint.latitude_,
-                nextPoint.longitude_,
-                initialMissionModel_.altitude());
-            waypoints.add(waypoint);
+            DJIGoToStep goToStep = new DJIGoToStep(
+                    waypoint.latitude_,
+                    waypoint.longitude_,
+                    initialMissionModel_.altitude(),
+                    null);
+            DJIShootPhotoStep shootPhotoStep = new DJIShootPhotoStep(missionStepCompletionCallback_);
+
+            missionSteps.add(goToStep);
+            missionSteps.add(shootPhotoStep);
         }
 
-        int waypointCount = 0;
-        int wayPointMissionIndex = -1;
-
-        for (DJIWaypoint waypoint : waypoints)
-        {
-            if (wayPointMissionIndex == -1 || waypointCount >= 99)
-            {
-                waypointCount = 0;
-                DJIWaypointMission waypointMission = new DJIWaypointMission();
-                waypointMission.autoFlightSpeed = 10;
-
-                waypointMissions.add(waypointMission);
-                wayPointMissionIndex++;
-            }
-
-            waypointMissions.elementAt(wayPointMissionIndex).addWaypoint(waypoint);
-            waypointCount++;
-        }
-
-        for (DJIWaypointMission waypointMission : waypointMissions)
-        {
-            missionSteps.add(new DJIWaypointStep(waypointMission,missionStepCompletionCallback_));
-            missionSteps.add(new DJIShootPhotoStep(null));
-        }
+        //TODO add mission completion callback here
+        missionSteps.add(new DJIGoHomeStep(null));
 
         generatedMissionModel_.djiMission_ = new DJICustomMission(missionSteps);
         generatedMissionModel_.waypoints_ = waypoints;

@@ -44,7 +44,7 @@ public class WaypointReachedHandler implements
     public void handleWaypointReached(int waypointIndex)
     {
         sendIntentNotifyingWaypointHasBeenReached(waypointIndex);
-        completeImageTransferIfNecessary(waypointIndex);
+        //completeImageTransferIfNecessary(waypointIndex);
     }
 
     void sendIntentNotifyingWaypointHasBeenReached(int waypointIndex)
@@ -56,8 +56,11 @@ public class WaypointReachedHandler implements
 
     void completeImageTransferIfNecessary(int waypointIndex)
     {
+        Log.e(TAG, "in handler ");
+
         if(waypointIndex %5 == 0)
         {
+            Log.e(TAG, "pausing mission ");
             missionController_.pauseMission(this);
         }
     }
@@ -67,6 +70,7 @@ public class WaypointReachedHandler implements
     {
         if (error == null)
         {
+            Log.e(TAG, "transferring images ");
             imageTransferer_.transferNewImagesFromDrone(this);
         }
         else
@@ -78,6 +82,18 @@ public class WaypointReachedHandler implements
     @Override
     public void onImageTransferCompletion()
     {
-        missionController_.resumeMission(null);
+        missionController_.resumeMission(new I_CompletionCallback() {
+            @Override
+            public void onResult(DJIError error) {
+                if (error == null)
+                {
+                    Log.e(TAG, "success: resumed mission ");
+                }
+                else
+                {
+                    Log.e(TAG, "error: unable to resume mission " + error.getDescription());
+                }
+            }
+        });
     }
 }
