@@ -11,6 +11,7 @@ import java.lang.Math;
  * Created by eric on 2017-01-23.
  * Edited by Bill on 2017-02-15
  * Edited by Bill on 2017-03-01
+ * Edited by Bill on 2017-03-08
  */
 
 public class SwitchBackPathGenerator {
@@ -18,66 +19,102 @@ public class SwitchBackPathGenerator {
     private static double minimumPercentImageOverlap_ = 0.80; // number between 0 and 1
     private static double minimumPercentSwathOverlap_ = 0.50; // number between 0 and 1
 
-    public static List<Coordinate> generateSwitchback(Coordinate bottomLeft, Coordinate topRight, float altitude) {
-        List<Coordinate> switchbackPoints = new Vector<Coordinate>();
+    private Coordinate bottomLeft_;
+    private Coordinate topLeft_;
+    private Coordinate topRight_;
+    private Coordinate bottomRight_;
 
-        // Initial Testing
-//        DJIAircraft aircraft = (DJIAircraft) DJISDKManager.getInstance().getDJIProduct();
-//        double curLat = aircraft.getFlightController().getCurrentState().getAircraftLocation().getLatitude();
-//        double curLon = aircraft.getFlightController().getCurrentState().getAircraftLocation().getLongitude();
-//        double change = 0.000008;
-//
-//        switchbackPoints.add(new Coordinate(curLat + change, curLon));
-//        switchbackPoints.add(new Coordinate(curLat + change * 2.0, curLon));
+    private float altitude_;
+    private int numberOfSwaths_;
+    private int numberOfImagesPerSwath_;
 
-        //generatePathWaypoints(switchbackPoints, new Coordinate(51.081805, -114.161351),new Coordinate(51.082000, -114.160979), change);
+    private List<Coordinate> leftOrBottomSwathEndpointCoordinates_ = null;
+    private List<Coordinate> rightOrTopSwathEndpointCoordinates_ = null;
+    private List<Coordinate> switchbackPoints_ = null;
 
-        // Spacing calculations
-        double minimumImageSpacingInMeters = (1 - minimumPercentImageOverlap_) * calculateImageLength((double) altitude);
-        double minimumSwathSpacingInMeters = (1 - minimumPercentSwathOverlap_) * calculateImageWidth((double) altitude);
+    public SwitchBackPathGenerator(Coordinate bottomLeft, Coordinate topRight, float altitude) {
+        altitude_ = altitude;
 
-        Coordinate bottomRight = new Coordinate(topRight.latitude_, bottomLeft.longitude_);
-        Coordinate topLeft = new Coordinate(bottomLeft.latitude_, topRight.longitude_);
+        bottomLeft_ = bottomLeft;
+        topRight_ = topRight;
 
-        double averageSwathLengthInMeters = (bottomLeft.distanceApproximationInMeters(topLeft) + bottomRight.distanceApproximationInMeters(topRight)) / 2.0;
-        double averageDistancePerpendicularToSwathInMeters = (bottomLeft.distanceApproximationInMeters(bottomRight) + topLeft.distanceApproximationInMeters(topRight)) / 2.0;
-
-        int numberOfSwaths = 1 + (int) Math.ceil(averageDistancePerpendicularToSwathInMeters / minimumSwathSpacingInMeters);
-        int numberOfImagesPerSwath = 1 + (int) Math.ceil(averageSwathLengthInMeters / minimumImageSpacingInMeters);
-
-        // Generate Path Coordinates
-        generatePathAndImageCoordinates(switchbackPoints, bottomLeft, topLeft, topRight, bottomRight, numberOfSwaths, numberOfImagesPerSwath);
-
-        return switchbackPoints;
+        // Determine bottomRight and topLeft coordinates assuming rectangular area
+        bottomRight_ = new Coordinate(bottomLeft.latitude_, topRight.longitude_);
+        topLeft_ = new Coordinate(topRight.latitude_, bottomLeft.longitude_);
     }
 
-    private static void generatePathAndImageCoordinates(List<Coordinate> switchbackPoints, Coordinate bottomLeft, Coordinate topLeft, Coordinate topRight, Coordinate bottomRight, int numberOfSwaths, int numberOfImagesPerSwath) {
-        List<Coordinate> topPathCoordinates = new Vector<>();
-        List<Coordinate> bottomPathCoordinates = new Vector<>();
-        topPathCoordinates.add(topLeft);
-        topPathCoordinates.add(topRight);
-        bottomPathCoordinates.add(bottomLeft);
-        bottomPathCoordinates.add(bottomRight);
+    public List<Coordinate> generateSwitchback() {
+        switchbackPoints_ = new Vector<Coordinate>();
 
-        insertLinearlyDistributedCoordinates(topPathCoordinates, 0, numberOfSwaths - 2);
-        insertLinearlyDistributedCoordinates(bottomPathCoordinates, 0, numberOfSwaths - 2);
+        // Generate path coordinates choosing longer swaths
+        double leftRightDistance = bottomLeft_.distanceApproximationInMeters(bottomRight_);
+        double bottomTopDistance = bottomLeft_.distanceApproximationInMeters(topLeft_);
+        if (leftRightDistance > bottomTopDistance) {
+            // Compute the numbers of swaths and images per swath assuming rectangular area and east-west swaths
+            numberOfSwaths_ = calculateNumberOfSwaths(bottomLeft_, topLeft_, altitude_);
+            numberOfImagesPerSwath_ = calculateNumberOfImagesPerSwath(bottomLeft_, bottomRight_, altitude_);
+            createLeftRightSwathEndpointCoordinates();
+        } else {
+            // Compute the numbers of swaths and images per swath assuming rectangular area and north-south swaths
+            numberOfSwaths_ = calculateNumberOfSwaths(bottomLeft_, bottomRight_, altitude_);
+            numberOfImagesPerSwath_ = calculateNumberOfImagesPerSwath(bottomLeft_, topLeft_, altitude_);
+            createBottomTopSwathEndpointCoordinates();
+        }
+        generatePathAndImageCoordinates();
 
-        for (int i = 0; i < (numberOfSwaths); i++) {
+        return switchbackPoints_;
+    }
+
+    private void createLeftRightSwathEndpointCoordinates() {
+        // Create Swath Endpoints for left to right swaths
+        leftOrBottomSwathEndpointCoordinates_ = new Vector<>();
+        rightOrTopSwathEndpointCoordinates_ = new Vector<>();
+
+        // Left Edge
+        leftOrBottomSwathEndpointCoordinates_.add(bottomLeft_);
+        leftOrBottomSwathEndpointCoordinates_.add(topLeft_);
+
+        // Right Edge
+        rightOrTopSwathEndpointCoordinates_.add(bottomRight_);
+        rightOrTopSwathEndpointCoordinates_.add(topRight_);
+
+        insertLinearlyDistributedCoordinates(leftOrBottomSwathEndpointCoordinates_, 0, numberOfSwaths_ - 2);
+        insertLinearlyDistributedCoordinates(rightOrTopSwathEndpointCoordinates_, 0, numberOfSwaths_ - 2);
+    }
+
+    private void createBottomTopSwathEndpointCoordinates() {
+        // Create Swath Endpoints for bottom to top swaths
+        leftOrBottomSwathEndpointCoordinates_ = new Vector<>();
+        rightOrTopSwathEndpointCoordinates_ = new Vector<>();
+
+        // Bottom Edge
+        leftOrBottomSwathEndpointCoordinates_.add(bottomLeft_);
+        leftOrBottomSwathEndpointCoordinates_.add(bottomRight_);
+
+        // Top Edge
+        rightOrTopSwathEndpointCoordinates_.add(topLeft_);
+        rightOrTopSwathEndpointCoordinates_.add(topRight_);
+
+        insertLinearlyDistributedCoordinates(leftOrBottomSwathEndpointCoordinates_, 0, numberOfSwaths_ - 2);
+        insertLinearlyDistributedCoordinates(rightOrTopSwathEndpointCoordinates_, 0, numberOfSwaths_ - 2);
+    }
+
+    private void generatePathAndImageCoordinates() {
+        // Create swaths and append them to switchbackPoints
+        for (int i = 0; i < (numberOfSwaths_); i++) {
             switch (i % 2) {
-                case 0: { // Even Swaths - Bottom to Top
-                    Coordinate firstCoordinate = bottomPathCoordinates.get(i);
-                    Coordinate secondCoordinate = topPathCoordinates.get(i);
-                    switchbackPoints.add(firstCoordinate);
-                    switchbackPoints.add(secondCoordinate);
-                    insertLinearlyDistributedCoordinates(switchbackPoints, switchbackPoints.size() - 2, numberOfImagesPerSwath);
+                case 0: { // Even Swaths - Left to Right
+                    // Set coordinates defining start and end of a swath
+                    Coordinate swathStartingCoordinate = leftOrBottomSwathEndpointCoordinates_.get(i); // start at left or bottom
+                    Coordinate swathEndingCoordinate = rightOrTopSwathEndpointCoordinates_.get(i);
+                    appendSwath(switchbackPoints_, swathStartingCoordinate, swathEndingCoordinate, numberOfImagesPerSwath_);
                     break;
                 }
-                case 1: { // Odd Swaths - Top to Bottom
-                    Coordinate firstCoordinate = topPathCoordinates.get(i);
-                    Coordinate secondCoordinate = bottomPathCoordinates.get(i);
-                    switchbackPoints.add(firstCoordinate);
-                    switchbackPoints.add(secondCoordinate);
-                    insertLinearlyDistributedCoordinates(switchbackPoints, switchbackPoints.size() - 2, numberOfImagesPerSwath);
+                case 1: { // Odd Swaths - Right to Left
+                    // Set coordinates defining start and end of a swath
+                    Coordinate swathStartingCoordinate = rightOrTopSwathEndpointCoordinates_.get(i); // start at right or top
+                    Coordinate swathEndingCoordinate = leftOrBottomSwathEndpointCoordinates_.get(i);
+                    appendSwath(switchbackPoints_, swathStartingCoordinate, swathEndingCoordinate, numberOfImagesPerSwath_);
                     break;
                 }
             }
@@ -100,51 +137,63 @@ public class SwitchBackPathGenerator {
         }
     }
 
-    private static void generatePathWaypoints(List<Coordinate> switchbackPoints, Coordinate bottomLeft, Coordinate topRight, double spacing, int numberOfSwaths) {
-        int n = 2 * numberOfSwaths;
+    private static void appendSwath(List<Coordinate> coordinateList, Coordinate swathStartingCoordinate, Coordinate swathEndingCoordinate, int numberOfImagesPerSwath) {
 
-        Vector<Double> xrow = new Vector<>();
+        // Append starting and ending coordinates to end of list
+        coordinateList.add(swathStartingCoordinate);
+        coordinateList.add(swathEndingCoordinate);
 
-//        for(double i = bottomLeft.longitude_; i <= topRight.longitude_; i = i + spacing){
-//            xrow.add(i);
-//        }
+        // Fill with intermediate coordinates between start and end
+        int indexToBeginInsertion = coordinateList.size() - 2; // insert just before last coordinate
+        insertLinearlyDistributedCoordinates(coordinateList, indexToBeginInsertion, numberOfImagesPerSwath - 2);
+    }
 
-        for (int i = 0; i < numberOfSwaths; i++) {
-            xrow.add(bottomLeft.longitude_ + i * spacing);
-        }
+    private static int calculateNumberOfSwaths(Coordinate startingCoordinate, Coordinate endingCoordinate, float altitude) {
+        double maximumSwathSpacingInMeters = calculateSwathSpacing(minimumPercentSwathOverlap_, altitude);
+        double distanceInMeters = startingCoordinate.distanceApproximationInMeters(endingCoordinate);
+        return (2 + calculateNumberOfIntermediatePoints(distanceInMeters, maximumSwathSpacingInMeters));
+    }
 
-        double ymin = bottomLeft.latitude_;
-        double ymax = topRight.latitude_;
+    private static int calculateNumberOfImagesPerSwath(Coordinate swathStartingCoordinate, Coordinate swathEndingCoordinate, float altitude) {
+        double maximumImageSpacingInMeters = calculateImageSpacing(minimumPercentImageOverlap_, altitude);
+        double swathLengthInMeters = swathStartingCoordinate.distanceApproximationInMeters(swathEndingCoordinate);
+        return (2 + calculateNumberOfIntermediatePoints(swathLengthInMeters, maximumImageSpacingInMeters));
+    }
 
-        double x;
-        double y;
+    /**
+     * Returns number of linearly spaced intermediate points needed to ensure no more than maximum
+     * spacing between any two points
+     *
+     * @param distance       e.g. 10
+     * @param maximumSpacing e.g. 4
+     * @return eg. 2
+     */
+    private static int calculateNumberOfIntermediatePoints(double distance, double maximumSpacing) {
+        return (int) Math.floor(distance / maximumSpacing);
+    }
 
-        for (int i = 0; i < n; i++) {
-            int m = i % 4;
+    /**
+     * Calculates the minimum distance between two swaths of aerial images taken at a specific
+     * altitude to have the specified swath overlap.
+     *
+     * @param percentSwathOverlap_ a number between 0 and 1, e.g. 0.45 for 45% swath overlap
+     * @param altitude             altitude in meters
+     * @return distance in meters between two swaths taken at the same specified altitude to achieve specified overlap
+     */
+    private static double calculateSwathSpacing(double percentSwathOverlap_, float altitude) {
+        return (1 - percentSwathOverlap_) * calculateImageWidth((double) altitude);
+    }
 
-            switch (m) {
-                case 1:
-                    x = xrow.elementAt(2 * (int) Math.floor(i / 4));
-                    y = ymin;
-                    switchbackPoints.add(new Coordinate(x, y));
-                    break;
-                case 2:
-                    x = xrow.elementAt(2 * (int) Math.floor(i / 4));
-                    y = ymax;
-                    switchbackPoints.add(new Coordinate(x, y));
-                    break;
-                case 3:
-                    x = xrow.elementAt(1 + 2 * (int) Math.floor(i / 4));
-                    y = ymax;
-                    switchbackPoints.add(new Coordinate(x, y));
-                    break;
-                case 0:
-                    x = xrow.elementAt(2 * (int) Math.floor(i / 4));
-                    y = ymin;
-                    switchbackPoints.add(new Coordinate(x, y));
-                    break;
-            }
-        }
+    /**
+     * Calculates the minimum distance between two aerial images taken at a specific altitude to
+     * have the specified image overlap.
+     *
+     * @param percentImageOverlap_ a number between 0 and 1, e.g. 0.8 for 80% image overlap
+     * @param altitude             altitude in meters
+     * @return distance in meters between two images taken at the same specified altitude to achieve specified overlap
+     */
+    private static double calculateImageSpacing(double percentImageOverlap_, float altitude) {
+        return (1 - percentImageOverlap_) * calculateImageLength((double) altitude);
     }
 
     /**
