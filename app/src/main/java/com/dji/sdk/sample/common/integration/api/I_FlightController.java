@@ -10,9 +10,12 @@ import dji.sdk.flightcontroller.DJIFlightLimitation;
  */
 
 public interface I_FlightController {
-    public void takeOff(I_CompletionCallback callback);
-    public DJIFlightControllerCurrentState getCurrentState();
-    public void getHomeLocation(DJICommonCallbacks.DJICompletionCallbackWith<DJILocationCoordinate2D> callback);
-    public DJIFlightLimitation getFlightLimitation();
-    public void setHomeLocationUsingAircraftCurrentLocation(I_CompletionCallback callback);
+    void takeOff(I_CompletionCallback callback);
+    DJIFlightControllerCurrentState getCurrentState();
+    void getHomeLocation(DJICommonCallbacks.DJICompletionCallbackWith<DJILocationCoordinate2D> callback);
+    DJIFlightLimitation getFlightLimitation();
+    void setHomeLocationUsingAircraftCurrentLocation(I_CompletionCallback callback);
+
+    void goHome(I_CompletionCallback callback);
+    void cancelGoHome(I_CompletionCallback callback);
 }

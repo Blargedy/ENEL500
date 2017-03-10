@@ -51,7 +51,7 @@ public class FlightControlActivity extends FragmentActivity
         missionContainer_ = new MissionContainer(
                 integrationLayerContainer_,
                 imageTransferContainer_,
-                contextManager_);
+                this);
 
         presenterContainer_ = new PresenterContainer(
                 this,

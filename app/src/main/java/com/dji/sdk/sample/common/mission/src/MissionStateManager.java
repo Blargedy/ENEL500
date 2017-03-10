@@ -10,7 +10,6 @@ import android.util.Log;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
-import com.dji.sdk.sample.common.mission.api.I_MissionCancellationCompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionController;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
@@ -23,8 +22,7 @@ import com.dji.sdk.sample.common.entity.MissionStateEnum;
  */
 
 public class MissionStateManager implements
-        I_MissionGenerationCompletionCallback,
-        I_MissionCancellationCompletionCallback
+        I_MissionGenerationCompletionCallback
 {
     private static final String TAG = "MissionStateManager";
 
@@ -99,19 +97,6 @@ public class MissionStateManager implements
                 missionController_.pauseMission(null);
                 break;
 
-            case CANCEL_MISSION:
-                if (previousMissionState == MissionStateEnum.PAUSE_MISSION ||
-                        previousMissionState == MissionStateEnum.EXECUTE_MISSION){
-                    missionController_.cancelMission(this);
-                } else if (previousMissionState == MissionStateEnum.PAUSE_CANCEL_MISSION) {
-                    missionController_.resumeGoHome();
-                }
-                break;
-
-            case PAUSE_CANCEL_MISSION:
-                missionController_.pauseGoHome();
-                break;
-
             default:
                 break;
         }
@@ -131,11 +116,5 @@ public class MissionStateManager implements
     public void onMissionGenerationCompletion()
     {
         mapPresenter_.displayMissionWaypoints(generatedMissionModel_.waypoints_);
-    }
-
-    @Override
-    public void onMissionCancellationCompletion()
-    {
-        missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
     }
 }

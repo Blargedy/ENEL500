@@ -42,4 +42,9 @@ public class MissionManager implements I_MissionManager {
         missionManager_.prepareMission(mission, progressHandler, callback);
     }
 
+    @Override
+    public void stopMissionExecution(I_CompletionCallback callback) {
+        missionManager_.stopMissionExecution(callback);
+    }
+
 }

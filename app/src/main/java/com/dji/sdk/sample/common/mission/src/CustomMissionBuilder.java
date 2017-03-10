@@ -29,18 +29,15 @@ public class CustomMissionBuilder implements I_CustomMissionBuilder
 {
     private InitialMissionModel initialMissionModel_;
     private GeneratedMissionModel generatedMissionModel_;
-    private I_ApplicationContextManager contextManager_;
     private MissionStepCompletionCallback missionStepCompletionCallback_;
 
     public CustomMissionBuilder(
             InitialMissionModel initialMissionModel,
             GeneratedMissionModel generatedMissionModel,
-            I_ApplicationContextManager contextManager,
             MissionStepCompletionCallback missionStepCompletionCallback)
     {
         initialMissionModel_ = initialMissionModel;
         generatedMissionModel_ = generatedMissionModel;
-        contextManager_ = contextManager;
         missionStepCompletionCallback_ = missionStepCompletionCallback;
     }
     public void buildCustomMission()

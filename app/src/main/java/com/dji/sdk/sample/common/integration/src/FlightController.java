@@ -49,4 +49,16 @@ public class FlightController implements I_FlightController {
     {
         flightController_.setHomeLocationUsingAircraftCurrentLocation(callback);
     }
+
+    @Override
+    public void goHome(I_CompletionCallback callback)
+    {
+        flightController_.goHome(callback);
+    }
+
+    @Override
+    public void cancelGoHome(I_CompletionCallback callback)
+    {
+        flightController_.cancelGoHome(callback);
+    }
 }

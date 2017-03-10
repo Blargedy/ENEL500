@@ -16,7 +16,6 @@ import com.dji.sdk.sample.common.view.src.FlightControlView;
 
 public class PresenterContainer
 {
-    private MissionStateEntity missionState_;
     private MapPresenter mapPresenter_;
     private MissionControlsPresenter missionControlsPresenter_;
     private MissionStateManager missionStateManager_;
@@ -29,8 +28,6 @@ public class PresenterContainer
             MissionContainer missionContainer,
             GoogleMapsConnectionHandler googleMapsConnectionHandler)
     {
-        missionState_ = new MissionStateEntity(
-                activity);
         mapPresenter_ = new MapPresenter(
                 activity,
                 flightControlView,
@@ -38,7 +35,7 @@ public class PresenterContainer
         missionControlsPresenter_ = new MissionControlsPresenter(
                 activity,
                 flightControlView,
-                missionState_);
+                missionContainer.missionState());
         missionStateManager_ = new MissionStateManager(
                 activity,
                 mapPresenter_,
@@ -46,7 +43,7 @@ public class PresenterContainer
                 missionContainer.missionController(),
                 missionContainer.initialMissionModel(),
                 missionContainer.generatedMissionModel(),
-                missionState_);
+                missionContainer.missionState());
 
         productConnectionPresenter_ = new ProductConnectionPresenter(
                 activity,

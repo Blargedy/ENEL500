@@ -1,30 +1,22 @@
 package com.dji.sdk.sample.common.mission.src;
 
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
-import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
 import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
-import com.dji.sdk.sample.common.mission.api.I_MissionCancellationCompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionController;
-import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 /**
  * Created by Matthew on 2017-02-08.
  */
 
-public class MissionController implements I_MissionController
+public class MissionController implements
+        I_MissionController
 {
     private I_MissionManagerSource missionManagerSource_;
-    private I_FlightControllerSource flightControllerSource_;
-    private I_ApplicationContextManager contextManager_;
 
     public MissionController(
-            I_MissionManagerSource missionManagerSource,
-            I_FlightControllerSource flightControllerSource,
-            I_ApplicationContextManager contextManager)
+            I_MissionManagerSource missionManagerSource)
     {
         missionManagerSource_ = missionManagerSource;
-        flightControllerSource_ = flightControllerSource;
-        contextManager_ = contextManager;
     }
 
     @Override
@@ -46,24 +38,8 @@ public class MissionController implements I_MissionController
     }
 
     @Override
-    public void cancelMission(I_MissionCancellationCompletionCallback callback)
+    public void stopMission(I_CompletionCallback callback)
     {
-        //TODO Matt will implement cancel missions here
-        // mision.stopMissionExecution()
-        // go home
-        // call callback when the drone is home
-
-    }
-
-    @Override
-    public void pauseGoHome()
-    {
-        //flightController.cancelGoHome()
-    }
-
-    @Override
-    public void resumeGoHome()
-    {
-        //flightController.goHome()
+        missionManagerSource_.getMissionManager().stopMissionExecution(callback);
     }
 }
