@@ -93,7 +93,6 @@ public class DJISampleApplication extends Application {
         }
 
         private DJIBaseProduct.DJIBaseProductListener mDJIBaseProductListener = new DJIBaseProduct.DJIBaseProductListener() {
-            //TODO Extract this into its own class BaseProductChangeNotifier
             @Override
             public void onComponentChange(DJIBaseProduct.DJIComponentKey key, DJIBaseComponent oldComponent, DJIBaseComponent newComponent) {
 

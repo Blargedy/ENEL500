@@ -74,9 +74,9 @@ public class MissionControlsPresenter implements
     public void onClick(View v)
     {
         if (v.getId() == acceptAreaButton_.getId()) {
-            missionState_.setCurrentMissionState(MissionStateEnum.VIEW_MISSION);
+            missionState_.setCurrentMissionState(MissionStateEnum.GENERATE_MISSION_BOUNDARY);
         } else if (v.getId() == startMissionButton_.getId()) {
-            missionState_.setCurrentMissionState(MissionStateEnum.EXECUTE_MISSION);
+            missionState_.setCurrentMissionState(MissionStateEnum.START_MISSION);
         } else if (v.getId() == cancelButton_.getId()) {
             cancelButtonPressed();
         }
@@ -99,11 +99,11 @@ public class MissionControlsPresenter implements
                 missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
                 break;
 
-            case EXECUTE_MISSION:
+            case MISSION_EXECUTING:
                 missionState_.setCurrentMissionState(MissionStateEnum.CANCEL_MISSION);
                 break;
 
-            case PAUSE_MISSION:
+            case HOVERING:
                 missionState_.setCurrentMissionState(MissionStateEnum.CANCEL_MISSION);
                 break;
 
@@ -116,20 +116,20 @@ public class MissionControlsPresenter implements
     {
         switch (missionState_.getCurrentMissionState())
         {
-            case EXECUTE_MISSION:
-                missionState_.setCurrentMissionState(MissionStateEnum.PAUSE_MISSION);
+            case MISSION_EXECUTING:
+                missionState_.setCurrentMissionState(MissionStateEnum.HOVER_NOW);
                 break;
 
-            case PAUSE_MISSION:
-                missionState_.setCurrentMissionState(MissionStateEnum.EXECUTE_MISSION);
+            case HOVERING:
+                missionState_.setCurrentMissionState(MissionStateEnum.RESUME_MISSION);
                 break;
 
-            case CANCEL_MISSION:
-                missionState_.setCurrentMissionState(MissionStateEnum.PAUSE_CANCEL_MISSION);
+            case GO_HOME:
+                missionState_.setCurrentMissionState(MissionStateEnum.PAUSE_GO_HOME);
                 break;
 
-            case PAUSE_CANCEL_MISSION:
-                missionState_.setCurrentMissionState(MissionStateEnum.CANCEL_MISSION);
+            case GO_HOME_PAUSED:
+                missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME);
                 break;
 
             default:
@@ -143,48 +143,72 @@ public class MissionControlsPresenter implements
         {
             case SELECT_AREA:
                 acceptAreaButton_.setVisibility(View.VISIBLE);
+                acceptAreaButton_.setEnabled(true);
+
                 startMissionButton_.setVisibility(View.GONE);
                 cancelButton_.setVisibility(View.GONE);
                 hoverNowToggleButton_.setVisibility(View.GONE);
                 break;
 
+            case GENERATE_MISSION_BOUNDARY:
+                acceptAreaButton_.setEnabled(false);
+                break;
+
             case VIEW_MISSION:
-                acceptAreaButton_.setVisibility(View.GONE);
                 startMissionButton_.setVisibility(View.VISIBLE);
+                startMissionButton_.setEnabled(true);
                 cancelButton_.setVisibility(View.VISIBLE);
+                cancelButton_.setEnabled(true);
+
+                acceptAreaButton_.setVisibility(View.GONE);
                 hoverNowToggleButton_.setVisibility(View.GONE);
                 break;
 
-            case EXECUTE_MISSION:
-                acceptAreaButton_.setVisibility(View.GONE);
-                startMissionButton_.setVisibility(View.GONE);
-                cancelButton_.setVisibility(View.VISIBLE);
-                hoverNowToggleButton_.setVisibility(View.VISIBLE);
+            case START_MISSION:
+                startMissionButton_.setEnabled(false);
+                startMissionButton_.setEnabled(false);
                 break;
 
-            case PAUSE_MISSION:
+            case MISSION_EXECUTING:
+                hoverNowToggleButton_.setVisibility(View.VISIBLE);
+                cancelButton_.setVisibility(View.VISIBLE);
+                hoverNowToggleButton_.setEnabled(true);
+                cancelButton_.setEnabled(true);
+
                 acceptAreaButton_.setVisibility(View.GONE);
                 startMissionButton_.setVisibility(View.GONE);
-                cancelButton_.setVisibility(View.VISIBLE);
-                hoverNowToggleButton_.setVisibility(View.VISIBLE);
+                break;
+
+            case HOVER_NOW:
+                hoverNowToggleButton_.setEnabled(false);
+                cancelButton_.setEnabled(false);
+                break;
+
+            case HOVERING:
+                hoverNowToggleButton_.setEnabled(true);
+                cancelButton_.setEnabled(true);
+                break;
+
+            case RESUME_MISSION:
+                hoverNowToggleButton_.setEnabled(false);
+                cancelButton_.setEnabled(false);
                 break;
 
             case CANCEL_MISSION:
-                acceptAreaButton_.setVisibility(View.GONE);
-                startMissionButton_.setVisibility(View.GONE);
-                cancelButton_.setVisibility(View.VISIBLE);
-                hoverNowToggleButton_.setVisibility(View.VISIBLE);
-
+                hoverNowToggleButton_.setEnabled(false);
                 cancelButton_.setEnabled(false);
                 break;
 
-            case PAUSE_CANCEL_MISSION:
-                acceptAreaButton_.setVisibility(View.GONE);
-                startMissionButton_.setVisibility(View.GONE);
-                cancelButton_.setVisibility(View.VISIBLE);
-                hoverNowToggleButton_.setVisibility(View.VISIBLE);
+            case GO_HOME:
+                hoverNowToggleButton_.setEnabled(true);
+                break;
 
-                cancelButton_.setEnabled(false);
+            case PAUSE_GO_HOME:
+                hoverNowToggleButton_.setEnabled(false);
+                break;
+
+            case GO_HOME_PAUSED:
+                hoverNowToggleButton_.setEnabled(true);
                 break;
 
             default:

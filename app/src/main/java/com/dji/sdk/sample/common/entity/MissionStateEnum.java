@@ -7,9 +7,16 @@ package com.dji.sdk.sample.common.entity;
 public enum MissionStateEnum
 {
     SELECT_AREA,
+    GENERATE_MISSION_BOUNDARY,
+    GENERATE_MISSION,
     VIEW_MISSION,
-    EXECUTE_MISSION,
-    PAUSE_MISSION,
+    START_MISSION,
+    MISSION_EXECUTING,
+    HOVER_NOW,
+    HOVERING,
+    RESUME_MISSION,
     CANCEL_MISSION,
-    PAUSE_CANCEL_MISSION
+    GO_HOME,
+    PAUSE_GO_HOME,
+    GO_HOME_PAUSED
 }

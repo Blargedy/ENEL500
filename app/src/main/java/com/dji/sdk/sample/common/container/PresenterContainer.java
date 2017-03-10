@@ -2,10 +2,9 @@ package com.dji.sdk.sample.common.container;
 
 import android.support.v4.app.FragmentActivity;
 
-import com.dji.sdk.sample.common.entity.MissionStateEntity;
-import com.dji.sdk.sample.common.mission.src.MissionStateManager;
 import com.dji.sdk.sample.common.presenter.src.MapPresenter;
 import com.dji.sdk.sample.common.presenter.src.MissionControlsPresenter;
+import com.dji.sdk.sample.common.presenter.src.MissionMapDisplayPresenter;
 import com.dji.sdk.sample.common.presenter.src.ProductConnectionPresenter;
 import com.dji.sdk.sample.common.utility.GoogleMapsConnectionHandler;
 import com.dji.sdk.sample.common.view.src.FlightControlView;
@@ -18,7 +17,7 @@ public class PresenterContainer
 {
     private MapPresenter mapPresenter_;
     private MissionControlsPresenter missionControlsPresenter_;
-    private MissionStateManager missionStateManager_;
+    private MissionMapDisplayPresenter missionMapDisplayPresenter_;
 
     private ProductConnectionPresenter productConnectionPresenter_;
 
@@ -36,14 +35,12 @@ public class PresenterContainer
                 activity,
                 flightControlView,
                 missionContainer.missionState());
-        missionStateManager_ = new MissionStateManager(
+        missionMapDisplayPresenter_ = new MissionMapDisplayPresenter(
                 activity,
-                mapPresenter_,
-                missionContainer.missionGenerator(),
-                missionContainer.missionController(),
+                missionContainer.missionState(),
                 missionContainer.initialMissionModel(),
                 missionContainer.generatedMissionModel(),
-                missionContainer.missionState());
+                mapPresenter_);
 
         productConnectionPresenter_ = new ProductConnectionPresenter(
                 activity,

@@ -17,6 +17,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 
+import com.dji.sdk.sample.common.entity.MissionStateEntity;
+import com.dji.sdk.sample.common.entity.MissionStateEnum;
 import com.dji.sdk.sample.common.mission.src.MissionBoundary;
 import com.dji.sdk.sample.common.presenter.api.I_MapPresenter;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
@@ -51,7 +53,8 @@ import static com.dji.sdk.sample.common.utility.IntentExtraKeys.WAYPOINT_INDEX;
 
 public class MapPresenter implements
         I_MapPresenter,
-        OnMapReadyCallback {
+        OnMapReadyCallback
+{
     private BroadcastReceiver receiver_;
 
     private GoogleApiClient client;
@@ -110,7 +113,7 @@ public class MapPresenter implements
         this.fragmentActivity = fragmentActivity;
     }
 
-    void registerWaypointReachedReceiver(Context context) {
+    private void registerWaypointReachedReceiver(Context context) {
         IntentFilter filter = new IntentFilter();
         filter.addAction(BroadcastIntentNames.WAYPOINT_REACHED);
 
@@ -127,16 +130,17 @@ public class MapPresenter implements
 
     @Override
     public MissionBoundary getSurveyAreaBoundary() {
-        // Replace with actual logic to get the area from the map
-        Coordinate topRight = new Coordinate(surveyPolygon.getPoints().get(2).latitude, surveyPolygon.getPoints().get(2).longitude);
-        Coordinate bottomLeft = new Coordinate(surveyPolygon.getPoints().get(0).latitude, surveyPolygon.getPoints().get(0).longitude);
+        Coordinate topRight = new Coordinate(
+                surveyPolygon.getPoints().get(2).latitude,
+                surveyPolygon.getPoints().get(2).longitude);
+        Coordinate bottomLeft = new Coordinate(
+                surveyPolygon.getPoints().get(0).latitude,
+                surveyPolygon.getPoints().get(0).longitude);
         return new MissionBoundary(topRight, bottomLeft);
     }
 
     @Override
     public void displayMissionWaypoints(Vector<Coordinate> waypoints) {
-        // display list of waypoints
-        // Persist this list for looking up the location of the waypoints later
         surveyPolygon.remove(); //no longer needed
 
         wayPointList = waypoints;

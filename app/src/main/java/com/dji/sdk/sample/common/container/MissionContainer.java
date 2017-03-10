@@ -10,11 +10,11 @@ import com.dji.sdk.sample.common.mission.src.CustomMissionBuilder;
 import com.dji.sdk.sample.common.mission.api.I_MissionController;
 import com.dji.sdk.sample.common.mission.src.MissionCanceller;
 import com.dji.sdk.sample.common.mission.src.MissionController;
+import com.dji.sdk.sample.common.mission.src.MissionExecutor;
 import com.dji.sdk.sample.common.mission.src.MissionGenerator;
 import com.dji.sdk.sample.common.mission.src.MissionStepCompletionCallback;
 import com.dji.sdk.sample.common.mission.src.MissionPreparer;
 import com.dji.sdk.sample.common.mission.src.WaypointReachedHandler;
-import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 /**
  * Created by Julia on 2017-02-04.
@@ -33,6 +33,8 @@ public class MissionContainer
     private CustomMissionBuilder customMissionBuilder_;
     private MissionPreparer missionPreparer_;
     private MissionGenerator missionGenerator_;
+
+    private MissionExecutor missionExecutor_;
     private MissionCanceller missionCanceller_;
 
     public MissionContainer(
@@ -68,6 +70,12 @@ public class MissionContainer
                 customMissionBuilder_,
                 missionPreparer_,
                 imageTransferContainer.imageTransferModuleInitializer());
+
+        missionExecutor_ = new MissionExecutor(
+                context,
+                missionGenerator_,
+                integrationLayerContainer.missionManagerSource(),
+                missionState_);
         missionCanceller_ = new MissionCanceller(
                 context,
                 missionState_,
@@ -83,16 +91,6 @@ public class MissionContainer
     public GeneratedMissionModel generatedMissionModel()
     {
         return generatedMissionModel_;
-    }
-
-    public I_MissionController missionController()
-    {
-        return missionController_;
-    }
-
-    public I_MissionGenerator missionGenerator()
-    {
-        return missionGenerator_;
     }
 
     public MissionStateEntity missionState()

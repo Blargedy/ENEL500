@@ -46,8 +46,7 @@ public class GoogleMapsConnectionHandler
     public Action getIndexApiAction()
     {
         Thing object = new Thing.Builder()
-                .setName("Map Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
+                .setName("Map Page")
                 .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
                 .build();
         return new Action.Builder(Action.TYPE_VIEW)

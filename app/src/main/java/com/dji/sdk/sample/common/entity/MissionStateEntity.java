@@ -3,6 +3,7 @@ package com.dji.sdk.sample.common.entity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 
@@ -12,6 +13,8 @@ import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 
 public class MissionStateEntity
 {
+    private static final String TAG = "MissionStateEntity";
+
     private MissionStateEnum currentMissionState_;
     private MissionStateEnum previousMissionState_;
 
@@ -42,5 +45,8 @@ public class MissionStateEntity
 
         Intent intent = new Intent(BroadcastIntentNames.MISSION_STATE_CHANGED);
         LocalBroadcastManager.getInstance(context_).sendBroadcast(intent);
+
+        Log.d(TAG, "Mission state changed from "
+                + previousMissionState_.name() + " to " + currentMissionState_.name());
     }
 }

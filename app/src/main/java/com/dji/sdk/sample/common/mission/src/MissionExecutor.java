@@ -8,36 +8,41 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
-import com.dji.sdk.sample.common.entity.MissionStateEnum;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
-import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
 import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
+import com.dji.sdk.sample.common.mission.api.I_MissionController;
+import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallback;
+import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
+import com.dji.sdk.sample.common.entity.MissionStateEnum;
 
 import dji.common.error.DJIError;
 
 /**
- * Created by Julia on 2017-03-09.
+ * Created by Julia on 2017-03-07.
  */
 
-public class MissionCanceller implements I_CompletionCallback
+public class MissionExecutor implements
+        I_MissionGenerationCompletionCallback,
+        I_CompletionCallback
 {
-    private static final String TAG = "MissionCanceller";
+    private static final String TAG = "MissionExecutor";
 
     private BroadcastReceiver receiver_;
-    private MissionStateEntity missionState_;
-    private I_MissionManagerSource missionManagerSource_;
-    private I_FlightControllerSource flightControllerSource_;
 
-    public MissionCanceller(
+    private I_MissionGenerator missionGenerator_;
+    private I_MissionManagerSource missionManagerSource_;
+    private MissionStateEntity missionState_;
+
+    public MissionExecutor(
             Context context,
-            MissionStateEntity missionState,
+            I_MissionGenerator missionGenerator,
             I_MissionManagerSource missionManagerSource,
-            I_FlightControllerSource flightControllerSource)
+            MissionStateEntity missionState)
     {
-        missionState_ = missionState;
+        missionGenerator_ = missionGenerator;
         missionManagerSource_ = missionManagerSource;
-        flightControllerSource_ = flightControllerSource;
+        missionState_ = missionState;
 
         registerMissionStateChangedReceiver(context);
     }
@@ -61,16 +66,20 @@ public class MissionCanceller implements I_CompletionCallback
     {
         switch (missionState_.getCurrentMissionState())
         {
-            case CANCEL_MISSION:
-                missionManagerSource_.getMissionManager().stopMissionExecution(this);
+            case GENERATE_MISSION:
+                missionGenerator_.generateMission(this);
                 break;
 
-            case GO_HOME:
-                flightControllerSource_.getFlightController().goHome(this);
+            case START_MISSION:
+                missionManagerSource_.getMissionManager().startMissionExecution(this);
                 break;
 
-            case PAUSE_GO_HOME:
-                flightControllerSource_.getFlightController().cancelGoHome(this);
+            case HOVER_NOW:
+                missionManagerSource_.getMissionManager().pauseMissionExecution(this);
+                break;
+
+            case RESUME_MISSION:
+                missionManagerSource_.getMissionManager().resumeMissionExecution(this);
                 break;
 
             default:
@@ -79,9 +88,15 @@ public class MissionCanceller implements I_CompletionCallback
     }
 
     @Override
+    public void onMissionGenerationCompletion()
+    {
+        changeMissionStateAfterCommandIsExecuted();
+    }
+
+    @Override
     public void onResult(DJIError error)
     {
-        if (error == null)
+        if(error == null)
         {
             changeMissionStateAfterCommandIsExecuted();
         }
@@ -95,17 +110,20 @@ public class MissionCanceller implements I_CompletionCallback
     {
         switch (missionState_.getCurrentMissionState())
         {
-            case CANCEL_MISSION:
-                missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME);
+            case GENERATE_MISSION:
+                missionState_.setCurrentMissionState(MissionStateEnum.VIEW_MISSION);
                 break;
 
-            case GO_HOME:
-                //TODO call completion callback for ending mission maybe?
-                missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
+            case START_MISSION:
+                missionState_.setCurrentMissionState(MissionStateEnum.MISSION_EXECUTING);
                 break;
 
-            case PAUSE_GO_HOME:
-                missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME_PAUSED);
+            case HOVER_NOW:
+                missionState_.setCurrentMissionState(MissionStateEnum.HOVERING);
+                break;
+
+            case RESUME_MISSION:
+                missionState_.setCurrentMissionState(MissionStateEnum.MISSION_EXECUTING);
                 break;
 
             default:
