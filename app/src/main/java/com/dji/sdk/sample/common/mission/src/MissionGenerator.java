@@ -6,7 +6,9 @@ import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitiali
 import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleInitializationCallback;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
+import com.dji.sdk.sample.common.integration.api.I_MissionManager;
 import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
+import com.dji.sdk.sample.common.integration.api.I_WaypointMissionProgressStatusCallback;
 import com.dji.sdk.sample.common.mission.api.I_CustomMissionBuilder;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
@@ -29,6 +31,7 @@ public class MissionGenerator implements
     private I_FlightControllerSource flightControllerSource_;
     private I_ImageTransferModuleInitializer imageTransferModuleInitializer_;
     private I_CompletionCallback missionExecutionCompletionCallback_;
+    private I_WaypointMissionProgressStatusCallback missionProgressStatusCallback_;
 
     private I_MissionGenerationCompletionCallback callback_;
 
@@ -37,21 +40,26 @@ public class MissionGenerator implements
             I_MissionManagerSource missionManagerSource,
             I_FlightControllerSource flightControllerSource,
             I_ImageTransferModuleInitializer imageTransferModuleInitializer,
-            I_CompletionCallback missionExecutionCompletionCallback)
+            I_CompletionCallback missionExecutionCompletionCallback,
+            I_WaypointMissionProgressStatusCallback missionProgressStatusCallback)
     {
         customMissionBuilder_ = customMissionBuilder;
         missionManagerSource_ = missionManagerSource;
         flightControllerSource_ = flightControllerSource;
         imageTransferModuleInitializer_ = imageTransferModuleInitializer;
         missionExecutionCompletionCallback_ = missionExecutionCompletionCallback;
+        missionProgressStatusCallback_ = missionProgressStatusCallback;
     }
 
     public void generateMission(I_MissionGenerationCompletionCallback callback)
     {
         callback_ = callback;
         customMissionBuilder_.buildCustomMission();
-        missionManagerSource_.getMissionManager().setMissionExecutionFinishedCallback(
-                missionExecutionCompletionCallback_);
+
+        I_MissionManager missionManager = missionManagerSource_.getMissionManager();
+        missionManager.setMissionExecutionFinishedCallback(missionExecutionCompletionCallback_);
+        missionManager.setMissionProgressStatusCallback(missionProgressStatusCallback_);
+
         flightControllerSource_.getFlightController().
                 setHomeLocationUsingAircraftCurrentLocation(this);
     }

@@ -3,6 +3,7 @@ package com.dji.sdk.sample.common.integration.src;
 
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_MissionManager;
+import com.dji.sdk.sample.common.integration.api.I_WaypointMissionProgressStatusCallback;
 
 import dji.sdk.missionmanager.DJIMission;
 import dji.sdk.missionmanager.DJIMissionManager;
@@ -11,7 +12,8 @@ import dji.sdk.missionmanager.DJIMissionManager;
  * Created by eric7 on 2017-02-21.
  */
 
-public class MissionManager implements I_MissionManager {
+public class MissionManager implements I_MissionManager
+{
     DJIMissionManager missionManager_;
 
     MissionManager(DJIMissionManager missionManager)
@@ -56,5 +58,11 @@ public class MissionManager implements I_MissionManager {
     public void setMissionExecutionFinishedCallback(I_CompletionCallback callback)
     {
         missionManager_.setMissionExecutionFinishedCallback(callback);
+    }
+
+    @Override
+    public void setMissionProgressStatusCallback(I_WaypointMissionProgressStatusCallback callback)
+    {
+        missionManager_.setMissionProgressStatusCallback(callback);
     }
 }

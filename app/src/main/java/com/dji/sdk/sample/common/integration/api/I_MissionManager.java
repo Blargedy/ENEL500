@@ -17,4 +17,5 @@ public interface I_MissionManager
              I_CompletionCallback callback);
     void stopMissionExecution(I_CompletionCallback callback);
     void setMissionExecutionFinishedCallback(I_CompletionCallback callback);
+    void setMissionProgressStatusCallback(I_WaypointMissionProgressStatusCallback callback);
 }

@@ -22,16 +22,13 @@ public class CustomMissionBuilder implements I_CustomMissionBuilder
 
     private InitialMissionModel initialMissionModel_;
     private GeneratedMissionModel generatedMissionModel_;
-    private MissionStepCompletionCallback missionStepCompletionCallback_;
 
     public CustomMissionBuilder(
             InitialMissionModel initialMissionModel,
-            GeneratedMissionModel generatedMissionModel,
-            MissionStepCompletionCallback missionStepCompletionCallback)
+            GeneratedMissionModel generatedMissionModel)
     {
         initialMissionModel_ = initialMissionModel;
         generatedMissionModel_ = generatedMissionModel;
-        missionStepCompletionCallback_ = missionStepCompletionCallback;
     }
     public void buildCustomMission()
     {
@@ -41,7 +38,6 @@ public class CustomMissionBuilder implements I_CustomMissionBuilder
                 initialMissionModel_.altitude());
         Vector<Coordinate> waypoints = (Vector<Coordinate>)switchBackPathGenerator.generateSwitchback();
         generatedMissionModel_.setWaypoints(waypoints);
-
 
         DJIWaypointMission mission = new DJIWaypointMission();
         mission.autoFlightSpeed = 10;

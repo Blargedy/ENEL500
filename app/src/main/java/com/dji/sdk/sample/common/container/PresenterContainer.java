@@ -29,8 +29,9 @@ public class PresenterContainer
     {
         mapPresenter_ = new MapPresenter(
                 activity,
+                googleMapsConnectionHandler.googleApiClient(),
                 flightControlView,
-                googleMapsConnectionHandler.googleApiClient());
+                missionContainer.droneLocation());
         missionControlsPresenter_ = new MissionControlsPresenter(
                 activity,
                 flightControlView,

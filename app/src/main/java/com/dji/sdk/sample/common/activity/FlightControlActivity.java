@@ -49,9 +49,10 @@ public class FlightControlActivity extends FragmentActivity
                 pcIpAddress,
                 isLiveModeEnabled);
         missionContainer_ = new MissionContainer(
+                this,
                 integrationLayerContainer_,
                 imageTransferContainer_,
-                this);
+                isLiveModeEnabled);
 
         presenterContainer_ = new PresenterContainer(
                 this,

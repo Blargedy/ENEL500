@@ -22,29 +22,6 @@ public class FlightController implements I_FlightController {
     }
 
     @Override
-    public void takeOff(I_CompletionCallback callback)
-    {
-        flightController_.takeOff(callback);
-    }
-
-    @Override
-    public DJIFlightControllerCurrentState getCurrentState()
-    {
-        return flightController_.getCurrentState();
-    }
-
-    @Override
-    public void getHomeLocation(DJICommonCallbacks.DJICompletionCallbackWith<DJILocationCoordinate2D> callback) {
-        flightController_.getHomeLocation(callback);
-    }
-
-    @Override
-    public DJIFlightLimitation getFlightLimitation()
-    {
-        return flightController_.getFlightLimitation();
-    }
-
-    @Override
     public void setHomeLocationUsingAircraftCurrentLocation(I_CompletionCallback callback)
     {
         flightController_.setHomeLocationUsingAircraftCurrentLocation(callback);
@@ -60,5 +37,11 @@ public class FlightController implements I_FlightController {
     public void cancelGoHome(I_CompletionCallback callback)
     {
         flightController_.cancelGoHome(callback);
+    }
+
+    @Override
+    public DJILocationCoordinate2D getAircraftLocation()
+    {
+        return flightController_.getCurrentState().getAircraftLocation().getCoordinate2D();
     }
 }

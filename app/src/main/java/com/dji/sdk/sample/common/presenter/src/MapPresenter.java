@@ -17,8 +17,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 
-import com.dji.sdk.sample.common.entity.MissionStateEntity;
-import com.dji.sdk.sample.common.entity.MissionStateEnum;
+import com.dji.sdk.sample.common.entity.DroneLocationEntity;
 import com.dji.sdk.sample.common.mission.src.MissionBoundary;
 import com.dji.sdk.sample.common.presenter.api.I_MapPresenter;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
@@ -55,7 +54,9 @@ public class MapPresenter implements
         I_MapPresenter,
         OnMapReadyCallback
 {
-    private BroadcastReceiver receiver_;
+    private BroadcastReceiver waypointReachedReceiver_;
+    private BroadcastReceiver droneLocationChangedReceiver_;
+    private DroneLocationEntity droneLocation_;
 
     private GoogleApiClient client;
     private GoogleMap mMap;
@@ -96,12 +97,15 @@ public class MapPresenter implements
 
     public MapPresenter(
             FragmentActivity fragmentActivity,
+            GoogleApiClient googleApiClient,
             I_MapView mapView,
-            GoogleApiClient googleApiClient) {
+            DroneLocationEntity droneLocation) {
         SupportMapFragment mapFragment = (SupportMapFragment) fragmentActivity.
                 getSupportFragmentManager().findFragmentById(map);
         mapFragment.getMapAsync(this);
+
         client = googleApiClient;
+        this.fragmentActivity = fragmentActivity;
 
         surveyProgressBar = mapView.surveyProgressBar();
         surveyAreaHeightText = mapView.surveyAreaHeightText();
@@ -109,15 +113,16 @@ public class MapPresenter implements
         surveyAreaWidthText = mapView.surveyAreaWidthText();
         surveyAreaWidthBar = mapView.surveyAreaWidthBar();
 
+        droneLocation_ = droneLocation;
         registerWaypointReachedReceiver(fragmentActivity);
-        this.fragmentActivity = fragmentActivity;
+        registerDroneLocationChangedReceiver(fragmentActivity);
     }
 
     private void registerWaypointReachedReceiver(Context context) {
         IntentFilter filter = new IntentFilter();
         filter.addAction(BroadcastIntentNames.WAYPOINT_REACHED);
 
-        receiver_ = new BroadcastReceiver() {
+        waypointReachedReceiver_ = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 int waypointIndex = intent.getIntExtra(WAYPOINT_INDEX, 2000);
@@ -125,7 +130,21 @@ public class MapPresenter implements
             }
         };
 
-        LocalBroadcastManager.getInstance(context).registerReceiver(receiver_, filter);
+        LocalBroadcastManager.getInstance(context).registerReceiver(waypointReachedReceiver_, filter);
+    }
+
+    private void registerDroneLocationChangedReceiver(Context context) {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BroadcastIntentNames.DRONE_LOCATION_CHANGED);
+
+        droneLocationChangedReceiver_ = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                updateDroneLocation();
+            }
+        };
+
+        LocalBroadcastManager.getInstance(context).registerReceiver(droneLocationChangedReceiver_, filter);
     }
 
     @Override
@@ -395,16 +414,22 @@ public class MapPresenter implements
 
         userLocationManager = (LocationManager) fragmentActivity.getSystemService(Context.LOCATION_SERVICE);
         userLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, userLocationListener);
-
     }
 
     private void reachedWaypointAtIndex(int waypointIndex) {
         Log.d("MapPresenter", "Reached waypoint " + waypointIndex);
+
         droneMarker.setPosition(waypointCircleList.get(waypointIndex).getCenter());
         waypointCircleList.get(waypointIndex).setFillColor(Color.argb(150, 0, 0, 255)); // change marker to blue
         numWaypointsCompleted++; // track mission progress
         percentageCompletion = (int) (100.0d * numWaypointsCompleted / numWaypointsTotal);
         // surveyProgressBar.setProgress((int) percentageCompletion);
-        // Implement the colouring of the waypoint at the index corresponding to your list of waypoints
+    }
+
+    private void updateDroneLocation()
+    {
+        Coordinate location = droneLocation_.droneLocation();
+        Log.d("MapPresenter", "droneLocation: latitude=" + location.latitude_ + " longitude=" + location.longitude_);
+        // update the marker on the map
     }
 }
