@@ -32,19 +32,29 @@ public class MissionManager implements I_MissionManager {
     }
 
     @Override
-    public void startMissionExecution(I_CompletionCallback callback){
+    public void startMissionExecution(I_CompletionCallback callback)
+    {
         missionManager_.startMissionExecution(callback);
     }
 
     @Override
-    public void prepareMission(DJIMission mission, DJIMission.DJIMissionProgressHandler progressHandler, I_CompletionCallback callback)
+    public void prepareMission(
+            DJIMission mission,
+            DJIMission.DJIMissionProgressHandler progressHandler,
+            I_CompletionCallback callback)
     {
         missionManager_.prepareMission(mission, progressHandler, callback);
     }
 
     @Override
-    public void stopMissionExecution(I_CompletionCallback callback) {
+    public void stopMissionExecution(I_CompletionCallback callback)
+    {
         missionManager_.stopMissionExecution(callback);
     }
 
+    @Override
+    public void setMissionExecutionFinishedCallback(I_CompletionCallback callback)
+    {
+        missionManager_.setMissionExecutionFinishedCallback(callback);
+    }
 }

@@ -11,6 +11,9 @@ public class InertImageTransferModuleEnder implements I_ImageTransferModuleEnder
     @Override
     public void endImageTransfer(I_ImageTransferModuleEndCompletionCallback callback)
     {
-        callback.onEndImageTransferCompletion();
+        if (callback != null)
+        {
+            callback.onEndImageTransferCompletion();
+        }
     }
 }

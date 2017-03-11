@@ -5,15 +5,14 @@ import android.content.Context;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
-import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
+import com.dji.sdk.sample.common.mission.api.I_NextWaypointMissionStarter;
 import com.dji.sdk.sample.common.mission.src.CustomMissionBuilder;
-import com.dji.sdk.sample.common.mission.api.I_MissionController;
 import com.dji.sdk.sample.common.mission.src.MissionCanceller;
-import com.dji.sdk.sample.common.mission.src.MissionController;
 import com.dji.sdk.sample.common.mission.src.MissionExecutor;
 import com.dji.sdk.sample.common.mission.src.MissionGenerator;
 import com.dji.sdk.sample.common.mission.src.MissionStepCompletionCallback;
-import com.dji.sdk.sample.common.mission.src.MissionPreparer;
+import com.dji.sdk.sample.common.mission.src.NextWaypointMissionStarter;
+import com.dji.sdk.sample.common.mission.src.WaypointMissionCompletionCallback;
 import com.dji.sdk.sample.common.mission.src.WaypointReachedHandler;
 
 /**
@@ -26,12 +25,12 @@ public class MissionContainer
     private GeneratedMissionModel generatedMissionModel_;
     private MissionStateEntity missionState_;
 
-    private MissionController missionController_;
+    private I_NextWaypointMissionStarter nextWaypointMissionStarter_;
+    private WaypointMissionCompletionCallback waypointMissionCompletionCallback_;
 
     private WaypointReachedHandler waypointReachedHandler_;
     private MissionStepCompletionCallback missionStepCompletionCallback_;
     private CustomMissionBuilder customMissionBuilder_;
-    private MissionPreparer missionPreparer_;
     private MissionGenerator missionGenerator_;
 
     private MissionExecutor missionExecutor_;
@@ -48,12 +47,15 @@ public class MissionContainer
         missionState_ = new MissionStateEntity(
                 context);
 
-        missionController_ = new MissionController(
-                integrationLayerContainer.missionManagerSource());
+        nextWaypointMissionStarter_ = new NextWaypointMissionStarter(
+                integrationLayerContainer.missionManagerSource(),
+                generatedMissionModel(),
+                missionState_);
+        waypointMissionCompletionCallback_ = new WaypointMissionCompletionCallback(
+                nextWaypointMissionStarter_);
 
         waypointReachedHandler_ = new WaypointReachedHandler(
                 context,
-                missionController_,
                 imageTransferContainer.imageTransferer());
         missionStepCompletionCallback_ = new MissionStepCompletionCallback(
                 waypointReachedHandler_,
@@ -62,25 +64,25 @@ public class MissionContainer
                 initialMissionModel_,
                 generatedMissionModel_,
                 missionStepCompletionCallback_);
-        missionPreparer_ = new MissionPreparer(
-                integrationLayerContainer.missionManagerSource(),
-                integrationLayerContainer.flightControllerSource(),
-                generatedMissionModel_);
         missionGenerator_ = new MissionGenerator(
                 customMissionBuilder_,
-                missionPreparer_,
-                imageTransferContainer.imageTransferModuleInitializer());
+                integrationLayerContainer.missionManagerSource(),
+                integrationLayerContainer.flightControllerSource(),
+                imageTransferContainer.imageTransferModuleInitializer(),
+                waypointMissionCompletionCallback_);
 
         missionExecutor_ = new MissionExecutor(
                 context,
                 missionGenerator_,
+                nextWaypointMissionStarter_,
                 integrationLayerContainer.missionManagerSource(),
                 missionState_);
         missionCanceller_ = new MissionCanceller(
                 context,
                 missionState_,
                 integrationLayerContainer.missionManagerSource(),
-                integrationLayerContainer.flightControllerSource());
+                integrationLayerContainer.flightControllerSource(),
+                imageTransferContainer.imageTransferModuleEnder());
     }
 
     public InitialMissionModel initialMissionModel()

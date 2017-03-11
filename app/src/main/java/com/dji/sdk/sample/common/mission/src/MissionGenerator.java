@@ -5,10 +5,11 @@ import android.util.Log;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleInitializationCallback;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
+import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
+import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
 import com.dji.sdk.sample.common.mission.api.I_CustomMissionBuilder;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
-import com.dji.sdk.sample.common.mission.api.I_MissionPreparer;
 
 import dji.common.error.DJIError;
 
@@ -24,26 +25,35 @@ public class MissionGenerator implements
     private static final String TAG = "MissionGenerator";
 
     private I_CustomMissionBuilder customMissionBuilder_;
-    private I_MissionPreparer missionPreparer_;
+    private I_MissionManagerSource missionManagerSource_;
+    private I_FlightControllerSource flightControllerSource_;
     private I_ImageTransferModuleInitializer imageTransferModuleInitializer_;
+    private I_CompletionCallback missionExecutionCompletionCallback_;
 
     private I_MissionGenerationCompletionCallback callback_;
 
     public MissionGenerator(
             I_CustomMissionBuilder customMissionBuilder,
-            I_MissionPreparer missionPreparer,
-            I_ImageTransferModuleInitializer imageTransferModuleInitializer)
+            I_MissionManagerSource missionManagerSource,
+            I_FlightControllerSource flightControllerSource,
+            I_ImageTransferModuleInitializer imageTransferModuleInitializer,
+            I_CompletionCallback missionExecutionCompletionCallback)
     {
         customMissionBuilder_ = customMissionBuilder;
-        missionPreparer_ = missionPreparer;
+        missionManagerSource_ = missionManagerSource;
+        flightControllerSource_ = flightControllerSource;
         imageTransferModuleInitializer_ = imageTransferModuleInitializer;
+        missionExecutionCompletionCallback_ = missionExecutionCompletionCallback;
     }
 
     public void generateMission(I_MissionGenerationCompletionCallback callback)
     {
         callback_ = callback;
         customMissionBuilder_.buildCustomMission();
-        missionPreparer_.prepareMission(this);
+        missionManagerSource_.getMissionManager().setMissionExecutionFinishedCallback(
+                missionExecutionCompletionCallback_);
+        flightControllerSource_.getFlightController().
+                setHomeLocationUsingAircraftCurrentLocation(this);
     }
 
     @Override
@@ -55,7 +65,7 @@ public class MissionGenerator implements
         }
         else
         {
-            Log.e(TAG, "Unable to prepare mission : " + error.getDescription());
+            Log.e(TAG, "Unable to set home location : " + error.getDescription());
         }
     }
 

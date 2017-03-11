@@ -12,6 +12,9 @@ public class InertImageTransferModuleInitializer implements I_ImageTransferModul
     public void initializeImageTransferModulePriorToFlight(
             I_ImageTransferModuleInitializationCallback callback)
     {
-        callback.onImageTransferModuleInitializationCompletion();
+        if (callback != null)
+        {
+            callback.onImageTransferModuleInitializationCompletion();
+        }
     }
 }

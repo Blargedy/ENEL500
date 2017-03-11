@@ -8,7 +8,6 @@ import android.util.Log;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
-import com.dji.sdk.sample.common.mission.api.I_MissionController;
 import com.dji.sdk.sample.common.mission.api.I_WaypointReachedHandler;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.utility.IntentExtraKeys;
@@ -27,16 +26,13 @@ public class WaypointReachedHandler implements
     private static final String TAG = "WaypointReachedHandler";
 
     private Context context_;
-    private I_MissionController missionController_;
     private I_ImageTransferer imageTransferer_;
 
     public WaypointReachedHandler(
             Context context,
-            I_MissionController missionController,
             I_ImageTransferer imageTransferer)
     {
         context_ = context;
-        missionController_ = missionController;
         imageTransferer_ = imageTransferer;
     }
 
@@ -61,7 +57,7 @@ public class WaypointReachedHandler implements
         if(waypointIndex %5 == 0)
         {
             Log.e(TAG, "pausing mission ");
-            missionController_.pauseMission(this);
+            //missionController_.pauseMission(this);
         }
     }
 
@@ -82,18 +78,6 @@ public class WaypointReachedHandler implements
     @Override
     public void onImageTransferCompletion()
     {
-        missionController_.resumeMission(new I_CompletionCallback() {
-            @Override
-            public void onResult(DJIError error) {
-                if (error == null)
-                {
-                    Log.e(TAG, "success: resumed mission ");
-                }
-                else
-                {
-                    Log.e(TAG, "error: unable to resume mission " + error.getDescription());
-                }
-            }
-        });
+        //missionController_.resumeMission(null);
     }
 }

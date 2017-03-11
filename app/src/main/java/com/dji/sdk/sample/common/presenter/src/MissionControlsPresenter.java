@@ -104,7 +104,7 @@ public class MissionControlsPresenter implements
                 break;
 
             case HOVERING:
-                missionState_.setCurrentMissionState(MissionStateEnum.CANCEL_MISSION);
+                missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME);
                 break;
 
             default:

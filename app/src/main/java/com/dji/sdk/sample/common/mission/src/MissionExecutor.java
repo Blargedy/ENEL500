@@ -10,9 +10,9 @@ import android.util.Log;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
-import com.dji.sdk.sample.common.mission.api.I_MissionController;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
+import com.dji.sdk.sample.common.mission.api.I_NextWaypointMissionStarter;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
 
@@ -31,16 +31,19 @@ public class MissionExecutor implements
     private BroadcastReceiver receiver_;
 
     private I_MissionGenerator missionGenerator_;
+    private I_NextWaypointMissionStarter nextWaypointMissionStarter_;
     private I_MissionManagerSource missionManagerSource_;
     private MissionStateEntity missionState_;
 
     public MissionExecutor(
             Context context,
             I_MissionGenerator missionGenerator,
+            I_NextWaypointMissionStarter nextWaypointMissionStarter,
             I_MissionManagerSource missionManagerSource,
             MissionStateEntity missionState)
     {
         missionGenerator_ = missionGenerator;
+        nextWaypointMissionStarter_ = nextWaypointMissionStarter;
         missionManagerSource_ = missionManagerSource;
         missionState_ = missionState;
 
@@ -71,7 +74,7 @@ public class MissionExecutor implements
                 break;
 
             case START_MISSION:
-                missionManagerSource_.getMissionManager().startMissionExecution(this);
+                nextWaypointMissionStarter_.startNextWaypointMission(this);
                 break;
 
             case HOVER_NOW:

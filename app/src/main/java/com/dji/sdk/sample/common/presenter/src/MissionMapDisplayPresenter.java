@@ -72,7 +72,7 @@ public class MissionMapDisplayPresenter
                 break;
 
             case VIEW_MISSION:
-                mapPresenter_.displayMissionWaypoints(generatedMissionModel_.waypoints_);
+                mapPresenter_.displayMissionWaypoints(generatedMissionModel_.waypoints());
                 break;
 
             default:

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
+import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleEnder;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
 import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
@@ -28,16 +29,19 @@ public class MissionCanceller implements I_CompletionCallback
     private MissionStateEntity missionState_;
     private I_MissionManagerSource missionManagerSource_;
     private I_FlightControllerSource flightControllerSource_;
+    private I_ImageTransferModuleEnder imageTransferModuleEnder_;
 
     public MissionCanceller(
             Context context,
             MissionStateEntity missionState,
             I_MissionManagerSource missionManagerSource,
-            I_FlightControllerSource flightControllerSource)
+            I_FlightControllerSource flightControllerSource,
+            I_ImageTransferModuleEnder imageTransferModuleEnder)
     {
         missionState_ = missionState;
         missionManagerSource_ = missionManagerSource;
         flightControllerSource_ = flightControllerSource;
+        imageTransferModuleEnder_ = imageTransferModuleEnder;
 
         registerMissionStateChangedReceiver(context);
     }
@@ -66,6 +70,7 @@ public class MissionCanceller implements I_CompletionCallback
                 break;
 
             case GO_HOME:
+                imageTransferModuleEnder_.endImageTransfer(null);
                 flightControllerSource_.getFlightController().goHome(this);
                 break;
 
@@ -100,7 +105,6 @@ public class MissionCanceller implements I_CompletionCallback
                 break;
 
             case GO_HOME:
-                //TODO call completion callback for ending mission maybe?
                 missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
                 break;
 

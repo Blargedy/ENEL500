@@ -16,4 +16,5 @@ public interface I_MissionManager
              DJIMission.DJIMissionProgressHandler progressHandler,
              I_CompletionCallback callback);
     void stopMissionExecution(I_CompletionCallback callback);
+    void setMissionExecutionFinishedCallback(I_CompletionCallback callback);
 }
