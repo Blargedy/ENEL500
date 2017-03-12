@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.mission.src;
 
+import android.util.Log;
+
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.mission.api.I_CustomMissionBuilder;
@@ -18,8 +20,6 @@ import static dji.sdk.missionmanager.DJIWaypointMission.DJI_WAYPOINT_MISSION_MAX
 
 public class CustomMissionBuilder implements I_CustomMissionBuilder
 {
-    private static final int maximumWaypointsPerMission = 99;
-
     private InitialMissionModel initialMissionModel_;
     private GeneratedMissionModel generatedMissionModel_;
 
@@ -44,8 +44,7 @@ public class CustomMissionBuilder implements I_CustomMissionBuilder
 
         for (int i = 0; i < waypoints.size(); i++)
         {
-//            if (i % DJI_WAYPOINT_MISSION_MAXIMUM_WAYPOINT_COUNT == 0 && i != 0)
-                if (i % 3 == 0 && i != 0)
+            if (i % DJI_WAYPOINT_MISSION_MAXIMUM_WAYPOINT_COUNT == 0 && i != 0)
             {
                 generatedMissionModel_.addWaypointMission(mission);
                 mission = new DJIWaypointMission();
@@ -58,7 +57,6 @@ public class CustomMissionBuilder implements I_CustomMissionBuilder
                     initialMissionModel_.altitude());
             waypoint.addAction(new DJIWaypoint.DJIWaypointAction(
                     DJIWaypoint.DJIWaypointActionType.StartTakePhoto, 0));
-
             mission.addWaypoint(waypoint);
         }
         generatedMissionModel_.addWaypointMission(mission);

@@ -1,7 +1,5 @@
 package com.dji.sdk.sample.common.mission.src;
 
-import android.util.Log;
-
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_NextWaypointMissionStarter;
 
@@ -24,18 +22,6 @@ public class WaypointMissionCompletionCallback implements I_CompletionCallback
     @Override
     public void onResult(DJIError error)
     {
-        nextWaypointMissionStarter_.startNextWaypointMission(new I_CompletionCallback() {
-            @Override
-            public void onResult(DJIError error) {
-                if (error == null)
-                {
-                    Log.d("WaypointMissionCompletionCallback", "successfully started next mission");
-                }
-                else
-                {
-                    Log.e("WaypointMissionCompletionCallback", error.getDescription());
-                }
-            }
-        });
+        nextWaypointMissionStarter_.startNextWaypointMission(null);
     }
 }

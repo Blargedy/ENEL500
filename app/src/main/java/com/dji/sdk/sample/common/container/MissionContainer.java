@@ -87,6 +87,7 @@ public class MissionContainer
                 integrationLayerContainer.missionManagerSource(),
                 integrationLayerContainer.flightControllerSource(),
                 imageTransferContainer.imageTransferModuleInitializer(),
+                imageTransferContainer.cameraModeChanger(),
                 waypointMissionCompletionCallback_,
                 missionProgressStatusCallback_);
 

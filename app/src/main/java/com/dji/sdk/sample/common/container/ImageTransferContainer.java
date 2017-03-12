@@ -1,5 +1,6 @@
 package com.dji.sdk.sample.common.container;
 
+import com.dji.sdk.sample.common.imageTransfer.api.I_CameraModeChanger;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneMediaListInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleEnder;
@@ -105,5 +106,10 @@ public class ImageTransferContainer
     public I_DroneMediaListInitializer droneMediaListInitializer()
     {
         return downloadSelector_;
+    }
+
+    public I_CameraModeChanger cameraModeChanger()
+    {
+        return cameraModeChanger_;
     }
 }

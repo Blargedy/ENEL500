@@ -36,7 +36,7 @@ public class TestImageTransferModuleInitializer
             mediaListInitializer_,
             androidToPcImageCopier_);
 
-    private I_ImageTransferModuleInitializationCallback callback_ = mock(I_ImageTransferModuleInitializationCallback.class);
+    private I_CompletionCallback callback_ = mock(I_CompletionCallback.class);
 
     @Test
     public void willStartTheAndroidToPCImageCopierBackgroundThread()
@@ -85,7 +85,7 @@ public class TestImageTransferModuleInitializer
 
         patient_.initializeImageTransferModulePriorToFlight(callback_);
 
-        verify(callback_).onImageTransferModuleInitializationCompletion();
+        verify(callback_).onResult(null);
     }
 
     private void makeModeChangerCallOnResultCallback()

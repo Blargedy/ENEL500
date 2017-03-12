@@ -2,8 +2,8 @@ package com.dji.sdk.sample.common.mission.src;
 
 import android.util.Log;
 
+import com.dji.sdk.sample.common.imageTransfer.api.I_CameraModeChanger;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
-import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleInitializationCallback;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
 import com.dji.sdk.sample.common.integration.api.I_MissionManager;
@@ -21,15 +21,18 @@ import dji.common.error.DJIError;
 
 public class MissionGenerator implements
         I_MissionGenerator,
-        I_CompletionCallback,
-        I_ImageTransferModuleInitializationCallback
+        I_CompletionCallback
 {
     private static final String TAG = "MissionGenerator";
+
+    private enum ExpectedCallback { SET_HOME_LOCATION, INITIALIZE_IMAGE_TRANSFER, CHANGE_CAMERA_MODE }
+    private ExpectedCallback expectedCallback_;
 
     private I_CustomMissionBuilder customMissionBuilder_;
     private I_MissionManagerSource missionManagerSource_;
     private I_FlightControllerSource flightControllerSource_;
     private I_ImageTransferModuleInitializer imageTransferModuleInitializer_;
+    private I_CameraModeChanger cameraModeChanger_;
     private I_CompletionCallback missionExecutionCompletionCallback_;
     private I_WaypointMissionProgressStatusCallback missionProgressStatusCallback_;
 
@@ -40,6 +43,7 @@ public class MissionGenerator implements
             I_MissionManagerSource missionManagerSource,
             I_FlightControllerSource flightControllerSource,
             I_ImageTransferModuleInitializer imageTransferModuleInitializer,
+            I_CameraModeChanger cameraModeChanger,
             I_CompletionCallback missionExecutionCompletionCallback,
             I_WaypointMissionProgressStatusCallback missionProgressStatusCallback)
     {
@@ -47,6 +51,7 @@ public class MissionGenerator implements
         missionManagerSource_ = missionManagerSource;
         flightControllerSource_ = flightControllerSource;
         imageTransferModuleInitializer_ = imageTransferModuleInitializer;
+        cameraModeChanger_ = cameraModeChanger;
         missionExecutionCompletionCallback_ = missionExecutionCompletionCallback;
         missionProgressStatusCallback_ = missionProgressStatusCallback;
     }
@@ -60,8 +65,8 @@ public class MissionGenerator implements
         missionManager.setMissionExecutionFinishedCallback(missionExecutionCompletionCallback_);
         missionManager.setMissionProgressStatusCallback(missionProgressStatusCallback_);
 
-        flightControllerSource_.getFlightController().
-                setHomeLocationUsingAircraftCurrentLocation(this);
+        expectedCallback_ = ExpectedCallback.SET_HOME_LOCATION;
+        flightControllerSource_.getFlightController().setHomeLocationUsingAircraftCurrentLocation(this);
     }
 
     @Override
@@ -69,17 +74,26 @@ public class MissionGenerator implements
     {
         if (error == null)
         {
-            imageTransferModuleInitializer_.initializeImageTransferModulePriorToFlight(this);
+            switch (expectedCallback_)
+            {
+                case SET_HOME_LOCATION:
+                    expectedCallback_ = ExpectedCallback.INITIALIZE_IMAGE_TRANSFER;
+                    imageTransferModuleInitializer_.initializeImageTransferModulePriorToFlight(this);
+                    break;
+                case INITIALIZE_IMAGE_TRANSFER:
+                    expectedCallback_ = ExpectedCallback.CHANGE_CAMERA_MODE;
+                    cameraModeChanger_.changeToShootPhotoMode(this);
+                    break;
+                case CHANGE_CAMERA_MODE:
+                    callback_.onMissionGenerationCompletion();
+                    break;
+                default:
+                    break;
+            }
         }
         else
         {
-            Log.e(TAG, "Unable to set home location : " + error.getDescription());
+            Log.e(TAG, error.getDescription());
         }
-    }
-
-    @Override
-    public void onImageTransferModuleInitializationCompletion()
-    {
-        callback_.onMissionGenerationCompletion();
     }
 }

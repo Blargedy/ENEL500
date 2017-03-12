@@ -31,7 +31,7 @@ public class ImageTransferModuleInitializer implements
     private I_DroneMediaListInitializer mediaListInitializer_;
     private AndroidToPcImageCopier androidToPcImageCopier_;
 
-    private I_ImageTransferModuleInitializationCallback callback_;
+    private I_CompletionCallback callback_;
 
     public ImageTransferModuleInitializer(
             I_CameraModeChanger modeChanger,
@@ -46,8 +46,7 @@ public class ImageTransferModuleInitializer implements
     }
 
     @Override
-    public void initializeImageTransferModulePriorToFlight(
-            I_ImageTransferModuleInitializationCallback callback)
+    public void initializeImageTransferModulePriorToFlight(I_CompletionCallback callback)
     {
         callback_ = callback;
         androidToPcImageCopier_.start();
@@ -63,7 +62,7 @@ public class ImageTransferModuleInitializer implements
         }
         else
         {
-            Log.e(TAG, "Failed to change camera mode : " + error.getDescription());
+            callback_.onResult(error);
         }
     }
 
@@ -71,13 +70,13 @@ public class ImageTransferModuleInitializer implements
     public void onSuccess(ArrayList<DJIMedia> mediaList)
     {
         mediaListInitializer_.initializeDroneMediaList(mediaList);
-        callback_.onImageTransferModuleInitializationCompletion();
+        callback_.onResult(null);
     }
 
     @Override
     public void onFailure(DJIError error)
     {
-        Log.e(TAG, "Failed to fetched media list");
+        callback_.onResult(error);
     }
 
     @Override

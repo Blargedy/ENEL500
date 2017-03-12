@@ -10,11 +10,13 @@ import com.dji.sdk.sample.common.container.ImageTransferContainer;
 import com.dji.sdk.sample.common.container.IntegrationLayerContainer;
 import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
 import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleInitializationCallback;
+import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 import com.dji.sdk.sample.common.utility.IntentExtraKeys;
 
 import java.util.ArrayList;
 
+import dji.common.error.DJIError;
 import dji.sdk.camera.DJIMedia;
 
 /**
@@ -63,9 +65,9 @@ public class MainMenuPresenter implements View.OnClickListener
 
             imageTransferContainer
                     .imageTransferModuleInitializer().initializeImageTransferModulePriorToFlight(
-                    new I_ImageTransferModuleInitializationCallback() {
+                    new I_CompletionCallback() {
                         @Override
-                        public void onImageTransferModuleInitializationCompletion() {
+                        public void onResult(DJIError error) {
                             imageTransferContainer.droneMediaListInitializer().initializeDroneMediaList(new ArrayList<DJIMedia>());
                             imageTransferContainer.imageTransferer().transferNewImagesFromDrone(new I_ImageTransferCompletionCallback() {
                                 @Override

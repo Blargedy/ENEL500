@@ -44,7 +44,7 @@ public class WaypointMissionProgressStatusCallback implements I_WaypointMissionP
 
             if (waypointMissionStatus.isWaypointReached())
             {
-                iniateImageTransferIfNecessary();
+                initiateImageTransferIfNecessary();
                 waypointReachedNotifier_.notifyWaypointAtIndexHasBeenReached(nextWaypointIndex_);
                 nextWaypointIndex_++;
             }
@@ -53,7 +53,7 @@ public class WaypointMissionProgressStatusCallback implements I_WaypointMissionP
         }
     }
 
-    private void iniateImageTransferIfNecessary()
+    private void initiateImageTransferIfNecessary()
     {
         if (nextWaypointIndex_ != 0 && nextWaypointIndex_ % IMAGE_TRANSFER_DELAY == 0)
         {

@@ -1,6 +1,6 @@
 package com.dji.sdk.sample.common.imageTransfer.api;
 
-import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleInitializationCallback;
+import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 
 /**
  * Created by Julia on 2017-02-21.
@@ -8,6 +8,5 @@ import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleIn
 
 public interface I_ImageTransferModuleInitializer
 {
-    void initializeImageTransferModulePriorToFlight(
-            I_ImageTransferModuleInitializationCallback callback);
+    void initializeImageTransferModulePriorToFlight(I_CompletionCallback callback);
 }
