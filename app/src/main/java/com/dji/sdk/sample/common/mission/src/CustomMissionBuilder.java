@@ -44,7 +44,8 @@ public class CustomMissionBuilder implements I_CustomMissionBuilder
 
         for (int i = 0; i < waypoints.size(); i++)
         {
-            if (i % DJI_WAYPOINT_MISSION_MAXIMUM_WAYPOINT_COUNT == 0 && i != 0)
+//            if (i % DJI_WAYPOINT_MISSION_MAXIMUM_WAYPOINT_COUNT == 0 && i != 0)
+                if (i % 3 == 0 && i != 0)
             {
                 generatedMissionModel_.addWaypointMission(mission);
                 mission = new DJIWaypointMission();

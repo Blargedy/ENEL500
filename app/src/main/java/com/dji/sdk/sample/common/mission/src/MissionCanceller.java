@@ -88,15 +88,16 @@ public class MissionCanceller implements I_CompletionCallback
     {
         if (error == null)
         {
-            changeMissionStateAfterCommandIsExecuted();
+            changeMissionStateAfterCommandIsExecutedSuccessfully();
         }
         else
         {
             Log.e(TAG, error.getDescription());
+            changeMissionStateAfterCommandFails();
         }
     }
 
-    private void changeMissionStateAfterCommandIsExecuted()
+    private void changeMissionStateAfterCommandIsExecutedSuccessfully()
     {
         switch (missionState_.getCurrentMissionState())
         {
@@ -112,6 +113,18 @@ public class MissionCanceller implements I_CompletionCallback
                 missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME_PAUSED);
                 break;
 
+            default:
+                break;
+        }
+    }
+
+    private void changeMissionStateAfterCommandFails()
+    {
+        switch (missionState_.getCurrentMissionState())
+        {
+            case CANCEL_MISSION:
+                missionState_.setCurrentMissionState(MissionStateEnum.CANCEL_MISSION);
+                break;
             default:
                 break;
         }

@@ -93,7 +93,7 @@ public class MissionExecutor implements
     @Override
     public void onMissionGenerationCompletion()
     {
-        changeMissionStateAfterCommandIsExecuted();
+        changeMissionStateAfterCommandIsExecutedSuccessfully();
     }
 
     @Override
@@ -101,15 +101,16 @@ public class MissionExecutor implements
     {
         if(error == null)
         {
-            changeMissionStateAfterCommandIsExecuted();
+            changeMissionStateAfterCommandIsExecutedSuccessfully();
         }
         else
         {
             Log.e(TAG, error.getDescription());
+            changeMissionStateAfterCommandFails();
         }
     }
 
-    private void changeMissionStateAfterCommandIsExecuted()
+    private void changeMissionStateAfterCommandIsExecutedSuccessfully()
     {
         switch (missionState_.getCurrentMissionState())
         {
@@ -129,6 +130,18 @@ public class MissionExecutor implements
                 missionState_.setCurrentMissionState(MissionStateEnum.MISSION_EXECUTING);
                 break;
 
+            default:
+                break;
+        }
+    }
+
+    private void changeMissionStateAfterCommandFails()
+    {
+        switch (missionState_.getCurrentMissionState())
+        {
+            case HOVER_NOW:
+                missionState_.setCurrentMissionState(MissionStateEnum.HOVER_NOW);
+                break;
             default:
                 break;
         }
