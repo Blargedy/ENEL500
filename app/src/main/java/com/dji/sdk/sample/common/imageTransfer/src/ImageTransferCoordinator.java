@@ -3,7 +3,7 @@ package com.dji.sdk.sample.common.imageTransfer.src;
 
 import android.util.Log;
 
-import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaDownloadModeChanger;
+import com.dji.sdk.sample.common.imageTransfer.api.I_CameraModeChanger;
 import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaListFetcher;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadSelector;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneToAndroidImageDownloader;
@@ -28,7 +28,13 @@ public class ImageTransferCoordinator implements
 {
     private static final String TAG = "ImageTransferCoordinator";
 
-    private I_CameraMediaDownloadModeChanger modeChanger_;
+    private enum ExpectedCallback {
+        SWITCH_TO_DOWNLOAD,
+        DOWNLOAD_PHOTOS,
+        SWITCH_TO_SHOOT_PHOTO }
+    ExpectedCallback nextCallback_;
+
+    private I_CameraModeChanger modeChanger_;
     private I_CameraMediaListFetcher mediaListFetcher_;
     private I_DroneImageDownloadSelector downloadSelector_;
     private I_DroneToAndroidImageDownloader imageDownloader_;
@@ -36,7 +42,7 @@ public class ImageTransferCoordinator implements
     private I_ImageTransferCompletionCallback completionCallback_;
 
     public ImageTransferCoordinator(
-            I_CameraMediaDownloadModeChanger modeChanger,
+            I_CameraModeChanger modeChanger,
             I_CameraMediaListFetcher mediaListFetcher,
             I_DroneImageDownloadSelector downloadSelector,
             I_DroneToAndroidImageDownloader imageDownloader)
@@ -51,7 +57,9 @@ public class ImageTransferCoordinator implements
     public void transferNewImagesFromDrone(I_ImageTransferCompletionCallback callback)
     {
         completionCallback_ = callback;
-        modeChanger_.changeCameraModeForMediaDownload(this);
+
+        nextCallback_ = ExpectedCallback.SWITCH_TO_DOWNLOAD;
+        modeChanger_.changeToMediaDownloadMode(this);
     }
 
     @Override
@@ -59,11 +67,25 @@ public class ImageTransferCoordinator implements
     {
         if (error == null)
         {
-            mediaListFetcher_.fetchMediaListFromCamera(this);
+            switch (nextCallback_)
+            {
+                case SWITCH_TO_DOWNLOAD:
+                    mediaListFetcher_.fetchMediaListFromCamera(this);
+                    break;
+                case DOWNLOAD_PHOTOS:
+                    nextCallback_ = ExpectedCallback.SWITCH_TO_SHOOT_PHOTO;
+                    modeChanger_.changeToShootPhotoMode(this);
+                    break;
+                case SWITCH_TO_SHOOT_PHOTO:
+                    completionCallback_.onImageTransferCompletion();
+                    break;
+                default:
+                    break;
+            }
         }
         else
         {
-            Log.e(TAG, "Failed to change camera mode : " + error.getDescription());
+            Log.e(TAG, error.getDescription());
         }
     }
 
@@ -72,7 +94,9 @@ public class ImageTransferCoordinator implements
     {
         ArrayList<DJIMedia> imagesToDownload = downloadSelector_
                 .determineImagesForDownloadFromMediaList(currentMediaList);
-        imageDownloader_.downloadImagesFromDrone(imagesToDownload, completionCallback_);
+
+        nextCallback_ = ExpectedCallback.DOWNLOAD_PHOTOS;
+        imageDownloader_.downloadImagesFromDrone(imagesToDownload, this);
     }
 
     @Override

@@ -17,7 +17,6 @@ public class ImageTransferModuleEnder implements
 {
     private static final String TAG = "ImageTransferModuleEnder";
 
-
     private I_ImageTransferer droneToAndroidImageTransferer_;
     private AndroidToPcImageCopier androidToPcImageCopier_;
 
@@ -49,6 +48,9 @@ public class ImageTransferModuleEnder implements
             Log.e(TAG, e.toString());
         }
 
-        callback_.onEndImageTransferCompletion();
+        if (callback_ != null)
+        {
+            callback_.onEndImageTransferCompletion();
+        }
     }
 }

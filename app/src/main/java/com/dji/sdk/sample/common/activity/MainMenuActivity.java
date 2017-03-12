@@ -3,6 +3,8 @@ package com.dji.sdk.sample.common.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.dji.sdk.sample.common.container.ImageTransferContainer;
+import com.dji.sdk.sample.common.container.IntegrationLayerContainer;
 import com.dji.sdk.sample.common.presenter.src.MainMenuPresenter;
 import com.dji.sdk.sample.common.utility.ApplicationContextManager;
 import com.dji.sdk.sample.common.view.src.MainMenuView;

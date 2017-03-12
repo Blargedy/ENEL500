@@ -1,6 +1,6 @@
 package dji.developer.sample.imageTransfer;
 
-import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaDownloadModeChanger;
+import com.dji.sdk.sample.common.imageTransfer.api.I_CameraModeChanger;
 import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaListFetcher;
 import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleInitializationCallback;
 import com.dji.sdk.sample.common.imageTransfer.src.AndroidToPcImageCopier;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 
 public class TestImageTransferModuleInitializer
 {
-    private I_CameraMediaDownloadModeChanger modeChanger_ = mock(I_CameraMediaDownloadModeChanger.class);
+    private I_CameraModeChanger modeChanger_ = mock(I_CameraModeChanger.class);
     private I_CameraMediaListFetcher mediaListFetcher_ = mock(I_CameraMediaListFetcher.class);
     private I_DroneMediaListInitializer mediaListInitializer_ = mock(I_DroneMediaListInitializer.class);
     private AndroidToPcImageCopier androidToPcImageCopier_ = mock(AndroidToPcImageCopier.class);
@@ -51,7 +51,7 @@ public class TestImageTransferModuleInitializer
     {
         patient_.initializeImageTransferModulePriorToFlight(callback_);
 
-        verify(modeChanger_).changeCameraModeForMediaDownload(patient_);
+        verify(modeChanger_).changeToMediaDownloadMode(patient_);
     }
 
     @Test
@@ -96,7 +96,7 @@ public class TestImageTransferModuleInitializer
                 ((I_CompletionCallback)args[0]).onResult(null);
                 return null;
             }})
-                .when(modeChanger_).changeCameraModeForMediaDownload(same(patient_));
+                .when(modeChanger_).changeToMediaDownloadMode(same(patient_));
     }
 
     private void makeMediaListFetcherCallOnSuccessCallback(

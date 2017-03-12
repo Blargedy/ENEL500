@@ -1,6 +1,6 @@
 package com.dji.sdk.sample.common.imageTransfer.api;
 
-import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
+import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 
 import java.util.ArrayList;
 
@@ -14,5 +14,5 @@ public interface I_DroneToAndroidImageDownloader
 {
     void downloadImagesFromDrone(
             ArrayList<DJIMedia> imagesToDownload,
-            I_ImageTransferCompletionCallback callback);
+            I_CompletionCallback callback);
 }

@@ -2,8 +2,8 @@ package dji.developer.sample.imageTransfer;
 
 import com.dji.sdk.sample.common.imageTransfer.src.DroneToAndroidImageDownloader;
 import com.dji.sdk.sample.common.imageTransfer.api.I_AndroidToPcImageCopier;
-import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferPathsSource;
+import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_MediaDataFetcher;
 import com.dji.sdk.sample.common.integration.api.I_MediaDownloadListener;
 
@@ -38,7 +38,7 @@ public class TestDroneToAndroidImageDownloader
             mediaDataFetcher_,
             androidToPcImageCopier_);
 
-    private I_ImageTransferCompletionCallback completionCallback_ = mock(I_ImageTransferCompletionCallback.class);
+    private I_CompletionCallback completionCallback_ = mock(I_CompletionCallback.class);
 
     @Test
     public void willRequestAndroidImagePathFromPathSource()
@@ -93,7 +93,7 @@ public class TestDroneToAndroidImageDownloader
         InOrder inOrder = inOrder(mediaDataFetcher_, completionCallback_);
         inOrder.verify(mediaDataFetcher_, times(size)).fetchMediaData(
                 any(DJIMedia.class), any(File.class), any(I_MediaDownloadListener.class));
-        inOrder.verify(completionCallback_).onImageTransferCompletion();
+        inOrder.verify(completionCallback_).onResult(null);
     }
 
     private ArrayList<DJIMedia> makeListOfImages(int size)

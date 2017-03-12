@@ -1,11 +1,12 @@
 package com.dji.sdk.sample.common.container;
 
+import com.dji.sdk.sample.common.imageTransfer.api.I_DroneMediaListInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.src.AndroidToPcImageCopier;
-import com.dji.sdk.sample.common.imageTransfer.src.CameraMediaDownloadModeChanger;
+import com.dji.sdk.sample.common.imageTransfer.src.CameraModeChanger;
 import com.dji.sdk.sample.common.imageTransfer.src.CameraMediaListFetcher;
 import com.dji.sdk.sample.common.imageTransfer.src.DroneImageDownloadSelector;
 import com.dji.sdk.sample.common.imageTransfer.src.DroneToAndroidImageDownloader;
@@ -23,7 +24,7 @@ import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 
 public class ImageTransferContainer
 {
-    private CameraMediaDownloadModeChanger cameraModeChanger_;
+    private CameraModeChanger cameraModeChanger_;
     private CameraMediaListFetcher mediaListFetcher_;
     private DroneImageDownloadSelector downloadSelector_;
 
@@ -42,8 +43,9 @@ public class ImageTransferContainer
             String pcIpAddress,
             boolean isLiveModeEnabled)
     {
-        cameraModeChanger_ = new CameraMediaDownloadModeChanger(
-                integrationLayerContainer.mediaManagerSource());
+        cameraModeChanger_ = new CameraModeChanger(
+                integrationLayerContainer.mediaManagerSource(),
+                integrationLayerContainer.cameraSource());
         mediaListFetcher_ = new CameraMediaListFetcher(
                 integrationLayerContainer.mediaManagerSource(),
                 downloadSelector_,
@@ -98,5 +100,10 @@ public class ImageTransferContainer
     public I_ImageTransferModuleEnder imageTransferModuleEnder()
     {
         return imageTransferModuleEnder_;
+    }
+
+    public I_DroneMediaListInitializer droneMediaListInitializer()
+    {
+        return downloadSelector_;
     }
 }

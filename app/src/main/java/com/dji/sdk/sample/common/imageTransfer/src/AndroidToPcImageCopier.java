@@ -2,8 +2,10 @@ package com.dji.sdk.sample.common.imageTransfer.src;
 
 import android.util.Log;
 
+import com.dji.sdk.sample.common.container.ImageTransferContainer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_AndroidToPcImageCopier;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,9 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Created by Julia on 2017-03-01.
  */
 
-public class AndroidToPcImageCopier
-        extends Thread
-        implements I_AndroidToPcImageCopier
+public class AndroidToPcImageCopier extends Thread implements I_AndroidToPcImageCopier
 {
     private static final String TAG = "DroneToAndroidImageDownloader";
 
@@ -57,7 +57,8 @@ public class AndroidToPcImageCopier
             String androidImagePath = imagesToTransfer_.remove();
 
             try {
-                copyFile(androidImagePath);
+                copyFileToPc(androidImagePath);
+                deleteFileOnAndroid(androidImagePath);
             } catch (IOException e) {
                 Log.e(TAG, "Failed to send " + androidImagePath + ": " + e.toString());
             }
@@ -76,16 +77,16 @@ public class AndroidToPcImageCopier
         }
     }
 
-    private void copyFile(String androidImagePath) throws IOException {
+    private void copyFileToPc(String androidImagePath) throws IOException
+    {
         Socket socket = new Socket(pcIpAddress_, 6789);
         File image = new File(androidImagePath);
 
         InputStream in = new FileInputStream(image);
         OutputStream out = socket.getOutputStream();
 
-        PrintWriter writer = new PrintWriter(out);
-        writer.println(image.getName());
-        writer.flush();
+        DataOutputStream dataOutputStream = new DataOutputStream(out);
+        dataOutputStream.writeUTF(image.getName());
 
         int count;
         byte[] buffer = new byte[16384];
@@ -97,5 +98,11 @@ public class AndroidToPcImageCopier
         in.close();
         out.close();
         socket.close();
+    }
+
+    private void deleteFileOnAndroid(String androidImagePath)
+    {
+        File imageFile = new File(androidImagePath);
+        imageFile.delete();
     }
 }

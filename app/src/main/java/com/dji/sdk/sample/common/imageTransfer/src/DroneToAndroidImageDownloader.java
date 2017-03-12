@@ -6,6 +6,7 @@ import com.dji.sdk.sample.common.imageTransfer.api.I_AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneToAndroidImageDownloader;
 import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferPathsSource;
+import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_MediaDataFetcher;
 import com.dji.sdk.sample.common.integration.api.I_MediaDownloadListener;
 
@@ -29,7 +30,7 @@ public class DroneToAndroidImageDownloader implements
     private I_AndroidToPcImageCopier androidToPcImageCopier_;
 
     private ArrayList<DJIMedia> imagesLeftToDownload_;
-    private I_ImageTransferCompletionCallback completionCallback_;
+    private I_CompletionCallback completionCallback_;
 
     public DroneToAndroidImageDownloader(
             I_ImageTransferPathsSource pathSource,
@@ -44,7 +45,7 @@ public class DroneToAndroidImageDownloader implements
     @Override
     public void downloadImagesFromDrone(
             ArrayList<DJIMedia> imagesToDownload,
-            I_ImageTransferCompletionCallback callback)
+            I_CompletionCallback callback)
     {
         imagesLeftToDownload_ = imagesToDownload;
         completionCallback_ = callback;
@@ -62,7 +63,7 @@ public class DroneToAndroidImageDownloader implements
         }
         else
         {
-            completionCallback_.onImageTransferCompletion();
+            completionCallback_.onResult(null);
         }
     }
 
@@ -85,6 +86,6 @@ public class DroneToAndroidImageDownloader implements
     @Override
     public void onFailure(DJIError error)
     {
-        Log.e(TAG, "Failed to download an image : " + error.getDescription());
+        completionCallback_.onResult(error);
     }
 }

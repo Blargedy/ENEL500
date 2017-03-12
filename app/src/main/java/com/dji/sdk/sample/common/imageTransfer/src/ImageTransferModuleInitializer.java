@@ -2,7 +2,7 @@ package com.dji.sdk.sample.common.imageTransfer.src;
 
 import android.util.Log;
 
-import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaDownloadModeChanger;
+import com.dji.sdk.sample.common.imageTransfer.api.I_CameraModeChanger;
 import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaListFetcher;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneMediaListInitializer;
 import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleInitializationCallback;
@@ -26,7 +26,7 @@ public class ImageTransferModuleInitializer implements
 {
     private static final String TAG = "ImageTransferModuleInitializer";
 
-    private I_CameraMediaDownloadModeChanger modeChanger_;
+    private I_CameraModeChanger modeChanger_;
     private I_CameraMediaListFetcher mediaListFetcher_;
     private I_DroneMediaListInitializer mediaListInitializer_;
     private AndroidToPcImageCopier androidToPcImageCopier_;
@@ -34,7 +34,7 @@ public class ImageTransferModuleInitializer implements
     private I_ImageTransferModuleInitializationCallback callback_;
 
     public ImageTransferModuleInitializer(
-            I_CameraMediaDownloadModeChanger modeChanger,
+            I_CameraModeChanger modeChanger,
             I_CameraMediaListFetcher mediaListFetcher,
             I_DroneMediaListInitializer mediaListInitializer,
             AndroidToPcImageCopier androidToPcImageCopier)
@@ -51,7 +51,7 @@ public class ImageTransferModuleInitializer implements
     {
         callback_ = callback;
         androidToPcImageCopier_.start();
-        modeChanger_.changeCameraModeForMediaDownload(this);
+        modeChanger_.changeToMediaDownloadMode(this);
     }
 
     @Override

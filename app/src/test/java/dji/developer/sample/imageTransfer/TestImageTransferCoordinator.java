@@ -1,6 +1,6 @@
 package dji.developer.sample.imageTransfer;
 
-import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaDownloadModeChanger;
+import com.dji.sdk.sample.common.imageTransfer.api.I_CameraModeChanger;
 import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaListFetcher;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadSelector;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneToAndroidImageDownloader;
@@ -10,10 +10,13 @@ import com.dji.sdk.sample.common.integration.api.I_CameraMediaListDownloadListen
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 
 import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
 
 import dji.sdk.camera.DJIMedia;
 
@@ -25,7 +28,7 @@ import static org.mockito.Mockito.*;
 
 public class TestImageTransferCoordinator
 {
-    private I_CameraMediaDownloadModeChanger modeChanger_ = mock(I_CameraMediaDownloadModeChanger.class);
+    private I_CameraModeChanger modeChanger_ = mock(I_CameraModeChanger.class);
     private I_CameraMediaListFetcher mediaListFetcher_ = mock(I_CameraMediaListFetcher.class);
     private I_DroneImageDownloadSelector downloadSelector_ = mock(I_DroneImageDownloadSelector.class);
     private I_DroneToAndroidImageDownloader imageDownloader_ = mock(I_DroneToAndroidImageDownloader.class);
@@ -43,7 +46,7 @@ public class TestImageTransferCoordinator
     {
         patient_.transferNewImagesFromDrone(completionCallback_);
 
-        verify(modeChanger_).changeCameraModeForMediaDownload(patient_);
+        verify(modeChanger_).changeToMediaDownloadMode(patient_);
     }
 
     @Test
@@ -82,7 +85,44 @@ public class TestImageTransferCoordinator
 
         verify(imageDownloader_).downloadImagesFromDrone(
                 same(imagesToDownload),
-                same(completionCallback_));
+                same(patient_));
+    }
+
+    @Test
+    public void willChangeCameraModeBackToShootPhotoMode()
+    {
+        final ArrayList<DJIMedia> mediaList = makeMediaList(3);
+        ArrayList<DJIMedia> imagesToDownload = makeMediaList(3);
+        makeModeChangerCallOnResultCallback();
+        makeMediaListFetcherCallOnSuccessCallback(mediaList);
+        when(downloadSelector_.determineImagesForDownloadFromMediaList(any(ArrayList.class)))
+                .thenReturn(imagesToDownload);
+        makeImageDownloaderCallOnResultCallback();
+
+        patient_.transferNewImagesFromDrone(completionCallback_);
+
+        verify(modeChanger_).changeToShootPhotoMode(same(patient_));
+    }
+
+    @Test
+    public void willCallEachServiceInOrder()
+    {
+        final ArrayList<DJIMedia> mediaList = makeMediaList(3);
+        ArrayList<DJIMedia> imagesToDownload = makeMediaList(3);
+        makeModeChangerCallOnResultCallback();
+        makeMediaListFetcherCallOnSuccessCallback(mediaList);
+        when(downloadSelector_.determineImagesForDownloadFromMediaList(any(ArrayList.class)))
+                .thenReturn(imagesToDownload);
+        makeImageDownloaderCallOnResultCallback();
+
+        patient_.transferNewImagesFromDrone(completionCallback_);
+
+        InOrder inOrder = inOrder(modeChanger_, mediaListFetcher_, downloadSelector_, imageDownloader_);
+        inOrder.verify(modeChanger_).changeToMediaDownloadMode(same(patient_));
+        inOrder.verify(mediaListFetcher_).fetchMediaListFromCamera(same(patient_));
+        inOrder.verify(downloadSelector_).determineImagesForDownloadFromMediaList(any(ArrayList.class));
+        inOrder.verify(imageDownloader_).downloadImagesFromDrone(any(ArrayList.class),same(patient_));
+        inOrder.verify(modeChanger_).changeToShootPhotoMode(same(patient_));
     }
 
     private void makeModeChangerCallOnResultCallback()
@@ -93,7 +133,7 @@ public class TestImageTransferCoordinator
                 ((I_CompletionCallback)args[0]).onResult(null);
                 return null;
             }})
-                .when(modeChanger_).changeCameraModeForMediaDownload(same(patient_));
+                .when(modeChanger_).changeToMediaDownloadMode(same(patient_));
     }
 
     private void makeMediaListFetcherCallOnSuccessCallback(
@@ -106,6 +146,17 @@ public class TestImageTransferCoordinator
                 return null;
             }})
                 .when(mediaListFetcher_).fetchMediaListFromCamera(same(patient_));
+    }
+
+    private void makeImageDownloaderCallOnResultCallback()
+    {
+        doAnswer(new Answer() {
+            public Object answer(InvocationOnMock invocation) {
+                Object[] args = invocation.getArguments();
+                ((I_CompletionCallback)args[1]).onResult(null);
+                return null;
+            }})
+                .when(imageDownloader_).downloadImagesFromDrone(any(ArrayList.class), same(patient_));
     }
 
     private ArrayList<DJIMedia> makeMediaList(int size)

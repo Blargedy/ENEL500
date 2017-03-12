@@ -6,7 +6,8 @@ import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
  * Created by Julia on 2017-02-12.
  */
 
-public interface I_CameraMediaDownloadModeChanger
+public interface I_CameraModeChanger
 {
-    void changeCameraModeForMediaDownload(I_CompletionCallback callback);
+    void changeToMediaDownloadMode(I_CompletionCallback callback);
+    void changeToShootPhotoMode(I_CompletionCallback callback);
 }
