@@ -28,9 +28,9 @@ public class SwitchBackPathGenerator {
     private int numberOfSwaths_;
     private int numberOfImagesPerSwath_;
 
-    private List<Coordinate> leftOrBottomSwathEndpointCoordinates_ = null;
-    private List<Coordinate> rightOrTopSwathEndpointCoordinates_ = null;
-    private List<Coordinate> switchbackPoints_ = null;
+    private Vector<Coordinate> leftOrBottomSwathEndpointCoordinates_ = null;
+    private Vector<Coordinate> rightOrTopSwathEndpointCoordinates_ = null;
+    private Vector<Coordinate> switchbackPoints_ = null;
 
     public SwitchBackPathGenerator(Coordinate bottomLeft, Coordinate topRight, float altitude) {
         altitude_ = altitude;
@@ -43,7 +43,7 @@ public class SwitchBackPathGenerator {
         topLeft_ = new Coordinate(topRight.latitude_, bottomLeft.longitude_);
     }
 
-    public List<Coordinate> generateSwitchback() {
+    public Vector<Coordinate> generateSwitchback() {
         switchbackPoints_ = new Vector<Coordinate>();
 
         // Generate path coordinates choosing longer swaths
@@ -95,8 +95,10 @@ public class SwitchBackPathGenerator {
         rightOrTopSwathEndpointCoordinates_.add(topLeft_);
         rightOrTopSwathEndpointCoordinates_.add(topRight_);
 
-        insertLinearlyDistributedCoordinates(leftOrBottomSwathEndpointCoordinates_, 0, numberOfSwaths_ - 2);
-        insertLinearlyDistributedCoordinates(rightOrTopSwathEndpointCoordinates_, 0, numberOfSwaths_ - 2);
+        int numberOfCoordinatesToInsert = numberOfSwaths_ - 2; // total minus endpoints
+        int startIndex = 0; // inserts after startIndex
+        insertLinearlyDistributedCoordinates(leftOrBottomSwathEndpointCoordinates_, startIndex, numberOfCoordinatesToInsert);
+        insertLinearlyDistributedCoordinates(rightOrTopSwathEndpointCoordinates_, startIndex, numberOfCoordinatesToInsert);
     }
 
     private void generatePathAndImageCoordinates() {
