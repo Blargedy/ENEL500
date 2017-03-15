@@ -37,8 +37,7 @@ public class CustomMissionBuilder implements I_CustomMissionBuilder
     {
         Vector<Coordinate> waypoints = switchBackPathGenerator_.generateSwitchback(
                 initialMissionModel_.missionBoundary().bottomLeft(),
-                initialMissionModel_.missionBoundary().topRight(),
-                initialMissionModel_.altitude());
+                initialMissionModel_.missionBoundary().topRight());
         generatedMissionModel_.setWaypoints(waypoints);
 
         DJIWaypointMission mission = null;
