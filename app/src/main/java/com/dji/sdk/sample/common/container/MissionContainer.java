@@ -15,6 +15,7 @@ import com.dji.sdk.sample.common.mission.src.MissionExecutor;
 import com.dji.sdk.sample.common.mission.src.MissionGenerator;
 import com.dji.sdk.sample.common.mission.src.MissionPeriodicImageTransferInitiator;
 import com.dji.sdk.sample.common.mission.src.NextWaypointMissionStarter;
+import com.dji.sdk.sample.common.mission.src.SwitchBackPathGenerator;
 import com.dji.sdk.sample.common.mission.src.WaypointMissionCompletionCallback;
 import com.dji.sdk.sample.common.mission.src.WaypointMissionProgressStatusCallback;
 import com.dji.sdk.sample.common.mission.src.WaypointReachedNotifier;
@@ -38,6 +39,7 @@ public class MissionContainer
     private DroneLocationUpdater droneLocationUpdater_;
     private WaypointMissionProgressStatusCallback missionProgressStatusCallback_;
 
+    private SwitchBackPathGenerator switchBackPathGenerator_;
     private CustomMissionBuilder customMissionBuilder_;
     private MissionGenerator missionGenerator_;
 
@@ -79,9 +81,11 @@ public class MissionContainer
                 waypointReachedNotifier_,
                 droneLocationUpdater_);
 
+        switchBackPathGenerator_ = new SwitchBackPathGenerator();
         customMissionBuilder_ = new CustomMissionBuilder(
                 initialMissionModel_,
-                generatedMissionModel_);
+                generatedMissionModel_,
+                switchBackPathGenerator_);
         missionGenerator_ = new MissionGenerator(
                 customMissionBuilder_,
                 integrationLayerContainer.missionManagerSource(),

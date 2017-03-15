@@ -22,21 +22,23 @@ public class CustomMissionBuilder implements I_CustomMissionBuilder
 {
     private InitialMissionModel initialMissionModel_;
     private GeneratedMissionModel generatedMissionModel_;
+    private SwitchBackPathGenerator switchBackPathGenerator_;
 
     public CustomMissionBuilder(
             InitialMissionModel initialMissionModel,
-            GeneratedMissionModel generatedMissionModel)
+            GeneratedMissionModel generatedMissionModel,
+            SwitchBackPathGenerator switchBackPathGenerator)
     {
         initialMissionModel_ = initialMissionModel;
         generatedMissionModel_ = generatedMissionModel;
+        switchBackPathGenerator_ = switchBackPathGenerator;
     }
     public void buildCustomMission()
     {
-        SwitchBackPathGenerator switchBackPathGenerator = new SwitchBackPathGenerator(
+        Vector<Coordinate> waypoints = switchBackPathGenerator_.generateSwitchback(
                 initialMissionModel_.missionBoundary().bottomLeft(),
                 initialMissionModel_.missionBoundary().topRight(),
                 initialMissionModel_.altitude());
-        Vector<Coordinate> waypoints = (Vector<Coordinate>)switchBackPathGenerator.generateSwitchback();
         generatedMissionModel_.setWaypoints(waypoints);
 
         DJIWaypointMission mission = null;

@@ -32,18 +32,18 @@ public class SwitchBackPathGenerator {
     private Vector<Coordinate> rightOrTopSwathEndpointCoordinates_ = null;
     private Vector<Coordinate> switchbackPoints_ = null;
 
-    public SwitchBackPathGenerator(Coordinate bottomLeft, Coordinate topRight, float altitude) {
-        altitude_ = altitude;
+    public SwitchBackPathGenerator() {
+    }
 
+    public Vector<Coordinate> generateSwitchback(Coordinate bottomLeft, Coordinate topRight, float altitude) {
+        altitude_ = altitude;
         bottomLeft_ = bottomLeft;
         topRight_ = topRight;
 
         // Determine bottomRight and topLeft coordinates assuming rectangular area
         bottomRight_ = new Coordinate(bottomLeft.latitude_, topRight.longitude_);
         topLeft_ = new Coordinate(topRight.latitude_, bottomLeft.longitude_);
-    }
 
-    public Vector<Coordinate> generateSwitchback() {
         switchbackPoints_ = new Vector<Coordinate>();
 
         // Generate path coordinates choosing longer swaths
