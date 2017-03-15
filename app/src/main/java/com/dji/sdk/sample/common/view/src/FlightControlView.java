@@ -57,7 +57,7 @@ public class FlightControlView
     {
         inflate(getContext(), R.layout.flight_control_screen, this);
 
-        surveyProgressBar_ = (SeekBar) findViewById(R.id.pbar_surveyProgressTracking);
+        surveyProgressBar_ = (SeekBar) findViewById(R.id.surveyProgressBar);
         surveyAreaHeightText_ = (TextView) findViewById(R.id.txt_surveyAreaHeight);
         surveyAreaHeightBar_ = (SeekBar) findViewById(R.id.pbar_surveyAreaHeight);
         surveyAreaWidthText_ = (TextView) findViewById(R.id.txt_surveyAreaWidth);
@@ -109,7 +109,7 @@ public class FlightControlView
 
     @Override
     public SeekBar surveyProgressBar() {
-        return null;
+        return surveyProgressBar_;
     }
 
     @Override

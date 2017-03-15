@@ -7,106 +7,117 @@
     android:orientation="vertical">
 
     <fragment
-        android:layout_width="match_parent"
-        android:layout_height="258dp"
         android:id="@+id/map"
-        tools:context=".FlightControlActivity"
-        android:layout_gravity="center"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_weight="0.82" />
-
-    <SeekBar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/pbar_surveyProgressTracking"
-        android:progress="0"
-        android:layout_weight="0.05"
-        android:max="100" />
-
-    <TextView
-        android:text="Survey Area Height"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txt_surveyAreaHeight"
-        android:textStyle="normal|bold" />
-
-    <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/pbar_surveyAreaHeight"
-        android:progress="25"
-        android:layout_weight="0.05"
-        android:max="100" />
-
-    <TextView
-        android:text="Survey Area Width"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txt_surveyAreaWidth"
-        android:textStyle="normal|bold" />
-
-    <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/pbar_surveyAreaWidth"
-        android:progress="25"
-        android:layout_weight="0.05"
-        android:max="100" />
-
-    <Button
-        android:id="@+id/btn_accept_area"
-        android:layout_width="150dp"
-        android:layout_height="55dp"
+        android:layout_height="245dp"
         android:layout_gravity="center"
-        android:background="@drawable/round_btn"
-        android:textAllCaps="false"
-        android:text="Accept Survey Area"
-        android:textColor="@color/common_text_color"
-        android:textSize="15dp"/>
+        android:layout_weight="0.82"
+        tools:context=".FlightControlActivity" />
+
+    <SeekBar
+        android:id="@+id/surveyProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.05"
+        android:clickable="false"
+        android:max="100"
+        android:progress="0" />
+
+    <TextView
+        android:id="@+id/txt_surveyAreaHeight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Survey Area Height"
+        android:textStyle="normal|bold" />
+
+    <SeekBar
+        android:id="@+id/pbar_surveyAreaHeight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.05"
+        android:max="100"
+        android:progress="25" />
+
+    <TextView
+        android:id="@+id/txt_surveyAreaWidth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Survey Area Width"
+        android:textStyle="normal|bold" />
+
+    <SeekBar
+        android:id="@+id/pbar_surveyAreaWidth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.05"
+        android:max="100"
+        android:progress="25" />
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_start_mission"
-            android:layout_width="150dp"
-            android:layout_height="55dp"
+            android:id="@+id/btn_accept_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="0.40"
             android:background="@drawable/round_btn"
+            android:text="Accept Survey Area"
             android:textAllCaps="false"
+            android:textColor="@color/common_text_color"
+            android:textSize="15dp" />
+
+        <Button
+            android:id="@+id/btn_start_mission"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.30"
+            android:background="@drawable/round_btn"
             android:text="Start Mission"
+            android:textAllCaps="false"
             android:textColor="@color/common_text_color"
             android:textSize="15dp"
-            />
+            android:visibility="visible" />
 
         <ToggleButton
             android:id="@+id/btn_toggle_hover_now"
-            android:layout_width="150dp"
-            android:layout_height="55dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.30"
             android:layout_gravity="center"
             android:background="@drawable/round_btn"
+            android:checked="false"
             android:textAllCaps="false"
-            android:textOn="Resume"
-            android:textOff="Hover Now"
             android:textColor="@color/common_text_color"
+            android:textOff="Hover Now"
+            android:textOn="Resume"
             android:textSize="15dp"
-            android:checked="false" />
+            android:visibility="visible" />
 
         <Button
             android:id="@+id/btn_cancel"
-            android:layout_width="150dp"
-            android:layout_height="55dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+
             android:background="@drawable/round_btn"
-            android:textAllCaps="false"
             android:text="Cancel"
+            android:textAllCaps="false"
             android:textColor="@color/common_text_color"
             android:textSize="15dp"
-            />
+            android:visibility="visible" />
 
     </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.04" />
 
 </LinearLayout>

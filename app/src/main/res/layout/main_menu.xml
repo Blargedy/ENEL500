@@ -13,10 +13,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
         android:gravity="center"
-        android:text="Would you like to do a live reconstruction??"
+        android:text="Realtime reconstruction?"
         android:textColor="@android:color/black"
         android:textSize="20dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/btn_reconstruct_live"
