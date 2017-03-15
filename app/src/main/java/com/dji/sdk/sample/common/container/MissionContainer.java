@@ -81,7 +81,8 @@ public class MissionContainer
                 waypointReachedNotifier_,
                 droneLocationUpdater_);
 
-        switchBackPathGenerator_ = new SwitchBackPathGenerator();
+        switchBackPathGenerator_ = new SwitchBackPathGenerator(
+                initialMissionModel_);
         customMissionBuilder_ = new CustomMissionBuilder(
                 initialMissionModel_,
                 generatedMissionModel_,

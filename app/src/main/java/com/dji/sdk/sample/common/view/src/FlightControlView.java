@@ -19,7 +19,6 @@ import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
 public class FlightControlView
         extends RelativeLayout
         implements I_MissionControlsView, I_MapView
-
 {
     private SeekBar surveyProgressBar_;
     private TextView surveyAreaHeightText_;

@@ -1,5 +1,6 @@
 package com.dji.sdk.sample.common.mission.src;
 
+import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.values.Coordinate;
 
 import java.util.List;
@@ -16,15 +17,13 @@ import java.lang.Math;
 
 public class SwitchBackPathGenerator {
 
-    private static double minimumPercentImageOverlap_ = 0.80; // number between 0 and 1
-    private static double minimumPercentSwathOverlap_ = 0.50; // number between 0 and 1
+    private InitialMissionModel initialMissionModel_;
 
     private Coordinate bottomLeft_;
     private Coordinate topLeft_;
     private Coordinate topRight_;
     private Coordinate bottomRight_;
 
-    private float altitude_;
     private int numberOfSwaths_;
     private int numberOfImagesPerSwath_;
 
@@ -32,11 +31,13 @@ public class SwitchBackPathGenerator {
     private Vector<Coordinate> rightOrTopSwathEndpointCoordinates_ = null;
     private Vector<Coordinate> switchbackPoints_ = null;
 
-    public SwitchBackPathGenerator() {
+
+    public SwitchBackPathGenerator(
+            InitialMissionModel initialMissionModel) {
+        initialMissionModel_ = initialMissionModel;
     }
 
-    public Vector<Coordinate> generateSwitchback(Coordinate bottomLeft, Coordinate topRight, float altitude) {
-        altitude_ = altitude;
+    public Vector<Coordinate> generateSwitchback(Coordinate bottomLeft, Coordinate topRight) {
         bottomLeft_ = bottomLeft;
         topRight_ = topRight;
 
@@ -51,13 +52,13 @@ public class SwitchBackPathGenerator {
         double bottomTopDistance = bottomLeft_.distanceApproximationInMeters(topLeft_);
         if (leftRightDistance > bottomTopDistance) {
             // Compute the numbers of swaths and images per swath assuming rectangular area and east-west swaths
-            numberOfSwaths_ = calculateNumberOfSwaths(bottomLeft_, topLeft_, altitude_);
-            numberOfImagesPerSwath_ = calculateNumberOfImagesPerSwath(bottomLeft_, bottomRight_, altitude_);
+            numberOfSwaths_ = calculateNumberOfSwaths(bottomLeft_, topLeft_, initialMissionModel_.altitude());
+            numberOfImagesPerSwath_ = calculateNumberOfImagesPerSwath(bottomLeft_, bottomRight_, initialMissionModel_.altitude());
             createLeftRightSwathEndpointCoordinates();
         } else {
             // Compute the numbers of swaths and images per swath assuming rectangular area and north-south swaths
-            numberOfSwaths_ = calculateNumberOfSwaths(bottomLeft_, bottomRight_, altitude_);
-            numberOfImagesPerSwath_ = calculateNumberOfImagesPerSwath(bottomLeft_, topLeft_, altitude_);
+            numberOfSwaths_ = calculateNumberOfSwaths(bottomLeft_, bottomRight_, initialMissionModel_.altitude());
+            numberOfImagesPerSwath_ = calculateNumberOfImagesPerSwath(bottomLeft_, topLeft_, initialMissionModel_.altitude());
             createBottomTopSwathEndpointCoordinates();
         }
         generatePathAndImageCoordinates();
@@ -123,7 +124,7 @@ public class SwitchBackPathGenerator {
         } // end for loop
     }
 
-    public static void insertLinearlyDistributedCoordinates(List<Coordinate> coordinateList, int startIndex, int numberOfCoordinatesToInsert) {
+    public void insertLinearlyDistributedCoordinates(List<Coordinate> coordinateList, int startIndex, int numberOfCoordinatesToInsert) {
         double deltaLatitude = coordinateList.get(startIndex + 1).latitude_ - coordinateList.get(startIndex).latitude_;
         double deltaLongitude = coordinateList.get(startIndex + 1).longitude_ - coordinateList.get(startIndex).longitude_;
         int divisor = 1 + numberOfCoordinatesToInsert;
@@ -139,7 +140,11 @@ public class SwitchBackPathGenerator {
         }
     }
 
-    private static void appendSwath(List<Coordinate> coordinateList, Coordinate swathStartingCoordinate, Coordinate swathEndingCoordinate, int numberOfImagesPerSwath) {
+    private void appendSwath(
+            List<Coordinate> coordinateList,
+            Coordinate swathStartingCoordinate,
+            Coordinate swathEndingCoordinate,
+            int numberOfImagesPerSwath) {
 
         // Append starting and ending coordinates to end of list
         coordinateList.add(swathStartingCoordinate);
@@ -150,14 +155,24 @@ public class SwitchBackPathGenerator {
         insertLinearlyDistributedCoordinates(coordinateList, indexToBeginInsertion, numberOfImagesPerSwath - 2);
     }
 
-    private static int calculateNumberOfSwaths(Coordinate startingCoordinate, Coordinate endingCoordinate, float altitude) {
-        double maximumSwathSpacingInMeters = calculateSwathSpacing(minimumPercentSwathOverlap_, altitude);
+    private int calculateNumberOfSwaths(
+            Coordinate startingCoordinate,
+            Coordinate endingCoordinate,
+            float altitude) {
+        double maximumSwathSpacingInMeters = calculateSwathSpacing(
+                initialMissionModel_.minimumPercentSwathOverlap(),
+                altitude);
         double distanceInMeters = startingCoordinate.distanceApproximationInMeters(endingCoordinate);
         return (2 + calculateNumberOfIntermediatePoints(distanceInMeters, maximumSwathSpacingInMeters));
     }
 
-    private static int calculateNumberOfImagesPerSwath(Coordinate swathStartingCoordinate, Coordinate swathEndingCoordinate, float altitude) {
-        double maximumImageSpacingInMeters = calculateImageSpacing(minimumPercentImageOverlap_, altitude);
+    private int calculateNumberOfImagesPerSwath(
+            Coordinate swathStartingCoordinate,
+            Coordinate swathEndingCoordinate,
+            float altitude) {
+        double maximumImageSpacingInMeters = calculateImageSpacing(
+                initialMissionModel_.minimumPercentImageOverlap(),
+                altitude);
         double swathLengthInMeters = swathStartingCoordinate.distanceApproximationInMeters(swathEndingCoordinate);
         return (2 + calculateNumberOfIntermediatePoints(swathLengthInMeters, maximumImageSpacingInMeters));
     }
@@ -170,7 +185,7 @@ public class SwitchBackPathGenerator {
      * @param maximumSpacing e.g. 4
      * @return eg. 2
      */
-    private static int calculateNumberOfIntermediatePoints(double distance, double maximumSpacing) {
+    private int calculateNumberOfIntermediatePoints(double distance, double maximumSpacing) {
         return (int) Math.floor(distance / maximumSpacing);
     }
 
@@ -182,7 +197,7 @@ public class SwitchBackPathGenerator {
      * @param altitude             altitude in meters
      * @return distance in meters between two swaths taken at the same specified altitude to achieve specified overlap
      */
-    private static double calculateSwathSpacing(double percentSwathOverlap_, float altitude) {
+    private double calculateSwathSpacing(double percentSwathOverlap_, float altitude) {
         return (1 - percentSwathOverlap_) * calculateImageWidth((double) altitude);
     }
 
@@ -194,7 +209,7 @@ public class SwitchBackPathGenerator {
      * @param altitude             altitude in meters
      * @return distance in meters between two images taken at the same specified altitude to achieve specified overlap
      */
-    private static double calculateImageSpacing(double percentImageOverlap_, float altitude) {
+    private double calculateImageSpacing(double percentImageOverlap_, float altitude) {
         return (1 - percentImageOverlap_) * calculateImageLength((double) altitude);
     }
 
@@ -205,7 +220,7 @@ public class SwitchBackPathGenerator {
      * @param altitude altitude in meters
      * @return approximate length of short edge of picture of ground in meters
      */
-    private static double calculateImageLength(double altitude) {
+    private double calculateImageLength(double altitude) {
         return (1.2 * altitude); // factor of 1.2 based on numerical fit from test data
     }
 
@@ -216,7 +231,7 @@ public class SwitchBackPathGenerator {
      * @param altitude altitude in meters
      * @return approximate width of long edge of picture of ground in meters
      */
-    private static double calculateImageWidth(double altitude) {
+    private double calculateImageWidth(double altitude) {
         return (1.6 * altitude); // factor of 1.6 based on numerical fit from test data
     }
 }
