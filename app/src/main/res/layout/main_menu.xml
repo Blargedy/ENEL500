@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
         android:gravity="center"
-        android:text="Realtime reconstruction?"
+        android:text="Would you like to perform a real-time reconstruction?"
         android:textColor="@android:color/black"
         android:textSize="20dp"
         android:textStyle="bold" />

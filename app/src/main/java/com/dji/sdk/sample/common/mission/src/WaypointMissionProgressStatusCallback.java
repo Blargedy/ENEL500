@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.mission.src;
 
+import android.util.Log;
+
 import com.dji.sdk.sample.common.integration.api.I_WaypointMissionProgressStatusCallback;
 import com.dji.sdk.sample.common.mission.api.I_DroneLocationUpdater;
 import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferInitiator;
@@ -7,6 +9,8 @@ import com.dji.sdk.sample.common.mission.api.I_WaypointReachedNotifier;
 
 import dji.sdk.missionmanager.DJIMission;
 import dji.sdk.missionmanager.DJIWaypointMission;
+
+import static dji.sdk.missionmanager.DJIWaypointMission.DJI_WAYPOINT_MISSION_MAXIMUM_WAYPOINT_COUNT;
 
 /**
  * Created by Julia on 2017-03-11.
@@ -17,7 +21,7 @@ public class WaypointMissionProgressStatusCallback implements I_WaypointMissionP
     private static final String TAG = "WaypointMissionProgressStatusCallback";
 
     private static final int IMAGE_TRANSFER_DELAY = 5;
-    private int nextWaypointIndex_;
+    private int waypointIndex_;
 
     private I_MissionPeriodicImageTransferInitiator imageTransferInitiator_;
     private I_WaypointReachedNotifier waypointReachedNotifier_;
@@ -31,7 +35,7 @@ public class WaypointMissionProgressStatusCallback implements I_WaypointMissionP
         imageTransferInitiator_ = imageTransferInitiator;
         waypointReachedNotifier_ = waypointReachedNotifier;
         droneLocationUpdater_ = droneLocationUpdater;
-        nextWaypointIndex_ = 0;
+        waypointIndex_ = 0;
     }
 
     @Override
@@ -42,11 +46,14 @@ public class WaypointMissionProgressStatusCallback implements I_WaypointMissionP
             DJIWaypointMission.DJIWaypointMissionStatus waypointMissionStatus =
                     (DJIWaypointMission.DJIWaypointMissionStatus) progressStatus;
 
-            if (waypointMissionStatus.isWaypointReached())
+            int targetWaypointIndex = waypointMissionStatus.getTargetWaypointIndex();
+            boolean isWaypointReached = waypointMissionStatus.isWaypointReached();
+
+            if (isDroneAtNewWaypoint(targetWaypointIndex, isWaypointReached))
             {
                 initiateImageTransferIfNecessary();
-                waypointReachedNotifier_.notifyWaypointAtIndexHasBeenReached(nextWaypointIndex_);
-                nextWaypointIndex_++;
+                waypointReachedNotifier_.notifyWaypointAtIndexHasBeenReached(waypointIndex_);
+                waypointIndex_++;
             }
 
             droneLocationUpdater_.updateDroneLocation();
@@ -55,9 +62,17 @@ public class WaypointMissionProgressStatusCallback implements I_WaypointMissionP
 
     private void initiateImageTransferIfNecessary()
     {
-        if (nextWaypointIndex_ != 0 && nextWaypointIndex_ % IMAGE_TRANSFER_DELAY == 0)
+        if (waypointIndex_ != 0 && waypointIndex_ % IMAGE_TRANSFER_DELAY == 0)
         {
             imageTransferInitiator_.initiateImageTransfer();
         }
+    }
+
+    private boolean isDroneAtNewWaypoint(int missionUpdateTargetWaypoint, boolean isWaypointReached)
+    {
+        int nextTargetWaypointIndex = (waypointIndex_ + 1) % DJI_WAYPOINT_MISSION_MAXIMUM_WAYPOINT_COUNT;
+
+        return (nextTargetWaypointIndex == missionUpdateTargetWaypoint)
+                && isWaypointReached;
     }
 }

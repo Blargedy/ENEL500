@@ -39,14 +39,15 @@ public class CustomMissionBuilder implements I_CustomMissionBuilder
         Vector<Coordinate> waypoints = (Vector<Coordinate>)switchBackPathGenerator.generateSwitchback();
         generatedMissionModel_.setWaypoints(waypoints);
 
-        DJIWaypointMission mission = new DJIWaypointMission();
-        mission.autoFlightSpeed = 10;
-
+        DJIWaypointMission mission = null;
         for (int i = 0; i < waypoints.size(); i++)
         {
-            if (i % DJI_WAYPOINT_MISSION_MAXIMUM_WAYPOINT_COUNT == 0 && i != 0)
+            if (i % DJI_WAYPOINT_MISSION_MAXIMUM_WAYPOINT_COUNT == 0)
             {
-                generatedMissionModel_.addWaypointMission(mission);
+                if (i != 0)
+                {
+                    generatedMissionModel_.addWaypointMission(mission);
+                }
                 mission = new DJIWaypointMission();
                 mission.autoFlightSpeed = 10;
             }

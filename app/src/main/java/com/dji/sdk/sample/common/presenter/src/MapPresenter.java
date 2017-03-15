@@ -96,7 +96,6 @@ public class MapPresenter implements
     // Lists
     private ArrayList<Circle> waypointCircleList;
     private ArrayList<Polyline> wayPointPolyLineList;
-    private Vector<Coordinate> wayPointList;
     // Progress Tracking
     private double percentageCompletion = 0.00;
     private int numWaypointsTotal = 0;
@@ -172,14 +171,14 @@ public class MapPresenter implements
 
     @Override
     public MissionBoundary getSurveyAreaBoundary() {
-        //Coordinate topRight = new Coordinate(50.796276, -114.205159);
-        //Coordinate bottomLeft = new Coordinate(50.795906, -114.206540);
-        Coordinate topRight = new Coordinate(
-                surveyPolygon.getPoints().get(2).latitude,
-                surveyPolygon.getPoints().get(2).longitude);
-        Coordinate bottomLeft = new Coordinate(
-                surveyPolygon.getPoints().get(0).latitude,
-                surveyPolygon.getPoints().get(0).longitude);
+        Coordinate topRight = new Coordinate(50.796276, -114.205159);
+        Coordinate bottomLeft = new Coordinate(50.795906, -114.206540);
+//        Coordinate topRight = new Coordinate(
+//                surveyPolygon.getPoints().get(2).latitude,
+//                surveyPolygon.getPoints().get(2).longitude);
+//        Coordinate bottomLeft = new Coordinate(
+//                surveyPolygon.getPoints().get(0).latitude,
+//                surveyPolygon.getPoints().get(0).longitude);
         return new MissionBoundary(topRight, bottomLeft);
     }
 
@@ -187,20 +186,18 @@ public class MapPresenter implements
     public void displayMissionWaypoints(Vector<Coordinate> waypoints) {
         surveyPolygon.remove(); //no longer needed
 
-        wayPointList = waypoints;
-
         // Make net between each waypoint marker
         wayPointPolyLineList = new ArrayList<Polyline>();
         // Connect drone to first waypoint
         wayPointPolyLineList.add(mMap.addPolyline(new PolylineOptions()
-                .add(droneMarker.getPosition(), new LatLng(wayPointList.get(0).latitude_, wayPointList.get(0).longitude_))
+                .add(droneMarker.getPosition(), new LatLng(waypoints.get(0).latitude_, waypoints.get(0).longitude_))
                 .width(5)
                 .zIndex(3004.0f)
                 .color(Color.BLACK)));
 
-        for (int i = 0; i < wayPointList.size(); i++) {
-            LatLng waypointLatLng1 = new LatLng(wayPointList.get(i).latitude_, wayPointList.get(i).longitude_);
-            if (i == (wayPointList.size() - 1)) { //connect last waypoint to drone
+        for (int i = 0; i < waypoints.size(); i++) {
+            LatLng waypointLatLng1 = new LatLng(waypoints.get(i).latitude_, waypoints.get(i).longitude_);
+            if (i == (waypoints.size() - 1)) { //connect last waypoint to drone
                 wayPointPolyLineList.add(mMap.addPolyline(new PolylineOptions()
                         .add(waypointLatLng1, droneMarker.getPosition())
                         .width(5)
@@ -208,7 +205,7 @@ public class MapPresenter implements
                         .color(Color.BLACK)));
                 break;
             }
-            LatLng waypointLatLng2 = new LatLng(wayPointList.get(i + 1).latitude_, wayPointList.get(i + 1).longitude_);
+            LatLng waypointLatLng2 = new LatLng(waypoints.get(i + 1).latitude_, waypoints.get(i + 1).longitude_);
             wayPointPolyLineList.add(mMap.addPolyline(new PolylineOptions()
                     .add(waypointLatLng1, waypointLatLng2)
                     .width(5)
@@ -218,23 +215,20 @@ public class MapPresenter implements
 
         // Make the waypoint circles
         waypointCircleList = new ArrayList<Circle>();
-        for (int j = 0; j < wayPointList.size(); j++) {
+        for (int j = 0; j < waypoints.size(); j++) {
             waypointCircleList.add(mMap.addCircle(new CircleOptions()
-                    .center(new LatLng(wayPointList.get(j).latitude_, wayPointList.get(j).longitude_))
+                    .center(new LatLng(waypoints.get(j).latitude_, waypoints.get(j).longitude_))
                     .radius(12)
                     .strokeWidth(1)
                     .zIndex(3004.5f) // above the polylines, below the drone and user
                     .strokeColor(Color.BLACK)
                     .fillColor(Color.argb(150, 255, 0, 0)))); // transparent red circles
         }
-        numWaypointsTotal = wayPointList.size(); // do not use polyline size (1 extra)
-
+        numWaypointsTotal = waypoints.size(); // do not use polyline size (1 extra)
     }
 
     @Override
     public void clearMap() {
-        wayPointList.clear();
-
         for (int i = 0; i < wayPointPolyLineList.size(); i++) {
             wayPointPolyLineList.get(i).remove();
         }
@@ -487,7 +481,6 @@ public class MapPresenter implements
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         introZoomFinished = true;
-        writeToast("Select survey area.");
     }
 
     // Google map animation callback
@@ -497,17 +490,14 @@ public class MapPresenter implements
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         introZoomFinished = true;
-        writeToast("Select survey area.");
     }
 
     private void reachedWaypointAtIndex(int waypointIndex) {
-        // Log.d("MapPresenter", "Reached waypoint " + waypointIndex);
-        droneMarker.setPosition(waypointCircleList.get(waypointIndex).getCenter());
+        Log.d("MapPresenter", "Waypoint Reached: " + waypointIndex);
         waypointCircleList.get(waypointIndex).setFillColor(Color.argb(150, 0, 0, 255)); // change marker to blue
         numWaypointsCompleted++; // track mission progress
         percentageCompletion = (int) (100.0d * numWaypointsCompleted / numWaypointsTotal);
         surveyProgressBar.setProgress((int) percentageCompletion);
-        // Log.d("MapPresenter", "Percent Complete: " + percentageCompletion);
     }
 
     private void updateDroneLocation() {
@@ -533,7 +523,6 @@ public class MapPresenter implements
                 .zIndex(3005.0f)
                 .icon(markerIcon));
         // .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))); // to change to actual phantom 4 icon
-        // Log.d("MapPresenter", "droneLocation: latitude=" + location.latitude_ + " longitude=" + location.longitude_);
     }
 
 
