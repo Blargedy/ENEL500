@@ -65,8 +65,9 @@ public class MissionSettingsPresenter implements
         AlertDialog.Builder alert = new AlertDialog.Builder(context_);
 
         alert.setTitle("Mission Settings");
-        alert.setPositiveButton("Ok", );
+        alert.setPositiveButton("Ok", null);
         alert.setNegativeButton("Cancel", null);
+
         alert.setView(R.layout.settings_dialog_screen);
 
         alert.show();
