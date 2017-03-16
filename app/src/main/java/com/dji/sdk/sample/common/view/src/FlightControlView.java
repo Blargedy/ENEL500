@@ -30,6 +30,7 @@ public class FlightControlView
     private Button startMissionButton_;
     private Button cancelButton_;
     private ToggleButton hoverNowToggleButton_;
+    private Button settingsButton_;
 
     public FlightControlView(
             Context context) {
@@ -66,6 +67,7 @@ public class FlightControlView
         startMissionButton_ = (Button) findViewById(R.id.btn_start_mission);
         cancelButton_ = (Button) findViewById(R.id.btn_cancel);
         hoverNowToggleButton_ = (ToggleButton) findViewById(R.id.btn_toggle_hover_now);
+        settingsButton_ = (Button) findViewById(R.id.btn_settings);
     }
 
     @Override
@@ -129,5 +131,11 @@ public class FlightControlView
     @Override
     public SeekBar surveyAreaWidthBar() {
         return surveyAreaWidthBar_;
+    }
+
+    @Override
+    public Button settingsButton()
+    {
+        return settingsButton_;
     }
 }

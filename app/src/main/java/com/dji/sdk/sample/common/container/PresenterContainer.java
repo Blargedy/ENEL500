@@ -6,6 +6,7 @@ import com.dji.sdk.sample.common.presenter.src.MapPresenter;
 import com.dji.sdk.sample.common.presenter.src.MissionControlsPresenter;
 import com.dji.sdk.sample.common.presenter.src.MissionMapDisplayPresenter;
 import com.dji.sdk.sample.common.presenter.src.ProductConnectionPresenter;
+import com.dji.sdk.sample.common.presenter.src.MissionSettingsPresenter;
 import com.dji.sdk.sample.common.utility.GoogleMapsConnectionHandler;
 import com.dji.sdk.sample.common.view.src.FlightControlView;
 
@@ -18,6 +19,7 @@ public class PresenterContainer
     private MapPresenter mapPresenter_;
     private MissionControlsPresenter missionControlsPresenter_;
     private MissionMapDisplayPresenter missionMapDisplayPresenter_;
+    private MissionSettingsPresenter missionSettingsPresenter_;
 
     private ProductConnectionPresenter productConnectionPresenter_;
 
@@ -42,6 +44,10 @@ public class PresenterContainer
                 missionContainer.initialMissionModel(),
                 missionContainer.generatedMissionModel(),
                 mapPresenter_);
+        missionSettingsPresenter_ = new MissionSettingsPresenter(
+                flightControlView,
+                missionContainer.missionState(),
+                activity);
 
         productConnectionPresenter_ = new ProductConnectionPresenter(
                 activity,
