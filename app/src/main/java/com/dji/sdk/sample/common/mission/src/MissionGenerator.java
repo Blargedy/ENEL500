@@ -1,99 +1,62 @@
 package com.dji.sdk.sample.common.mission.src;
 
-import android.util.Log;
-
-import com.dji.sdk.sample.common.imageTransfer.api.I_CameraModeChanger;
-import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
-import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
-import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
-import com.dji.sdk.sample.common.integration.api.I_MissionManager;
-import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
-import com.dji.sdk.sample.common.integration.api.I_WaypointMissionProgressStatusCallback;
-import com.dji.sdk.sample.common.mission.api.I_CustomMissionBuilder;
-import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallback;
+import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
+import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
+import com.dji.sdk.sample.common.values.Coordinate;
 
-import dji.common.error.DJIError;
+import java.util.Vector;
+
+import dji.sdk.missionmanager.DJIWaypoint;
+import dji.sdk.missionmanager.DJIWaypointMission;
+
+import static dji.sdk.missionmanager.DJIWaypointMission.DJI_WAYPOINT_MISSION_MAXIMUM_WAYPOINT_COUNT;
 
 /**
- * Created by Julia on 2017-01-15.
+ * Created by eric7 on 2017-02-21.
  */
 
-public class MissionGenerator implements
-        I_MissionGenerator,
-        I_CompletionCallback
+public class MissionGenerator implements I_MissionGenerator
 {
-    private static final String TAG = "MissionGenerator";
-
-    private enum ExpectedCallback { SET_HOME_LOCATION, INITIALIZE_IMAGE_TRANSFER, CHANGE_CAMERA_MODE }
-    private ExpectedCallback expectedCallback_;
-
-    private I_CustomMissionBuilder customMissionBuilder_;
-    private I_MissionManagerSource missionManagerSource_;
-    private I_FlightControllerSource flightControllerSource_;
-    private I_ImageTransferModuleInitializer imageTransferModuleInitializer_;
-    private I_CameraModeChanger cameraModeChanger_;
-    private I_CompletionCallback missionExecutionCompletionCallback_;
-    private I_WaypointMissionProgressStatusCallback missionProgressStatusCallback_;
-
-    private I_MissionGenerationCompletionCallback callback_;
+    private InitialMissionModel initialMissionModel_;
+    private GeneratedMissionModel generatedMissionModel_;
+    private SwitchBackPathGenerator switchBackPathGenerator_;
 
     public MissionGenerator(
-            I_CustomMissionBuilder customMissionBuilder,
-            I_MissionManagerSource missionManagerSource,
-            I_FlightControllerSource flightControllerSource,
-            I_ImageTransferModuleInitializer imageTransferModuleInitializer,
-            I_CameraModeChanger cameraModeChanger,
-            I_CompletionCallback missionExecutionCompletionCallback,
-            I_WaypointMissionProgressStatusCallback missionProgressStatusCallback)
+            InitialMissionModel initialMissionModel,
+            GeneratedMissionModel generatedMissionModel,
+            SwitchBackPathGenerator switchBackPathGenerator)
     {
-        customMissionBuilder_ = customMissionBuilder;
-        missionManagerSource_ = missionManagerSource;
-        flightControllerSource_ = flightControllerSource;
-        imageTransferModuleInitializer_ = imageTransferModuleInitializer;
-        cameraModeChanger_ = cameraModeChanger;
-        missionExecutionCompletionCallback_ = missionExecutionCompletionCallback;
-        missionProgressStatusCallback_ = missionProgressStatusCallback;
+        initialMissionModel_ = initialMissionModel;
+        generatedMissionModel_ = generatedMissionModel;
+        switchBackPathGenerator_ = switchBackPathGenerator;
     }
-
-    public void generateMission(I_MissionGenerationCompletionCallback callback)
+    public void generateMission()
     {
-        callback_ = callback;
-        customMissionBuilder_.buildCustomMission();
+        Vector<Coordinate> waypoints = switchBackPathGenerator_.generateSwitchback(
+                initialMissionModel_.missionBoundary().bottomLeft(),
+                initialMissionModel_.missionBoundary().topRight());
+        generatedMissionModel_.setWaypoints(waypoints);
 
-        I_MissionManager missionManager = missionManagerSource_.getMissionManager();
-        missionManager.setMissionExecutionFinishedCallback(missionExecutionCompletionCallback_);
-        missionManager.setMissionProgressStatusCallback(missionProgressStatusCallback_);
-
-        expectedCallback_ = ExpectedCallback.SET_HOME_LOCATION;
-        flightControllerSource_.getFlightController().setHomeLocationUsingAircraftCurrentLocation(this);
-    }
-
-    @Override
-    public void onResult(DJIError error)
-    {
-        if (error == null)
+        DJIWaypointMission mission = null;
+        for (int i = 0; i < waypoints.size(); i++)
         {
-            switch (expectedCallback_)
+            if (i % DJI_WAYPOINT_MISSION_MAXIMUM_WAYPOINT_COUNT == 0)
             {
-                case SET_HOME_LOCATION:
-                    expectedCallback_ = ExpectedCallback.INITIALIZE_IMAGE_TRANSFER;
-                    imageTransferModuleInitializer_.initializeImageTransferModulePriorToFlight(this);
-                    break;
-                case INITIALIZE_IMAGE_TRANSFER:
-                    expectedCallback_ = ExpectedCallback.CHANGE_CAMERA_MODE;
-                    cameraModeChanger_.changeToShootPhotoMode(this);
-                    break;
-                case CHANGE_CAMERA_MODE:
-                    callback_.onMissionGenerationCompletion();
-                    break;
-                default:
-                    break;
+                if (i != 0)
+                {
+                    generatedMissionModel_.addWaypointMission(mission);
+                }
+                mission = new DJIWaypointMission();
+                mission.autoFlightSpeed = 10;
             }
+
+            DJIWaypoint waypoint = new DJIWaypoint(
+                    waypoints.get(i).latitude_,
+                    waypoints.get(i).longitude_,
+                    initialMissionModel_.altitude());
+            mission.addWaypoint(waypoint);
         }
-        else
-        {
-            Log.e(TAG, error.getDescription());
-        }
+        generatedMissionModel_.addWaypointMission(mission);
     }
 }

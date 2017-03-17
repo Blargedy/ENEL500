@@ -76,7 +76,7 @@ public class MissionControlsPresenter implements
         if (v.getId() == acceptAreaButton_.getId()) {
             missionState_.setCurrentMissionState(MissionStateEnum.GENERATE_MISSION_BOUNDARY);
         } else if (v.getId() == startMissionButton_.getId()) {
-            missionState_.setCurrentMissionState(MissionStateEnum.START_MISSION);
+            missionState_.setCurrentMissionState(MissionStateEnum.INITIALIZE_MISSION);
         } else if (v.getId() == cancelButton_.getId()) {
             cancelButtonPressed();
         }
@@ -162,6 +162,11 @@ public class MissionControlsPresenter implements
 
                 acceptAreaButton_.setVisibility(View.GONE);
                 hoverNowToggleButton_.setVisibility(View.GONE);
+                break;
+
+            case INITIALIZE_MISSION:
+                startMissionButton_.setEnabled(false);
+                startMissionButton_.setEnabled(false);
                 break;
 
             case START_MISSION:

@@ -13,15 +13,12 @@ import java.io.File;
 
 public class MainMenuActivity extends AppCompatActivity
 {
-    private ApplicationContextManager contextManager_;
     private MainMenuView mainMenuView_;
     private MainMenuPresenter mainMenuPresenter_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        contextManager_ = new ApplicationContextManager(this);
-
         sendLogsToFile();
 
         mainMenuView_ = new MainMenuView(this);
@@ -29,7 +26,7 @@ public class MainMenuActivity extends AppCompatActivity
         mainMenuPresenter_ = new MainMenuPresenter(
                 mainMenuView_.reconstructLiveButton(),
                 mainMenuView_.reconstructLaterButton(),
-                contextManager_);
+                this);
 
         setContentView(mainMenuView_);
     }

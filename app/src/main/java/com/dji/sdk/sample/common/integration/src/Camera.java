@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.integration.src;
 
 import com.dji.sdk.sample.common.integration.api.I_Camera;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
+import com.dji.sdk.sample.common.mission.api.I_CameraGeneratedNewMediaFileCallback;
 
 import dji.common.camera.DJICameraSettingsDef;
 import dji.sdk.camera.DJICamera;
@@ -31,5 +32,17 @@ public class Camera implements I_Camera
             default:
                 break;
         }
+    }
+
+    @Override
+    public void setCameraGeneratedNewMediaFileCallback(I_CameraGeneratedNewMediaFileCallback callback)
+    {
+        camera_.setDJICameraGeneratedNewMediaFileCallback(callback);
+    }
+
+    @Override
+    public void shootSinglePhoto(I_CompletionCallback callback)
+    {
+        camera_.startShootPhoto(DJICameraSettingsDef.CameraShootPhotoMode.Single, callback);
     }
 }

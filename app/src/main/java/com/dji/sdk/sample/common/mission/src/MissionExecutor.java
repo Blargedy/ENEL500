@@ -10,8 +10,8 @@ import android.util.Log;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
-import com.dji.sdk.sample.common.mission.api.I_MissionGenerationCompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
+import com.dji.sdk.sample.common.mission.api.I_MissionInitializer;
 import com.dji.sdk.sample.common.mission.api.I_NextWaypointMissionStarter;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
@@ -22,9 +22,7 @@ import dji.common.error.DJIError;
  * Created by Julia on 2017-03-07.
  */
 
-public class MissionExecutor implements
-        I_MissionGenerationCompletionCallback,
-        I_CompletionCallback
+public class MissionExecutor implements I_CompletionCallback
 {
     private static final String TAG = "MissionExecutor";
 
@@ -32,6 +30,7 @@ public class MissionExecutor implements
 
     private I_MissionGenerator missionGenerator_;
     private I_NextWaypointMissionStarter nextWaypointMissionStarter_;
+    private I_MissionInitializer missionInitializer_;
     private I_MissionManagerSource missionManagerSource_;
     private MissionStateEntity missionState_;
 
@@ -39,11 +38,13 @@ public class MissionExecutor implements
             Context context,
             I_MissionGenerator missionGenerator,
             I_NextWaypointMissionStarter nextWaypointMissionStarter,
+            I_MissionInitializer missionInitializer,
             I_MissionManagerSource missionManagerSource,
             MissionStateEntity missionState)
     {
         missionGenerator_ = missionGenerator;
         nextWaypointMissionStarter_ = nextWaypointMissionStarter;
+        missionInitializer_ = missionInitializer;
         missionManagerSource_ = missionManagerSource;
         missionState_ = missionState;
 
@@ -70,7 +71,12 @@ public class MissionExecutor implements
         switch (missionState_.getCurrentMissionState())
         {
             case GENERATE_MISSION:
-                missionGenerator_.generateMission(this);
+                missionGenerator_.generateMission();
+                missionState_.setCurrentMissionState(MissionStateEnum.VIEW_MISSION);
+                break;
+
+            case INITIALIZE_MISSION:
+                missionInitializer_.initializeMissionPriorToTakeoff(this);
                 break;
 
             case START_MISSION:
@@ -91,12 +97,6 @@ public class MissionExecutor implements
     }
 
     @Override
-    public void onMissionGenerationCompletion()
-    {
-        changeMissionStateAfterCommandIsExecutedSuccessfully();
-    }
-
-    @Override
     public void onResult(DJIError error)
     {
         if(error == null)
@@ -114,8 +114,8 @@ public class MissionExecutor implements
     {
         switch (missionState_.getCurrentMissionState())
         {
-            case GENERATE_MISSION:
-                missionState_.setCurrentMissionState(MissionStateEnum.VIEW_MISSION);
+            case INITIALIZE_MISSION:
+                missionState_.setCurrentMissionState(MissionStateEnum.START_MISSION);
                 break;
 
             case START_MISSION:

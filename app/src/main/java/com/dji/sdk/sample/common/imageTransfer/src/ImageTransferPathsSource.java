@@ -24,6 +24,7 @@ public class ImageTransferPathsSource implements I_ImageTransferPathsSource
     @Override
     public File androidDeviceImagePath()
     {
-        return Environment.getExternalStorageDirectory();
+        return contextManager_.getApplicationContext()
+                .getExternalFilesDir(Environment.DIRECTORY_PICTURES);
     }
 }

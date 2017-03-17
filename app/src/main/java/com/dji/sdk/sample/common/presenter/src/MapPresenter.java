@@ -171,14 +171,14 @@ public class MapPresenter implements
 
     @Override
     public MissionBoundary getSurveyAreaBoundary() {
-        Coordinate topRight = new Coordinate(50.796276, -114.205159);
-        Coordinate bottomLeft = new Coordinate(50.795906, -114.206540);
-//        Coordinate topRight = new Coordinate(
-//                surveyPolygon.getPoints().get(2).latitude,
-//                surveyPolygon.getPoints().get(2).longitude);
-//        Coordinate bottomLeft = new Coordinate(
-//                surveyPolygon.getPoints().get(0).latitude,
-//                surveyPolygon.getPoints().get(0).longitude);
+//        Coordinate topRight = new Coordinate(50.796276, -114.205159);
+//        Coordinate bottomLeft = new Coordinate(50.795906, -114.206540);
+        Coordinate topRight = new Coordinate(
+                surveyPolygon.getPoints().get(2).latitude,
+                surveyPolygon.getPoints().get(2).longitude);
+        Coordinate bottomLeft = new Coordinate(
+                surveyPolygon.getPoints().get(0).latitude,
+                surveyPolygon.getPoints().get(0).longitude);
         return new MissionBoundary(topRight, bottomLeft);
     }
 

@@ -6,5 +6,5 @@ package com.dji.sdk.sample.common.mission.api;
 
 public interface I_MissionGenerator
 {
-    void generateMission(I_MissionGenerationCompletionCallback callback);
+    void generateMission();
 }

@@ -85,7 +85,8 @@ public class ImageTransferCoordinator implements
         }
         else
         {
-            Log.e(TAG, error.getDescription());
+            Log.e(TAG, "Failed while expecting " + nextCallback_.name() +
+                    " callback : " + error.getDescription());
         }
     }
 

@@ -5,7 +5,6 @@ import android.util.Log;
 import com.dji.sdk.sample.common.imageTransfer.api.I_CameraModeChanger;
 import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaListFetcher;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneMediaListInitializer;
-import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleInitializationCallback;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.integration.api.I_CameraMediaListDownloadListener;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
