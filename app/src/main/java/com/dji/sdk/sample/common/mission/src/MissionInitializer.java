@@ -12,6 +12,7 @@ import com.dji.sdk.sample.common.integration.api.I_WaypointMissionProgressStatus
 import com.dji.sdk.sample.common.mission.api.I_CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionInitializer;
 
+import dji.common.camera.DJICameraSettingsDef;
 import dji.common.error.DJIError;
 
 /**
@@ -22,7 +23,11 @@ public class MissionInitializer implements
         I_MissionInitializer,
         I_CompletionCallback
 {
-    private enum ExpectedCallback { SET_HOME_LOCATION, INITIALIZE_IMAGE_TRANSFER, CHANGE_CAMERA_MODE }
+    private enum ExpectedCallback {
+        SET_HOME_LOCATION,
+        INITIALIZE_IMAGE_TRANSFER,
+        CHANGE_CAMERA_MODE,
+        SET_PHOTO_FILE_FORMAT }
     private MissionInitializer.ExpectedCallback expectedCallback_;
 
     private I_MissionManagerSource missionManagerSource_;
@@ -87,6 +92,12 @@ public class MissionInitializer implements
                     cameraModeChanger_.changeToShootPhotoMode(this);
                     break;
                 case CHANGE_CAMERA_MODE:
+                    expectedCallback_ = MissionInitializer.ExpectedCallback.SET_PHOTO_FILE_FORMAT;
+                    cameraSource_.getCamera().setPhotoFileFormat(
+                            DJICameraSettingsDef.CameraPhotoFileFormat.RAW,
+                            this);
+                    break;
+                case SET_PHOTO_FILE_FORMAT:
                     callback_.onResult(null);
                     break;
                 default:

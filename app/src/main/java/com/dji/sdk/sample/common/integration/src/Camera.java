@@ -41,6 +41,14 @@ public class Camera implements I_Camera
     }
 
     @Override
+    public void setPhotoFileFormat(
+            DJICameraSettingsDef.CameraPhotoFileFormat photoFileFormat,
+            I_CompletionCallback callback)
+    {
+        camera_.setPhotoFileFormat(photoFileFormat, callback);
+    }
+
+    @Override
     public void shootSinglePhoto(I_CompletionCallback callback)
     {
         camera_.startShootPhoto(DJICameraSettingsDef.CameraShootPhotoMode.Single, callback);
