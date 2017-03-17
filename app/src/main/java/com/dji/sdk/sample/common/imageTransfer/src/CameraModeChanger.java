@@ -29,9 +29,9 @@ public class CameraModeChanger implements I_CameraModeChanger
     @Override
     public void changeToMediaDownloadMode(I_CompletionCallback callback)
     {
-        I_MediaManager mediaManager = mediaManagerSource_.getMediaManager();
-        mediaManager.setCameraModeMediaDownload(callback);
-    }
+        I_Camera camera = cameraSource_.getCamera();
+        camera.setCameraMode(I_Camera.CameraMode.MEDIA_DOWNLOAD, callback);
+}
 
     public void changeToShootPhotoMode(I_CompletionCallback callback)
     {

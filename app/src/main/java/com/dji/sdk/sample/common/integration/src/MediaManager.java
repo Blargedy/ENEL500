@@ -23,10 +23,4 @@ public class MediaManager implements I_MediaManager {
     {
         mediaManager_.fetchMediaList(downloadListener);
     }
-
-    @Override
-    public void setCameraModeMediaDownload(I_CompletionCallback callback)
-    {
-        mediaManager_.setCameraModeMediaDownload(callback);
-    }
 }

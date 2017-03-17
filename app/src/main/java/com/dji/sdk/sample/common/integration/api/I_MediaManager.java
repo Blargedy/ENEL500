@@ -7,5 +7,4 @@ package com.dji.sdk.sample.common.integration.api;
 public interface I_MediaManager
 {
     void fetchMediaList(I_CameraMediaListDownloadListener downloadListener);
-    void setCameraModeMediaDownload(I_CompletionCallback callback);
 }

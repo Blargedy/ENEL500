@@ -218,7 +218,7 @@ public class MapPresenter implements
         for (int j = 0; j < waypoints.size(); j++) {
             waypointCircleList.add(mMap.addCircle(new CircleOptions()
                     .center(new LatLng(waypoints.get(j).latitude_, waypoints.get(j).longitude_))
-                    .radius(12)
+                    .radius(3)
                     .strokeWidth(1)
                     .zIndex(3004.5f) // above the polylines, below the drone and user
                     .strokeColor(Color.BLACK)
@@ -402,6 +402,7 @@ public class MapPresenter implements
                             haveAnimatedCameraToUserMarker = true;
                             mMap.setOnMapLoadedCallback(null); // don't need anymore since loaded
                             writeToast("GPS Signal Acquired.");
+                            mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                             mMap.getUiSettings().setAllGesturesEnabled(false);
                             mMap.getUiSettings().setScrollGesturesEnabled(false);
                             mMap.getUiSettings().setZoomControlsEnabled(false);
@@ -459,7 +460,7 @@ public class MapPresenter implements
                     usingCachedMap = false;
                     Log.d("MapPresenter", "Internet Connection Found. Switching back to Google Hybrid Map");
                     offlineOverlay.remove();
-                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                     writeToast("Internet Connection Found. Switching back to Google Hybrid Map");
                 }
             }

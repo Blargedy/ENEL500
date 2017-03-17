@@ -6,6 +6,7 @@ import com.dji.sdk.sample.common.entity.DroneLocationEntity;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
+import com.dji.sdk.sample.common.imageTransfer.src.DroneImageDownloadQueuer;
 import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferInitiator;
 import com.dji.sdk.sample.common.mission.api.InertMissionPeriodicImageTransferInitiator;
 import com.dji.sdk.sample.common.mission.src.CameraGeneratedNewMediaFileCallback;
@@ -71,11 +72,13 @@ public class MissionContainer
         if (isLiveModeEnabled){
             periodicImageTransferInitiator_ = new MissionPeriodicImageTransferInitiator(
                     integrationLayerContainer.missionManagerSource(),
-                    imageTransferContainer.imageTransferer());
+                    imageTransferContainer.imageTransferer(),
+                    imageTransferContainer.droneImageDownloadQueuer());
         } else{
             periodicImageTransferInitiator_ = new InertMissionPeriodicImageTransferInitiator();
         }
         cameraGeneratedNewMediaFileCallback_ = new CameraGeneratedNewMediaFileCallback(
+                imageTransferContainer.droneImageDownloadQueuer(),
                 periodicImageTransferInitiator_);
 
         waypointReachedNotifier_ = new WaypointReachedNotifier(context);

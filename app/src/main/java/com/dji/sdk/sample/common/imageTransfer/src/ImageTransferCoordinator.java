@@ -1,15 +1,11 @@
 package com.dji.sdk.sample.common.imageTransfer.src;
 
-
 import android.util.Log;
 
 import com.dji.sdk.sample.common.imageTransfer.api.I_CameraModeChanger;
-import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaListFetcher;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadSelector;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneToAndroidImageDownloader;
-import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
-import com.dji.sdk.sample.common.integration.api.I_CameraMediaListDownloadListener;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 
 import java.util.ArrayList;
@@ -23,8 +19,7 @@ import dji.sdk.camera.DJIMedia;
 
 public class ImageTransferCoordinator implements
         I_ImageTransferer,
-        I_CompletionCallback,
-        I_CameraMediaListDownloadListener
+        I_CompletionCallback
 {
     private static final String TAG = "ImageTransferCoordinator";
 
@@ -35,26 +30,23 @@ public class ImageTransferCoordinator implements
     ExpectedCallback nextCallback_;
 
     private I_CameraModeChanger modeChanger_;
-    private I_CameraMediaListFetcher mediaListFetcher_;
     private I_DroneImageDownloadSelector downloadSelector_;
     private I_DroneToAndroidImageDownloader imageDownloader_;
 
-    private I_ImageTransferCompletionCallback completionCallback_;
+    private I_CompletionCallback completionCallback_;
 
     public ImageTransferCoordinator(
             I_CameraModeChanger modeChanger,
-            I_CameraMediaListFetcher mediaListFetcher,
             I_DroneImageDownloadSelector downloadSelector,
             I_DroneToAndroidImageDownloader imageDownloader)
     {
         modeChanger_ = modeChanger;
-        mediaListFetcher_ = mediaListFetcher;
         downloadSelector_ = downloadSelector;
         imageDownloader_ = imageDownloader;
     }
 
     @Override
-    public void transferNewImagesFromDrone(I_ImageTransferCompletionCallback callback)
+    public void transferNewImagesFromDrone(I_CompletionCallback callback)
     {
         completionCallback_ = callback;
 
@@ -70,14 +62,19 @@ public class ImageTransferCoordinator implements
             switch (nextCallback_)
             {
                 case SWITCH_TO_DOWNLOAD:
-                    mediaListFetcher_.fetchMediaListFromCamera(this);
+                    ArrayList<DJIMedia> imagesToDownload = downloadSelector_
+                            .determineImagesForDownloadFromMediaList(null);
+
+                    nextCallback_ = ExpectedCallback.DOWNLOAD_PHOTOS;
+                    imageDownloader_.downloadImagesFromDrone(imagesToDownload, this);
+
                     break;
                 case DOWNLOAD_PHOTOS:
                     nextCallback_ = ExpectedCallback.SWITCH_TO_SHOOT_PHOTO;
                     modeChanger_.changeToShootPhotoMode(this);
                     break;
                 case SWITCH_TO_SHOOT_PHOTO:
-                    completionCallback_.onImageTransferCompletion();
+                    completionCallback_.onResult(null);
                     break;
                 default:
                     break;
@@ -87,31 +84,8 @@ public class ImageTransferCoordinator implements
         {
             Log.e(TAG, "Failed while expecting " + nextCallback_.name() +
                     " callback : " + error.getDescription());
+
+            completionCallback_.onResult(error);
         }
-    }
-
-    @Override
-    public void onSuccess(ArrayList<DJIMedia> currentMediaList)
-    {
-        ArrayList<DJIMedia> imagesToDownload = downloadSelector_
-                .determineImagesForDownloadFromMediaList(currentMediaList);
-
-        nextCallback_ = ExpectedCallback.DOWNLOAD_PHOTOS;
-        imageDownloader_.downloadImagesFromDrone(imagesToDownload, this);
-    }
-
-    @Override
-    public void onStart() {}
-
-    @Override
-    public void onRateUpdate(long total, long current, long persize) {}
-
-    @Override
-    public void onProgress(long total, long current) {}
-
-    @Override
-    public void onFailure(DJIError error)
-    {
-        Log.e(TAG, "Failed to fetched media list: " + error.getDescription());
     }
 }

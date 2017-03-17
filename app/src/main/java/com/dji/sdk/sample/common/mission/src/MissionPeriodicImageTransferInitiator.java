@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.mission.src;
 
 import android.util.Log;
 
+import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadQueuer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
@@ -17,23 +18,25 @@ import dji.common.util.LocationUtils;
 
 public class MissionPeriodicImageTransferInitiator implements
         I_MissionPeriodicImageTransferInitiator,
-        I_ImageTransferCompletionCallback,
         I_CompletionCallback
 {
     private static final String TAG = "MissionPeriodicImageTransferInitiator";
 
-    private enum ExpectedCallback { PAUSE, RESUME }
+    private enum ExpectedCallback { PAUSE, TRANSFER, RESUME }
 
     private ExpectedCallback expectedCallback_;
     private I_MissionManagerSource missionManagerSource_;
     private I_ImageTransferer imageTransferer_;
+    private I_DroneImageDownloadQueuer imageDownloadQueuer_;
 
     public MissionPeriodicImageTransferInitiator(
             I_MissionManagerSource missionManagerSource,
-            I_ImageTransferer imageTransferer)
+            I_ImageTransferer imageTransferer,
+            I_DroneImageDownloadQueuer imageDownloadQueuer)
     {
         missionManagerSource_ = missionManagerSource;
         imageTransferer_ = imageTransferer;
+        imageDownloadQueuer_ = imageDownloadQueuer;
     }
 
     @Override
@@ -51,7 +54,13 @@ public class MissionPeriodicImageTransferInitiator implements
             switch (expectedCallback_)
             {
                 case PAUSE:
+                    expectedCallback_ = ExpectedCallback.TRANSFER;
                     imageTransferer_.transferNewImagesFromDrone(this);
+                    break;
+                case TRANSFER:
+                    imageDownloadQueuer_.clearQueue();
+                    expectedCallback_ = ExpectedCallback.RESUME;
+                    missionManagerSource_.getMissionManager().resumeMissionExecution(this);
                     break;
                 case RESUME:
                     break;
@@ -63,12 +72,5 @@ public class MissionPeriodicImageTransferInitiator implements
         {
             Log.e(TAG, error.getDescription());
         }
-    }
-
-    @Override
-    public void onImageTransferCompletion()
-    {
-        expectedCallback_ = ExpectedCallback.RESUME;
-        missionManagerSource_.getMissionManager().resumeMissionExecution(this);
     }
 }

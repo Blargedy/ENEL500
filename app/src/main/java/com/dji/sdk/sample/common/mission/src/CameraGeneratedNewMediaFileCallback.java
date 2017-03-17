@@ -1,5 +1,6 @@
 package com.dji.sdk.sample.common.mission.src;
 
+import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadQueuer;
 import com.dji.sdk.sample.common.mission.api.I_CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferInitiator;
 
@@ -11,20 +12,26 @@ import dji.sdk.camera.DJIMedia;
 
 public class CameraGeneratedNewMediaFileCallback implements I_CameraGeneratedNewMediaFileCallback
 {
-    private int imageCount_;
     private static final int IMAGE_TRANSFER_DELAY = 5;
+    private int imageCount_;
+
     private I_MissionPeriodicImageTransferInitiator imageTransferInitiator_;
+    private I_DroneImageDownloadQueuer imageDownloadQueuer_;
 
     public CameraGeneratedNewMediaFileCallback(
+            I_DroneImageDownloadQueuer imageDownloadQueuer,
             I_MissionPeriodicImageTransferInitiator imageTransferInitiator)
     {
+        imageDownloadQueuer_ = imageDownloadQueuer;
         imageTransferInitiator_ = imageTransferInitiator;
+
         imageCount_ = 0;
     }
 
     @Override
     public void onResult(DJIMedia media)
     {
+        imageDownloadQueuer_.addImageToDownloadQueue(media);
         imageCount_++;
         if (imageCount_ % IMAGE_TRANSFER_DELAY == 0)
         {

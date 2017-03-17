@@ -10,12 +10,13 @@ import dji.common.camera.DJICameraSettingsDef;
 
 public interface I_Camera
 {
-    enum CameraMode { SHOOT_PHOTO }
+    enum CameraMode { SHOOT_PHOTO, MEDIA_DOWNLOAD }
 
     void setCameraMode(CameraMode mode, I_CompletionCallback callback);
     void setCameraGeneratedNewMediaFileCallback(I_CameraGeneratedNewMediaFileCallback callback);
     void setPhotoFileFormat(
             DJICameraSettingsDef.CameraPhotoFileFormat  photoFileFormat,
             I_CompletionCallback callback);
+    void setExposureModeToAutomatic(I_CompletionCallback callback);
     void shootSinglePhoto(I_CompletionCallback callback);
 }

@@ -102,7 +102,7 @@ public class FlightControlView
     @Override
     public void disableAllControls()
     {
-        acceptAreaButton_.setEnabled(false);
+        //acceptAreaButton_.setEnabled(false);
         startMissionButton_.setEnabled(false);
         cancelButton_.setEnabled(false);
         hoverNowToggleButton_.setEnabled(false);

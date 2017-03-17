@@ -58,7 +58,7 @@ public class AndroidToPcImageCopier extends Thread implements I_AndroidToPcImage
 
             try {
                 copyFileToPc(androidImagePath);
-                deleteFileOnAndroid(androidImagePath);
+                //deleteFileOnAndroid(androidImagePath);
             } catch (IOException e) {
                 Log.e(TAG, "Failed to send " + androidImagePath + ": " + e.toString());
             }

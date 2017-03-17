@@ -6,6 +6,9 @@ import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
 import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleEndCompletionCallback;
+import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
+
+import dji.common.error.DJIError;
 
 /**
  * Created by Julia on 2017-03-05.
@@ -13,7 +16,7 @@ import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleEn
 
 public class ImageTransferModuleEnder implements
         I_ImageTransferModuleEnder,
-        I_ImageTransferCompletionCallback
+        I_CompletionCallback
 {
     private static final String TAG = "ImageTransferModuleEnder";
 
@@ -38,7 +41,7 @@ public class ImageTransferModuleEnder implements
     }
 
     @Override
-    public void onImageTransferCompletion()
+    public void onResult(DJIError error)
     {
         androidToPcImageCopier_.interrupt();
 

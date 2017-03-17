@@ -9,7 +9,7 @@ import com.dji.sdk.sample.common.mission.src.MissionBoundary;
 public class InitialMissionModel
 {
     private MissionBoundary missionBoundary_;
-    private float altitude_ = 35.0f;
+    private float altitude_ = 20.0f;
     private double minimumPercentImageOverlap_ = 0.80; // number between 0 and 1 e.g. 0.80
     private double minimumPercentSwathOverlap_ = 0.50; // number between 0 and 1 e.g. 0.50
 

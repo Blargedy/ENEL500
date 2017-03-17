@@ -14,8 +14,8 @@ import dji.sdk.camera.DJIMedia;
  */
 
 public class DroneImageDownloadSelector implements
-        I_DroneImageDownloadSelector,
-        I_DroneMediaListInitializer
+        I_DroneMediaListInitializer,
+        I_DroneImageDownloadSelector
 {
     private HashSet<String> pastMediaFileNames_;
 
@@ -48,4 +48,6 @@ public class DroneImageDownloadSelector implements
         }
         return imagesToDownload;
     }
+
+
 }

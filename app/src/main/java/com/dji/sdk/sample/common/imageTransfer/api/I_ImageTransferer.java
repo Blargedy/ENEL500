@@ -1,6 +1,6 @@
 package com.dji.sdk.sample.common.imageTransfer.api;
 
-import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
+import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 
 /**
  * Created by Julia on 2017-02-12.
@@ -8,5 +8,5 @@ import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompleti
 
 public interface I_ImageTransferer
 {
-    void transferNewImagesFromDrone(I_ImageTransferCompletionCallback callback);
+    void transferNewImagesFromDrone(I_CompletionCallback callback);
 }

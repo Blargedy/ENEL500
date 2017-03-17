@@ -29,6 +29,9 @@ public class Camera implements I_Camera
             case SHOOT_PHOTO:
                 camera_.setCameraMode(DJICameraSettingsDef.CameraMode.ShootPhoto, callback);
                 break;
+            case MEDIA_DOWNLOAD:
+                camera_.setCameraMode(DJICameraSettingsDef.CameraMode.MediaDownload, callback);
+                break;
             default:
                 break;
         }
@@ -46,6 +49,12 @@ public class Camera implements I_Camera
             I_CompletionCallback callback)
     {
         camera_.setPhotoFileFormat(photoFileFormat, callback);
+    }
+
+    @Override
+    public void setExposureModeToAutomatic(I_CompletionCallback callback)
+    {
+        camera_.setExposureMode(DJICameraSettingsDef.CameraExposureMode.Program, callback);
     }
 
     @Override

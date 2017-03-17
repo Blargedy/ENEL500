@@ -1,6 +1,7 @@
 package com.dji.sdk.sample.common.container;
 
 import com.dji.sdk.sample.common.imageTransfer.api.I_CameraModeChanger;
+import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadQueuer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneMediaListInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleEnder;
@@ -9,6 +10,7 @@ import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.src.AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.imageTransfer.src.CameraModeChanger;
 import com.dji.sdk.sample.common.imageTransfer.src.CameraMediaListFetcher;
+import com.dji.sdk.sample.common.imageTransfer.src.DroneImageDownloadQueuer;
 import com.dji.sdk.sample.common.imageTransfer.src.DroneImageDownloadSelector;
 import com.dji.sdk.sample.common.imageTransfer.src.DroneToAndroidImageDownloader;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
@@ -26,8 +28,9 @@ import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 public class ImageTransferContainer
 {
     private CameraModeChanger cameraModeChanger_;
-    private CameraMediaListFetcher mediaListFetcher_;
     private DroneImageDownloadSelector downloadSelector_;
+
+    private DroneImageDownloadQueuer droneImageDownloadQueuer_;
 
     private ImageTransferPathsSource pathsSource_;
     private AndroidToPcImageCopier androidToPcImageCopier_;
@@ -47,11 +50,9 @@ public class ImageTransferContainer
         cameraModeChanger_ = new CameraModeChanger(
                 integrationLayerContainer.mediaManagerSource(),
                 integrationLayerContainer.cameraSource());
-        mediaListFetcher_ = new CameraMediaListFetcher(
-                integrationLayerContainer.mediaManagerSource(),
-                downloadSelector_,
-                droneToAndroidImageDownloader_);
         downloadSelector_ = new DroneImageDownloadSelector();
+
+        droneImageDownloadQueuer_ = new DroneImageDownloadQueuer();
 
         pathsSource_ = new ImageTransferPathsSource(
                 contextManager);
@@ -66,14 +67,11 @@ public class ImageTransferContainer
         {
             imageTransferer_ = new ImageTransferCoordinator(
                     cameraModeChanger_,
-                    mediaListFetcher_,
-                    downloadSelector_,
+                    droneImageDownloadQueuer_,
                     droneToAndroidImageDownloader_);
 
             imageTransferModuleInitializer_ = new ImageTransferModuleInitializer(
                     cameraModeChanger_,
-                    mediaListFetcher_,
-                    downloadSelector_,
                     androidToPcImageCopier_);
 
             imageTransferModuleEnder_ = new ImageTransferModuleEnder(
@@ -103,13 +101,13 @@ public class ImageTransferContainer
         return imageTransferModuleEnder_;
     }
 
-    public I_DroneMediaListInitializer droneMediaListInitializer()
-    {
-        return downloadSelector_;
-    }
-
     public I_CameraModeChanger cameraModeChanger()
     {
         return cameraModeChanger_;
+    }
+
+    public I_DroneImageDownloadQueuer droneImageDownloadQueuer()
+    {
+        return droneImageDownloadQueuer_;
     }
 }

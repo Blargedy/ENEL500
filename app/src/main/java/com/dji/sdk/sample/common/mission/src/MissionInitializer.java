@@ -27,7 +27,8 @@ public class MissionInitializer implements
         SET_HOME_LOCATION,
         INITIALIZE_IMAGE_TRANSFER,
         CHANGE_CAMERA_MODE,
-        SET_PHOTO_FILE_FORMAT }
+        SET_PHOTO_FILE_FORMAT,
+        SET_CAMERA_EXPOSURE }
     private MissionInitializer.ExpectedCallback expectedCallback_;
 
     private I_MissionManagerSource missionManagerSource_;
@@ -98,6 +99,10 @@ public class MissionInitializer implements
                             this);
                     break;
                 case SET_PHOTO_FILE_FORMAT:
+                    expectedCallback_ = ExpectedCallback.SET_CAMERA_EXPOSURE;
+                    cameraSource_.getCamera().setExposureModeToAutomatic(this);
+                    break;
+                case SET_CAMERA_EXPOSURE:
                     callback_.onResult(null);
                     break;
                 default:
