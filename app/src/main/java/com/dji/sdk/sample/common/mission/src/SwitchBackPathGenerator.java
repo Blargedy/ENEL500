@@ -37,13 +37,14 @@ public class SwitchBackPathGenerator {
         initialMissionModel_ = initialMissionModel;
     }
 
-    public Vector<Coordinate> generateSwitchback(Coordinate bottomLeft, Coordinate topRight) {
-        bottomLeft_ = bottomLeft;
-        topRight_ = topRight;
+    public Vector<Coordinate> generateSwitchback()
+    {
+        bottomLeft_ = initialMissionModel_.missionBoundary().bottomLeft();
+        topRight_ = initialMissionModel_.missionBoundary().topRight();
 
         // Determine bottomRight and topLeft coordinates assuming rectangular area
-        bottomRight_ = new Coordinate(bottomLeft.latitude_, topRight.longitude_);
-        topLeft_ = new Coordinate(topRight.latitude_, bottomLeft.longitude_);
+        bottomRight_ = new Coordinate(bottomLeft_.latitude_, topRight_.longitude_);
+        topLeft_ = new Coordinate(topRight_.latitude_, bottomLeft_.longitude_);
 
         switchbackPoints_ = new Vector<Coordinate>();
 

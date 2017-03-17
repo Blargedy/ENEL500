@@ -1,10 +1,10 @@
 package dji.developer.sample.imageTransfer;
 
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
-import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
 import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleEndCompletionCallback;
 import com.dji.sdk.sample.common.imageTransfer.src.AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferModuleEnder;
+import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -53,7 +53,7 @@ public class TestImageTransferModuleEnder
         doAnswer(new Answer() {
             public Object answer(InvocationOnMock invocation) {
                 Object[] args = invocation.getArguments();
-                ((I_ImageTransferCompletionCallback)args[0]).onImageTransferCompletion();
+                ((I_CompletionCallback)args[0]).onResult(null);
                 return null;
             }})
                 .when(droneToAndroidImageTransferer_).transferNewImagesFromDrone(same(patient_));

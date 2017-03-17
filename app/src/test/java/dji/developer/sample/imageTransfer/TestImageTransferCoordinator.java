@@ -1,22 +1,18 @@
 package dji.developer.sample.imageTransfer;
 
-import com.dji.sdk.sample.common.imageTransfer.api.I_CameraModeChanger;
-import com.dji.sdk.sample.common.imageTransfer.api.I_CameraMediaListFetcher;
-import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadSelector;
+import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadQueuer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneToAndroidImageDownloader;
-import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferCoordinator;
-import com.dji.sdk.sample.common.integration.api.I_CameraMediaListDownloadListener;
+import com.dji.sdk.sample.common.integration.api.I_Camera;
+import com.dji.sdk.sample.common.integration.api.I_CameraSource;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
 
 import dji.sdk.camera.DJIMedia;
 
@@ -28,58 +24,46 @@ import static org.mockito.Mockito.*;
 
 public class TestImageTransferCoordinator
 {
-    private I_CameraModeChanger modeChanger_ = mock(I_CameraModeChanger.class);
-    private I_CameraMediaListFetcher mediaListFetcher_ = mock(I_CameraMediaListFetcher.class);
-    private I_DroneImageDownloadSelector downloadSelector_ = mock(I_DroneImageDownloadSelector.class);
+    private I_CameraSource cameraSource_ = mock(I_CameraSource.class);
+    private I_DroneImageDownloadQueuer downloadQueuer_ = mock(I_DroneImageDownloadQueuer.class);
     private I_DroneToAndroidImageDownloader imageDownloader_ = mock(I_DroneToAndroidImageDownloader.class);
 
     private ImageTransferCoordinator patient_ = new ImageTransferCoordinator(
-            modeChanger_,
-            mediaListFetcher_,
-            downloadSelector_,
+            cameraSource_,
+            downloadQueuer_,
             imageDownloader_);
 
-    private I_ImageTransferCompletionCallback completionCallback_ = mock(I_ImageTransferCompletionCallback.class);
+    private I_CompletionCallback completionCallback_ = mock(I_CompletionCallback.class);
+    private I_Camera camera_ = mock(I_Camera.class);
 
     @Test
     public void willChangeCameraModeToMediaDownloadMode()
     {
-        patient_.transferNewImagesFromDrone(completionCallback_);
-
-        verify(modeChanger_).changeToMediaDownloadMode(patient_);
-    }
-
-    @Test
-    public void willFetchMediaListAfterChangingCameraMode()
-    {
-        makeModeChangerCallOnResultCallback();
+        when(cameraSource_.getCamera()).thenReturn(camera_);
 
         patient_.transferNewImagesFromDrone(completionCallback_);
 
-        verify(mediaListFetcher_).fetchMediaListFromCamera(same(patient_));
+        verify(camera_).setCameraMode(eq(I_Camera.CameraMode.MEDIA_DOWNLOAD), same(patient_));
     }
 
     @Test
     public void willDetermineWhichImagesNeedToBeDownloaded()
     {
-        final ArrayList<DJIMedia> mediaList = new ArrayList<>();
-        makeModeChangerCallOnResultCallback();
-        makeMediaListFetcherCallOnSuccessCallback(mediaList);
+        when(cameraSource_.getCamera()).thenReturn(camera_);
+        makeCameraCallOnResultCallback();
 
         patient_.transferNewImagesFromDrone(completionCallback_);
 
-        verify(downloadSelector_).determineImagesForDownloadFromMediaList(same(mediaList));
+        verify(downloadQueuer_).getListOfImagesToDownload();
     }
 
     @Test
     public void willDownloadSelectedImages()
     {
-        final ArrayList<DJIMedia> mediaList = makeMediaList(3);
         ArrayList<DJIMedia> imagesToDownload = makeMediaList(3);
-        makeModeChangerCallOnResultCallback();
-        makeMediaListFetcherCallOnSuccessCallback(mediaList);
-        when(downloadSelector_.determineImagesForDownloadFromMediaList(same(mediaList)))
-                .thenReturn(imagesToDownload);
+        when(cameraSource_.getCamera()).thenReturn(camera_);
+        makeCameraCallOnResultCallback();
+        when(downloadQueuer_.getListOfImagesToDownload()).thenReturn(imagesToDownload);
 
         patient_.transferNewImagesFromDrone(completionCallback_);
 
@@ -91,61 +75,46 @@ public class TestImageTransferCoordinator
     @Test
     public void willChangeCameraModeBackToShootPhotoMode()
     {
-        final ArrayList<DJIMedia> mediaList = makeMediaList(3);
         ArrayList<DJIMedia> imagesToDownload = makeMediaList(3);
-        makeModeChangerCallOnResultCallback();
-        makeMediaListFetcherCallOnSuccessCallback(mediaList);
-        when(downloadSelector_.determineImagesForDownloadFromMediaList(any(ArrayList.class)))
-                .thenReturn(imagesToDownload);
+        when(cameraSource_.getCamera()).thenReturn(camera_);
+        makeCameraCallOnResultCallback();
+        when(downloadQueuer_.getListOfImagesToDownload()).thenReturn(imagesToDownload);
         makeImageDownloaderCallOnResultCallback();
 
         patient_.transferNewImagesFromDrone(completionCallback_);
 
-        verify(modeChanger_).changeToShootPhotoMode(same(patient_));
+        verify(camera_).setCameraMode(eq(I_Camera.CameraMode.SHOOT_PHOTO), same(patient_));
     }
 
     @Test
     public void willCallEachServiceInOrder()
     {
-        final ArrayList<DJIMedia> mediaList = makeMediaList(3);
         ArrayList<DJIMedia> imagesToDownload = makeMediaList(3);
-        makeModeChangerCallOnResultCallback();
-        makeMediaListFetcherCallOnSuccessCallback(mediaList);
-        when(downloadSelector_.determineImagesForDownloadFromMediaList(any(ArrayList.class)))
-                .thenReturn(imagesToDownload);
+        when(cameraSource_.getCamera()).thenReturn(camera_);
+        makeCameraCallOnResultCallback();
+        when(downloadQueuer_.getListOfImagesToDownload()).thenReturn(imagesToDownload);
         makeImageDownloaderCallOnResultCallback();
 
         patient_.transferNewImagesFromDrone(completionCallback_);
 
-        InOrder inOrder = inOrder(modeChanger_, mediaListFetcher_, downloadSelector_, imageDownloader_);
-        inOrder.verify(modeChanger_).changeToMediaDownloadMode(same(patient_));
-        inOrder.verify(mediaListFetcher_).fetchMediaListFromCamera(same(patient_));
-        inOrder.verify(downloadSelector_).determineImagesForDownloadFromMediaList(any(ArrayList.class));
+        InOrder inOrder = inOrder(camera_, downloadQueuer_, imageDownloader_);
+        inOrder.verify(camera_).setCameraMode(eq(I_Camera.CameraMode.MEDIA_DOWNLOAD), same(patient_));
+        inOrder.verify(downloadQueuer_).getListOfImagesToDownload();
         inOrder.verify(imageDownloader_).downloadImagesFromDrone(any(ArrayList.class),same(patient_));
-        inOrder.verify(modeChanger_).changeToShootPhotoMode(same(patient_));
+        inOrder.verify(camera_).setCameraMode(eq(I_Camera.CameraMode.SHOOT_PHOTO),same(patient_));
     }
 
-    private void makeModeChangerCallOnResultCallback()
+    private void makeCameraCallOnResultCallback()
     {
         doAnswer(new Answer() {
             public Object answer(InvocationOnMock invocation) {
                 Object[] args = invocation.getArguments();
-                ((I_CompletionCallback)args[0]).onResult(null);
+                ((I_CompletionCallback)args[1]).onResult(null);
                 return null;
             }})
-                .when(modeChanger_).changeToMediaDownloadMode(same(patient_));
-    }
-
-    private void makeMediaListFetcherCallOnSuccessCallback(
-            final ArrayList<DJIMedia> mediaList)
-    {
-        doAnswer(new Answer() {
-            public Object answer(InvocationOnMock invocation) {
-                Object[] args = invocation.getArguments();
-                ((I_CameraMediaListDownloadListener)args[0]).onSuccess(mediaList);
-                return null;
-            }})
-                .when(mediaListFetcher_).fetchMediaListFromCamera(same(patient_));
+                .when(camera_).setCameraMode(
+                        any(I_Camera.CameraMode.class),
+                        any(I_CompletionCallback.class));
     }
 
     private void makeImageDownloaderCallOnResultCallback()

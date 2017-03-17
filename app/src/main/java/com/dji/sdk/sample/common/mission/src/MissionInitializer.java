@@ -1,6 +1,5 @@
 package com.dji.sdk.sample.common.mission.src;
 
-import com.dji.sdk.sample.common.imageTransfer.api.I_CameraModeChanger;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.integration.api.I_Camera;
 import com.dji.sdk.sample.common.integration.api.I_CameraSource;
@@ -35,7 +34,6 @@ public class MissionInitializer implements
     private I_FlightControllerSource flightControllerSource_;
     private I_CameraSource cameraSource_;
     private I_ImageTransferModuleInitializer imageTransferModuleInitializer_;
-    private I_CameraModeChanger cameraModeChanger_;
     private I_CompletionCallback missionExecutionCompletionCallback_;
     private I_WaypointMissionProgressStatusCallback missionProgressStatusCallback_;
     private I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback_;
@@ -47,7 +45,6 @@ public class MissionInitializer implements
             I_FlightControllerSource flightControllerSource,
             I_CameraSource cameraSource,
             I_ImageTransferModuleInitializer imageTransferModuleInitializer,
-            I_CameraModeChanger cameraModeChanger,
             I_CompletionCallback missionExecutionCompletionCallback,
             I_WaypointMissionProgressStatusCallback missionProgressStatusCallback,
             I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback)
@@ -56,7 +53,6 @@ public class MissionInitializer implements
         flightControllerSource_ = flightControllerSource;
         cameraSource_ = cameraSource;
         imageTransferModuleInitializer_ = imageTransferModuleInitializer;
-        cameraModeChanger_ = cameraModeChanger;
         missionExecutionCompletionCallback_ = missionExecutionCompletionCallback;
         missionProgressStatusCallback_ = missionProgressStatusCallback;
         cameraGeneratedNewMediaFileCallback_ = cameraGeneratedNewMediaFileCallback;
@@ -90,12 +86,12 @@ public class MissionInitializer implements
                     break;
                 case INITIALIZE_IMAGE_TRANSFER:
                     expectedCallback_ = MissionInitializer.ExpectedCallback.CHANGE_CAMERA_MODE;
-                    cameraModeChanger_.changeToShootPhotoMode(this);
+                    cameraSource_.getCamera().setCameraMode(I_Camera.CameraMode.SHOOT_PHOTO, this);
                     break;
                 case CHANGE_CAMERA_MODE:
                     expectedCallback_ = MissionInitializer.ExpectedCallback.SET_PHOTO_FILE_FORMAT;
                     cameraSource_.getCamera().setPhotoFileFormat(
-                            DJICameraSettingsDef.CameraPhotoFileFormat.RAW,
+                            DJICameraSettingsDef.CameraPhotoFileFormat.RAWAndJPEG,
                             this);
                     break;
                 case SET_PHOTO_FILE_FORMAT:

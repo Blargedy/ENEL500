@@ -11,5 +11,6 @@ import dji.sdk.camera.DJIMedia;
 public interface I_DroneImageDownloadQueuer
 {
     void addImageToDownloadQueue(DJIMedia image);
+    ArrayList<DJIMedia> getListOfImagesToDownload();
     void clearQueue();
 }

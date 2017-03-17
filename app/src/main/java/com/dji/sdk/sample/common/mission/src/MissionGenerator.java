@@ -33,9 +33,7 @@ public class MissionGenerator implements I_MissionGenerator
     }
     public void generateMission()
     {
-        Vector<Coordinate> waypoints = switchBackPathGenerator_.generateSwitchback(
-                initialMissionModel_.missionBoundary().bottomLeft(),
-                initialMissionModel_.missionBoundary().topRight());
+        Vector<Coordinate> waypoints = switchBackPathGenerator_.generateSwitchback();
         generatedMissionModel_.setWaypoints(waypoints);
 
         DJIWaypointMission mission = null;

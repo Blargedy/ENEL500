@@ -1,11 +1,14 @@
 package dji.developer.sample.mission;
 
+import com.dji.sdk.sample.common.entity.InitialMissionModel;
+import com.dji.sdk.sample.common.mission.src.MissionBoundary;
 import com.dji.sdk.sample.common.mission.src.SwitchBackPathGenerator;
 import com.dji.sdk.sample.common.values.Coordinate;
 
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.Vector;
@@ -14,7 +17,13 @@ import java.util.Vector;
  * Created by Bill on 01-Mar-2017.
  */
 
-public class TestSwitchBackPathGenerator {
+public class TestSwitchBackPathGenerator
+{
+    private InitialMissionModel initialMissionModel_ = mock(InitialMissionModel.class);
+
+    private SwitchBackPathGenerator patient_ = new SwitchBackPathGenerator(
+            initialMissionModel_);
+
     @Test
     public void willAddLinearlySpacedIntermediateCoordinates() {
         Coordinate bottomLeft = new Coordinate(0.0, 0.0);
@@ -25,7 +34,7 @@ public class TestSwitchBackPathGenerator {
         coordinateList.add(bottomLeft);
         coordinateList.add(topRight);
 
-        SwitchBackPathGenerator.insertLinearlyDistributedCoordinates(coordinateList, 0, 3);
+        patient_.insertLinearlyDistributedCoordinates(coordinateList, 0, 3);
 
         assertEquals(0.0, coordinateList.get(0).latitude_, tolerance);
         assertEquals(0.0, coordinateList.get(0).longitude_, tolerance);
@@ -44,9 +53,11 @@ public class TestSwitchBackPathGenerator {
         Coordinate bottomLeft = new Coordinate(51.080873, -114.130272); // SW Corner of EEEL Building
         Coordinate topRight = new Coordinate(51.081239, -114.128617); // NE Corner of EEEL Building
         float altitude = 35;
+        MissionBoundary missionBoundary = new MissionBoundary(topRight, bottomLeft);
+        when(initialMissionModel_.missionBoundary()).thenReturn(missionBoundary);
+        when(initialMissionModel_.altitude()).thenReturn(altitude);
 
-        SwitchBackPathGenerator switchBackPathGenerator = new SwitchBackPathGenerator(bottomLeft, topRight, altitude);
-        List<Coordinate> coordinateVector = switchBackPathGenerator.generateSwitchback();
+        List<Coordinate> coordinateVector = patient_.generateSwitchback();
 
         int expectedNumberOfCoordinates = 45;
         assertEquals(expectedNumberOfCoordinates, coordinateVector.size());
@@ -62,9 +73,11 @@ public class TestSwitchBackPathGenerator {
         Coordinate bottomLeft = new Coordinate(51.080873, -114.130272); // SW Corner of EEEL Building
         Coordinate topRight = new Coordinate(51.081239, -114.129917); // On North Edge of EEEL Building
         float altitude = 35;
+        MissionBoundary missionBoundary = new MissionBoundary(topRight, bottomLeft);
+        when(initialMissionModel_.missionBoundary()).thenReturn(missionBoundary);
+        when(initialMissionModel_.altitude()).thenReturn(altitude);
 
-        SwitchBackPathGenerator switchBackPathGenerator = new SwitchBackPathGenerator(bottomLeft, topRight, altitude);
-        List<Coordinate> coordinateVector = switchBackPathGenerator.generateSwitchback();
+        List<Coordinate> coordinateVector = patient_.generateSwitchback();
 
         int expectedNumberOfCoordinates = 12;
         assertEquals(expectedNumberOfCoordinates, coordinateVector.size());

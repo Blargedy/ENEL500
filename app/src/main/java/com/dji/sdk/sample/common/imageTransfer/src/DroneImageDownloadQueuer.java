@@ -1,7 +1,6 @@
 package com.dji.sdk.sample.common.imageTransfer.src;
 
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadQueuer;
-import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadSelector;
 
 import java.util.ArrayList;
 
@@ -12,8 +11,7 @@ import dji.sdk.camera.DJIMedia;
  */
 
 public class DroneImageDownloadQueuer implements
-        I_DroneImageDownloadQueuer,
-        I_DroneImageDownloadSelector
+        I_DroneImageDownloadQueuer
 {
     private ArrayList<DJIMedia> imagesToDownload_;
 
@@ -35,7 +33,7 @@ public class DroneImageDownloadQueuer implements
     }
 
     @Override
-    public ArrayList<DJIMedia> determineImagesForDownloadFromMediaList(ArrayList<DJIMedia> currentMediaList)
+    public ArrayList<DJIMedia> getListOfImagesToDownload()
     {
         return imagesToDownload_;
     }

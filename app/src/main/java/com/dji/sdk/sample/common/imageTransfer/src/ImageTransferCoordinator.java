@@ -2,10 +2,11 @@ package com.dji.sdk.sample.common.imageTransfer.src;
 
 import android.util.Log;
 
-import com.dji.sdk.sample.common.imageTransfer.api.I_CameraModeChanger;
-import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadSelector;
+import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadQueuer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneToAndroidImageDownloader;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
+import com.dji.sdk.sample.common.integration.api.I_Camera;
+import com.dji.sdk.sample.common.integration.api.I_CameraSource;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 
 import java.util.ArrayList;
@@ -29,19 +30,19 @@ public class ImageTransferCoordinator implements
         SWITCH_TO_SHOOT_PHOTO }
     ExpectedCallback nextCallback_;
 
-    private I_CameraModeChanger modeChanger_;
-    private I_DroneImageDownloadSelector downloadSelector_;
+    private I_CameraSource cameraSource_;
+    private I_DroneImageDownloadQueuer downloadQueuer_;
     private I_DroneToAndroidImageDownloader imageDownloader_;
 
     private I_CompletionCallback completionCallback_;
 
     public ImageTransferCoordinator(
-            I_CameraModeChanger modeChanger,
-            I_DroneImageDownloadSelector downloadSelector,
+            I_CameraSource cameraSource,
+            I_DroneImageDownloadQueuer downloadQueuer,
             I_DroneToAndroidImageDownloader imageDownloader)
     {
-        modeChanger_ = modeChanger;
-        downloadSelector_ = downloadSelector;
+        cameraSource_ = cameraSource;
+        downloadQueuer_ = downloadQueuer;
         imageDownloader_ = imageDownloader;
     }
 
@@ -51,7 +52,7 @@ public class ImageTransferCoordinator implements
         completionCallback_ = callback;
 
         nextCallback_ = ExpectedCallback.SWITCH_TO_DOWNLOAD;
-        modeChanger_.changeToMediaDownloadMode(this);
+        cameraSource_.getCamera().setCameraMode(I_Camera.CameraMode.MEDIA_DOWNLOAD, this);
     }
 
     @Override
@@ -62,16 +63,13 @@ public class ImageTransferCoordinator implements
             switch (nextCallback_)
             {
                 case SWITCH_TO_DOWNLOAD:
-                    ArrayList<DJIMedia> imagesToDownload = downloadSelector_
-                            .determineImagesForDownloadFromMediaList(null);
-
                     nextCallback_ = ExpectedCallback.DOWNLOAD_PHOTOS;
+                    ArrayList<DJIMedia> imagesToDownload = downloadQueuer_.getListOfImagesToDownload();
                     imageDownloader_.downloadImagesFromDrone(imagesToDownload, this);
-
                     break;
                 case DOWNLOAD_PHOTOS:
                     nextCallback_ = ExpectedCallback.SWITCH_TO_SHOOT_PHOTO;
-                    modeChanger_.changeToShootPhotoMode(this);
+                    cameraSource_.getCamera().setCameraMode(I_Camera.CameraMode.SHOOT_PHOTO, this);
                     break;
                 case SWITCH_TO_SHOOT_PHOTO:
                     completionCallback_.onResult(null);
