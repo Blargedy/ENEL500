@@ -1,6 +1,5 @@
 package com.dji.sdk.sample.common.imageTransfer.api;
 
-import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleInitializationCallback;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 
 /**

@@ -33,7 +33,8 @@ public class SwitchBackPathGenerator {
 
 
     public SwitchBackPathGenerator(
-            InitialMissionModel initialMissionModel) {
+            InitialMissionModel initialMissionModel)
+    {
         initialMissionModel_ = initialMissionModel;
     }
 

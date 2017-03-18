@@ -1,6 +1,6 @@
 package com.dji.sdk.sample.common.imageTransfer.api;
 
-import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleEndCompletionCallback;
+import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 
 /**
  * Created by Julia on 2017-03-05.
@@ -8,5 +8,5 @@ import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleEn
 
 public interface I_ImageTransferModuleEnder
 {
-    void endImageTransfer(I_ImageTransferModuleEndCompletionCallback callback);
+    void endImageTransfer(I_CompletionCallback callback);
 }

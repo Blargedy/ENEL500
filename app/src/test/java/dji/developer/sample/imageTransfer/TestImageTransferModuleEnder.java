@@ -1,7 +1,6 @@
 package dji.developer.sample.imageTransfer;
 
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
-import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleEndCompletionCallback;
 import com.dji.sdk.sample.common.imageTransfer.src.AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferModuleEnder;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
@@ -26,7 +25,7 @@ public class TestImageTransferModuleEnder
             droneToAndroidImageTransferer_,
             androidToPcImageCopier_);
 
-    private I_ImageTransferModuleEndCompletionCallback callback_ = mock(I_ImageTransferModuleEndCompletionCallback.class);
+    private I_CompletionCallback callback_ = mock(I_CompletionCallback.class);
 
     @Test
     public void willTransferAnyLastImagesOnTheDroneToTheAndroidDevice()
@@ -45,7 +44,7 @@ public class TestImageTransferModuleEnder
 
         InOrder inOrder = inOrder(androidToPcImageCopier_, callback_);
         inOrder.verify(androidToPcImageCopier_).interrupt();
-        inOrder.verify(callback_).onEndImageTransferCompletion();
+        inOrder.verify(callback_).onResult(null);
     }
 
     private void makeImageTransfererCallOnImageTransferCompletionCallback()

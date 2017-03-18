@@ -4,21 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.dji.sdk.sample.common.activity.FlightControlActivity;
-import com.dji.sdk.sample.common.container.ImageTransferContainer;
-import com.dji.sdk.sample.common.container.IntegrationLayerContainer;
-import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
-import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferModuleInitializationCallback;
-import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
-import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 import com.dji.sdk.sample.common.utility.IntentExtraKeys;
-
-import java.util.ArrayList;
-
-import dji.common.error.DJIError;
-import dji.sdk.camera.DJIMedia;
 
 /**
  * Created by Julia on 2017-02-08.

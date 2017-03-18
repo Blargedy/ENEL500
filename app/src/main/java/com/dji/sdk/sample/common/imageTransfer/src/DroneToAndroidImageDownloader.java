@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.dji.sdk.sample.common.imageTransfer.api.I_AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneToAndroidImageDownloader;
-import com.dji.sdk.sample.common.imageTransfer.callbacks.I_ImageTransferCompletionCallback;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferPathsSource;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_MediaDataFetcher;
