@@ -6,6 +6,8 @@ import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferIniti
 
 import dji.sdk.camera.DJIMedia;
 
+import static dji.sdk.camera.DJIMedia.MediaType.JPG;
+
 /**
  * Created by Julia on 2017-03-16.
  */
@@ -31,8 +33,12 @@ public class CameraGeneratedNewMediaFileCallback implements I_CameraGeneratedNew
     @Override
     public void onResult(DJIMedia media)
     {
-        imageDownloadQueuer_.addImageToDownloadQueue(media);
-        imageCount_++;
+        if (media.getMediaType() == JPG)
+        {
+            imageDownloadQueuer_.addImageToDownloadQueue(media);
+            imageCount_++;
+        }
+
         if (imageCount_ % IMAGE_TRANSFER_DELAY == 0)
         {
             imageTransferInitiator_.initiateImageTransfer();

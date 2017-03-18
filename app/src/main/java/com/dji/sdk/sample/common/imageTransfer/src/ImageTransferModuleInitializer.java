@@ -1,7 +1,6 @@
 package com.dji.sdk.sample.common.imageTransfer.src;
 
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
-import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 
 /**
  * Created by Julia on 2017-02-21.
@@ -22,7 +21,7 @@ public class ImageTransferModuleInitializer implements
     }
 
     @Override
-    public void initializeImageTransferModulePriorToFlight(I_CompletionCallback callback)
+    public void initializeImageTransferModule()
     {
         androidToPcImageCopier_.start();
     }

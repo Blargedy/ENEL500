@@ -22,8 +22,6 @@ public class DroneToAndroidImageDownloader implements
         I_DroneToAndroidImageDownloader,
         I_MediaDownloadListener
 {
-    private static final String TAG = "DroneToAndroidImageDownloader";
-
     private I_ImageTransferPathsSource pathSource_;
     private I_MediaDataFetcher mediaDataFetcher_;
     private I_AndroidToPcImageCopier androidToPcImageCopier_;

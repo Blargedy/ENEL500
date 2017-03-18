@@ -10,6 +10,7 @@ import com.dji.sdk.sample.common.integration.api.I_CameraSource;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 
 import java.util.ArrayList;
+import java.util.jar.Pack200;
 
 import dji.common.error.DJIError;
 import dji.sdk.camera.DJIMedia;
@@ -22,7 +23,7 @@ public class ImageTransferCoordinator implements
         I_ImageTransferer,
         I_CompletionCallback
 {
-    private static final String TAG = "ImageTransferCoordinator";
+    private static final String TAG = "HydraImageTransferCoordinator";
 
     private enum ExpectedCallback {
         SWITCH_TO_DOWNLOAD,
@@ -72,7 +73,7 @@ public class ImageTransferCoordinator implements
                     cameraSource_.getCamera().setCameraMode(I_Camera.CameraMode.SHOOT_PHOTO, this);
                     break;
                 case SWITCH_TO_SHOOT_PHOTO:
-                    completionCallback_.onResult(null);
+                    callback(null);
                     break;
                 default:
                     break;
@@ -82,7 +83,14 @@ public class ImageTransferCoordinator implements
         {
             Log.e(TAG, "Failed while expecting " + nextCallback_.name() +
                     " callback : " + error.getDescription());
+            callback(error);
+        }
+    }
 
+    private void callback(DJIError error)
+    {
+        if (completionCallback_ != null)
+        {
             completionCallback_.onResult(error);
         }
     }

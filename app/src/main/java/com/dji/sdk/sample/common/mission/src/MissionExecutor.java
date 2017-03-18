@@ -24,7 +24,7 @@ import dji.common.error.DJIError;
 
 public class MissionExecutor implements I_CompletionCallback
 {
-    private static final String TAG = "MissionExecutor";
+    private static final String TAG = "HydraMissionExecutor";
 
     private BroadcastReceiver receiver_;
 
@@ -139,9 +139,22 @@ public class MissionExecutor implements I_CompletionCallback
     {
         switch (missionState_.getCurrentMissionState())
         {
+            case INITIALIZE_MISSION:
+                missionState_.setCurrentMissionState(MissionStateEnum.VIEW_MISSION);
+                break;
+
+            case START_MISSION:
+                missionState_.setCurrentMissionState(MissionStateEnum.VIEW_MISSION);
+                break;
+
             case HOVER_NOW:
                 missionState_.setCurrentMissionState(MissionStateEnum.HOVER_NOW);
                 break;
+
+            case RESUME_MISSION:
+                missionState_.setCurrentMissionState(MissionStateEnum.HOVERING);
+                break;
+
             default:
                 break;
         }

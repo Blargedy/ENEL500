@@ -9,7 +9,6 @@ import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
 import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferInitiator;
 
 import dji.common.error.DJIError;
-import dji.common.util.LocationUtils;
 
 /**
  * Created by Julia on 2017-03-11.
@@ -19,7 +18,7 @@ public class MissionPeriodicImageTransferInitiator implements
         I_MissionPeriodicImageTransferInitiator,
         I_CompletionCallback
 {
-    private static final String TAG = "MissionPeriodicImageTransferInitiator";
+    private static final String TAG = "HydraMissionPeriodicImageTransferInitiator";
 
     private enum ExpectedCallback { PAUSE, TRANSFER, RESUME }
 

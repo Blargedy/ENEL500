@@ -23,7 +23,7 @@ import dji.common.error.DJIError;
 
 public class MissionCanceller implements I_CompletionCallback
 {
-    private static final String TAG = "MissionCanceller";
+    private static final String TAG = "HydraMissionCanceller";
 
     private BroadcastReceiver receiver_;
     private MissionStateEntity missionState_;

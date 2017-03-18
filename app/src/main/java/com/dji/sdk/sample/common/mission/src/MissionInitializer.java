@@ -1,17 +1,16 @@
 package com.dji.sdk.sample.common.mission.src;
 
+import android.util.Log;
+
+import com.dji.sdk.sample.common.mission.api.I_CameraInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
-import com.dji.sdk.sample.common.integration.api.I_Camera;
-import com.dji.sdk.sample.common.integration.api.I_CameraSource;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
 import com.dji.sdk.sample.common.integration.api.I_MissionManager;
 import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
 import com.dji.sdk.sample.common.integration.api.I_WaypointMissionProgressStatusCallback;
-import com.dji.sdk.sample.common.mission.api.I_CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionInitializer;
 
-import dji.common.camera.DJICameraSettingsDef;
 import dji.common.error.DJIError;
 
 /**
@@ -22,40 +21,34 @@ public class MissionInitializer implements
         I_MissionInitializer,
         I_CompletionCallback
 {
-    private enum ExpectedCallback {
-        SET_HOME_LOCATION,
-        INITIALIZE_IMAGE_TRANSFER,
-        CHANGE_CAMERA_MODE,
-        SET_PHOTO_FILE_FORMAT,
-        SET_CAMERA_EXPOSURE }
+    private static final String TAG = "HydraMissionInitializer";
+
+    private enum ExpectedCallback { SET_HOME_LOCATION, INITIALIZE_CAMERA}
     private MissionInitializer.ExpectedCallback expectedCallback_;
 
     private I_MissionManagerSource missionManagerSource_;
     private I_FlightControllerSource flightControllerSource_;
-    private I_CameraSource cameraSource_;
+    private I_CameraInitializer cameraInitializer_;
     private I_ImageTransferModuleInitializer imageTransferModuleInitializer_;
     private I_CompletionCallback missionExecutionCompletionCallback_;
     private I_WaypointMissionProgressStatusCallback missionProgressStatusCallback_;
-    private I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback_;
 
     private I_CompletionCallback callback_;
 
     public MissionInitializer(
             I_MissionManagerSource missionManagerSource,
             I_FlightControllerSource flightControllerSource,
-            I_CameraSource cameraSource,
+            I_CameraInitializer cameraInitializer,
             I_ImageTransferModuleInitializer imageTransferModuleInitializer,
             I_CompletionCallback missionExecutionCompletionCallback,
-            I_WaypointMissionProgressStatusCallback missionProgressStatusCallback,
-            I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback)
+            I_WaypointMissionProgressStatusCallback missionProgressStatusCallback)
     {
         missionManagerSource_ = missionManagerSource;
         flightControllerSource_ = flightControllerSource;
-        cameraSource_ = cameraSource;
+        cameraInitializer_ = cameraInitializer;
         imageTransferModuleInitializer_ = imageTransferModuleInitializer;
         missionExecutionCompletionCallback_ = missionExecutionCompletionCallback;
         missionProgressStatusCallback_ = missionProgressStatusCallback;
-        cameraGeneratedNewMediaFileCallback_ = cameraGeneratedNewMediaFileCallback;
     }
 
     public void initializeMissionPriorToTakeoff(I_CompletionCallback callback)
@@ -66,8 +59,7 @@ public class MissionInitializer implements
         missionManager.setMissionExecutionFinishedCallback(missionExecutionCompletionCallback_);
         missionManager.setMissionProgressStatusCallback(missionProgressStatusCallback_);
 
-        I_Camera camera = cameraSource_.getCamera();
-        camera.setCameraGeneratedNewMediaFileCallback(cameraGeneratedNewMediaFileCallback_);
+        imageTransferModuleInitializer_.initializeImageTransferModule();
 
         expectedCallback_ = MissionInitializer.ExpectedCallback.SET_HOME_LOCATION;
         flightControllerSource_.getFlightController().setHomeLocationUsingAircraftCurrentLocation(this);
@@ -81,31 +73,26 @@ public class MissionInitializer implements
             switch (expectedCallback_)
             {
                 case SET_HOME_LOCATION:
-                    expectedCallback_ = MissionInitializer.ExpectedCallback.INITIALIZE_IMAGE_TRANSFER;
-                    imageTransferModuleInitializer_.initializeImageTransferModulePriorToFlight(this);
+                    expectedCallback_ = ExpectedCallback.INITIALIZE_CAMERA;
+                    cameraInitializer_.initializeCameraForMission(this);
                     break;
-                case INITIALIZE_IMAGE_TRANSFER:
-                    expectedCallback_ = MissionInitializer.ExpectedCallback.CHANGE_CAMERA_MODE;
-                    cameraSource_.getCamera().setCameraMode(I_Camera.CameraMode.SHOOT_PHOTO, this);
-                    break;
-                case CHANGE_CAMERA_MODE:
-                    expectedCallback_ = MissionInitializer.ExpectedCallback.SET_PHOTO_FILE_FORMAT;
-                    cameraSource_.getCamera().setPhotoFileFormat(
-                            DJICameraSettingsDef.CameraPhotoFileFormat.RAWAndJPEG,
-                            this);
-                    break;
-                case SET_PHOTO_FILE_FORMAT:
-                    expectedCallback_ = ExpectedCallback.SET_CAMERA_EXPOSURE;
-                    cameraSource_.getCamera().setExposureModeToAutomatic(this);
-                    break;
-                case SET_CAMERA_EXPOSURE:
-                    callback_.onResult(null);
+                case INITIALIZE_CAMERA:
+                    callback(null);
                     break;
                 default:
                     break;
             }
         }
         else
+        {
+            Log.e(TAG, error.toString());
+            callback_.onResult(error);
+        }
+    }
+
+    private void callback(DJIError error)
+    {
+        if (callback_ != null)
         {
             callback_.onResult(error);
         }

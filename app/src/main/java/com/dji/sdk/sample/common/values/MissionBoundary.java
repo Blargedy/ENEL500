@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.mission.src;
+package com.dji.sdk.sample.common.values;
 
 import com.dji.sdk.sample.common.values.Coordinate;
 
@@ -9,12 +9,6 @@ import com.dji.sdk.sample.common.values.Coordinate;
 public class MissionBoundary {
     private Coordinate topRight_;
     private Coordinate bottomLeft_;
-
-    public MissionBoundary()
-    {
-        topRight_ = new Coordinate();
-        bottomLeft_ = new Coordinate();
-    }
 
     public MissionBoundary(Coordinate topRight, Coordinate bottomLeft)
     {
@@ -31,8 +25,4 @@ public class MissionBoundary {
     {
         return bottomLeft_;
     }
-
-    public void setTopRight(Coordinate topRight) { topRight_ = topRight; }
-
-    public void setBottomLeft(Coordinate bottomLeft) {topRight_ = bottomLeft;}
 }

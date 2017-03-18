@@ -23,7 +23,7 @@ public class WaypointMissionProgressStatusCallback implements
         I_WaypointMissionProgressStatusCallback,
         I_CompletionCallback
 {
-    private static final String TAG = "WaypointMissionProgressStatusCallback";
+    private static final String TAG = "HydraWaypointMissionProgressStatusCallback";
 
     private int waypointIndex_;
 

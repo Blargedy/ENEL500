@@ -10,7 +10,7 @@ import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
-import com.dji.sdk.sample.common.mission.src.MissionBoundary;
+import com.dji.sdk.sample.common.values.MissionBoundary;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 
 /**

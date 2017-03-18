@@ -1,7 +1,7 @@
 package dji.developer.sample.mission;
 
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
-import com.dji.sdk.sample.common.mission.src.MissionBoundary;
+import com.dji.sdk.sample.common.values.MissionBoundary;
 import com.dji.sdk.sample.common.mission.src.SwitchBackPathGenerator;
 import com.dji.sdk.sample.common.values.Coordinate;
 

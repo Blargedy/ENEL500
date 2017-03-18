@@ -6,10 +6,10 @@ import com.dji.sdk.sample.common.entity.DroneLocationEntity;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
-import com.dji.sdk.sample.common.imageTransfer.src.DroneImageDownloadQueuer;
 import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferInitiator;
 import com.dji.sdk.sample.common.mission.api.InertMissionPeriodicImageTransferInitiator;
 import com.dji.sdk.sample.common.mission.src.CameraGeneratedNewMediaFileCallback;
+import com.dji.sdk.sample.common.mission.src.CameraInitializer;
 import com.dji.sdk.sample.common.mission.src.MissionGenerator;
 import com.dji.sdk.sample.common.mission.src.DroneLocationUpdater;
 import com.dji.sdk.sample.common.mission.src.MissionCanceller;
@@ -38,14 +38,15 @@ public class MissionContainer
 
     private I_MissionPeriodicImageTransferInitiator periodicImageTransferInitiator_;
     private CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback_;
+    private CameraInitializer cameraInitializer_;
 
     private WaypointReachedNotifier waypointReachedNotifier_;
     private DroneLocationUpdater droneLocationUpdater_;
     private WaypointMissionProgressStatusCallback missionProgressStatusCallback_;
 
     private SwitchBackPathGenerator switchBackPathGenerator_;
-
     private MissionGenerator missionGenerator_;
+
     private MissionInitializer missionInitializer_;
     private MissionExecutor missionExecutor_;
     private MissionCanceller missionCanceller_;
@@ -80,6 +81,9 @@ public class MissionContainer
         cameraGeneratedNewMediaFileCallback_ = new CameraGeneratedNewMediaFileCallback(
                 imageTransferContainer.droneImageDownloadQueuer(),
                 periodicImageTransferInitiator_);
+        cameraInitializer_ = new CameraInitializer(
+                integrationLayerContainer.cameraSource(),
+                cameraGeneratedNewMediaFileCallback_);
 
         waypointReachedNotifier_ = new WaypointReachedNotifier(context);
         droneLocationUpdater_ = new DroneLocationUpdater(
@@ -100,11 +104,10 @@ public class MissionContainer
         missionInitializer_ = new MissionInitializer(
                 integrationLayerContainer.missionManagerSource(),
                 integrationLayerContainer.flightControllerSource(),
-                integrationLayerContainer.cameraSource(),
+                cameraInitializer_,
                 imageTransferContainer.imageTransferModuleInitializer(),
                 waypointMissionCompletionCallback_,
-                missionProgressStatusCallback_,
-                cameraGeneratedNewMediaFileCallback_);
+                missionProgressStatusCallback_);
         missionExecutor_ = new MissionExecutor(
                 context,
                 missionGenerator_,

@@ -22,9 +22,9 @@ public class NextWaypointMissionStarter implements
         I_NextWaypointMissionStarter,
         I_CompletionCallback
 {
-    private static final String TAG = "NextWaypointMissionStarter";
+    private static final String TAG = "HydraNextWaypointMissionStarter";
 
-    private enum ExpectedCallback {PREPARE, START};
+    private enum ExpectedCallback {PREPARE, START}
     ExpectedCallback expectedCallback_;
 
     private I_MissionManagerSource missionManagerSource_;
@@ -52,7 +52,6 @@ public class NextWaypointMissionStarter implements
             DJIWaypointMission mission = generatedMissionModel_.getNextWaypointMission();
             expectedCallback_ = ExpectedCallback.PREPARE;
             missionManagerSource_.getMissionManager().prepareMission(mission, null, this);
-            callback_ = callback;
         }
         else
         {

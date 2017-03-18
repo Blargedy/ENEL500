@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.mission.src;
 
+import android.util.Log;
+
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_NextWaypointMissionStarter;
 
@@ -11,6 +13,8 @@ import dji.common.error.DJIError;
 
 public class WaypointMissionCompletionCallback implements I_CompletionCallback
 {
+    private static final String TAG = "HydraWaypointMissionCompletionCallback";
+
     private I_NextWaypointMissionStarter nextWaypointMissionStarter_;
 
     public WaypointMissionCompletionCallback(
@@ -22,6 +26,13 @@ public class WaypointMissionCompletionCallback implements I_CompletionCallback
     @Override
     public void onResult(DJIError error)
     {
-        nextWaypointMissionStarter_.startNextWaypointMission(null);
+        if (error == null)
+        {
+            nextWaypointMissionStarter_.startNextWaypointMission(null);
+        }
+        else
+        {
+            Log.e(TAG, error.getDescription());
+        }
     }
 }

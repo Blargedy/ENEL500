@@ -29,7 +29,7 @@ import android.widget.Toast;
 
 import com.dji.sdk.sample.R;
 import com.dji.sdk.sample.common.entity.DroneLocationEntity;
-import com.dji.sdk.sample.common.mission.src.MissionBoundary;
+import com.dji.sdk.sample.common.values.MissionBoundary;
 import com.dji.sdk.sample.common.presenter.api.I_MapPresenter;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.utility.CachedMapLoaderThread;
