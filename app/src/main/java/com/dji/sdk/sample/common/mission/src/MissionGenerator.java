@@ -46,6 +46,7 @@ public class MissionGenerator implements I_MissionGenerator
                     generatedMissionModel_.addWaypointMission(mission);
                 }
                 mission = new DJIWaypointMission();
+                mission.needRotateGimbalPitch = true;
                 mission.autoFlightSpeed = 10;
             }
 
@@ -53,6 +54,7 @@ public class MissionGenerator implements I_MissionGenerator
                     waypoints.get(i).latitude_,
                     waypoints.get(i).longitude_,
                     initialMissionModel_.altitude());
+            waypoint.gimbalPitch = -90f;
             mission.addWaypoint(waypoint);
         }
         generatedMissionModel_.addWaypointMission(mission);

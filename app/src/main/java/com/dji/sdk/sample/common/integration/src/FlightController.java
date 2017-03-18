@@ -13,7 +13,8 @@ import dji.sdk.flightcontroller.DJIFlightLimitation;
  * Created by eric7 on 2017-02-28.
  */
 
-public class FlightController implements I_FlightController {
+public class FlightController implements I_FlightController
+{
     DJIFlightController flightController_;
 
     FlightController(DJIFlightController flightController)
@@ -25,6 +26,12 @@ public class FlightController implements I_FlightController {
     public void setHomeLocationUsingAircraftCurrentLocation(I_CompletionCallback callback)
     {
         flightController_.setHomeLocationUsingAircraftCurrentLocation(callback);
+    }
+
+    @Override
+    public void setGoHomeBatteryThreshold(int threshold, I_CompletionCallback callback)
+    {
+        flightController_.setGoHomeBatteryThreshold(threshold, callback);
     }
 
     @Override

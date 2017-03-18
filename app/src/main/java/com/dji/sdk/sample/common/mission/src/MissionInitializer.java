@@ -5,10 +5,10 @@ import android.util.Log;
 import com.dji.sdk.sample.common.mission.api.I_CameraInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
-import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
 import com.dji.sdk.sample.common.integration.api.I_MissionManager;
 import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
 import com.dji.sdk.sample.common.integration.api.I_WaypointMissionProgressStatusCallback;
+import com.dji.sdk.sample.common.mission.api.I_FlightControllerInitializer;
 import com.dji.sdk.sample.common.mission.api.I_MissionInitializer;
 
 import dji.common.error.DJIError;
@@ -23,11 +23,11 @@ public class MissionInitializer implements
 {
     private static final String TAG = "HydraMissionInitializer";
 
-    private enum ExpectedCallback { SET_HOME_LOCATION, INITIALIZE_CAMERA}
+    private enum ExpectedCallback { INITIALIZE_FLIGHT_CONTROLLER, INITIALIZE_CAMERA}
     private MissionInitializer.ExpectedCallback expectedCallback_;
 
     private I_MissionManagerSource missionManagerSource_;
-    private I_FlightControllerSource flightControllerSource_;
+    private I_FlightControllerInitializer flightControllerInitializer_;
     private I_CameraInitializer cameraInitializer_;
     private I_ImageTransferModuleInitializer imageTransferModuleInitializer_;
     private I_CompletionCallback missionExecutionCompletionCallback_;
@@ -37,14 +37,14 @@ public class MissionInitializer implements
 
     public MissionInitializer(
             I_MissionManagerSource missionManagerSource,
-            I_FlightControllerSource flightControllerSource,
+            I_FlightControllerInitializer flightControllerInitializer,
             I_CameraInitializer cameraInitializer,
             I_ImageTransferModuleInitializer imageTransferModuleInitializer,
             I_CompletionCallback missionExecutionCompletionCallback,
             I_WaypointMissionProgressStatusCallback missionProgressStatusCallback)
     {
         missionManagerSource_ = missionManagerSource;
-        flightControllerSource_ = flightControllerSource;
+        flightControllerInitializer_ = flightControllerInitializer;
         cameraInitializer_ = cameraInitializer;
         imageTransferModuleInitializer_ = imageTransferModuleInitializer;
         missionExecutionCompletionCallback_ = missionExecutionCompletionCallback;
@@ -61,8 +61,8 @@ public class MissionInitializer implements
 
         imageTransferModuleInitializer_.initializeImageTransferModule();
 
-        expectedCallback_ = MissionInitializer.ExpectedCallback.SET_HOME_LOCATION;
-        flightControllerSource_.getFlightController().setHomeLocationUsingAircraftCurrentLocation(this);
+        expectedCallback_ = MissionInitializer.ExpectedCallback.INITIALIZE_FLIGHT_CONTROLLER;
+        flightControllerInitializer_.initializeFlightController(this);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class MissionInitializer implements
         {
             switch (expectedCallback_)
             {
-                case SET_HOME_LOCATION:
+                case INITIALIZE_FLIGHT_CONTROLLER:
                     expectedCallback_ = ExpectedCallback.INITIALIZE_CAMERA;
                     cameraInitializer_.initializeCameraForMission(this);
                     break;

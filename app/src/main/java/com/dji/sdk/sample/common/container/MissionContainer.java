@@ -10,6 +10,7 @@ import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferIniti
 import com.dji.sdk.sample.common.mission.api.InertMissionPeriodicImageTransferInitiator;
 import com.dji.sdk.sample.common.mission.src.CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.src.CameraInitializer;
+import com.dji.sdk.sample.common.mission.src.FlightControllerInitializer;
 import com.dji.sdk.sample.common.mission.src.MissionGenerator;
 import com.dji.sdk.sample.common.mission.src.DroneLocationUpdater;
 import com.dji.sdk.sample.common.mission.src.MissionCanceller;
@@ -39,6 +40,7 @@ public class MissionContainer
     private I_MissionPeriodicImageTransferInitiator periodicImageTransferInitiator_;
     private CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback_;
     private CameraInitializer cameraInitializer_;
+    private FlightControllerInitializer flightControllerInitializer_;
 
     private WaypointReachedNotifier waypointReachedNotifier_;
     private DroneLocationUpdater droneLocationUpdater_;
@@ -84,6 +86,8 @@ public class MissionContainer
         cameraInitializer_ = new CameraInitializer(
                 integrationLayerContainer.cameraSource(),
                 cameraGeneratedNewMediaFileCallback_);
+        flightControllerInitializer_ = new FlightControllerInitializer(
+                integrationLayerContainer.flightControllerSource());
 
         waypointReachedNotifier_ = new WaypointReachedNotifier(context);
         droneLocationUpdater_ = new DroneLocationUpdater(
@@ -103,7 +107,7 @@ public class MissionContainer
 
         missionInitializer_ = new MissionInitializer(
                 integrationLayerContainer.missionManagerSource(),
-                integrationLayerContainer.flightControllerSource(),
+                flightControllerInitializer_,
                 cameraInitializer_,
                 imageTransferContainer.imageTransferModuleInitializer(),
                 waypointMissionCompletionCallback_,
