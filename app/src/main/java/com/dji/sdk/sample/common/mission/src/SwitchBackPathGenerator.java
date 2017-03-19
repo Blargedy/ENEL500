@@ -104,7 +104,7 @@ public class SwitchBackPathGenerator {
         insertLinearlyDistributedCoordinates(rightOrTopSwathEndpointCoordinates_, startIndex, numberOfCoordinatesToInsert);
     }
 
-    private void generatePathAndImageCoordinates() {
+    public void generatePathAndImageCoordinates() {
         // Create swaths and append them to switchbackPoints
         for (int i = 0; i < (numberOfSwaths_); i++) {
             switch (i % 2) {
@@ -142,7 +142,7 @@ public class SwitchBackPathGenerator {
         }
     }
 
-    private void appendSwath(
+    public void appendSwath(
             List<Coordinate> coordinateList,
             Coordinate swathStartingCoordinate,
             Coordinate swathEndingCoordinate,
@@ -157,7 +157,7 @@ public class SwitchBackPathGenerator {
         insertLinearlyDistributedCoordinates(coordinateList, indexToBeginInsertion, numberOfImagesPerSwath - 2);
     }
 
-    private int calculateNumberOfSwaths(
+    public int calculateNumberOfSwaths(
             Coordinate startingCoordinate,
             Coordinate endingCoordinate,
             float altitude) {
@@ -168,7 +168,7 @@ public class SwitchBackPathGenerator {
         return (2 + calculateNumberOfIntermediatePoints(distanceInMeters, maximumSwathSpacingInMeters));
     }
 
-    private int calculateNumberOfImagesPerSwath(
+    public int calculateNumberOfImagesPerSwath(
             Coordinate swathStartingCoordinate,
             Coordinate swathEndingCoordinate,
             float altitude) {
@@ -187,7 +187,7 @@ public class SwitchBackPathGenerator {
      * @param maximumSpacing e.g. 4
      * @return eg. 2
      */
-    private int calculateNumberOfIntermediatePoints(double distance, double maximumSpacing) {
+    public int calculateNumberOfIntermediatePoints(double distance, double maximumSpacing) {
         return (int) Math.floor(distance / maximumSpacing);
     }
 
@@ -199,7 +199,7 @@ public class SwitchBackPathGenerator {
      * @param altitude             altitude in meters
      * @return distance in meters between two swaths taken at the same specified altitude to achieve specified overlap
      */
-    private double calculateSwathSpacing(double percentSwathOverlap_, float altitude) {
+    public double calculateSwathSpacing(double percentSwathOverlap_, float altitude) {
         return (1 - percentSwathOverlap_) * calculateImageWidth((double) altitude);
     }
 
@@ -211,7 +211,7 @@ public class SwitchBackPathGenerator {
      * @param altitude             altitude in meters
      * @return distance in meters between two images taken at the same specified altitude to achieve specified overlap
      */
-    private double calculateImageSpacing(double percentImageOverlap_, float altitude) {
+    public double calculateImageSpacing(double percentImageOverlap_, float altitude) {
         return (1 - percentImageOverlap_) * calculateImageLength((double) altitude);
     }
 
@@ -222,7 +222,7 @@ public class SwitchBackPathGenerator {
      * @param altitude altitude in meters
      * @return approximate length of short edge of picture of ground in meters
      */
-    private double calculateImageLength(double altitude) {
+    public double calculateImageLength(double altitude) {
         return (1.2 * altitude); // factor of 1.2 based on numerical fit from test data
     }
 
@@ -233,7 +233,7 @@ public class SwitchBackPathGenerator {
      * @param altitude altitude in meters
      * @return approximate width of long edge of picture of ground in meters
      */
-    private double calculateImageWidth(double altitude) {
+    public double calculateImageWidth(double altitude) {
         return (1.6 * altitude); // factor of 1.6 based on numerical fit from test data
     }
 }
