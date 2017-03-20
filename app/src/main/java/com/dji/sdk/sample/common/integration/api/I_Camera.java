@@ -1,8 +1,7 @@
 package com.dji.sdk.sample.common.integration.api;
 
-import com.dji.sdk.sample.common.mission.api.I_CameraGeneratedNewMediaFileCallback;
-
-import dji.common.camera.DJICameraSettingsDef;
+        import dji.common.camera.DJICameraSettingsDef;
+        import dji.sdk.camera.DJICamera;
 
 /**
  * Created by Julia on 2017-03-12.
@@ -19,4 +18,6 @@ public interface I_Camera
             I_CompletionCallback callback);
     void setExposureModeToAutomatic(I_CompletionCallback callback);
     void shootSinglePhoto(I_CompletionCallback callback);
+
+    void setDJICameraUpdatedSystemStateCallback(I_CameraUpdatedSystemStateCallback callback);
 }

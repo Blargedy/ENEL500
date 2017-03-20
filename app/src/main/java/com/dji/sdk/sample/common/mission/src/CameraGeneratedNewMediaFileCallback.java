@@ -1,7 +1,7 @@
 package com.dji.sdk.sample.common.mission.src;
 
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadQueuer;
-import com.dji.sdk.sample.common.mission.api.I_CameraGeneratedNewMediaFileCallback;
+import com.dji.sdk.sample.common.integration.api.I_CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferInitiator;
 
 import dji.sdk.camera.DJIMedia;

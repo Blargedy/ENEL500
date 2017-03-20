@@ -6,11 +6,14 @@ import com.dji.sdk.sample.common.entity.DroneLocationEntity;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
+import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferPathsSource;
 import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferInitiator;
 import com.dji.sdk.sample.common.mission.api.InertMissionPeriodicImageTransferInitiator;
 import com.dji.sdk.sample.common.mission.src.CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.src.CameraInitializer;
 import com.dji.sdk.sample.common.mission.src.FlightControllerInitializer;
+import com.dji.sdk.sample.common.mission.src.InvestigativeCameraSystemState;
+import com.dji.sdk.sample.common.mission.src.InvestigativeWaypointReachedHandler;
 import com.dji.sdk.sample.common.mission.src.MissionGenerator;
 import com.dji.sdk.sample.common.mission.src.DroneLocationUpdater;
 import com.dji.sdk.sample.common.mission.src.MissionCanceller;
@@ -36,6 +39,9 @@ public class MissionContainer
 
     private NextWaypointMissionStarter nextWaypointMissionStarter_;
     private WaypointMissionCompletionCallback waypointMissionCompletionCallback_;
+
+    private InvestigativeCameraSystemState cameraSystemState_;
+//    private InvestigativeWaypointReachedHandler investigatingImageTransfer_;
 
     private I_MissionPeriodicImageTransferInitiator periodicImageTransferInitiator_;
     private CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback_;
@@ -72,6 +78,13 @@ public class MissionContainer
         waypointMissionCompletionCallback_ = new WaypointMissionCompletionCallback(
                 nextWaypointMissionStarter_);
 
+        cameraSystemState_ = new InvestigativeCameraSystemState();
+//        investigatingImageTransfer_ = new InvestigativeWaypointReachedHandler(
+//                integrationLayerContainer.missionManagerSource(),
+//                integrationLayerContainer.cameraSource(),
+//                cameraSystemState_,
+//                imageTransferContainer.imageTransferPathsSource());
+
         if (isLiveModeEnabled){
             periodicImageTransferInitiator_ = new MissionPeriodicImageTransferInitiator(
                     integrationLayerContainer.missionManagerSource(),
@@ -85,7 +98,8 @@ public class MissionContainer
                 periodicImageTransferInitiator_);
         cameraInitializer_ = new CameraInitializer(
                 integrationLayerContainer.cameraSource(),
-                cameraGeneratedNewMediaFileCallback_);
+                cameraGeneratedNewMediaFileCallback_ /*investigatingImageTransfer_*/,
+                cameraSystemState_);
         flightControllerInitializer_ = new FlightControllerInitializer(
                 integrationLayerContainer.flightControllerSource());
 
@@ -94,7 +108,7 @@ public class MissionContainer
                 droneLocation_,
                 integrationLayerContainer.flightControllerSource());
         missionProgressStatusCallback_ = new WaypointMissionProgressStatusCallback(
-                waypointReachedNotifier_,
+                waypointReachedNotifier_ /*investigatingImageTransfer_*/,
                 droneLocationUpdater_,
                 integrationLayerContainer.cameraSource());
 

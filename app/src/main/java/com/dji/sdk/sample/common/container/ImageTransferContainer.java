@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.container;
 
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadQueuer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleEnder;
+import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferPathsSource;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferer;
@@ -90,5 +91,10 @@ public class ImageTransferContainer
     public I_DroneImageDownloadQueuer droneImageDownloadQueuer()
     {
         return droneImageDownloadQueuer_;
+    }
+
+    public I_ImageTransferPathsSource imageTransferPathsSource()
+    {
+        return pathsSource_;
     }
 }

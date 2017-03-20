@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.mission.api;
+package com.dji.sdk.sample.common.integration.api;
 
 import dji.sdk.camera.DJICamera;
 import dji.sdk.camera.DJIMedia;

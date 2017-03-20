@@ -1,8 +1,9 @@
 package com.dji.sdk.sample.common.integration.src;
 
 import com.dji.sdk.sample.common.integration.api.I_Camera;
+import com.dji.sdk.sample.common.integration.api.I_CameraUpdatedSystemStateCallback;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
-import com.dji.sdk.sample.common.mission.api.I_CameraGeneratedNewMediaFileCallback;
+import com.dji.sdk.sample.common.integration.api.I_CameraGeneratedNewMediaFileCallback;
 
 import dji.common.camera.DJICameraSettingsDef;
 import dji.sdk.camera.DJICamera;
@@ -61,5 +62,11 @@ public class Camera implements I_Camera
     public void shootSinglePhoto(I_CompletionCallback callback)
     {
         camera_.startShootPhoto(DJICameraSettingsDef.CameraShootPhotoMode.Single, callback);
+    }
+
+    @Override
+    public void setDJICameraUpdatedSystemStateCallback(I_CameraUpdatedSystemStateCallback callback)
+    {
+        camera_.setDJICameraUpdatedSystemStateCallback(callback);
     }
 }

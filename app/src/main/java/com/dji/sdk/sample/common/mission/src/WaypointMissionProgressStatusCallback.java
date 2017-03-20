@@ -5,7 +5,6 @@ import android.util.Log;
 import com.dji.sdk.sample.common.integration.api.I_CameraSource;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_WaypointMissionProgressStatusCallback;
-import com.dji.sdk.sample.common.mission.api.I_CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.api.I_DroneLocationUpdater;
 import com.dji.sdk.sample.common.mission.api.I_WaypointReachedNotifier;
 
