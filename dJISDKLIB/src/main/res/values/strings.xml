@@ -1,7 +1,0 @@
-<resources>
-
-    <string name="app_name">DJI-SDK-LIB</string>
-    <string name="version_name">3.3Beta</string>
-    <string name="dji_check_fc_gyroscope_reason">NULL</string>
-    <string name="dji_check_fc_gyroscope_solution">NULL</string>
-</resources>

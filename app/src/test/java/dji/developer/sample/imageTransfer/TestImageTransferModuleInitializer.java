@@ -21,11 +21,11 @@ public class TestImageTransferModuleInitializer
 
     private I_CompletionCallback callback_ = mock(I_CompletionCallback.class);
 
-    @Test
-    public void willStartTheAndroidToPCImageCopierBackgroundThread()
-    {
-        patient_.initializeImageTransferModulePriorToFlight(callback_);
-
-        verify(androidToPcImageCopier_).start();
-    }
+//    @Test
+//    public void willStartTheAndroidToPCImageCopierBackgroundThread()
+//    {
+//        patient_.initializeImageTransferModulePriorToFlight(callback_);
+//
+//        verify(androidToPcImageCopier_).start();
+//    }
 }

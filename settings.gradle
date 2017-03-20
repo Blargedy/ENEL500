@@ -1,2 +1,2 @@
 include ':app'
-include ':dJISDKLIB'
+include ':dJISDKLIB_3.5.1'
