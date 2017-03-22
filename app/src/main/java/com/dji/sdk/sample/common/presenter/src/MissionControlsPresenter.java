@@ -96,17 +96,17 @@ public class MissionControlsPresenter implements
                 context_.startActivity(mainIntent);
                 mainIntent = new Intent(context_, FlightControlActivity.class);
                 context_.stopService(mainIntent);
-                missionState_.setCurrentMissionState(MissionStateEnum.INITIALIZING_MAP);
+                //missionState_.setCurrentMissionState(MissionStateEnum.INITIALIZING_MAP);
                 break;
             case SELECT_AREA:
                 mainIntent = new Intent(context_, MainMenuActivity.class);
                 context_.startActivity(mainIntent);
                 mainIntent = new Intent(context_, FlightControlActivity.class);
                 context_.stopService(mainIntent);
-                missionState_.setCurrentMissionState(MissionStateEnum.INITIALIZING_MAP);
+                //missionState_.setCurrentMissionState(MissionStateEnum.INITIALIZING_MAP);
                 break;
             case VIEW_MISSION:
-                missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA); // might need to go to INITIALIZING_MAP
+                missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
                 break;
             case MISSION_EXECUTING:
                 missionState_.setCurrentMissionState(MissionStateEnum.CANCEL_MISSION);
@@ -154,7 +154,6 @@ public class MissionControlsPresenter implements
                 cancelButton_.setEnabled(true);
                 startMissionButton_.setVisibility(View.GONE);
                 hoverNowToggleButton_.setVisibility(View.GONE);
-
                 break;
             case GENERATE_MISSION_BOUNDARY:
                 acceptAreaButton_.setVisibility(View.GONE);

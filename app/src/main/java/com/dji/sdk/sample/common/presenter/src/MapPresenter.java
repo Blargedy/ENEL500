@@ -36,6 +36,7 @@ import com.dji.sdk.sample.R;
 import com.dji.sdk.sample.common.entity.DroneLocationEntity;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
+import com.dji.sdk.sample.common.utility.IntentExtraKeys;
 import com.dji.sdk.sample.common.values.MissionBoundary;
 import com.dji.sdk.sample.common.presenter.api.I_MapPresenter;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
@@ -170,6 +171,12 @@ public class MapPresenter implements
         registerDroneLocationChangedReceiver(fragmentActivity);
         starterIntent = fragmentActivity.getIntent();
         missionState.setCurrentMissionState(MissionStateEnum.INITIALIZING_MAP);
+
+//        Intent intent = new Intent(BroadcastIntentNames.ERROR_OCCURRED);
+//        intent.putExtra(IntentExtraKeys.ERROR_MESSAGE, "Test");
+//        LocalBroadcastManager.getInstance(fragmentActivity).sendBroadcast(intent);
+
+
         this.surveyAreaHeightBar.setEnabled(false);
         this.surveyAreaWidthBar.setEnabled(false);
     }
@@ -570,8 +577,23 @@ public class MapPresenter implements
     }
 
     private void reachedWaypointAtIndex(int waypointIndex) {
+
         Log.d("MapPresenter", "Waypoint Reached: " + waypointIndex);
-        waypointCircleList.get(waypointIndex).setFillColor(Color.argb(150, 0, 0, 255)); // change marker to blue
+
+        Circle temp = waypointCircleList.get(waypointIndex);
+        waypointCircleList.get(waypointIndex).remove();
+        waypointCircleList.remove(waypointIndex);
+
+        waypointCircleList.add(waypointIndex, mMap.addCircle((new CircleOptions()
+                .center(new LatLng(temp.getCenter().latitude, temp.getCenter().longitude))
+                .radius(3)
+                .strokeWidth(3)
+                .zIndex(3004.5f) // above the polylines, below the drone and user
+                .strokeColor(Color.BLACK)
+                .fillColor(Color.argb(150, 0, 0, 255))))); // transparent blue circles
+
+
+        // waypointCircleList.get(waypointIndex).setFillColor(Color.argb(150, 0, 0, 255)); // change marker to blue
         numWaypointsCompleted++; // track mission progress
         percentageCompletion = (int) (100.0d * numWaypointsCompleted / numWaypointsTotal);
         surveyProgressBar.setProgress((int) percentageCompletion);
@@ -772,40 +794,40 @@ public class MapPresenter implements
         if (userMarker != null) userMarker.remove();
 
         userMarker = tempUserMarker;
-            droneMarkerIcon = getMarkerIconFromDrawable(droneDrawable, 50 + (int) (130.0f * 1.85f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f)), 50 + (int) (130 * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f))); // aspect ratio = l/w = 1.85
-            droneMarker = mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(lastKnownUserLocation.getLatitude() - 0.0006, lastKnownUserLocation.getLongitude() + 0.001))
-                    .zIndex(3005.0f)
-                    .icon(droneMarkerIcon));
-            mMap.setOnMapLoadedCallback(null); // don't need anymore since loaded
-            //writeToast("GPS Signal Acquired.");
-            mMap.getUiSettings().setAllGesturesEnabled(false);
-            mMap.getUiSettings().setScrollGesturesEnabled(false);
-            mMap.getUiSettings().setZoomControlsEnabled(false);
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-            polySurveyAreaPicked = true;
-            dbl_HeightSeek = (double) surveyAreaHeightBar.getProgress() / dbl_SurveyBoxScaler;
-            dbl_WidthSeek = (double) surveyAreaWidthBar.getProgress() / dbl_SurveyBoxScaler;
-            double lati = userMarker.getPosition().latitude + 0.0001; // store the latitude of the tap
-            double longi = userMarker.getPosition().longitude + 0.001; // store the longitude of the tap
-            areaSelectingMaskMidpoint = (new LatLng(lati, longi)); // save the tap LatLng globally
-            surveyPolygon = mMap.addPolygon(new PolygonOptions()
-                    .add(new LatLng((lati - dbl_areaSS * dbl_HeightSeek), (longi - dbl_areaSS * dbl_WidthSeek)), new LatLng((lati + dbl_areaSS * dbl_HeightSeek), (longi - dbl_areaSS * dbl_WidthSeek)), new LatLng((lati + dbl_areaSS * dbl_HeightSeek), (longi + dbl_areaSS * dbl_WidthSeek)), new LatLng((lati - dbl_areaSS * dbl_HeightSeek), (longi + dbl_areaSS * dbl_WidthSeek)))
-                    .strokeWidth(2)
-                    .strokeColor(Color.BLACK)
-                    .zIndex(3005.0f)
-                    .fillColor(Color.argb(125, 0, 0, 0)) // black that is 50% opaque (see through)
-                    .clickable(true));
+        droneMarkerIcon = getMarkerIconFromDrawable(droneDrawable, 50 + (int) (130.0f * 1.85f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f)), 50 + (int) (130 * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f))); // aspect ratio = l/w = 1.85
+        droneMarker = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(lastKnownUserLocation.getLatitude() - 0.0006, lastKnownUserLocation.getLongitude() + 0.001))
+                .zIndex(3005.0f)
+                .icon(droneMarkerIcon));
+        mMap.setOnMapLoadedCallback(null); // don't need anymore since loaded
+        //writeToast("GPS Signal Acquired.");
+        mMap.getUiSettings().setAllGesturesEnabled(false);
+        mMap.getUiSettings().setScrollGesturesEnabled(false);
+        mMap.getUiSettings().setZoomControlsEnabled(false);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        polySurveyAreaPicked = true;
+        dbl_HeightSeek = (double) surveyAreaHeightBar.getProgress() / dbl_SurveyBoxScaler;
+        dbl_WidthSeek = (double) surveyAreaWidthBar.getProgress() / dbl_SurveyBoxScaler;
+        double lati = userMarker.getPosition().latitude + 0.0001; // store the latitude of the tap
+        double longi = userMarker.getPosition().longitude + 0.001; // store the longitude of the tap
+        areaSelectingMaskMidpoint = (new LatLng(lati, longi)); // save the tap LatLng globally
+        surveyPolygon = mMap.addPolygon(new PolygonOptions()
+                .add(new LatLng((lati - dbl_areaSS * dbl_HeightSeek), (longi - dbl_areaSS * dbl_WidthSeek)), new LatLng((lati + dbl_areaSS * dbl_HeightSeek), (longi - dbl_areaSS * dbl_WidthSeek)), new LatLng((lati + dbl_areaSS * dbl_HeightSeek), (longi + dbl_areaSS * dbl_WidthSeek)), new LatLng((lati - dbl_areaSS * dbl_HeightSeek), (longi + dbl_areaSS * dbl_WidthSeek)))
+                .strokeWidth(2)
+                .strokeColor(Color.BLACK)
+                .zIndex(3005.0f)
+                .fillColor(Color.argb(125, 0, 0, 0)) // black that is 50% opaque (see through)
+                .clickable(true));
 
-            // Go the new GPS coordinates of the user
-            Double heightDistance = distance(surveyPolygon.getPoints().get(0).latitude, surveyPolygon.getPoints().get(1).latitude, surveyPolygon.getPoints().get(0).longitude, surveyPolygon.getPoints().get(1).longitude, 0d, 0d);
-            surveyAreaHeightText.setText("Survey Area Height: " + String.valueOf(round(heightDistance, 1)) + " m");
-            Double widthDistance = distance(surveyPolygon.getPoints().get(0).latitude, surveyPolygon.getPoints().get(3).latitude, surveyPolygon.getPoints().get(0).longitude, surveyPolygon.getPoints().get(3).longitude, 0d, 0d);
-            surveyAreaWidthText.setText("Survey Area Width: " + String.valueOf(round(widthDistance, 1)) + " m");
-            CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude + 0.001), 18.0f);
-            mMap.animateCamera(cu, 3000, MapPresenter.this);
-            this.surveyAreaHeightBar.setEnabled(true);
-            this.surveyAreaWidthBar.setEnabled(true);
+        // Go the new GPS coordinates of the user
+        Double heightDistance = distance(surveyPolygon.getPoints().get(0).latitude, surveyPolygon.getPoints().get(1).latitude, surveyPolygon.getPoints().get(0).longitude, surveyPolygon.getPoints().get(1).longitude, 0d, 0d);
+        surveyAreaHeightText.setText("Survey Area Height: " + String.valueOf(round(heightDistance, 1)) + " m");
+        Double widthDistance = distance(surveyPolygon.getPoints().get(0).latitude, surveyPolygon.getPoints().get(3).latitude, surveyPolygon.getPoints().get(0).longitude, surveyPolygon.getPoints().get(3).longitude, 0d, 0d);
+        surveyAreaWidthText.setText("Survey Area Width: " + String.valueOf(round(widthDistance, 1)) + " m");
+        CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude + 0.001), 18.0f);
+        mMap.animateCamera(cu, 3000, MapPresenter.this);
+        this.surveyAreaHeightBar.setEnabled(true);
+        this.surveyAreaWidthBar.setEnabled(true);
         return;
     }
 

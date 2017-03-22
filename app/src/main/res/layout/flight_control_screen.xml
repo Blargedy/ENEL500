@@ -150,6 +150,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:orientation="horizontal">
 
         <Button
@@ -157,6 +159,8 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_gravity="center"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
             android:background="@drawable/round_btn"
             android:enabled="true"
             android:text="Cancel"
