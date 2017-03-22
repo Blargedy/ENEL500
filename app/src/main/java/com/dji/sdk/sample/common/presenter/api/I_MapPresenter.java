@@ -14,7 +14,4 @@ public interface I_MapPresenter
     MissionBoundary getSurveyAreaBoundary();
     void displayMissionWaypoints(Vector<Coordinate> waypoints);
     void clearMap();
-
-    void enableAllControls();
-    void disableAllControls();
 }

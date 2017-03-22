@@ -10,10 +10,14 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
+import com.dji.sdk.sample.common.activity.FlightControlActivity;
+import com.dji.sdk.sample.common.activity.MainMenuActivity;
+import com.dji.sdk.sample.common.activity.SlashScreenActivity;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
+import com.dji.sdk.sample.common.view.src.FlightControlView;
 
 /**
  * Created by Julia on 2017-03-08.
@@ -21,42 +25,42 @@ import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
 
 public class MissionControlsPresenter implements
         View.OnClickListener,
-        CompoundButton.OnCheckedChangeListener
-{
+        CompoundButton.OnCheckedChangeListener {
     private Button acceptAreaButton_;
     private Button startMissionButton_;
     private Button cancelButton_;
     private ToggleButton hoverNowToggleButton_;
 
     private MissionStateEntity missionState_;
+    private MissionSettingsPresenter missionSettings_;
     private BroadcastReceiver receiver_;
+    private Context context_;
 
     public MissionControlsPresenter(
             Context context,
             I_MissionControlsView view,
-            MissionStateEntity missionState)
-    {
+            MissionStateEntity missionState, MissionSettingsPresenter missionSettings) {
         acceptAreaButton_ = view.acceptAreaButton();
         startMissionButton_ = view.startMissionButton();
         cancelButton_ = view.cancelButton();
         hoverNowToggleButton_ = view.hoverNowToggleButton();
         missionState_ = missionState;
+        missionSettings_ = missionSettings;
 
         setButtonOnClickListeners();
         registerMissionStateChangedReceiver(context);
         setViewBasedOnMissionState();
+        context_ = context;
     }
 
-    private void setButtonOnClickListeners()
-    {
+    private void setButtonOnClickListeners() {
         acceptAreaButton_.setOnClickListener(this);
         startMissionButton_.setOnClickListener(this);
         cancelButton_.setOnClickListener(this);
         hoverNowToggleButton_.setOnCheckedChangeListener(this);
     }
 
-    private void registerMissionStateChangedReceiver(Context context)
-    {
+    private void registerMissionStateChangedReceiver(Context context) {
         IntentFilter filter = new IntentFilter();
         filter.addAction(BroadcastIntentNames.MISSION_STATE_CHANGED);
 
@@ -71,8 +75,7 @@ public class MissionControlsPresenter implements
     }
 
     @Override
-    public void onClick(View v)
-    {
+    public void onClick(View v) {
         if (v.getId() == acceptAreaButton_.getId()) {
             missionState_.setCurrentMissionState(MissionStateEnum.GENERATE_MISSION_BOUNDARY);
         } else if (v.getId() == startMissionButton_.getId()) {
@@ -83,139 +86,128 @@ public class MissionControlsPresenter implements
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-    {
-        if (buttonView.getId() == hoverNowToggleButton_.getId())
-        {
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (buttonView.getId() == hoverNowToggleButton_.getId()) {
             hoverNowToggleButtonPressed();
         }
     }
 
-    private void cancelButtonPressed()
-    {
-        switch (missionState_.getCurrentMissionState())
-        {
-            case VIEW_MISSION:
-                missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
+    private void cancelButtonPressed() {
+        Intent mainIntent;
+        switch (missionState_.getCurrentMissionState()) {
+            case INITIALIZING_MAP:
+                mainIntent = new Intent(context_, MainMenuActivity.class);
+                context_.startActivity(mainIntent);
+                mainIntent = new Intent(context_, FlightControlActivity.class);
+                context_.stopService(mainIntent);
+                missionState_.setCurrentMissionState(MissionStateEnum.INITIALIZING_MAP);
                 break;
-
+            case SELECT_AREA:
+                mainIntent = new Intent(context_, MainMenuActivity.class);
+                context_.startActivity(mainIntent);
+                mainIntent = new Intent(context_, FlightControlActivity.class);
+                context_.stopService(mainIntent);
+                missionState_.setCurrentMissionState(MissionStateEnum.INITIALIZING_MAP);
+                break;
+            case VIEW_MISSION:
+                missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA); // might need to go to INITIALIZING_MAP
+                break;
             case MISSION_EXECUTING:
                 missionState_.setCurrentMissionState(MissionStateEnum.CANCEL_MISSION);
                 break;
-
             case HOVERING:
                 missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME);
                 break;
-
             default:
                 break;
         }
     }
 
-    private void hoverNowToggleButtonPressed()
-    {
-        switch (missionState_.getCurrentMissionState())
-        {
+    private void hoverNowToggleButtonPressed() {
+        switch (missionState_.getCurrentMissionState()) {
             case MISSION_EXECUTING:
                 missionState_.setCurrentMissionState(MissionStateEnum.HOVER_NOW);
                 break;
-
             case HOVERING:
                 missionState_.setCurrentMissionState(MissionStateEnum.RESUME_MISSION);
                 break;
-
             case GO_HOME:
                 missionState_.setCurrentMissionState(MissionStateEnum.PAUSE_GO_HOME);
                 break;
-
             case GO_HOME_PAUSED:
                 missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME);
                 break;
-
             default:
                 break;
         }
     }
 
-    private void setViewBasedOnMissionState()
-    {
-        switch (missionState_.getCurrentMissionState())
-        {
+    private void setViewBasedOnMissionState() {
+        switch (missionState_.getCurrentMissionState()) {
+            case INITIALIZING_MAP:
+                acceptAreaButton_.setVisibility(View.VISIBLE);
+                acceptAreaButton_.setEnabled(false);
+                cancelButton_.setVisibility(View.VISIBLE);
+                startMissionButton_.setVisibility(View.GONE);
+                cancelButton_.setEnabled(true);
+                hoverNowToggleButton_.setVisibility(View.GONE);
+                break;
             case SELECT_AREA:
                 acceptAreaButton_.setVisibility(View.VISIBLE);
                 acceptAreaButton_.setEnabled(true);
-
+                cancelButton_.setEnabled(true);
                 startMissionButton_.setVisibility(View.GONE);
-                cancelButton_.setVisibility(View.GONE);
                 hoverNowToggleButton_.setVisibility(View.GONE);
-                break;
 
+                break;
             case GENERATE_MISSION_BOUNDARY:
-                acceptAreaButton_.setEnabled(false);
+                acceptAreaButton_.setVisibility(View.GONE);
                 break;
-
             case VIEW_MISSION:
                 startMissionButton_.setVisibility(View.VISIBLE);
                 startMissionButton_.setEnabled(true);
-                cancelButton_.setVisibility(View.VISIBLE);
                 cancelButton_.setEnabled(true);
-
                 acceptAreaButton_.setVisibility(View.GONE);
                 hoverNowToggleButton_.setVisibility(View.GONE);
                 break;
-
             case INITIALIZE_MISSION:
-                startMissionButton_.setEnabled(false);
-                startMissionButton_.setEnabled(false);
+                startMissionButton_.setVisibility(View.GONE);
                 break;
-
             case START_MISSION:
-                startMissionButton_.setEnabled(false);
-                startMissionButton_.setEnabled(false);
+                startMissionButton_.setVisibility(View.GONE);
                 break;
-
             case MISSION_EXECUTING:
                 hoverNowToggleButton_.setVisibility(View.VISIBLE);
-                cancelButton_.setVisibility(View.VISIBLE);
                 hoverNowToggleButton_.setEnabled(true);
                 cancelButton_.setEnabled(true);
-
                 acceptAreaButton_.setVisibility(View.GONE);
                 startMissionButton_.setVisibility(View.GONE);
                 break;
-
             case HOVER_NOW:
                 hoverNowToggleButton_.setEnabled(false);
-                cancelButton_.setEnabled(false);
+                cancelButton_.setEnabled(true);
                 break;
-
             case HOVERING:
                 hoverNowToggleButton_.setEnabled(true);
                 cancelButton_.setEnabled(true);
                 break;
-
             case RESUME_MISSION:
                 hoverNowToggleButton_.setEnabled(false);
-                cancelButton_.setEnabled(false);
+                cancelButton_.setEnabled(true);
                 break;
-
             case CANCEL_MISSION:
                 hoverNowToggleButton_.setEnabled(false);
-                cancelButton_.setEnabled(false);
+                cancelButton_.setEnabled(true);
                 break;
-
             case GO_HOME:
                 hoverNowToggleButton_.setEnabled(true);
                 break;
-
             case PAUSE_GO_HOME:
                 hoverNowToggleButton_.setEnabled(false);
                 break;
-
             case GO_HOME_PAUSED:
                 hoverNowToggleButton_.setEnabled(true);
                 break;
-
             default:
                 break;
         }

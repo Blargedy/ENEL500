@@ -1,6 +1,7 @@
 package com.dji.sdk.sample.common.view.api;
 
 
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -15,4 +16,5 @@ public interface I_MapView
     SeekBar surveyAreaHeightBar();
     TextView surveyAreaWidthText();
     SeekBar surveyAreaWidthBar();
+    LinearLayout linearLayoutMainV();
 }

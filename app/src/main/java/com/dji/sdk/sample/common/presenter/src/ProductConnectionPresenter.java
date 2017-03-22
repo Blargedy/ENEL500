@@ -49,13 +49,5 @@ public class ProductConnectionPresenter
     private void updateProgressConnectionStatus()
     {
         DJIBaseProduct product = DJISampleApplication.getProductInstance();
-        if (product != null && product.isConnected())
-        {
-            missionControlsView_.enableAllControls();
-        }
-        else
-        {
-            missionControlsView_.disableAllControls();
-        }
     }
 }

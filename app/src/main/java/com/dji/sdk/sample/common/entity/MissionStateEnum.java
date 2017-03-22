@@ -6,6 +6,7 @@ package com.dji.sdk.sample.common.entity;
 
 public enum MissionStateEnum
 {
+    INITIALIZING_MAP,
     SELECT_AREA,
     GENERATE_MISSION_BOUNDARY,
     GENERATE_MISSION,

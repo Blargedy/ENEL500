@@ -17,21 +17,20 @@ import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
  * Created by Julia on 2017-03-10.
  */
 
-public class MissionMapDisplayPresenter
-{
+public class MissionMapDisplayPresenter {
     private MissionStateEntity missionState_;
     private InitialMissionModel initialMissionModel_;
     private GeneratedMissionModel generatedMissionModel_;
     private BroadcastReceiver receiver_;
     private MapPresenter mapPresenter_;
+    MissionStateEnum lastMissionState_;
 
     public MissionMapDisplayPresenter(
             Context context,
             MissionStateEntity missionState,
             InitialMissionModel initialMissionModel,
             GeneratedMissionModel generatedMissionModel,
-            MapPresenter mapPresenter)
-    {
+            MapPresenter mapPresenter) {
         missionState_ = missionState;
         initialMissionModel_ = initialMissionModel;
         generatedMissionModel_ = generatedMissionModel;
@@ -40,8 +39,7 @@ public class MissionMapDisplayPresenter
         registerMissionStateChangedReceiver(context);
     }
 
-    private void registerMissionStateChangedReceiver(Context context)
-    {
+    private void registerMissionStateChangedReceiver(Context context) {
         IntentFilter filter = new IntentFilter();
         filter.addAction(BroadcastIntentNames.MISSION_STATE_CHANGED);
 
@@ -55,28 +53,29 @@ public class MissionMapDisplayPresenter
         LocalBroadcastManager.getInstance(context).registerReceiver(receiver_, filter);
     }
 
-    private void missionStateChanged()
-    {
+    private void missionStateChanged() {
         MissionStateEnum currentMissionState = missionState_.getCurrentMissionState();
-        switch (currentMissionState) {
-            case SELECT_AREA:
-                mapPresenter_.clearMap();
-                mapPresenter_.enableAllControls();
-                break;
 
+        switch (currentMissionState) {
+            case INITIALIZING_MAP:
+                break;
+            case SELECT_AREA:
+                if (lastMissionState_ == MissionStateEnum.VIEW_MISSION){
+                    mapPresenter_.clearMap();
+                }
+                break;
             case GENERATE_MISSION_BOUNDARY:
-                mapPresenter_.disableAllControls();
                 MissionBoundary boundary = mapPresenter_.getSurveyAreaBoundary();
                 initialMissionModel_.setMissionBoundary(boundary);
                 missionState_.setCurrentMissionState(MissionStateEnum.GENERATE_MISSION);
                 break;
-
             case VIEW_MISSION:
+                mapPresenter_.setallowRealTimeDroneGPS(true);
                 mapPresenter_.displayMissionWaypoints(generatedMissionModel_.waypoints());
                 break;
-
             default:
                 break;
         }
+        lastMissionState_=currentMissionState;
     }
 }

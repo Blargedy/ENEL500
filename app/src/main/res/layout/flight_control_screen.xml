@@ -1,57 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayoutMainV"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/txt_console"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.03"
+        android:text="Console: Julia to connect."
+        android:textAlignment="center"
+        android:textSize="18sp"
+        tools:textSize="36sp"
+        tools:textStyle="bold" />
+
     <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="258dp"
-        android:id="@+id/map"
-        tools:context=".FlightControlActivity"
         android:layout_gravity="center"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_weight="0.82" />
+        android:layout_weight="0.82"
+        tools:context=".FlightControlActivity" />
 
     <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/surveyProgressBar"
-        android:progress="0"
-        android:layout_weight="0.05"
-        android:max="100" />
-
-    <TextView
-        android:text="Survey Area Height"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0.05"
+        android:max="100"
+        android:progress="0" />
+
+    <TextView
         android:id="@+id/txt_surveyAreaHeight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Survey Area Height"
         android:textStyle="normal|bold" />
 
     <SeekBar
+        android:id="@+id/pbar_surveyAreaHeight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/pbar_surveyAreaHeight"
-        android:progress="25"
         android:layout_weight="0.05"
-        android:max="100" />
+        android:max="100"
+        android:progress="25" />
 
     <TextView
-        android:text="Survey Area Width"
+        android:id="@+id/txt_surveyAreaWidth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txt_surveyAreaWidth"
+        android:text="Survey Area Width"
         android:textStyle="normal|bold" />
 
     <SeekBar
+        android:id="@+id/pbar_surveyAreaWidth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/pbar_surveyAreaWidth"
-        android:progress="25"
         android:layout_weight="0.05"
-        android:max="100" />
+        android:max="100"
+        android:progress="25" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_weight="0.03" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,24 +81,70 @@
             android:layout_width="150dp"
             android:layout_height="55dp"
             android:layout_gravity="center"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
             android:background="@drawable/round_btn"
-            android:textAllCaps="false"
+            android:enabled="true"
             android:text="Accept Survey Area"
+            android:textAllCaps="false"
             android:textColor="@color/common_text_color"
-            android:textSize="15dp"/>
+            android:textSize="15dp"
+            tools:enabled="true" />
+
+        <Button
+            android:id="@+id/btn_start_mission"
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/round_btn"
+            android:enabled="true"
+            android:text="Start Mission"
+            android:textAllCaps="false"
+            android:textColor="@color/common_text_color"
+            android:textSize="15dp" />
+
+        <ToggleButton
+            android:id="@+id/btn_toggle_hover_now"
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/round_btn"
+            android:checked="false"
+            android:enabled="true"
+            android:textAllCaps="false"
+            android:textColor="@color/common_text_color"
+            android:textOff="Hover Now"
+            android:textOn="Resume"
+            android:textSize="15dp" />
 
         <Button
             android:id="@+id/btn_settings"
             android:layout_width="150dp"
             android:layout_height="55dp"
             android:layout_gravity="center"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
             android:background="@drawable/round_btn"
-            android:textAllCaps="false"
+            android:enabled="true"
             android:text="Settings"
+            android:textAllCaps="false"
             android:textColor="@color/common_text_color"
-            android:textSize="15dp"/>
+            android:textSize="15dp" />
 
     </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_weight="0.03" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -90,42 +153,22 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_start_mission"
-            android:layout_width="150dp"
-            android:layout_height="55dp"
-            android:layout_gravity="center"
-            android:background="@drawable/round_btn"
-            android:textAllCaps="false"
-            android:text="Start Mission"
-            android:textColor="@color/common_text_color"
-            android:textSize="15dp"
-            />
-
-        <ToggleButton
-            android:id="@+id/btn_toggle_hover_now"
-            android:layout_width="150dp"
-            android:layout_height="55dp"
-            android:layout_gravity="center"
-            android:background="@drawable/round_btn"
-            android:textAllCaps="false"
-            android:textOn="Resume"
-            android:textOff="Hover Now"
-            android:textColor="@color/common_text_color"
-            android:textSize="15dp"
-            android:checked="false" />
-
-        <Button
             android:id="@+id/btn_cancel"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_gravity="center"
             android:background="@drawable/round_btn"
-            android:textAllCaps="false"
+            android:enabled="true"
             android:text="Cancel"
+            android:textAllCaps="false"
             android:textColor="@color/common_text_color"
-            android:textSize="15dp"
-            />
+            android:textSize="15dp" />
 
     </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_weight="0.03" />
 
 </LinearLayout>

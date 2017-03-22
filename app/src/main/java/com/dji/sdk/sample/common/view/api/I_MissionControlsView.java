@@ -14,7 +14,4 @@ public interface I_MissionControlsView
     Button cancelButton();
     ToggleButton hoverNowToggleButton();
     Button settingsButton();
-
-    void enableAllControls();
-    void disableAllControls();
 }

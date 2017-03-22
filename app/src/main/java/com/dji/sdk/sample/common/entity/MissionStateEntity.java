@@ -24,7 +24,7 @@ public class MissionStateEntity
     {
         context_ = context;
 
-        currentMissionState_ = MissionStateEnum.SELECT_AREA;
+        currentMissionState_ = MissionStateEnum.INITIALIZING_MAP;
         previousMissionState_ = null;
     }
 

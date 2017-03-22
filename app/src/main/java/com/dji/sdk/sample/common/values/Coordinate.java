@@ -22,16 +22,6 @@ public class Coordinate {
         longitude_ = longitude;
     }
 
-//    public double distanceApproximationInMeters(Coordinate coordinate)
-//    {
-//        double deltaLatitude = coordinate.latitude_ - latitude_;
-//        double deltaLongitude = coordinate.longitude_ - longitude_;
-//        double deltaDegrees = Math.sqrt(deltaLatitude*deltaLatitude + deltaLongitude*deltaLongitude);
-//        double deltaRadians = MathUtilities.degreesToRadians(deltaDegrees);
-//        double radiusOfEarthInMeters = 6371008;
-//        return deltaRadians*radiusOfEarthInMeters;
-//    }
-
     //using the haversine method https://en.wikipedia.org/wiki/Haversine_formula
     public double distanceApproximationInMeters(Coordinate coordinate)
     {

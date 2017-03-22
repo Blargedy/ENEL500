@@ -4,38 +4,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:layout_gravity="center"
         android:orientation="horizontal">
 
-        <TextView android:id="@+id/altitudeLabel"
+        <TextView
+            android:id="@+id/altitudeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Altitude (m):              " />
 
-        <NumberPicker android:id="@+id/altitude"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
-
-        <TextView android:id="@+id/imageOverlapLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Image Overlap (%):   " />
-
-        <NumberPicker android:id="@+id/imageOverlap"
+        <NumberPicker
+            android:id="@+id/altitude"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
@@ -44,17 +31,40 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:layout_gravity="center"
         android:orientation="horizontal">
 
-        <TextView android:id="@+id/swathOverlapLabel"
+        <TextView
+            android:id="@+id/imageOverlapLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Image Overlap (%):   " />
+
+        <NumberPicker
+            android:id="@+id/imageOverlap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/swathOverlapLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Swath Overlap (%):   " />
 
-        <NumberPicker android:id="@+id/swathOverlap"
+        <NumberPicker
+            android:id="@+id/swathOverlap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />

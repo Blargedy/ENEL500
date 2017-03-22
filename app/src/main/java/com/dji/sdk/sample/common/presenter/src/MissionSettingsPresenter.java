@@ -40,7 +40,7 @@ public class MissionSettingsPresenter implements
 
         missionState_ = missionState;
         context_ = context;
-
+        //settingsButton_.setEnabled(false);
         registerMissionStateChangedReceiver(context);
     }
 
@@ -73,21 +73,25 @@ public class MissionSettingsPresenter implements
         alert.show();
     }
 
-    private void setViewBasedOnMissionState()
+    public void setViewBasedOnMissionState()
     {
         switch (missionState_.getCurrentMissionState())
         {
+            case INITIALIZING_MAP:
+                settingsButton_.setVisibility(View.VISIBLE);
+                settingsButton_.setEnabled(true);
+                break;
             case SELECT_AREA:
                 settingsButton_.setVisibility(View.VISIBLE);
                 settingsButton_.setEnabled(true);
                 break;
 
             case GENERATE_MISSION_BOUNDARY:
-                settingsButton_.setEnabled(false);
+                settingsButton_.setVisibility(View.GONE);
                 break;
 
             case VIEW_MISSION:
-                settingsButton_.setVisibility(View.INVISIBLE);
+                settingsButton_.setVisibility(View.GONE);
                 break;
 
             default:

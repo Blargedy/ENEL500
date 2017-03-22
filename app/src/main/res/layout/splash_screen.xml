@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="25" />
+
+    <ImageView
+        android:id="@+id/imagelockheedLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="344dp"
+        android:layout_weight="50"
+        android:src="@drawable/lockheedlogo"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/imageucLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="70"
+        android:alpha="1.0"
+        android:src="@drawable/uclogo"
+        android:visibility="gone" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="25" />
+
+</LinearLayout>

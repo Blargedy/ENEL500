@@ -33,11 +33,7 @@ public class PresenterContainer
                 activity,
                 googleMapsConnectionHandler.googleApiClient(),
                 flightControlView,
-                missionContainer.droneLocation());
-        missionControlsPresenter_ = new MissionControlsPresenter(
-                activity,
-                flightControlView,
-                missionContainer.missionState());
+                missionContainer.droneLocation(), missionContainer.missionState());
         missionMapDisplayPresenter_ = new MissionMapDisplayPresenter(
                 activity,
                 missionContainer.missionState(),
@@ -48,7 +44,10 @@ public class PresenterContainer
                 flightControlView,
                 missionContainer.missionState(),
                 activity);
-
+        missionControlsPresenter_ = new MissionControlsPresenter(
+                activity,
+                flightControlView,
+                missionContainer.missionState(),missionSettingsPresenter_);
         productConnectionPresenter_ = new ProductConnectionPresenter(
                 activity,
                 flightControlView);

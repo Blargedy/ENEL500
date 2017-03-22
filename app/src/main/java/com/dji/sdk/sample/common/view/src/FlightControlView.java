@@ -3,6 +3,7 @@ package com.dji.sdk.sample.common.view.src;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ public class FlightControlView
     private SeekBar surveyAreaHeightBar_;
     private TextView surveyAreaWidthText_;
     private SeekBar surveyAreaWidthBar_;
+    private LinearLayout linearLayoutMainV_;
 
     private Button acceptAreaButton_;
     private Button startMissionButton_;
@@ -62,6 +64,7 @@ public class FlightControlView
         surveyAreaHeightBar_ = (SeekBar) findViewById(R.id.pbar_surveyAreaHeight);
         surveyAreaWidthText_ = (TextView) findViewById(R.id.txt_surveyAreaWidth);
         surveyAreaWidthBar_ = (SeekBar) findViewById(R.id.pbar_surveyAreaWidth);
+        linearLayoutMainV_ = (LinearLayout) findViewById(R.id.linearLayoutMainV);
 
         acceptAreaButton_ = (Button) findViewById(R.id.btn_accept_area);
         startMissionButton_ = (Button) findViewById(R.id.btn_start_mission);
@@ -88,24 +91,6 @@ public class FlightControlView
     @Override
     public ToggleButton hoverNowToggleButton() {
         return hoverNowToggleButton_;
-    }
-
-    @Override
-    public void enableAllControls()
-    {
-        acceptAreaButton_.setEnabled(true);
-        startMissionButton_.setEnabled(true);
-        cancelButton_.setEnabled(true);
-        hoverNowToggleButton_.setEnabled(true);
-    }
-
-    @Override
-    public void disableAllControls()
-    {
-        //acceptAreaButton_.setEnabled(false);
-        startMissionButton_.setEnabled(false);
-        cancelButton_.setEnabled(false);
-        hoverNowToggleButton_.setEnabled(false);
     }
 
     @Override
@@ -137,5 +122,11 @@ public class FlightControlView
     public Button settingsButton()
     {
         return settingsButton_;
+    }
+
+    @Override
+    public LinearLayout linearLayoutMainV()
+    {
+        return linearLayoutMainV_;
     }
 }

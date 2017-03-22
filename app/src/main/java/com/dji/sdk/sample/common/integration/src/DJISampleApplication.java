@@ -53,7 +53,14 @@ public class DJISampleApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        //Intent intent = new Intent(this,SlashScreenActivity.class);
+       //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+       // startActivity(intent);
+        //this.finish();// here i finish my current activity
+
         mHandler = new Handler(Looper.getMainLooper());
+
 
         DJISDKManager.getInstance().initSDKManager(this, mDJISDKManagerCallback);
     }
