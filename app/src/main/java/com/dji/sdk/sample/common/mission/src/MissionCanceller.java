@@ -14,6 +14,7 @@ import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
 import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
+import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
 
 import dji.common.error.DJIError;
 
@@ -25,6 +26,7 @@ public class MissionCanceller implements I_CompletionCallback
 {
     private static final String TAG = "HydraMissionCanceller";
 
+    private I_MissionErrorNotifier missionErrorNotifier_;
     private BroadcastReceiver receiver_;
     private MissionStateEntity missionState_;
     private I_MissionManagerSource missionManagerSource_;
@@ -33,11 +35,13 @@ public class MissionCanceller implements I_CompletionCallback
 
     public MissionCanceller(
             Context context,
+            I_MissionErrorNotifier missionErrorNotifier,
             MissionStateEntity missionState,
             I_MissionManagerSource missionManagerSource,
             I_FlightControllerSource flightControllerSource,
             I_ImageTransferModuleEnder imageTransferModuleEnder)
     {
+        missionErrorNotifier_ = missionErrorNotifier;
         missionState_ = missionState;
         missionManagerSource_ = missionManagerSource;
         flightControllerSource_ = flightControllerSource;
@@ -93,6 +97,7 @@ public class MissionCanceller implements I_CompletionCallback
         else
         {
             Log.e(TAG, error.getDescription());
+            missionErrorNotifier_.notifyErrorOccurred(error.getDescription());
             changeMissionStateAfterCommandFails();
         }
     }

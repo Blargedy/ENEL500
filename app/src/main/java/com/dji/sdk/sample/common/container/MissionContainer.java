@@ -25,6 +25,7 @@ import com.dji.sdk.sample.common.mission.src.SwitchBackPathGenerator;
 import com.dji.sdk.sample.common.mission.src.WaypointMissionCompletionCallback;
 import com.dji.sdk.sample.common.mission.src.WaypointMissionProgressStatusCallback;
 import com.dji.sdk.sample.common.mission.src.WaypointReachedNotifier;
+import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
 
 /**
  * Created by Julia on 2017-02-04.
@@ -61,6 +62,7 @@ public class MissionContainer
 
     public MissionContainer(
             Context context,
+            I_MissionErrorNotifier missionErrorNotifier,
             IntegrationLayerContainer integrationLayerContainer,
             ImageTransferContainer imageTransferContainer,
             boolean isLiveModeEnabled)
@@ -76,6 +78,7 @@ public class MissionContainer
                 generatedMissionModel(),
                 missionState_);
         waypointMissionCompletionCallback_ = new WaypointMissionCompletionCallback(
+                missionErrorNotifier,
                 nextWaypointMissionStarter_);
 
         cameraSystemState_ = new InvestigativeCameraSystemState();
@@ -87,6 +90,7 @@ public class MissionContainer
 
         if (isLiveModeEnabled){
             periodicImageTransferInitiator_ = new MissionPeriodicImageTransferInitiator(
+                    missionErrorNotifier,
                     integrationLayerContainer.missionManagerSource(),
                     imageTransferContainer.imageTransferer(),
                     imageTransferContainer.droneImageDownloadQueuer());
@@ -108,6 +112,7 @@ public class MissionContainer
                 droneLocation_,
                 integrationLayerContainer.flightControllerSource());
         missionProgressStatusCallback_ = new WaypointMissionProgressStatusCallback(
+                missionErrorNotifier,
                 waypointReachedNotifier_ /*investigatingImageTransfer_*/,
                 droneLocationUpdater_,
                 integrationLayerContainer.cameraSource());
@@ -128,6 +133,7 @@ public class MissionContainer
                 missionProgressStatusCallback_);
         missionExecutor_ = new MissionExecutor(
                 context,
+                missionErrorNotifier,
                 missionGenerator_,
                 nextWaypointMissionStarter_,
                 missionInitializer_,
@@ -135,6 +141,7 @@ public class MissionContainer
                 missionState_);
         missionCanceller_ = new MissionCanceller(
                 context,
+                missionErrorNotifier,
                 missionState_,
                 integrationLayerContainer.missionManagerSource(),
                 integrationLayerContainer.flightControllerSource(),

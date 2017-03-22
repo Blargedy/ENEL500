@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_NextWaypointMissionStarter;
+import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
 
 import dji.common.error.DJIError;
 
@@ -15,11 +16,14 @@ public class WaypointMissionCompletionCallback implements I_CompletionCallback
 {
     private static final String TAG = "HydraWaypointMissionCompletionCallback";
 
+    private I_MissionErrorNotifier missionErrorNotifier_;
     private I_NextWaypointMissionStarter nextWaypointMissionStarter_;
 
     public WaypointMissionCompletionCallback(
+            I_MissionErrorNotifier missionErrorNotifier,
             I_NextWaypointMissionStarter nextWaypointMissionStarter)
     {
+        missionErrorNotifier_ = missionErrorNotifier;
         nextWaypointMissionStarter_ = nextWaypointMissionStarter;
     }
 
@@ -32,6 +36,7 @@ public class WaypointMissionCompletionCallback implements I_CompletionCallback
         }
         else
         {
+            missionErrorNotifier_.notifyErrorOccurred(error.getDescription());
             Log.e(TAG, error.getDescription());
         }
     }

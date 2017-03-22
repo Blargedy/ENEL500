@@ -7,6 +7,7 @@ import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_WaypointMissionProgressStatusCallback;
 import com.dji.sdk.sample.common.mission.api.I_DroneLocationUpdater;
 import com.dji.sdk.sample.common.mission.api.I_WaypointReachedNotifier;
+import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
 
 import dji.common.error.DJIError;
 import dji.sdk.missionmanager.DJIMission;
@@ -26,15 +27,18 @@ public class WaypointMissionProgressStatusCallback implements
 
     private int waypointIndex_;
 
+    private I_MissionErrorNotifier missionErrorNotifier_;
     private I_WaypointReachedNotifier waypointReachedNotifier_;
     private I_DroneLocationUpdater droneLocationUpdater_;
     private I_CameraSource cameraSource_;
 
     public WaypointMissionProgressStatusCallback(
+            I_MissionErrorNotifier missionErrorNotifier,
             I_WaypointReachedNotifier waypointReachedNotifier,
             I_DroneLocationUpdater droneLocationUpdater,
             I_CameraSource cameraSource)
     {
+        missionErrorNotifier_ = missionErrorNotifier;
         waypointReachedNotifier_ = waypointReachedNotifier;
         droneLocationUpdater_ = droneLocationUpdater;
         cameraSource_ = cameraSource;
@@ -75,8 +79,10 @@ public class WaypointMissionProgressStatusCallback implements
     {
         if (error != null)
         {
-            Log.e(TAG, "Failed to take image on waypoint " + waypointIndex_ +
-                    " : " + error.getDescription());
+            String errorMessage = "Failed to take image on waypoint " + waypointIndex_ +
+                    " : " + error.getDescription();
+            missionErrorNotifier_.notifyErrorOccurred(errorMessage);
+            Log.e(TAG, errorMessage);
         }
     }
 }

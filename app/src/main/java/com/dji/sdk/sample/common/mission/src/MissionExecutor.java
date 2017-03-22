@@ -15,6 +15,7 @@ import com.dji.sdk.sample.common.mission.api.I_MissionInitializer;
 import com.dji.sdk.sample.common.mission.api.I_NextWaypointMissionStarter;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
+import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
 
 import dji.common.error.DJIError;
 
@@ -28,6 +29,7 @@ public class MissionExecutor implements I_CompletionCallback
 
     private BroadcastReceiver receiver_;
 
+    private I_MissionErrorNotifier missionErrorNotifier_;
     private I_MissionGenerator missionGenerator_;
     private I_NextWaypointMissionStarter nextWaypointMissionStarter_;
     private I_MissionInitializer missionInitializer_;
@@ -36,12 +38,14 @@ public class MissionExecutor implements I_CompletionCallback
 
     public MissionExecutor(
             Context context,
+            I_MissionErrorNotifier missionErrorNotifier,
             I_MissionGenerator missionGenerator,
             I_NextWaypointMissionStarter nextWaypointMissionStarter,
             I_MissionInitializer missionInitializer,
             I_MissionManagerSource missionManagerSource,
             MissionStateEntity missionState)
     {
+        missionErrorNotifier_ = missionErrorNotifier;
         missionGenerator_ = missionGenerator;
         nextWaypointMissionStarter_ = nextWaypointMissionStarter;
         missionInitializer_ = missionInitializer;
@@ -106,6 +110,7 @@ public class MissionExecutor implements I_CompletionCallback
         else
         {
             Log.e(TAG, error.getDescription());
+            missionErrorNotifier_.notifyErrorOccurred(error.getDescription());
             changeMissionStateAfterCommandFails();
         }
     }

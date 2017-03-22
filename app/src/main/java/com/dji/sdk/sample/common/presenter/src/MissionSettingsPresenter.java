@@ -40,7 +40,6 @@ public class MissionSettingsPresenter implements
 
         missionState_ = missionState;
         context_ = context;
-        //settingsButton_.setEnabled(false);
         registerMissionStateChangedReceiver(context);
     }
 

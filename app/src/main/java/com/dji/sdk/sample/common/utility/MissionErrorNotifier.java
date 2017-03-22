@@ -12,7 +12,7 @@ public class MissionErrorNotifier implements I_MissionErrorNotifier
 {
     private Context context_;
 
-    MissionErrorNotifier(
+    public MissionErrorNotifier(
             Context context)
     {
         context_ = context;

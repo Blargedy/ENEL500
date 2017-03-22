@@ -12,12 +12,10 @@ import android.widget.ToggleButton;
 
 import com.dji.sdk.sample.common.activity.FlightControlActivity;
 import com.dji.sdk.sample.common.activity.MainMenuActivity;
-import com.dji.sdk.sample.common.activity.SlashScreenActivity;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
-import com.dji.sdk.sample.common.view.src.FlightControlView;
 
 /**
  * Created by Julia on 2017-03-08.
@@ -169,7 +167,7 @@ public class MissionControlsPresenter implements
                 hoverNowToggleButton_.setVisibility(View.GONE);
                 break;
             case INITIALIZE_MISSION:
-                startMissionButton_.setVisibility(View.GONE);
+                startMissionButton_.setEnabled(false);
                 break;
             case START_MISSION:
                 startMissionButton_.setVisibility(View.GONE);

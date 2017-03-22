@@ -7,21 +7,16 @@ import com.dji.sdk.sample.common.container.ImageTransferContainer;
 import com.dji.sdk.sample.common.container.IntegrationLayerContainer;
 import com.dji.sdk.sample.common.container.MissionContainer;
 import com.dji.sdk.sample.common.container.PresenterContainer;
-import com.dji.sdk.sample.common.utility.ApplicationContextManager;
-import com.dji.sdk.sample.common.utility.GoogleMapsConnectionHandler;
-import com.dji.sdk.sample.common.utility.UserPermissionRequester;
+import com.dji.sdk.sample.common.container.UtilityContainer;
 import com.dji.sdk.sample.common.view.src.FlightControlView;
 
 import static com.dji.sdk.sample.common.utility.IntentExtraKeys.*;
 
 public class FlightControlActivity extends FragmentActivity
 {
-    private UserPermissionRequester permissionRequester_;
-    private ApplicationContextManager contextManager_;
-    private GoogleMapsConnectionHandler googleMapsConnectionHandler_;
-
     private FlightControlView flightControlView_;
 
+    private UtilityContainer utilityContainer_;
     private IntegrationLayerContainer integrationLayerContainer_;
     private ImageTransferContainer imageTransferContainer_;
     private MissionContainer missionContainer_;
@@ -35,21 +30,19 @@ public class FlightControlActivity extends FragmentActivity
         Boolean isLiveModeEnabled = getIntent().getBooleanExtra(IS_LIVE_MODE_ENABLED, false);
         String pcIpAddress = getIntent().getStringExtra(PC_IP_ADDRESS);
 
-        permissionRequester_ = new UserPermissionRequester();
-        permissionRequester_.requestPermissions(this);
-        contextManager_ = new ApplicationContextManager(this);
-        googleMapsConnectionHandler_ = new GoogleMapsConnectionHandler(this);
-
         flightControlView_ = new FlightControlView(this);
 
+        utilityContainer_ = new UtilityContainer(this);
         integrationLayerContainer_ = new IntegrationLayerContainer();
         imageTransferContainer_ = new ImageTransferContainer(
-                contextManager_,
+                utilityContainer_.contextManager(),
+                utilityContainer_.missionErrorNotifier(),
                 integrationLayerContainer_,
                 pcIpAddress,
                 isLiveModeEnabled);
         missionContainer_ = new MissionContainer(
                 this,
+                utilityContainer_.missionErrorNotifier(),
                 integrationLayerContainer_,
                 imageTransferContainer_,
                 isLiveModeEnabled);
@@ -58,7 +51,7 @@ public class FlightControlActivity extends FragmentActivity
                 this,
                 flightControlView_,
                 missionContainer_,
-                googleMapsConnectionHandler_);
+                utilityContainer_.googleMapsConnectionHandler());
 
         setContentView(flightControlView_);
     }
@@ -67,13 +60,13 @@ public class FlightControlActivity extends FragmentActivity
     public void onStart()
     {
         super.onStart();
-        googleMapsConnectionHandler_.startConnection();
+        utilityContainer_.googleMapsConnectionHandler().startConnection();
     }
 
     @Override
     public void onStop()
     {
         super.onStop();
-        googleMapsConnectionHandler_.endConnection();
+        utilityContainer_.googleMapsConnectionHandler().endConnection();
     }
 }

@@ -30,24 +30,28 @@ public class MainMenuPresenter implements View.OnClickListener {
     public MainMenuPresenter(
             Button reconstructLiveButton,
             Button reconstructLaterButton, Context context) {
-        this.reconstructLiveButton_ = reconstructLiveButton;
-        this.reconstructLiveButton_.setOnClickListener(this);
+        reconstructLiveButton_ = reconstructLiveButton;
+        reconstructLiveButton_.setOnClickListener(this);
 
-        this.reconstructLaterButton_ = reconstructLaterButton;
-        this.reconstructLaterButton_.setOnClickListener(this);
+        reconstructLaterButton_ = reconstructLaterButton;
+        reconstructLaterButton_.setOnClickListener(this);
         context_ = context;
     }
 
     @Override
-    public void onClick(View view) {
-        if (view.getId() == reconstructLiveButton_.getId()) {
+    public void onClick(View view)
+    {
+        if (view.getId() == reconstructLiveButton_.getId())
+        {
             // todo with Berni: Add screen with instructions and to test connection
             Intent reconstructLiveIntent = new Intent(context_, FlightControlActivity.class);
             reconstructLiveIntent.putExtra(IntentExtraKeys.IS_LIVE_MODE_ENABLED, new Boolean(true));
             reconstructLiveIntent.putExtra(IntentExtraKeys.PC_IP_ADDRESS, "192.168.1.203");
 
             context_.startActivity(reconstructLiveIntent);
-        } else if (view.getId() == reconstructLaterButton_.getId()) {
+        }
+        else if (view.getId() == reconstructLaterButton_.getId())
+        {
             Intent reconstructLaterIntent = new Intent(context_, FlightControlActivity.class);
             reconstructLaterIntent.putExtra(IntentExtraKeys.IS_LIVE_MODE_ENABLED, new Boolean(false));
 

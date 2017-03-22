@@ -7,6 +7,7 @@ import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
 import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferInitiator;
+import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
 
 import dji.common.error.DJIError;
 
@@ -22,16 +23,19 @@ public class MissionPeriodicImageTransferInitiator implements
 
     private enum ExpectedCallback { PAUSE, TRANSFER, RESUME }
 
+    private I_MissionErrorNotifier missionErrorNotifier_;
     private ExpectedCallback expectedCallback_;
     private I_MissionManagerSource missionManagerSource_;
     private I_ImageTransferer imageTransferer_;
     private I_DroneImageDownloadQueuer imageDownloadQueuer_;
 
     public MissionPeriodicImageTransferInitiator(
+            I_MissionErrorNotifier missionErrorNotifier,
             I_MissionManagerSource missionManagerSource,
             I_ImageTransferer imageTransferer,
             I_DroneImageDownloadQueuer imageDownloadQueuer)
     {
+        missionErrorNotifier_ = missionErrorNotifier;
         missionManagerSource_ = missionManagerSource;
         imageTransferer_ = imageTransferer;
         imageDownloadQueuer_ = imageDownloadQueuer;
@@ -68,6 +72,7 @@ public class MissionPeriodicImageTransferInitiator implements
         }
         else
         {
+            missionErrorNotifier_.notifyErrorOccurred(error.getDescription());
             Log.e(TAG, error.getDescription());
         }
     }

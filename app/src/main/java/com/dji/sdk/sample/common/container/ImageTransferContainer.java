@@ -16,6 +16,7 @@ import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferPathsSource;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
+import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
 
 /**
  * Created by Julia on 2017-02-21.
@@ -36,6 +37,7 @@ public class ImageTransferContainer
 
     public ImageTransferContainer(
             I_ApplicationContextManager contextManager,
+            I_MissionErrorNotifier missionErrorNotifier,
             IntegrationLayerContainer integrationLayerContainer,
             String pcIpAddress,
             boolean isLiveModeEnabled)
@@ -54,6 +56,7 @@ public class ImageTransferContainer
         if(isLiveModeEnabled)
         {
             imageTransferer_ = new ImageTransferCoordinator(
+                    missionErrorNotifier,
                     integrationLayerContainer.cameraSource(),
                     droneImageDownloadQueuer_,
                     droneToAndroidImageDownloader_);
