@@ -32,20 +32,18 @@ public class MissionControlsPresenter implements
     private ToggleButton hoverNowToggleButton_;
 
     private MissionStateEntity missionState_;
-    private MissionSettingsPresenter missionSettings_;
     private BroadcastReceiver receiver_;
     private Context context_;
 
     public MissionControlsPresenter(
             Context context,
             I_MissionControlsView view,
-            MissionStateEntity missionState, MissionSettingsPresenter missionSettings) {
+            MissionStateEntity missionState) {
         acceptAreaButton_ = view.acceptAreaButton();
         startMissionButton_ = view.startMissionButton();
         cancelButton_ = view.cancelButton();
         hoverNowToggleButton_ = view.hoverNowToggleButton();
         missionState_ = missionState;
-        missionSettings_ = missionSettings;
 
         setButtonOnClickListeners();
         registerMissionStateChangedReceiver(context);

@@ -47,7 +47,7 @@ public class PresenterContainer
         missionControlsPresenter_ = new MissionControlsPresenter(
                 activity,
                 flightControlView,
-                missionContainer.missionState(),missionSettingsPresenter_);
+                missionContainer.missionState());
         productConnectionPresenter_ = new ProductConnectionPresenter(
                 activity,
                 flightControlView);
