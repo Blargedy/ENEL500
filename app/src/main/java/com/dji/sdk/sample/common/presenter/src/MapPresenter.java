@@ -34,13 +34,9 @@ import android.widget.Toast;
 
 import com.dji.sdk.sample.R;
 import com.dji.sdk.sample.common.entity.DroneLocationEntity;
-<<<<<<< HEAD
-import com.dji.sdk.sample.common.values.MissionBoundary;
-=======
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
-import com.dji.sdk.sample.common.mission.src.MissionBoundary;
->>>>>>> See Slack for adjustments.
+import com.dji.sdk.sample.common.values.MissionBoundary;
 import com.dji.sdk.sample.common.presenter.api.I_MapPresenter;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.utility.CachedMapLoaderThread;

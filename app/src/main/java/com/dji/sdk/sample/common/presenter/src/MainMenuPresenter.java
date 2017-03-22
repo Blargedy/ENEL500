@@ -7,12 +7,10 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-<<<<<<< HEAD
-=======
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
->>>>>>> See Slack for adjustments.
+
 
 import com.dji.sdk.sample.common.activity.FlightControlActivity;
 import com.dji.sdk.sample.common.utility.IntentExtraKeys;
