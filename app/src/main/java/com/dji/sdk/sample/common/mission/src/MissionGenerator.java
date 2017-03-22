@@ -47,7 +47,7 @@ public class MissionGenerator implements I_MissionGenerator
                 }
                 mission = new DJIWaypointMission();
                 mission.needRotateGimbalPitch = true;
-                mission.autoFlightSpeed = 10;
+                mission.autoFlightSpeed = 5;
             }
 
             DJIWaypoint waypoint = new DJIWaypoint(
