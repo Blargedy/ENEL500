@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.dji.sdk.sample.R;
+import com.dji.sdk.sample.common.view.api.I_ErrorConsoleView;
 import com.dji.sdk.sample.common.view.api.I_MapView;
 import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
 
@@ -19,8 +20,10 @@ import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
 
 public class FlightControlView
         extends RelativeLayout
-        implements I_MissionControlsView, I_MapView
+        implements I_MissionControlsView, I_MapView, I_ErrorConsoleView
 {
+    private TextView errorConsole_;
+
     private SeekBar surveyProgressBar_;
     private TextView surveyAreaHeightText_;
     private SeekBar surveyAreaHeightBar_;
@@ -58,6 +61,8 @@ public class FlightControlView
     private void initUI()
     {
         inflate(getContext(), R.layout.flight_control_screen, this);
+
+        errorConsole_ = (TextView) findViewById(R.id.txt_console);
 
         surveyProgressBar_ = (SeekBar) findViewById(R.id.surveyProgressBar);
         surveyAreaHeightText_ = (TextView) findViewById(R.id.txt_surveyAreaHeight);
@@ -128,5 +133,11 @@ public class FlightControlView
     public LinearLayout linearLayoutMainV()
     {
         return linearLayoutMainV_;
+    }
+
+    @Override
+    public TextView errorConsoleText()
+    {
+        return errorConsole_;
     }
 }

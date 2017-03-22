@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.container;
 
 import android.support.v4.app.FragmentActivity;
 
+import com.dji.sdk.sample.common.presenter.src.ErrorConsolePresenter;
 import com.dji.sdk.sample.common.presenter.src.MapPresenter;
 import com.dji.sdk.sample.common.presenter.src.MissionControlsPresenter;
 import com.dji.sdk.sample.common.presenter.src.MissionMapDisplayPresenter;
@@ -20,7 +21,7 @@ public class PresenterContainer
     private MissionControlsPresenter missionControlsPresenter_;
     private MissionMapDisplayPresenter missionMapDisplayPresenter_;
     private MissionSettingsPresenter missionSettingsPresenter_;
-
+    private ErrorConsolePresenter errorConsolePresenter_;
     private ProductConnectionPresenter productConnectionPresenter_;
 
     public PresenterContainer(
@@ -48,6 +49,9 @@ public class PresenterContainer
                 activity,
                 flightControlView,
                 missionContainer.missionState());
+        errorConsolePresenter_ = new ErrorConsolePresenter(
+                activity,
+                flightControlView);
         productConnectionPresenter_ = new ProductConnectionPresenter(
                 activity,
                 flightControlView);
