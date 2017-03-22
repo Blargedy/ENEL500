@@ -11,6 +11,8 @@ import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
 import com.dji.sdk.sample.common.integration.api.I_CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.api.I_WaypointReachedNotifier;
 
+import java.io.File;
+
 import dji.common.camera.DJICameraSettingsDef;
 import dji.common.error.DJIError;
 import dji.sdk.camera.DJIMedia;
@@ -54,7 +56,8 @@ public class InvestigativeWaypointReachedHandler implements
     {
         Log.d(TAG, "Reached waypoint at index " + waypointIndex + ", pausing mission");
         expectedCallback_ = ExpectedCallback.PAUSE_MISSION;
-        missionManagerSource_.getMissionManager().pauseMissionExecution(this);
+        //missionManagerSource_.getMissionManager().pauseMissionExecution(this);
+        this.onResult((DJIError)null);
     }
 
     @Override
@@ -81,7 +84,11 @@ public class InvestigativeWaypointReachedHandler implements
                     }
 
                     Log.d(TAG, "Camera mode changed, downloading photo");
-                    mediaToDownload_.fetchMediaData(pathsSource_.androidDeviceImagePath(), null, this);
+                    Log.d(TAG, "Photo name: " + mediaToDownload_.getFileName());
+                    File path = pathsSource_.androidDeviceImagePath();
+                    Log.d(TAG, "Image path: " + path.getAbsolutePath());
+
+                    mediaToDownload_.fetchMediaData(path, null, this);
                     break;
 
                 case CHANGE_TO_SHOOTPHOTO_MODE:
@@ -92,7 +99,7 @@ public class InvestigativeWaypointReachedHandler implements
 
                     Log.d(TAG, "Camera mode changed, resuming mission");
                     expectedCallback_ = ExpectedCallback.RESUME_MISSION;
-                    missionManagerSource_.getMissionManager().resumeMissionExecution(this);
+                    //missionManagerSource_.getMissionManager().resumeMissionExecution(this);
                     break;
 
                 case RESUME_MISSION:
@@ -104,9 +111,9 @@ public class InvestigativeWaypointReachedHandler implements
         }
         else
         {
-            Log.d(TAG, "Failed on " + expectedCallback_.name() + ": error.getDescription()");
-            expectedCallback_ = ExpectedCallback.RESUME_MISSION;
-            missionManagerSource_.getMissionManager().resumeMissionExecution(this);
+            Log.d(TAG, "Failed on " + expectedCallback_.name() + error.getDescription());
+            //expectedCallback_ = ExpectedCallback.RESUME_MISSION;
+            //missionManagerSource_.getMissionManager().resumeMissionExecution(this);
         }
     }
 
@@ -160,7 +167,7 @@ public class InvestigativeWaypointReachedHandler implements
     public void onFailure(DJIError error)
     {
         Log.d(TAG, "Failed to download photo successfully: " + error.getDescription());
-        expectedCallback_ = ExpectedCallback.RESUME_MISSION;
-        missionManagerSource_.getMissionManager().resumeMissionExecution(this);
+        //expectedCallback_ = ExpectedCallback.RESUME_MISSION;
+        //missionManagerSource_.getMissionManager().resumeMissionExecution(this);
     }
 }

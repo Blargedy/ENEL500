@@ -41,7 +41,7 @@ public class MissionContainer
     private WaypointMissionCompletionCallback waypointMissionCompletionCallback_;
 
     private InvestigativeCameraSystemState cameraSystemState_;
-//    private InvestigativeWaypointReachedHandler investigatingImageTransfer_;
+    private InvestigativeWaypointReachedHandler investigatingImageTransfer_;
 
     private I_MissionPeriodicImageTransferInitiator periodicImageTransferInitiator_;
     private CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback_;
@@ -79,11 +79,11 @@ public class MissionContainer
                 nextWaypointMissionStarter_);
 
         cameraSystemState_ = new InvestigativeCameraSystemState();
-//        investigatingImageTransfer_ = new InvestigativeWaypointReachedHandler(
-//                integrationLayerContainer.missionManagerSource(),
-//                integrationLayerContainer.cameraSource(),
-//                cameraSystemState_,
-//                imageTransferContainer.imageTransferPathsSource());
+        investigatingImageTransfer_ = new InvestigativeWaypointReachedHandler(
+                integrationLayerContainer.missionManagerSource(),
+                integrationLayerContainer.cameraSource(),
+                cameraSystemState_,
+                imageTransferContainer.imageTransferPathsSource());
 
         if (isLiveModeEnabled){
             periodicImageTransferInitiator_ = new MissionPeriodicImageTransferInitiator(
@@ -98,7 +98,7 @@ public class MissionContainer
                 periodicImageTransferInitiator_);
         cameraInitializer_ = new CameraInitializer(
                 integrationLayerContainer.cameraSource(),
-                cameraGeneratedNewMediaFileCallback_ /*investigatingImageTransfer_*/,
+                /*cameraGeneratedNewMediaFileCallback_ */investigatingImageTransfer_,
                 cameraSystemState_);
         flightControllerInitializer_ = new FlightControllerInitializer(
                 integrationLayerContainer.flightControllerSource());
@@ -108,7 +108,7 @@ public class MissionContainer
                 droneLocation_,
                 integrationLayerContainer.flightControllerSource());
         missionProgressStatusCallback_ = new WaypointMissionProgressStatusCallback(
-                waypointReachedNotifier_ /*investigatingImageTransfer_*/,
+                /*waypointReachedNotifier_ */investigatingImageTransfer_,
                 droneLocationUpdater_,
                 integrationLayerContainer.cameraSource());
 

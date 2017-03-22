@@ -1,2 +1,4 @@
 include ':app'
 include ':dJISDKLIB_3.5.1'
+
+include ':Upgraded_DJI_SDK'
