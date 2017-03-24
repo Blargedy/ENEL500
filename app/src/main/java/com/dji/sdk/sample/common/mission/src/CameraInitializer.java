@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.mission.src;
 
 import android.util.Log;
 
+import com.dji.sdk.sample.common.entity.CameraSettingsEntity;
 import com.dji.sdk.sample.common.integration.api.I_CameraUpdatedSystemStateCallback;
 import com.dji.sdk.sample.common.mission.api.I_CameraInitializer;
 import com.dji.sdk.sample.common.integration.api.I_Camera;
@@ -22,7 +23,12 @@ public class CameraInitializer implements
 {
     private static final String TAG = "HydraCameraInitializer";
 
-    private enum ExpectedCallback { SET_CAMERA_MODE, SET_FILE_FORMAT, SET_EXPOSURE_MODE }
+    private enum ExpectedCallback {
+        SET_CAMERA_MODE,
+        SET_FILE_FORMAT,
+        SET_EXPOSURE_MODE,
+        SET_ISO,
+        SET_SHUTTER_SPEED }
 
     private ExpectedCallback expectedCallback_;
     private I_CompletionCallback callback_;
@@ -30,15 +36,18 @@ public class CameraInitializer implements
     private I_CameraSource cameraSource_;
     private I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback_;
     private I_CameraUpdatedSystemStateCallback cameraUpdatedSystemStateCallback_;
+    private CameraSettingsEntity cameraSettings_;
 
     public CameraInitializer(
             I_CameraSource cameraSource,
             I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback,
-            I_CameraUpdatedSystemStateCallback cameraUpdatedSystemStateCallback)
+            I_CameraUpdatedSystemStateCallback cameraUpdatedSystemStateCallback,
+            CameraSettingsEntity cameraSettings)
     {
         cameraSource_ = cameraSource;
         cameraGeneratedNewMediaFileCallback_ = cameraGeneratedNewMediaFileCallback;
         cameraUpdatedSystemStateCallback_ = cameraUpdatedSystemStateCallback;
+        cameraSettings_ = cameraSettings;
     }
 
     @Override
@@ -70,11 +79,32 @@ public class CameraInitializer implements
 
                 case SET_FILE_FORMAT:
                     expectedCallback_ = ExpectedCallback.SET_EXPOSURE_MODE;
-                    cameraSource_.getCamera().setExposureModeToAutomatic(this);
+                    if (!cameraSettings_.isInAutomaticMode())
+                    {
+                        cameraSource_.getCamera().setExposureMode(
+                                DJICameraSettingsDef.CameraExposureMode.Manual, this);
+                    }
+                    else
+                    {
+                        callback(null);
+                    }
                     break;
 
                 case SET_EXPOSURE_MODE:
+                    expectedCallback_ = ExpectedCallback.SET_ISO;
+                    cameraSource_.getCamera().setISO(cameraSettings_.cameraISO(), this);
+                    break;
+
+                case SET_ISO:
+                    expectedCallback_ = ExpectedCallback.SET_SHUTTER_SPEED;
+                    cameraSource_.getCamera().setShutterSpeed(cameraSettings_.cameraShutterSpeed(), this);
+                    break;
+
+                case SET_SHUTTER_SPEED:
                     callback(null);
+                    break;
+                
+                default:
                     break;
             }
         }

@@ -111,7 +111,8 @@ public class MissionContainer
         cameraInitializer_ = new CameraInitializer(
                 integrationLayerContainer.cameraSource(),
                 cameraGeneratedNewMediaFileCallback_ /*investigatingImageTransfer_*/,
-                cameraSystemState_);
+                cameraSystemState_,
+                cameraSettings_);
         flightControllerInitializer_ = new FlightControllerInitializer(
                 integrationLayerContainer.flightControllerSource());
 

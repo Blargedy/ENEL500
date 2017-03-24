@@ -53,9 +53,21 @@ public class Camera implements I_Camera
     }
 
     @Override
-    public void setExposureModeToAutomatic(I_CompletionCallback callback)
+    public void setExposureMode(DJICameraSettingsDef.CameraExposureMode mode, I_CompletionCallback callback)
     {
-        camera_.setExposureMode(DJICameraSettingsDef.CameraExposureMode.Program, callback);
+        camera_.setExposureMode(mode, callback);
+    }
+
+    @Override
+    public void setISO(DJICameraSettingsDef.CameraISO isoType, I_CompletionCallback callback)
+    {
+        camera_.setISO(isoType, callback);
+    }
+
+    @Override
+    public void setShutterSpeed(DJICameraSettingsDef.CameraShutterSpeed shutterSpeed, I_CompletionCallback callback)
+    {
+        camera_.setShutterSpeed(shutterSpeed, callback);
     }
 
     @Override
