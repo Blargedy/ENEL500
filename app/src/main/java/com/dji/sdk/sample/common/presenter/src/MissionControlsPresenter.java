@@ -1,7 +1,9 @@
 package com.dji.sdk.sample.common.presenter.src;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
@@ -10,6 +12,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
+import com.dji.sdk.sample.R;
 import com.dji.sdk.sample.common.activity.FlightControlActivity;
 import com.dji.sdk.sample.common.activity.MainMenuActivity;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
@@ -107,7 +110,7 @@ public class MissionControlsPresenter implements
                 missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
                 break;
             case MISSION_EXECUTING:
-                missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME);
+                askUserIfTheyAreSureTheyWantToCancel();
                 break;
             case HOVERING:
                 missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME);
@@ -154,7 +157,7 @@ public class MissionControlsPresenter implements
                 hoverNowToggleButton_.setVisibility(View.GONE);
                 break;
             case GENERATE_MISSION_BOUNDARY:
-                acceptAreaButton_.setVisibility(View.GONE);
+                acceptAreaButton_.setEnabled(false);
                 break;
             case VIEW_MISSION:
                 startMissionButton_.setVisibility(View.VISIBLE);
@@ -165,9 +168,6 @@ public class MissionControlsPresenter implements
                 break;
             case INITIALIZE_MISSION:
                 startMissionButton_.setEnabled(false);
-                break;
-            case START_MISSION:
-                startMissionButton_.setVisibility(View.GONE);
                 break;
             case MISSION_EXECUTING:
                 hoverNowToggleButton_.setVisibility(View.VISIBLE);
@@ -201,5 +201,21 @@ public class MissionControlsPresenter implements
             default:
                 break;
         }
+    }
+
+    private void askUserIfTheyAreSureTheyWantToCancel()
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context_);
+
+        alert.setTitle("Cancel Mission");
+        alert.setMessage("Once you cancel you will not be able to restart your mission. " +
+                "Are you sure you want to cancel?");
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME);
+            }});
+        alert.setNegativeButton("Cancel", null);
+
+        alert.show();
     }
 }
