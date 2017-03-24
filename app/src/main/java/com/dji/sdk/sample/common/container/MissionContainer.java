@@ -72,11 +72,11 @@ public class MissionContainer
             boolean isLiveModeEnabled)
     {
 
-        initialMissionModel_ = new InitialMissionModel();
+        initialMissionModel_ = new InitialMissionModel(context);
         generatedMissionModel_ = new GeneratedMissionModel();
         missionState_ = new MissionStateEntity(context);
         droneLocation_ = new DroneLocationEntity(context);
-        cameraSettings_ = new CameraSettingsEntity();
+        cameraSettings_ = new CameraSettingsEntity(context);
 
         nextWaypointMissionStarter_ = new NextWaypointMissionStarter(
                 integrationLayerContainer.missionManagerSource(),

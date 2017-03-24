@@ -37,8 +37,8 @@ public class MissionSettingsChangedNotifier
         intent.putExtra(IntentExtraKeys.MINIMUM_PERCENT_IMAGE_OVERLAP, minimumPercentImageOverlap);
         intent.putExtra(IntentExtraKeys.MINIMUM_PERCENT_SWATH_OVERLAP, minimumPercentSwathOverlap);
         intent.putExtra(IntentExtraKeys.IS_CAMERA_AUTOMATIC_MODE, isInAutomaticMode);
-        intent.putExtra(IntentExtraKeys.CAMERA_ISO, cameraISO);
-        intent.putExtra(IntentExtraKeys.CAMERA_SHUTTER_SPEED, cameraShutterSpeed);
+        intent.putExtra(IntentExtraKeys.CAMERA_ISO, cameraISO.value());
+        intent.putExtra(IntentExtraKeys.CAMERA_SHUTTER_SPEED, cameraShutterSpeed.value());
 
         LocalBroadcastManager.getInstance(context_).sendBroadcast(intent);
     }

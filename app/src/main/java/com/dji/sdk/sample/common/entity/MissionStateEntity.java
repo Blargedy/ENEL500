@@ -13,7 +13,7 @@ import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 
 public class MissionStateEntity
 {
-    private static final String TAG = "MissionStateEntity";
+    private static final String TAG = "HydraMissionStateEntity";
 
     private MissionStateEnum currentMissionState_;
     private MissionStateEnum previousMissionState_;
