@@ -9,9 +9,8 @@ import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
-import com.dji.sdk.sample.R;
+import com.dji.sdk.sample.common.activity.SettingsMenuActivity;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
@@ -22,8 +21,7 @@ import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
 
 public class MissionSettingsPresenter implements
         View.OnClickListener,
-        DialogInterface.OnClickListener
-{
+        DialogInterface.OnClickListener {
     public Button settingsButton_;
 
     private MissionStateEntity missionState_;
@@ -33,8 +31,8 @@ public class MissionSettingsPresenter implements
     public MissionSettingsPresenter(
             I_MissionControlsView view,
             MissionStateEntity missionState,
-            Context context)
-    {
+            Context context) {
+
         settingsButton_ = view.settingsButton();
         settingsButton_.setOnClickListener(this);
 
@@ -43,8 +41,7 @@ public class MissionSettingsPresenter implements
         registerMissionStateChangedReceiver(context);
     }
 
-    private void registerMissionStateChangedReceiver(Context context)
-    {
+    private void registerMissionStateChangedReceiver(Context context) {
         IntentFilter filter = new IntentFilter();
         filter.addAction(BroadcastIntentNames.MISSION_STATE_CHANGED);
 
@@ -58,24 +55,20 @@ public class MissionSettingsPresenter implements
         LocalBroadcastManager.getInstance(context).registerReceiver(receiver_, filter);
     }
 
+
     @Override
-    public void onClick(View v)
-    {
-        AlertDialog.Builder alert = new AlertDialog.Builder(context_);
+    public void onClick(View v) {
+        if (v.getId() == settingsButton_.getId()) {
+            // Show the settings dialog
+            AlertDialog.Builder alert = new AlertDialog.Builder(context_);
+            Intent mainIntent = new Intent(context_, SettingsMenuActivity.class);
+            context_.startActivity(mainIntent);
+        }
 
-        alert.setTitle("Mission Settings");
-        alert.setPositiveButton("Ok", null);
-        alert.setNegativeButton("Cancel", null);
-
-        alert.setView(R.layout.settings_dialog_screen);
-
-        alert.show();
     }
 
-    public void setViewBasedOnMissionState()
-    {
-        switch (missionState_.getCurrentMissionState())
-        {
+    public void setViewBasedOnMissionState() {
+        switch (missionState_.getCurrentMissionState()) {
             case INITIALIZING_MAP:
                 settingsButton_.setVisibility(View.VISIBLE);
                 settingsButton_.setEnabled(true);

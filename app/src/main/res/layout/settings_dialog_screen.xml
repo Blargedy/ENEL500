@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mission Options"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="36sp" />
 
     <Space
         android:layout_width="match_parent"
@@ -19,15 +29,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Altitude (m):              " />
+            android:text="Altitude (m):              "
+            android:textColor="@color/white" />
 
         <NumberPicker
-            android:id="@+id/altitude"
+            android:id="@+id/numPickerAltitude"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_weight=".5"
+            android:clickable="true"
+            android:hapticFeedbackEnabled="true" />
 
     </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -40,15 +58,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Image Overlap (%):   " />
+            android:text="Image Overlap (%):   "
+            android:textColor="@color/white" />
 
         <NumberPicker
             android:id="@+id/imageOverlap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_weight=".5"
+            android:clickable="true" />
 
     </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -61,14 +86,89 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Swath Overlap (%):   " />
+            android:clickable="true"
+            android:text="Swath Overlap (%):   "
+            android:textColor="@color/white" />
 
         <NumberPicker
             android:id="@+id/swathOverlap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_weight=".5"
+            android:hapticFeedbackEnabled="true" />
 
     </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/cameraISOLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight=".5"
+            android:clickable="true"
+            android:text="Camera Exposure"
+            android:textColor="@color/white" />
+
+        <Spinner
+            android:id="@+id/spinnerCameraISO"
+            android:layout_width="279dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight=".5"
+            android:hapticFeedbackEnabled="true" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/cameraShutterLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight=".5"
+            android:clickable="true"
+            android:text="Camera Shutter"
+            android:textColor="@color/white" />
+
+        <Spinner
+            android:id="@+id/spinnerCameraShutter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1.69"
+            android:hapticFeedbackEnabled="true" />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <Button
+        android:id="@+id/btnAcceptOK"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="true"
+        android:hapticFeedbackEnabled="true"
+        android:text="Ok" />
 
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.container;
 
 import android.support.v4.app.FragmentActivity;
 
+import com.dji.sdk.sample.common.activity.SettingsMenuActivity;
 import com.dji.sdk.sample.common.presenter.src.ErrorConsolePresenter;
 import com.dji.sdk.sample.common.presenter.src.MapPresenter;
 import com.dji.sdk.sample.common.presenter.src.MissionControlsPresenter;

@@ -173,8 +173,6 @@ public class MapPresenter implements
         missionState.setCurrentMissionState(MissionStateEnum.INITIALIZING_MAP);
 
 
-
-
         this.surveyAreaHeightBar.setEnabled(false);
         this.surveyAreaWidthBar.setEnabled(false);
     }
@@ -362,7 +360,9 @@ public class MapPresenter implements
                 }
             }
         });
-
+        Intent intent = new Intent(BroadcastIntentNames.ERROR_OCCURRED);
+        intent.putExtra(IntentExtraKeys.ERROR_MESSAGE, "Waiting for GPS signal...");
+        LocalBroadcastManager.getInstance(fragmentActivity).sendBroadcast(intent);
 
         userLocationListener = new
 
@@ -423,9 +423,9 @@ public class MapPresenter implements
                                 Double widthDistance = distance(surveyPolygon.getPoints().get(0).latitude, surveyPolygon.getPoints().get(3).latitude, surveyPolygon.getPoints().get(0).longitude, surveyPolygon.getPoints().get(3).longitude, 0d, 0d);
                                 surveyAreaWidthText.setText("Survey Area Width: " + String.valueOf(round(widthDistance, 1)) + " m");
                                 CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude + 0.001), 18.0f);
-                                Intent intent = new Intent(BroadcastIntentNames.ERROR_OCCURRED);
-                                intent.putExtra(IntentExtraKeys.ERROR_MESSAGE, "Zooming in!");
-                                LocalBroadcastManager.getInstance(fragmentActivity).sendBroadcast(intent);
+                                // Intent intent = new Intent(BroadcastIntentNames.ERROR_OCCURRED);
+                                //intent.putExtra(IntentExtraKeys.ERROR_MESSAGE, "Zooming in!");
+                                //LocalBroadcastManager.getInstance(fragmentActivity).sendBroadcast(intent);
                                 mMap.animateCamera(cu, 3000, MapPresenter.this);
 
                             }
