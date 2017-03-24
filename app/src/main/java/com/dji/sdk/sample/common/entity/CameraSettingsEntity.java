@@ -16,11 +16,7 @@ public class CameraSettingsEntity
 
     public CameraSettingsEntity()
     {
-//        isInAutomaticMode_ = true;
-
-        isInAutomaticMode_ = false;
-        cameraISO_ = ISO_1600;
-        cameraShutterSpeed_ = DJICameraSettingsDef.CameraShutterSpeed.ShutterSpeed1_5;
+        isInAutomaticMode_ = true;
     }
 
     public void setIsInAutomaticMode(boolean isInAutomaticMode)
