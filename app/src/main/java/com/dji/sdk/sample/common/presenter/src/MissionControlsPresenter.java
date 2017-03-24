@@ -96,20 +96,18 @@ public class MissionControlsPresenter implements
                 context_.startActivity(mainIntent);
                 mainIntent = new Intent(context_, FlightControlActivity.class);
                 context_.stopService(mainIntent);
-                //missionState_.setCurrentMissionState(MissionStateEnum.INITIALIZING_MAP);
                 break;
             case SELECT_AREA:
                 mainIntent = new Intent(context_, MainMenuActivity.class);
                 context_.startActivity(mainIntent);
                 mainIntent = new Intent(context_, FlightControlActivity.class);
                 context_.stopService(mainIntent);
-                //missionState_.setCurrentMissionState(MissionStateEnum.INITIALIZING_MAP);
                 break;
             case VIEW_MISSION:
                 missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
                 break;
             case MISSION_EXECUTING:
-                missionState_.setCurrentMissionState(MissionStateEnum.CANCEL_MISSION);
+                missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME);
                 break;
             case HOVERING:
                 missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME);
@@ -190,12 +188,9 @@ public class MissionControlsPresenter implements
                 hoverNowToggleButton_.setEnabled(false);
                 cancelButton_.setEnabled(true);
                 break;
-            case CANCEL_MISSION:
-                hoverNowToggleButton_.setEnabled(false);
-                cancelButton_.setEnabled(true);
-                break;
             case GO_HOME:
                 hoverNowToggleButton_.setEnabled(true);
+                cancelButton_.setEnabled(false);
                 break;
             case PAUSE_GO_HOME:
                 hoverNowToggleButton_.setEnabled(false);

@@ -2,6 +2,8 @@ package com.dji.sdk.sample.common.mission.src;
 
 import android.util.Log;
 
+import com.dji.sdk.sample.common.integration.api.I_BatterySource;
+import com.dji.sdk.sample.common.integration.api.I_BatteryStateUpdateCallback;
 import com.dji.sdk.sample.common.mission.api.I_CameraInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
@@ -24,7 +26,7 @@ public class MissionInitializer implements
     private static final String TAG = "HydraMissionInitializer";
 
     private enum ExpectedCallback { INITIALIZE_FLIGHT_CONTROLLER, INITIALIZE_CAMERA}
-    private MissionInitializer.ExpectedCallback expectedCallback_;
+    private ExpectedCallback expectedCallback_;
 
     private I_MissionManagerSource missionManagerSource_;
     private I_FlightControllerInitializer flightControllerInitializer_;
@@ -32,6 +34,8 @@ public class MissionInitializer implements
     private I_ImageTransferModuleInitializer imageTransferModuleInitializer_;
     private I_CompletionCallback missionExecutionCompletionCallback_;
     private I_WaypointMissionProgressStatusCallback missionProgressStatusCallback_;
+    private I_BatterySource batterySource_;
+    private I_BatteryStateUpdateCallback batteryStateUpdateCallback_;
 
     private I_CompletionCallback callback_;
 
@@ -41,7 +45,9 @@ public class MissionInitializer implements
             I_CameraInitializer cameraInitializer,
             I_ImageTransferModuleInitializer imageTransferModuleInitializer,
             I_CompletionCallback missionExecutionCompletionCallback,
-            I_WaypointMissionProgressStatusCallback missionProgressStatusCallback)
+            I_WaypointMissionProgressStatusCallback missionProgressStatusCallback,
+            I_BatterySource batterySource,
+            I_BatteryStateUpdateCallback batteryStateUpdateCallback)
     {
         missionManagerSource_ = missionManagerSource;
         flightControllerInitializer_ = flightControllerInitializer;
@@ -49,6 +55,8 @@ public class MissionInitializer implements
         imageTransferModuleInitializer_ = imageTransferModuleInitializer;
         missionExecutionCompletionCallback_ = missionExecutionCompletionCallback;
         missionProgressStatusCallback_ = missionProgressStatusCallback;
+        batterySource_ = batterySource;
+        batteryStateUpdateCallback_ = batteryStateUpdateCallback;
     }
 
     public void initializeMissionPriorToTakeoff(I_CompletionCallback callback)
@@ -61,7 +69,9 @@ public class MissionInitializer implements
 
         imageTransferModuleInitializer_.initializeImageTransferModule();
 
-        expectedCallback_ = MissionInitializer.ExpectedCallback.INITIALIZE_FLIGHT_CONTROLLER;
+        batterySource_.getBattery().setBatteryStateUpdateCallback(batteryStateUpdateCallback_);
+
+        expectedCallback_ = ExpectedCallback.INITIALIZE_FLIGHT_CONTROLLER;
         flightControllerInitializer_.initializeFlightController(this);
     }
 

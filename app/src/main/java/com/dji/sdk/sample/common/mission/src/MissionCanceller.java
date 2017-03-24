@@ -69,10 +69,6 @@ public class MissionCanceller implements I_CompletionCallback
     {
         switch (missionState_.getCurrentMissionState())
         {
-            case CANCEL_MISSION:
-                missionManagerSource_.getMissionManager().stopMissionExecution(this);
-                break;
-
             case GO_HOME:
                 imageTransferModuleEnder_.endImageTransfer(null);
                 flightControllerSource_.getFlightController().goHome(this);
@@ -98,7 +94,6 @@ public class MissionCanceller implements I_CompletionCallback
         {
             Log.e(TAG, error.getDescription());
             missionErrorNotifier_.notifyErrorOccurred(error.getDescription());
-            changeMissionStateAfterCommandFails();
         }
     }
 
@@ -106,10 +101,6 @@ public class MissionCanceller implements I_CompletionCallback
     {
         switch (missionState_.getCurrentMissionState())
         {
-            case CANCEL_MISSION:
-                missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME);
-                break;
-
             case GO_HOME:
                 missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
                 break;
@@ -118,18 +109,6 @@ public class MissionCanceller implements I_CompletionCallback
                 missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME_PAUSED);
                 break;
 
-            default:
-                break;
-        }
-    }
-
-    private void changeMissionStateAfterCommandFails()
-    {
-        switch (missionState_.getCurrentMissionState())
-        {
-            case CANCEL_MISSION:
-                missionState_.setCurrentMissionState(MissionStateEnum.CANCEL_MISSION);
-                break;
             default:
                 break;
         }

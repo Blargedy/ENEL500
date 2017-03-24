@@ -17,7 +17,6 @@ public enum MissionStateEnum
     HOVER_NOW,
     HOVERING,
     RESUME_MISSION,
-    CANCEL_MISSION,
     GO_HOME,
     PAUSE_GO_HOME,
     GO_HOME_PAUSED

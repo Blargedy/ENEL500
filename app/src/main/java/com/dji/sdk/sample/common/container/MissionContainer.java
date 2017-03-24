@@ -9,6 +9,7 @@ import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferPathsSource;
 import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferInitiator;
 import com.dji.sdk.sample.common.mission.api.InertMissionPeriodicImageTransferInitiator;
+import com.dji.sdk.sample.common.mission.src.BatteryTemperatureWarningNotifier;
 import com.dji.sdk.sample.common.mission.src.CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.src.CameraInitializer;
 import com.dji.sdk.sample.common.mission.src.FlightControllerInitializer;
@@ -41,6 +42,7 @@ public class MissionContainer
     private NextWaypointMissionStarter nextWaypointMissionStarter_;
     private WaypointMissionCompletionCallback waypointMissionCompletionCallback_;
 
+    private BatteryTemperatureWarningNotifier batteryTemperatureWarningNotifier_;
     private InvestigativeCameraSystemState cameraSystemState_;
 //    private InvestigativeWaypointReachedHandler investigatingImageTransfer_;
 
@@ -80,6 +82,9 @@ public class MissionContainer
         waypointMissionCompletionCallback_ = new WaypointMissionCompletionCallback(
                 missionErrorNotifier,
                 nextWaypointMissionStarter_);
+
+        batteryTemperatureWarningNotifier_ = new BatteryTemperatureWarningNotifier(
+                missionErrorNotifier);
 
         cameraSystemState_ = new InvestigativeCameraSystemState();
 //        investigatingImageTransfer_ = new InvestigativeWaypointReachedHandler(
@@ -130,7 +135,9 @@ public class MissionContainer
                 cameraInitializer_,
                 imageTransferContainer.imageTransferModuleInitializer(),
                 waypointMissionCompletionCallback_,
-                missionProgressStatusCallback_);
+                missionProgressStatusCallback_,
+                integrationLayerContainer.batterySource(),
+                batteryTemperatureWarningNotifier_);
         missionExecutor_ = new MissionExecutor(
                 context,
                 missionErrorNotifier,

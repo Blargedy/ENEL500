@@ -1,6 +1,8 @@
 package com.dji.sdk.sample.common.container;
 
+import com.dji.sdk.sample.common.integration.api.I_BatterySource;
 import com.dji.sdk.sample.common.integration.api.I_CameraSource;
+import com.dji.sdk.sample.common.integration.src.BatterySource;
 import com.dji.sdk.sample.common.integration.src.CameraSource;
 import com.dji.sdk.sample.common.integration.src.FlightControllerSource;
 import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
@@ -22,15 +24,16 @@ public class IntegrationLayerContainer
     CameraSource cameraSource_;
     MissionManagerSource missionManagerSource_;
     FlightControllerSource flightControllerSource_;
+    BatterySource batterySource_;
 
     public IntegrationLayerContainer()
     {
         mediaManagerSource_ = new MediaManagerSource();
         mediaDataFetcher_ = new MediaDataFetcher();
         cameraSource_ = new CameraSource();
-
         missionManagerSource_ = new MissionManagerSource();
         flightControllerSource_ = new FlightControllerSource();
+        batterySource_ = new BatterySource();
     }
 
     public I_MediaManagerSource mediaManagerSource()
@@ -52,4 +55,8 @@ public class IntegrationLayerContainer
 
     public I_FlightControllerSource flightControllerSource() {return flightControllerSource_;}
 
+    public I_BatterySource batterySource()
+    {
+        return batterySource_;
+    }
 }
