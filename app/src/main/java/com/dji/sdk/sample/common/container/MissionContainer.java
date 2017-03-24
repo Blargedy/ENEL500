@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.container;
 
 import android.content.Context;
 
+import com.dji.sdk.sample.common.entity.CameraSettingsEntity;
 import com.dji.sdk.sample.common.entity.DroneLocationEntity;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
@@ -38,6 +39,7 @@ public class MissionContainer
     private GeneratedMissionModel generatedMissionModel_;
     private MissionStateEntity missionState_;
     private DroneLocationEntity droneLocation_;
+    private CameraSettingsEntity cameraSettings_;
 
     private NextWaypointMissionStarter nextWaypointMissionStarter_;
     private WaypointMissionCompletionCallback waypointMissionCompletionCallback_;
@@ -74,6 +76,7 @@ public class MissionContainer
         generatedMissionModel_ = new GeneratedMissionModel();
         missionState_ = new MissionStateEntity(context);
         droneLocation_ = new DroneLocationEntity(context);
+        cameraSettings_ = new CameraSettingsEntity();
 
         nextWaypointMissionStarter_ = new NextWaypointMissionStarter(
                 integrationLayerContainer.missionManagerSource(),
