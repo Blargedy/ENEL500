@@ -6,11 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 
 import com.dji.sdk.sample.R;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
+import com.dji.sdk.sample.common.presenter.src.MissionSettingsChangedNotifier;
 
 import dji.common.camera.DJICameraSettingsDef;
 
@@ -28,6 +30,7 @@ public class SettingsMenuActivity extends AppCompatActivity implements View.OnCl
     private Spinner spinnerCameraISO_;
     private Spinner spinnerCameraShutter_;
     private Button btnAcceptOK_;
+    private CheckBox chkCameraAuto_;
 
 
     @Override
@@ -42,7 +45,10 @@ public class SettingsMenuActivity extends AppCompatActivity implements View.OnCl
         numPickerSwathOverlap_ = (NumberPicker) findViewById(R.id.swathOverlap);
         spinnerCameraISO_ = (Spinner) findViewById(R.id.spinnerCameraISO);
         spinnerCameraShutter_ = (Spinner) findViewById(R.id.spinnerCameraShutter);
+        chkCameraAuto_ = (CheckBox) findViewById(R.id.chkCameraAuto);
         btnAcceptOK_ = (Button) findViewById(R.id.btnAcceptOK);
+
+
         btnAcceptOK_.setEnabled(true);
         btnAcceptOK_.setOnClickListener(this);
 
@@ -91,6 +97,7 @@ public class SettingsMenuActivity extends AppCompatActivity implements View.OnCl
         numPickerAltitude_.setValue(10);
         numPickerImageOverlap_.setValue(10);
         numPickerSwathOverlap_.setValue(10);
+        chkCameraAuto_.setChecked(true);
 
     String compareValue = "ISO_100";
         if (!compareValue.equals(null)) {
@@ -107,12 +114,24 @@ public class SettingsMenuActivity extends AppCompatActivity implements View.OnCl
 
     }
 
-
     @Override
     public void onClick(View v) {
         if (v.getId() == btnAcceptOK_.getId()) {
             // Save the current settings
-            //MissionSettingsChangedNotifier
+            DJICameraSettingsDef.CameraISO[] ISOENUMLIST = DJICameraSettingsDef.CameraISO.values();
+            DJICameraSettingsDef.CameraShutterSpeed[] SHUTTERENUMLIST = DJICameraSettingsDef.CameraShutterSpeed.values();
+
+            MissionSettingsChangedNotifier myMSCN = new MissionSettingsChangedNotifier(this);
+
+            float altitude = this.numPickerAltitude_.getValue();
+            double minimumPercentImageOverlap = this.numPickerImageOverlap_.getValue();
+            double minimumPercentSwathOverlap = this.numPickerSwathOverlap_.getValue();
+
+            boolean isInAutomaticMode = this.chkCameraAuto_.isChecked();
+            DJICameraSettingsDef.CameraISO cameraISO = ISOENUMLIST[this.spinnerCameraISO_.getSelectedItemPosition()];
+            DJICameraSettingsDef.CameraShutterSpeed cameraShutterSpeed = SHUTTERENUMLIST[this.spinnerCameraShutter_.getSelectedItemPosition()];
+
+            myMSCN.notifySettingsChanged(altitude,minimumPercentImageOverlap,minimumPercentSwathOverlap,isInAutomaticMode,cameraShutterSpeed,cameraISO);
             this.finish();
         }
     }
