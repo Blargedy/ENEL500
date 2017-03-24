@@ -49,6 +49,11 @@ public class WaypointMissionProgressStatusCallback implements
     @Override
     public void missionProgressStatus(DJIMission.DJIMissionProgressStatus progressStatus)
     {
+        if (progressStatus.getError() != null)
+        {
+            missionErrorNotifier_.notifyErrorOccurred(progressStatus.getError().getDescription());
+        }
+
         if (progressStatus instanceof DJIWaypointMission.DJIWaypointMissionStatus)
         {
             DJIWaypointMission.DJIWaypointMissionStatus waypointMissionStatus =

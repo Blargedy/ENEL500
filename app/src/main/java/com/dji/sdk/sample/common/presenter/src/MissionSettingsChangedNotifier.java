@@ -34,8 +34,8 @@ public class MissionSettingsChangedNotifier
         Intent intent = new Intent(BroadcastIntentNames.MISSION_SETTINGS_CHANGED);
 
         intent.putExtra(IntentExtraKeys.ALTITUDE, altitude);
-        intent.putExtra(IntentExtraKeys.MINIMUM_PERCENT_IMAGE_OVERLAP, minimumPercentImageOverlap);
-        intent.putExtra(IntentExtraKeys.MINIMUM_PERCENT_SWATH_OVERLAP, minimumPercentSwathOverlap);
+        intent.putExtra(IntentExtraKeys.MINIMUM_PERCENT_IMAGE_OVERLAP, minimumPercentImageOverlap/100.0);
+        intent.putExtra(IntentExtraKeys.MINIMUM_PERCENT_SWATH_OVERLAP, minimumPercentSwathOverlap/100.0);
         intent.putExtra(IntentExtraKeys.IS_CAMERA_AUTOMATIC_MODE, isInAutomaticMode);
         intent.putExtra(IntentExtraKeys.CAMERA_ISO, cameraISO.value());
         intent.putExtra(IntentExtraKeys.CAMERA_SHUTTER_SPEED, cameraShutterSpeed.value());

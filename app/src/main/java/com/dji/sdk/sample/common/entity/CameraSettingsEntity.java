@@ -29,7 +29,9 @@ public class CameraSettingsEntity
     public CameraSettingsEntity(
             Context context)
     {
-        isInAutomaticMode_ = true;
+        isInAutomaticMode_ = false;
+        cameraISO_ = DJICameraSettingsDef.CameraISO.ISO_100;
+        cameraShutterSpeed_ = DJICameraSettingsDef.CameraShutterSpeed.ShutterSpeed1_200;
         registerMissionSettingsChangedReceiver(context);
     }
 
@@ -65,16 +67,16 @@ public class CameraSettingsEntity
 
     private void cameraSettingsChanged(Intent intent)
     {
-        isInAutomaticMode_ = intent.getBooleanExtra(
-                IntentExtraKeys.IS_CAMERA_AUTOMATIC_MODE, true);
-        cameraISO_ = DJICameraSettingsDef.CameraISO.find(
-                intent.getIntExtra(IntentExtraKeys.CAMERA_ISO, 0));
-        cameraShutterSpeed_ = DJICameraSettingsDef.CameraShutterSpeed.find(
-                intent.getIntExtra(IntentExtraKeys.CAMERA_SHUTTER_SPEED, 0));
+//        isInAutomaticMode_ = intent.getBooleanExtra(
+//                IntentExtraKeys.IS_CAMERA_AUTOMATIC_MODE, true);
+//        cameraISO_ = DJICameraSettingsDef.CameraISO.find(
+//                intent.getIntExtra(IntentExtraKeys.CAMERA_ISO, 0));
+//        cameraShutterSpeed_ = DJICameraSettingsDef.CameraShutterSpeed.find(
+//                intent.getIntExtra(IntentExtraKeys.CAMERA_SHUTTER_SPEED, 0));
 
-        Log.d(TAG,
-                "isInAutomaticMode=" + isInAutomaticMode_ +
-                "cameraISO=" + cameraISO_.name()+
-                "cameraShutterSpeed=" + cameraShutterSpeed_.name());
+//        Log.d(TAG,
+//                "isInAutomaticMode=" + isInAutomaticMode_ +
+//                "cameraISO=" + cameraISO_.name()+
+//                "cameraShutterSpeed=" + cameraShutterSpeed_.name());
     }
 }

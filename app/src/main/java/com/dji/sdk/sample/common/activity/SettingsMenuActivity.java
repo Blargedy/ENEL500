@@ -94,9 +94,9 @@ public class SettingsMenuActivity extends AppCompatActivity implements View.OnCl
 
         // Set the values as per current settings:
 
-        numPickerAltitude_.setValue(10);
-        numPickerImageOverlap_.setValue(10);
-        numPickerSwathOverlap_.setValue(10);
+        numPickerAltitude_.setValue(20);
+        numPickerImageOverlap_.setValue(80);
+        numPickerSwathOverlap_.setValue(50);
         chkCameraAuto_.setChecked(true);
 
     String compareValue = "ISO_100";
