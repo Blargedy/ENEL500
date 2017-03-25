@@ -10,7 +10,7 @@ import java.util.Vector;
 import dji.sdk.missionmanager.DJIWaypoint;
 import dji.sdk.missionmanager.DJIWaypointMission;
 
-import static dji.sdk.missionmanager.DJIWaypointMission.DJI_WAYPOINT_MISSION_MAXIMUM_WAYPOINT_COUNT;
+import static com.dji.sdk.sample.common.utility.MissionParameters.WAYPOINTS_PER_MISSION;
 
 /**
  * Created by eric7 on 2017-02-21.
@@ -39,7 +39,7 @@ public class MissionGenerator implements I_MissionGenerator
         DJIWaypointMission mission = null;
         for (int i = 0; i < waypoints.size(); i++)
         {
-            if (i % DJI_WAYPOINT_MISSION_MAXIMUM_WAYPOINT_COUNT == 0)
+            if (i % WAYPOINTS_PER_MISSION == 0)
             {
                 if (i != 0)
                 {

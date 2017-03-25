@@ -41,9 +41,6 @@ public class MissionContainer
     private MissionStateEntity missionState_;
     private DroneLocationEntity droneLocation_;
 
-    private NextWaypointMissionStarter nextWaypointMissionStarter_;
-    private WaypointMissionCompletionCallback waypointMissionCompletionCallback_;
-
     private BatteryTemperatureWarningNotifier batteryTemperatureWarningNotifier_;
     private CameraState cameraSystemState_;
 //    private InvestigativeWaypointReachedHandler investigatingImageTransfer_;
@@ -57,6 +54,9 @@ public class MissionContainer
     private WaypointReachedNotifier waypointReachedNotifier_;
     private DroneLocationUpdater droneLocationUpdater_;
     private WaypointMissionProgressStatusCallback missionProgressStatusCallback_;
+
+    private NextWaypointMissionStarter nextWaypointMissionStarter_;
+    private WaypointMissionCompletionCallback waypointMissionCompletionCallback_;
 
     private SwitchBackPathGenerator switchBackPathGenerator_;
     private MissionGenerator missionGenerator_;
@@ -78,14 +78,6 @@ public class MissionContainer
         generatedMissionModel_ = new GeneratedMissionModel();
         missionState_ = new MissionStateEntity(context);
         droneLocation_ = new DroneLocationEntity(context);
-
-        nextWaypointMissionStarter_ = new NextWaypointMissionStarter(
-                integrationLayerContainer.missionManagerSource(),
-                generatedMissionModel(),
-                missionState_);
-        waypointMissionCompletionCallback_ = new WaypointMissionCompletionCallback(
-                missionErrorNotifier,
-                nextWaypointMissionStarter_);
 
         batteryTemperatureWarningNotifier_ = new BatteryTemperatureWarningNotifier(
                 missionErrorNotifier);
@@ -131,6 +123,16 @@ public class MissionContainer
                 waypointReachedNotifier_ /*investigatingImageTransfer_*/,
                 droneLocationUpdater_,
                 waypointImageShooter_);
+
+        nextWaypointMissionStarter_ = new NextWaypointMissionStarter(
+                integrationLayerContainer.missionManagerSource(),
+                generatedMissionModel(),
+                missionState_);
+        waypointMissionCompletionCallback_ = new WaypointMissionCompletionCallback(
+                missionErrorNotifier,
+                waypointReachedNotifier_,
+                nextWaypointMissionStarter_,
+                missionProgressStatusCallback_);
 
         switchBackPathGenerator_ = new SwitchBackPathGenerator(
                 initialMissionModel_);

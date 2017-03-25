@@ -1,18 +1,15 @@
 package com.dji.sdk.sample.common.mission.src;
 
-import android.util.Log;
-
 import com.dji.sdk.sample.common.integration.api.I_WaypointMissionProgressStatusCallback;
 import com.dji.sdk.sample.common.mission.api.I_DroneLocationUpdater;
 import com.dji.sdk.sample.common.mission.api.I_WaypointImageShooter;
 import com.dji.sdk.sample.common.mission.api.I_WaypointReachedNotifier;
 import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
 
-import dji.common.error.DJIError;
 import dji.sdk.missionmanager.DJIMission;
 import dji.sdk.missionmanager.DJIWaypointMission;
 
-import static dji.sdk.missionmanager.DJIWaypointMission.DJI_WAYPOINT_MISSION_MAXIMUM_WAYPOINT_COUNT;
+import static com.dji.sdk.sample.common.utility.MissionParameters.WAYPOINTS_PER_MISSION;
 
 /**
  * Created by Julia on 2017-03-11.
@@ -71,7 +68,7 @@ public class WaypointMissionProgressStatusCallback implements
 
     private boolean isDroneAtNewWaypoint(int missionUpdateTargetWaypoint, boolean isWaypointReached)
     {
-        int nextTargetWaypointIndex = (waypointIndex_ + 1) % DJI_WAYPOINT_MISSION_MAXIMUM_WAYPOINT_COUNT;
+        int nextTargetWaypointIndex = (waypointIndex_ + 1) % WAYPOINTS_PER_MISSION;
         return (nextTargetWaypointIndex == missionUpdateTargetWaypoint) && isWaypointReached;
     }
 }
