@@ -3,6 +3,7 @@ package com.dji.sdk.sample.common.presenter.src;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.utility.IntentExtraKeys;
@@ -15,6 +16,8 @@ import dji.common.camera.DJICameraSettingsDef;
 
 public class MissionSettingsChangedNotifier
 {
+    private static final String TAG = "HydraMissionSettingsChangedNotifier";
+
     private Context context_;
 
     public MissionSettingsChangedNotifier(

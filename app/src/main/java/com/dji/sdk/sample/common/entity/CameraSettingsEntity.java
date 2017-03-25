@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.utility.IntentExtraKeys;
@@ -18,8 +17,6 @@ import dji.common.camera.DJICameraSettingsDef;
 
 public class CameraSettingsEntity
 {
-    private static final String TAG = "HydraCameraSettingsEntity";
-
     private boolean isInAutomaticMode_;
     private DJICameraSettingsDef.CameraISO cameraISO_;
     private DJICameraSettingsDef.CameraShutterSpeed cameraShutterSpeed_;
@@ -67,16 +64,11 @@ public class CameraSettingsEntity
 
     private void cameraSettingsChanged(Intent intent)
     {
-//        isInAutomaticMode_ = intent.getBooleanExtra(
-//                IntentExtraKeys.IS_CAMERA_AUTOMATIC_MODE, true);
-//        cameraISO_ = DJICameraSettingsDef.CameraISO.find(
-//                intent.getIntExtra(IntentExtraKeys.CAMERA_ISO, 0));
-//        cameraShutterSpeed_ = DJICameraSettingsDef.CameraShutterSpeed.find(
-//                intent.getIntExtra(IntentExtraKeys.CAMERA_SHUTTER_SPEED, 0));
-
-//        Log.d(TAG,
-//                "isInAutomaticMode=" + isInAutomaticMode_ +
-//                "cameraISO=" + cameraISO_.name()+
-//                "cameraShutterSpeed=" + cameraShutterSpeed_.name());
+        isInAutomaticMode_ = intent.getBooleanExtra(
+                IntentExtraKeys.IS_CAMERA_AUTOMATIC_MODE, true);
+        cameraISO_ = DJICameraSettingsDef.CameraISO.find(
+                intent.getIntExtra(IntentExtraKeys.CAMERA_ISO, 2000));
+        cameraShutterSpeed_ = DJICameraSettingsDef.CameraShutterSpeed.find(
+                intent.getFloatExtra(IntentExtraKeys.CAMERA_SHUTTER_SPEED, 2000));
     }
 }

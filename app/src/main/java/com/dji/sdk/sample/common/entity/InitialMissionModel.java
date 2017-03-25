@@ -79,10 +79,5 @@ public class InitialMissionModel
                 IntentExtraKeys.MINIMUM_PERCENT_IMAGE_OVERLAP, 0.80);
         minimumPercentSwathOverlap_ = intent.getDoubleExtra(
                 IntentExtraKeys.MINIMUM_PERCENT_SWATH_OVERLAP, 0.50);
-
-        Log.d(TAG,
-                "altitude=" + altitude_ +
-                "imageOverlap=" + minimumPercentImageOverlap_+
-                "swathOverlap=" + minimumPercentSwathOverlap_);
     }
 }
