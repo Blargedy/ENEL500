@@ -3,6 +3,7 @@ package com.dji.sdk.sample.common.container;
 import android.support.v4.app.FragmentActivity;
 
 import com.dji.sdk.sample.common.utility.ApplicationContextManager;
+import com.dji.sdk.sample.common.utility.ApplicationSettingsManager;
 import com.dji.sdk.sample.common.utility.GoogleMapsConnectionHandler;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
@@ -17,6 +18,7 @@ public class UtilityContainer
     private ApplicationContextManager contextManager_;
     private GoogleMapsConnectionHandler googleMapsConnectionHandler_;
     private MissionErrorNotifier missionErrorNotifier_;
+    private ApplicationSettingsManager applicationSettingsManager_;
 
     public UtilityContainer(
             FragmentActivity activity)
@@ -24,6 +26,7 @@ public class UtilityContainer
         contextManager_ = new ApplicationContextManager(activity);
         googleMapsConnectionHandler_ = new GoogleMapsConnectionHandler(activity);
         missionErrorNotifier_ = new MissionErrorNotifier(activity);
+        applicationSettingsManager_ = new ApplicationSettingsManager(activity);
     }
 
     public GoogleMapsConnectionHandler googleMapsConnectionHandler()
@@ -39,5 +42,10 @@ public class UtilityContainer
     public I_MissionErrorNotifier missionErrorNotifier()
     {
         return missionErrorNotifier_;
+    }
+
+    public ApplicationSettingsManager applicationSettingsManager()
+    {
+        return applicationSettingsManager_;
     }
 }

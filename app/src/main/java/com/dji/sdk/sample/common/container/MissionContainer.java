@@ -27,6 +27,7 @@ import com.dji.sdk.sample.common.mission.src.SwitchBackPathGenerator;
 import com.dji.sdk.sample.common.mission.src.WaypointMissionCompletionCallback;
 import com.dji.sdk.sample.common.mission.src.WaypointMissionProgressStatusCallback;
 import com.dji.sdk.sample.common.mission.src.WaypointReachedNotifier;
+import com.dji.sdk.sample.common.utility.ApplicationSettingsManager;
 import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
 
 /**
@@ -35,11 +36,11 @@ import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
 
 public class MissionContainer
 {
+    private CameraSettingsEntity cameraSettings_;
     private InitialMissionModel initialMissionModel_;
     private GeneratedMissionModel generatedMissionModel_;
     private MissionStateEntity missionState_;
     private DroneLocationEntity droneLocation_;
-    private CameraSettingsEntity cameraSettings_;
 
     private NextWaypointMissionStarter nextWaypointMissionStarter_;
     private WaypointMissionCompletionCallback waypointMissionCompletionCallback_;
@@ -67,16 +68,16 @@ public class MissionContainer
     public MissionContainer(
             Context context,
             I_MissionErrorNotifier missionErrorNotifier,
+            ApplicationSettingsManager applicationSettingsManager,
             IntegrationLayerContainer integrationLayerContainer,
             ImageTransferContainer imageTransferContainer,
             boolean isLiveModeEnabled)
     {
-
-        initialMissionModel_ = new InitialMissionModel(context);
+        cameraSettings_ = new CameraSettingsEntity(context, applicationSettingsManager);
+        initialMissionModel_ = new InitialMissionModel(context, applicationSettingsManager);
         generatedMissionModel_ = new GeneratedMissionModel();
         missionState_ = new MissionStateEntity(context);
         droneLocation_ = new DroneLocationEntity(context);
-        cameraSettings_ = new CameraSettingsEntity(context);
 
         nextWaypointMissionStarter_ = new NextWaypointMissionStarter(
                 integrationLayerContainer.missionManagerSource(),

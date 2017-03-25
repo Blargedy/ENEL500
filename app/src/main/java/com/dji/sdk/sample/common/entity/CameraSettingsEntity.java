@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.dji.sdk.sample.common.utility.ApplicationSettingsManager;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
-import com.dji.sdk.sample.common.utility.IntentExtraKeys;
 
 import dji.common.camera.DJICameraSettingsDef;
 
@@ -22,13 +22,14 @@ public class CameraSettingsEntity
     private DJICameraSettingsDef.CameraShutterSpeed cameraShutterSpeed_;
 
     private BroadcastReceiver receiver_;
+    private ApplicationSettingsManager applicationSettingsManager_;
 
     public CameraSettingsEntity(
-            Context context)
+            Context context,
+            ApplicationSettingsManager applicationSettingsManager)
     {
-        isInAutomaticMode_ = false;
-        cameraISO_ = DJICameraSettingsDef.CameraISO.ISO_100;
-        cameraShutterSpeed_ = DJICameraSettingsDef.CameraShutterSpeed.ShutterSpeed1_200;
+        applicationSettingsManager_ = applicationSettingsManager;
+        retrieveSettingsFromSettingsManager();
         registerMissionSettingsChangedReceiver(context);
     }
 
@@ -40,7 +41,7 @@ public class CameraSettingsEntity
         receiver_ = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                cameraSettingsChanged(intent);
+                retrieveSettingsFromSettingsManager();
             }
         };
 
@@ -62,13 +63,14 @@ public class CameraSettingsEntity
         return cameraShutterSpeed_;
     }
 
-    private void cameraSettingsChanged(Intent intent)
+    private void retrieveSettingsFromSettingsManager()
     {
-        isInAutomaticMode_ = intent.getBooleanExtra(
-                IntentExtraKeys.IS_CAMERA_AUTOMATIC_MODE, true);
-        cameraISO_ = DJICameraSettingsDef.CameraISO.find(
-                intent.getIntExtra(IntentExtraKeys.CAMERA_ISO, 2000));
-        cameraShutterSpeed_ = DJICameraSettingsDef.CameraShutterSpeed.find(
-                intent.getFloatExtra(IntentExtraKeys.CAMERA_SHUTTER_SPEED, 2000));
+        isInAutomaticMode_ = applicationSettingsManager_.getIsCameraInAutomaticModeFromSettings();
+
+        cameraISO_ = DJICameraSettingsDef.CameraISO.valueOf(
+                applicationSettingsManager_.getCameraIsoFromSettings());
+
+        cameraShutterSpeed_ = DJICameraSettingsDef.CameraShutterSpeed.valueOf(
+                applicationSettingsManager_.getCameraShutterSpeedFromSettings());
     }
 }

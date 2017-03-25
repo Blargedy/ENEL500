@@ -5,10 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
+import com.dji.sdk.sample.common.utility.ApplicationSettingsManager;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
-import com.dji.sdk.sample.common.utility.IntentExtraKeys;
 import com.dji.sdk.sample.common.values.MissionBoundary;
 
 /**
@@ -17,18 +16,20 @@ import com.dji.sdk.sample.common.values.MissionBoundary;
 
 public class InitialMissionModel
 {
-    private static final String TAG = "HydraInitialMissionModel";
-
     private MissionBoundary missionBoundary_;
-    private float altitude_ = 20.0f;
-    private double minimumPercentImageOverlap_ = 0.80; // number between 0 and 1 e.g. 0.80
-    private double minimumPercentSwathOverlap_ = 0.50; // number between 0 and 1 e.g. 0.50
+    private float altitude_;
+    private double minimumPercentImageOverlap_;
+    private double minimumPercentSwathOverlap_;
 
     private BroadcastReceiver receiver_;
+    private ApplicationSettingsManager applicationSettingsManager_;
 
     public InitialMissionModel(
-            Context context)
+            Context context,
+            ApplicationSettingsManager applicationSettingsManager)
     {
+        applicationSettingsManager_ = applicationSettingsManager;
+        retrieveSettingsFromSettingsManager();
         registerMissionSettingsChangedReceiver(context);
     }
 
@@ -40,7 +41,7 @@ public class InitialMissionModel
         receiver_ = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                missionSettingsChanged(intent);
+                retrieveSettingsFromSettingsManager();
             }
         };
 
@@ -72,12 +73,10 @@ public class InitialMissionModel
         return minimumPercentSwathOverlap_;
     }
 
-    private void missionSettingsChanged(Intent intent)
+    private void retrieveSettingsFromSettingsManager()
     {
-        altitude_ = intent.getFloatExtra(IntentExtraKeys.ALTITUDE, 20.0f);
-        minimumPercentImageOverlap_ = intent.getDoubleExtra(
-                IntentExtraKeys.MINIMUM_PERCENT_IMAGE_OVERLAP, 0.80);
-        minimumPercentSwathOverlap_ = intent.getDoubleExtra(
-                IntentExtraKeys.MINIMUM_PERCENT_SWATH_OVERLAP, 0.50);
+        altitude_ = applicationSettingsManager_.getAltitudeFromSettings();
+        minimumPercentImageOverlap_ = applicationSettingsManager_.getMinimumPercentImageOverlapFromSettings();
+        minimumPercentSwathOverlap_ = applicationSettingsManager_.getMinimumPercentSwathOverlapFromSettings();
     }
 }

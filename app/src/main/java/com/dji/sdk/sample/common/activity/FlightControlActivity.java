@@ -43,6 +43,7 @@ public class FlightControlActivity extends FragmentActivity
         missionContainer_ = new MissionContainer(
                 this,
                 utilityContainer_.missionErrorNotifier(),
+                utilityContainer_.applicationSettingsManager(),
                 integrationLayerContainer_,
                 imageTransferContainer_,
                 isLiveModeEnabled);
