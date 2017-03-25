@@ -44,4 +44,10 @@ public class CameraGeneratedNewMediaFileCallback implements I_CameraGeneratedNew
             imageTransferInitiator_.initiateImageTransfer();
         }
     }
+
+    @Override
+    public void resetImageCount()
+    {
+        imageCount_ = 0;
+    }
 }

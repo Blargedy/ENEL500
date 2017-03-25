@@ -35,4 +35,10 @@ public class BatteryTemperatureWarningNotifier implements I_BatteryStateUpdateCa
             }
         }
     }
+
+    @Override
+    public void resetIfWarningHasBeenShown()
+    {
+        hasErrorBeenShown_ = false;
+    }
 }

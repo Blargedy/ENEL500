@@ -9,10 +9,9 @@ import android.util.Log;
 
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
-import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleEnder;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
-import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
+import com.dji.sdk.sample.common.mission.api.I_MissionStateResetter;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
 
@@ -29,23 +28,20 @@ public class MissionCanceller implements I_CompletionCallback
     private I_MissionErrorNotifier missionErrorNotifier_;
     private BroadcastReceiver receiver_;
     private MissionStateEntity missionState_;
-    private I_MissionManagerSource missionManagerSource_;
     private I_FlightControllerSource flightControllerSource_;
-    private I_ImageTransferModuleEnder imageTransferModuleEnder_;
+    private I_MissionStateResetter missionStateResetter_;
 
     public MissionCanceller(
             Context context,
             I_MissionErrorNotifier missionErrorNotifier,
             MissionStateEntity missionState,
-            I_MissionManagerSource missionManagerSource,
             I_FlightControllerSource flightControllerSource,
-            I_ImageTransferModuleEnder imageTransferModuleEnder)
+            I_MissionStateResetter missionStateResetter)
     {
         missionErrorNotifier_ = missionErrorNotifier;
         missionState_ = missionState;
-        missionManagerSource_ = missionManagerSource;
         flightControllerSource_ = flightControllerSource;
-        imageTransferModuleEnder_ = imageTransferModuleEnder;
+        missionStateResetter_ = missionStateResetter;
 
         registerMissionStateChangedReceiver(context);
     }
@@ -70,7 +66,7 @@ public class MissionCanceller implements I_CompletionCallback
         switch (missionState_.getCurrentMissionState())
         {
             case GO_HOME:
-                imageTransferModuleEnder_.endImageTransfer(null);
+                missionStateResetter_.resetMissionState();
                 flightControllerSource_.getFlightController().goHome(this);
                 break;
 

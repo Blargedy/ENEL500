@@ -131,6 +131,12 @@ public class InvestigativeWaypointReachedHandler implements
     }
 
     @Override
+    public void resetImageCount()
+    {
+
+    }
+
+    @Override
     public void onStart()
     {
         Log.d(TAG, "Starting download");

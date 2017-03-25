@@ -7,7 +7,10 @@ import com.dji.sdk.sample.common.entity.DroneLocationEntity;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
+import com.dji.sdk.sample.common.integration.api.I_CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferInitiator;
+import com.dji.sdk.sample.common.mission.api.I_MissionStateResetter;
+import com.dji.sdk.sample.common.mission.api.InertCameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.api.InertMissionPeriodicImageTransferInitiator;
 import com.dji.sdk.sample.common.mission.src.BatteryTemperatureWarningNotifier;
 import com.dji.sdk.sample.common.mission.src.CameraGeneratedNewMediaFileCallback;
@@ -20,6 +23,7 @@ import com.dji.sdk.sample.common.mission.src.MissionCanceller;
 import com.dji.sdk.sample.common.mission.src.MissionExecutor;
 import com.dji.sdk.sample.common.mission.src.MissionInitializer;
 import com.dji.sdk.sample.common.mission.src.MissionPeriodicImageTransferInitiator;
+import com.dji.sdk.sample.common.mission.src.MissionStateResetter;
 import com.dji.sdk.sample.common.mission.src.NextWaypointMissionStarter;
 import com.dji.sdk.sample.common.mission.src.SwitchBackPathGenerator;
 import com.dji.sdk.sample.common.mission.src.WaypointImageShooter;
@@ -46,7 +50,7 @@ public class MissionContainer
 //    private InvestigativeWaypointReachedHandler investigatingImageTransfer_;
 
     private I_MissionPeriodicImageTransferInitiator periodicImageTransferInitiator_;
-    private CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback_;
+    private I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback_;
     private CameraInitializer cameraInitializer_;
     private FlightControllerInitializer flightControllerInitializer_;
 
@@ -55,6 +59,7 @@ public class MissionContainer
     private DroneLocationUpdater droneLocationUpdater_;
     private WaypointMissionProgressStatusCallback missionProgressStatusCallback_;
 
+    private MissionStateResetter missionStateResetter_;
     private NextWaypointMissionStarter nextWaypointMissionStarter_;
     private WaypointMissionCompletionCallback waypointMissionCompletionCallback_;
 
@@ -95,12 +100,14 @@ public class MissionContainer
                     integrationLayerContainer.missionManagerSource(),
                     imageTransferContainer.imageTransferer(),
                     imageTransferContainer.droneImageDownloadQueuer());
+            cameraGeneratedNewMediaFileCallback_ = new CameraGeneratedNewMediaFileCallback(
+                    imageTransferContainer.droneImageDownloadQueuer(),
+                    periodicImageTransferInitiator_);
         } else{
             periodicImageTransferInitiator_ = new InertMissionPeriodicImageTransferInitiator();
+            cameraGeneratedNewMediaFileCallback_ = new InertCameraGeneratedNewMediaFileCallback();
         }
-        cameraGeneratedNewMediaFileCallback_ = new CameraGeneratedNewMediaFileCallback(
-                imageTransferContainer.droneImageDownloadQueuer(),
-                periodicImageTransferInitiator_);
+
         cameraInitializer_ = new CameraInitializer(
                 integrationLayerContainer.cameraSource(),
                 integrationLayerContainer.gimbalSource(),
@@ -124,6 +131,12 @@ public class MissionContainer
                 droneLocationUpdater_,
                 waypointImageShooter_);
 
+        missionStateResetter_ = new MissionStateResetter(
+                generatedMissionModel_,
+                missionProgressStatusCallback_,
+                cameraGeneratedNewMediaFileCallback_,
+                imageTransferContainer.imageTransferModuleEnder(),
+                batteryTemperatureWarningNotifier_);
         nextWaypointMissionStarter_ = new NextWaypointMissionStarter(
                 integrationLayerContainer.missionManagerSource(),
                 generatedMissionModel(),
@@ -162,9 +175,8 @@ public class MissionContainer
                 context,
                 missionErrorNotifier,
                 missionState_,
-                integrationLayerContainer.missionManagerSource(),
                 integrationLayerContainer.flightControllerSource(),
-                imageTransferContainer.imageTransferModuleEnder());
+                missionStateResetter_);
     }
 
     public InitialMissionModel initialMissionModel()

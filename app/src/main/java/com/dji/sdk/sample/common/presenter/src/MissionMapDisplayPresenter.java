@@ -10,6 +10,7 @@ import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
+import com.dji.sdk.sample.common.mission.api.I_MissionStateResetter;
 import com.dji.sdk.sample.common.values.MissionBoundary;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 
@@ -23,7 +24,6 @@ public class MissionMapDisplayPresenter {
     private GeneratedMissionModel generatedMissionModel_;
     private BroadcastReceiver receiver_;
     private MapPresenter mapPresenter_;
-    MissionStateEnum lastMissionState_;
 
     public MissionMapDisplayPresenter(
             Context context,
@@ -60,9 +60,8 @@ public class MissionMapDisplayPresenter {
             case INITIALIZING_MAP:
                 break;
             case SELECT_AREA:
-                if (lastMissionState_ == MissionStateEnum.VIEW_MISSION){
-                    mapPresenter_.clearMap();
-                }
+                mapPresenter_.clearMap();
+                generatedMissionModel_.clearWaypointMissions();
                 break;
             case GENERATE_MISSION_BOUNDARY:
                 MissionBoundary boundary = mapPresenter_.getSurveyAreaBoundary();
@@ -76,6 +75,5 @@ public class MissionMapDisplayPresenter {
             default:
                 break;
         }
-        lastMissionState_=currentMissionState;
     }
 }

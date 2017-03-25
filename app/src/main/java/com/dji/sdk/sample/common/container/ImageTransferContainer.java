@@ -3,6 +3,7 @@ package com.dji.sdk.sample.common.container;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadQueuer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferPathsSource;
+import com.dji.sdk.sample.common.imageTransfer.api.InertDroneImageDownloadQueuer;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferer;
@@ -24,11 +25,11 @@ import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
 
 public class ImageTransferContainer
 {
-    private DroneImageDownloadQueuer droneImageDownloadQueuer_;
-
     private ImageTransferPathsSource pathsSource_;
     private AndroidToPcImageCopier androidToPcImageCopier_;
     private DroneToAndroidImageDownloader droneToAndroidImageDownloader_;
+
+    private I_DroneImageDownloadQueuer droneImageDownloadQueuer_;
 
     private I_ImageTransferer imageTransferer_;
 
@@ -42,7 +43,6 @@ public class ImageTransferContainer
             String pcIpAddress,
             boolean isLiveModeEnabled)
     {
-        droneImageDownloadQueuer_ = new DroneImageDownloadQueuer();
 
         pathsSource_ = new ImageTransferPathsSource(
                 contextManager);
@@ -55,6 +55,8 @@ public class ImageTransferContainer
 
         if(isLiveModeEnabled)
         {
+            droneImageDownloadQueuer_ = new DroneImageDownloadQueuer();
+
             imageTransferer_ = new ImageTransferCoordinator(
                     missionErrorNotifier,
                     integrationLayerContainer.cameraSource(),
@@ -70,6 +72,7 @@ public class ImageTransferContainer
         }
         else
         {
+            droneImageDownloadQueuer_ = new InertDroneImageDownloadQueuer();
             imageTransferer_ = new InertImageTransferer();
             imageTransferModuleInitializer_ = new InertImageTransferModuleInitializer();
             imageTransferModuleEnder_ = new InertImageTransferModuleEnder();

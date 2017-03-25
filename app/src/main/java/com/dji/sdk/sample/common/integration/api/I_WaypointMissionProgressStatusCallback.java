@@ -11,4 +11,6 @@ public interface I_WaypointMissionProgressStatusCallback
         extends DJIMissionManager.MissionProgressStatusCallback
 {
     void missionProgressStatus(DJIMission.DJIMissionProgressStatus progressStatus);
+
+    void resetWaypointCount();
 }

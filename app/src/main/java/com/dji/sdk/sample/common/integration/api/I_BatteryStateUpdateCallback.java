@@ -10,4 +10,5 @@ import dji.sdk.battery.DJIBattery;
 public interface I_BatteryStateUpdateCallback extends DJIBattery.DJIBatteryStateUpdateCallback
 {
     void onResult(DJIBatteryState state);
+    void resetIfWarningHasBeenShown();
 }

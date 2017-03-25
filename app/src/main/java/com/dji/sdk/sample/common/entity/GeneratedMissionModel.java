@@ -36,6 +36,11 @@ public class GeneratedMissionModel
         return waypointMissions_.size();
     }
 
+    public void clearWaypointMissions()
+    {
+        waypointMissions_.clear();
+    }
+
     public Vector<Coordinate> waypoints()
     {
         return waypoints_;

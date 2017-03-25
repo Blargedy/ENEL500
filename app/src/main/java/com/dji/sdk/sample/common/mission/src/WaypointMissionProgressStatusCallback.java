@@ -66,6 +66,12 @@ public class WaypointMissionProgressStatusCallback implements
         }
     }
 
+    @Override
+    public void resetWaypointCount()
+    {
+        waypointIndex_ = 0;
+    }
+
     private boolean isDroneAtNewWaypoint(int missionUpdateTargetWaypoint, boolean isWaypointReached)
     {
         int nextTargetWaypointIndex = (waypointIndex_ + 1) % WAYPOINTS_PER_MISSION;

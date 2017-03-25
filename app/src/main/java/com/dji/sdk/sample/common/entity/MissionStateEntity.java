@@ -33,6 +33,11 @@ public class MissionStateEntity
         return currentMissionState_;
     }
 
+    public MissionStateEnum getPreviousMissionState()
+    {
+        return  previousMissionState_;
+    }
+
     public void setCurrentMissionState(MissionStateEnum state)
     {
         previousMissionState_ = currentMissionState_;

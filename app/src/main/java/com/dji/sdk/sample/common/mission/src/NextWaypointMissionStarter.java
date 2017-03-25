@@ -6,9 +6,8 @@ import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
-import com.dji.sdk.sample.common.integration.api.I_MissionManager;
 import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
-import com.dji.sdk.sample.common.integration.src.MissionManager;
+import com.dji.sdk.sample.common.mission.api.I_MissionStateResetter;
 import com.dji.sdk.sample.common.mission.api.I_NextWaypointMissionStarter;
 
 import dji.common.error.DJIError;
