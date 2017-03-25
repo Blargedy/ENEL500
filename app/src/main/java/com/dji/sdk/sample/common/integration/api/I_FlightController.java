@@ -10,6 +10,7 @@ public interface I_FlightController
 {
     void setHomeLocationUsingAircraftCurrentLocation(I_CompletionCallback callback);
     void setGoHomeBatteryThreshold(int threshold, I_CompletionCallback callback);
+    void setUpdateSystemStateCallback(I_FlightControllerUpdateSystemStateCallback callback);
     void goHome(I_CompletionCallback callback);
     void cancelGoHome(I_CompletionCallback callback);
     DJILocationCoordinate2D getAircraftLocation();

@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.container;
 
 import android.content.Context;
 
+import com.dji.sdk.sample.common.droneState.api.I_FlightControllerInitializer;
 import com.dji.sdk.sample.common.entity.CameraSettingsEntity;
 import com.dji.sdk.sample.common.entity.DroneLocationEntity;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
@@ -11,13 +12,8 @@ import com.dji.sdk.sample.common.integration.api.I_CameraGeneratedNewMediaFileCa
 import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferInitiator;
 import com.dji.sdk.sample.common.mission.api.InertCameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.api.InertMissionPeriodicImageTransferInitiator;
-import com.dji.sdk.sample.common.droneState.src.BatteryTemperatureWarningNotifier;
 import com.dji.sdk.sample.common.mission.src.CameraGeneratedNewMediaFileCallback;
-import com.dji.sdk.sample.common.droneState.src.CameraInitializer;
-import com.dji.sdk.sample.common.droneState.src.FlightControllerInitializer;
-import com.dji.sdk.sample.common.droneState.src.CameraState;
 import com.dji.sdk.sample.common.mission.src.MissionGenerator;
-import com.dji.sdk.sample.common.droneState.src.DroneLocationUpdater;
 import com.dji.sdk.sample.common.mission.src.MissionCanceller;
 import com.dji.sdk.sample.common.mission.src.MissionExecutor;
 import com.dji.sdk.sample.common.mission.src.MissionInitializer;
@@ -51,7 +47,6 @@ public class MissionContainer
 
     private WaypointImageShooter waypointImageShooter_;
     private WaypointReachedNotifier waypointReachedNotifier_;
-    private DroneLocationUpdater droneLocationUpdater_;
     private WaypointMissionProgressStatusCallback missionProgressStatusCallback_;
 
     private MissionStateResetter missionStateResetter_;
@@ -109,7 +104,6 @@ public class MissionContainer
         missionProgressStatusCallback_ = new WaypointMissionProgressStatusCallback(
                 missionErrorNotifier,
                 waypointReachedNotifier_,
-                droneLocationUpdater_,
                 waypointImageShooter_);
 
         missionStateResetter_ = new MissionStateResetter(
@@ -178,5 +172,10 @@ public class MissionContainer
     public DroneLocationEntity droneLocation()
     {
         return droneLocation_;
+    }
+
+    public I_FlightControllerInitializer flightControllerInitializer()
+    {
+        return droneStateContainer_.flightControllerInitializer();
     }
 }

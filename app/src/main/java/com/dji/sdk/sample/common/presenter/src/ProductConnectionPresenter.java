@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import com.dji.sdk.sample.common.droneState.api.I_FlightControllerInitializer;
+import com.dji.sdk.sample.common.integration.api.I_FlightController;
+import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
+import com.dji.sdk.sample.common.integration.api.I_FlightControllerUpdateSystemStateCallback;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.integration.src.DJISampleApplication;
 import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
@@ -18,14 +22,17 @@ import dji.sdk.base.DJIBaseProduct;
 public class ProductConnectionPresenter
 {
     private I_MissionControlsView missionControlsView_;
+    private I_FlightControllerInitializer flightControllerInitializer_;
 
     private BroadcastReceiver receiver_;
 
     public ProductConnectionPresenter(
             Context context,
-            I_MissionControlsView missionControlsView)
+            I_MissionControlsView missionControlsView,
+            I_FlightControllerInitializer flightControllerInitializer)
     {
         missionControlsView_ = missionControlsView;
+        flightControllerInitializer_ = flightControllerInitializer;
 
         registerConnectionChangedReceiver(context);
         updateProgressConnectionStatus();
@@ -49,5 +56,12 @@ public class ProductConnectionPresenter
     private void updateProgressConnectionStatus()
     {
         DJIBaseProduct product = DJISampleApplication.getProductInstance();
+        if (product != null && product.isConnected())
+        {
+            flightControllerInitializer_.initializeFlightController(null);
+        }
+        else
+        {
+        }
     }
 }

@@ -5,8 +5,8 @@ import com.dji.sdk.sample.common.droneState.api.I_FlightControllerInitializer;
 import com.dji.sdk.sample.common.droneState.src.BatteryTemperatureWarningNotifier;
 import com.dji.sdk.sample.common.droneState.src.CameraInitializer;
 import com.dji.sdk.sample.common.droneState.src.CameraState;
-import com.dji.sdk.sample.common.droneState.src.DroneLocationUpdater;
 import com.dji.sdk.sample.common.droneState.src.FlightControllerInitializer;
+import com.dji.sdk.sample.common.droneState.src.FlightControllerUpdateSystemStateCallback;
 import com.dji.sdk.sample.common.entity.CameraSettingsEntity;
 import com.dji.sdk.sample.common.entity.DroneLocationEntity;
 import com.dji.sdk.sample.common.integration.api.I_BatteryStateUpdateCallback;
@@ -23,9 +23,9 @@ public class DroneStateContainer
 
     private CameraState cameraState_;
     private CameraInitializer cameraInitializer_;
-    private FlightControllerInitializer flightControllerInitializer_;
 
-    private DroneLocationUpdater droneLocationUpdater_;
+    private FlightControllerUpdateSystemStateCallback flightControllerUpdateSystemStateCallback_;
+    private FlightControllerInitializer flightControllerInitializer_;
 
     public DroneStateContainer(
             I_MissionErrorNotifier missionErrorNotifier,
@@ -45,12 +45,12 @@ public class DroneStateContainer
                 cameraState_,
                 cameraSettings);
 
-        flightControllerInitializer_ = new FlightControllerInitializer(
-                integrationLayerContainer.flightControllerSource());
+        flightControllerUpdateSystemStateCallback_ = new FlightControllerUpdateSystemStateCallback(
+                droneLocationEntity);
 
-        droneLocationUpdater_ = new DroneLocationUpdater(
-                droneLocationEntity,
-                integrationLayerContainer.flightControllerSource());
+        flightControllerInitializer_ = new FlightControllerInitializer(
+                integrationLayerContainer.flightControllerSource(),
+                flightControllerUpdateSystemStateCallback_);
     }
 
     public CameraState cameraState()

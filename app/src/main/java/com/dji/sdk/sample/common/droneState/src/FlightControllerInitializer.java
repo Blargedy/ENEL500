@@ -3,8 +3,10 @@ package com.dji.sdk.sample.common.droneState.src;
 import android.util.Log;
 
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
+import com.dji.sdk.sample.common.integration.api.I_FlightController;
 import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
 import com.dji.sdk.sample.common.droneState.api.I_FlightControllerInitializer;
+import com.dji.sdk.sample.common.integration.api.I_FlightControllerUpdateSystemStateCallback;
 
 import dji.common.error.DJIError;
 
@@ -23,11 +25,14 @@ public class FlightControllerInitializer implements
     private I_CompletionCallback callback_;
 
     private I_FlightControllerSource flightControllerSource_;
+    private I_FlightControllerUpdateSystemStateCallback flightControllerUpdateSystemStateCallback_;
 
     public FlightControllerInitializer(
-            I_FlightControllerSource flightControllerSource)
+            I_FlightControllerSource flightControllerSource,
+            I_FlightControllerUpdateSystemStateCallback flightControllerUpdateSystemStateCallback)
     {
         flightControllerSource_ = flightControllerSource;
+        flightControllerUpdateSystemStateCallback_ = flightControllerUpdateSystemStateCallback;
     }
 
     @Override
@@ -35,8 +40,11 @@ public class FlightControllerInitializer implements
     {
         callback_ = callback;
 
+        I_FlightController flightController = flightControllerSource_.getFlightController();
+        flightController.setUpdateSystemStateCallback(flightControllerUpdateSystemStateCallback_);
+
         expectedCallback_ = ExpectedCallback.SET_HOME_LOCATION;
-        flightControllerSource_.getFlightController().setHomeLocationUsingAircraftCurrentLocation(this);
+        flightController.setHomeLocationUsingAircraftCurrentLocation(this);
     }
 
     @Override

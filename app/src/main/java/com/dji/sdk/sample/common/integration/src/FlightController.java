@@ -2,6 +2,7 @@ package com.dji.sdk.sample.common.integration.src;
 
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_FlightController;
+import com.dji.sdk.sample.common.integration.api.I_FlightControllerUpdateSystemStateCallback;
 
 import dji.common.flightcontroller.DJIFlightControllerCurrentState;
 import dji.common.flightcontroller.DJILocationCoordinate2D;
@@ -32,6 +33,12 @@ public class FlightController implements I_FlightController
     public void setGoHomeBatteryThreshold(int threshold, I_CompletionCallback callback)
     {
         flightController_.setGoHomeBatteryThreshold(threshold, callback);
+    }
+
+    @Override
+    public void setUpdateSystemStateCallback(I_FlightControllerUpdateSystemStateCallback callback)
+    {
+        flightController_.setUpdateSystemStateCallback(callback);
     }
 
     @Override

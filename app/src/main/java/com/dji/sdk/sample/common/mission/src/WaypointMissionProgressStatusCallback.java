@@ -1,7 +1,6 @@
 package com.dji.sdk.sample.common.mission.src;
 
 import com.dji.sdk.sample.common.integration.api.I_WaypointMissionProgressStatusCallback;
-import com.dji.sdk.sample.common.droneState.api.I_DroneLocationUpdater;
 import com.dji.sdk.sample.common.mission.api.I_WaypointImageShooter;
 import com.dji.sdk.sample.common.mission.api.I_WaypointReachedNotifier;
 import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
@@ -22,18 +21,15 @@ public class WaypointMissionProgressStatusCallback implements
 
     private I_MissionErrorNotifier missionErrorNotifier_;
     private I_WaypointReachedNotifier waypointReachedNotifier_;
-    private I_DroneLocationUpdater droneLocationUpdater_;
     private I_WaypointImageShooter imageShooter_;
 
     public WaypointMissionProgressStatusCallback(
             I_MissionErrorNotifier missionErrorNotifier,
             I_WaypointReachedNotifier waypointReachedNotifier,
-            I_DroneLocationUpdater droneLocationUpdater,
             I_WaypointImageShooter imageShooter)
     {
         missionErrorNotifier_ = missionErrorNotifier;
         waypointReachedNotifier_ = waypointReachedNotifier;
-        droneLocationUpdater_ = droneLocationUpdater;
         imageShooter_ = imageShooter;
 
         waypointIndex_ = 0;
@@ -61,8 +57,6 @@ public class WaypointMissionProgressStatusCallback implements
                 imageShooter_.shootPhotoOnWaypoint(waypointIndex_);
                 waypointIndex_++;
             }
-
-            droneLocationUpdater_.updateDroneLocation();
         }
     }
 

@@ -55,6 +55,7 @@ public class PresenterContainer
                 flightControlView);
         productConnectionPresenter_ = new ProductConnectionPresenter(
                 activity,
-                flightControlView);
+                flightControlView,
+                missionContainer.flightControllerInitializer());
     }
 }
