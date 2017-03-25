@@ -1,7 +1,7 @@
 package com.dji.sdk.sample.common.mission.src;
 
 import com.dji.sdk.sample.common.integration.api.I_WaypointMissionProgressStatusCallback;
-import com.dji.sdk.sample.common.mission.api.I_DroneLocationUpdater;
+import com.dji.sdk.sample.common.droneState.api.I_DroneLocationUpdater;
 import com.dji.sdk.sample.common.mission.api.I_WaypointImageShooter;
 import com.dji.sdk.sample.common.mission.api.I_WaypointReachedNotifier;
 import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;

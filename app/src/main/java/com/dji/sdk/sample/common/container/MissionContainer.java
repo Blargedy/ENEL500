@@ -9,16 +9,15 @@ import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.integration.api.I_CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferInitiator;
-import com.dji.sdk.sample.common.mission.api.I_MissionStateResetter;
 import com.dji.sdk.sample.common.mission.api.InertCameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.api.InertMissionPeriodicImageTransferInitiator;
-import com.dji.sdk.sample.common.mission.src.BatteryTemperatureWarningNotifier;
+import com.dji.sdk.sample.common.droneState.src.BatteryTemperatureWarningNotifier;
 import com.dji.sdk.sample.common.mission.src.CameraGeneratedNewMediaFileCallback;
-import com.dji.sdk.sample.common.mission.src.CameraInitializer;
-import com.dji.sdk.sample.common.mission.src.FlightControllerInitializer;
-import com.dji.sdk.sample.common.mission.src.CameraState;
+import com.dji.sdk.sample.common.droneState.src.CameraInitializer;
+import com.dji.sdk.sample.common.droneState.src.FlightControllerInitializer;
+import com.dji.sdk.sample.common.droneState.src.CameraState;
 import com.dji.sdk.sample.common.mission.src.MissionGenerator;
-import com.dji.sdk.sample.common.mission.src.DroneLocationUpdater;
+import com.dji.sdk.sample.common.droneState.src.DroneLocationUpdater;
 import com.dji.sdk.sample.common.mission.src.MissionCanceller;
 import com.dji.sdk.sample.common.mission.src.MissionExecutor;
 import com.dji.sdk.sample.common.mission.src.MissionInitializer;
@@ -45,14 +44,10 @@ public class MissionContainer
     private MissionStateEntity missionState_;
     private DroneLocationEntity droneLocation_;
 
-    private BatteryTemperatureWarningNotifier batteryTemperatureWarningNotifier_;
-    private CameraState cameraSystemState_;
-//    private InvestigativeWaypointReachedHandler investigatingImageTransfer_;
-
     private I_MissionPeriodicImageTransferInitiator periodicImageTransferInitiator_;
     private I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback_;
-    private CameraInitializer cameraInitializer_;
-    private FlightControllerInitializer flightControllerInitializer_;
+
+    private DroneStateContainer droneStateContainer_;
 
     private WaypointImageShooter waypointImageShooter_;
     private WaypointReachedNotifier waypointReachedNotifier_;
@@ -84,16 +79,6 @@ public class MissionContainer
         missionState_ = new MissionStateEntity(context);
         droneLocation_ = new DroneLocationEntity(context);
 
-        batteryTemperatureWarningNotifier_ = new BatteryTemperatureWarningNotifier(
-                missionErrorNotifier);
-
-        cameraSystemState_ = new CameraState();
-//        investigatingImageTransfer_ = new InvestigativeWaypointReachedHandler(
-//                integrationLayerContainer.missionManagerSource(),
-//                integrationLayerContainer.cameraSource(),
-//                cameraSystemState_,
-//                imageTransferContainer.imageTransferPathsSource());
-
         if (isLiveModeEnabled){
             periodicImageTransferInitiator_ = new MissionPeriodicImageTransferInitiator(
                     missionErrorNotifier,
@@ -108,26 +93,22 @@ public class MissionContainer
             cameraGeneratedNewMediaFileCallback_ = new InertCameraGeneratedNewMediaFileCallback();
         }
 
-        cameraInitializer_ = new CameraInitializer(
-                integrationLayerContainer.cameraSource(),
-                integrationLayerContainer.gimbalSource(),
-                cameraGeneratedNewMediaFileCallback_ /*investigatingImageTransfer_*/,
-                cameraSystemState_,
-                cameraSettings_);
-        flightControllerInitializer_ = new FlightControllerInitializer(
-                integrationLayerContainer.flightControllerSource());
+        droneStateContainer_ = new DroneStateContainer(
+                missionErrorNotifier,
+                integrationLayerContainer,
+                cameraGeneratedNewMediaFileCallback_,
+                cameraSettings_,
+                droneLocation_);
 
         waypointImageShooter_ = new WaypointImageShooter(
                 missionErrorNotifier,
                 integrationLayerContainer.cameraSource(),
-                cameraSystemState_);
+                droneStateContainer_.cameraState());
         waypointReachedNotifier_ = new WaypointReachedNotifier(context);
-        droneLocationUpdater_ = new DroneLocationUpdater(
-                droneLocation_,
-                integrationLayerContainer.flightControllerSource());
+
         missionProgressStatusCallback_ = new WaypointMissionProgressStatusCallback(
                 missionErrorNotifier,
-                waypointReachedNotifier_ /*investigatingImageTransfer_*/,
+                waypointReachedNotifier_,
                 droneLocationUpdater_,
                 waypointImageShooter_);
 
@@ -136,7 +117,7 @@ public class MissionContainer
                 missionProgressStatusCallback_,
                 cameraGeneratedNewMediaFileCallback_,
                 imageTransferContainer.imageTransferModuleEnder(),
-                batteryTemperatureWarningNotifier_);
+                droneStateContainer_.batteryStateUpdateCallback());
         nextWaypointMissionStarter_ = new NextWaypointMissionStarter(
                 integrationLayerContainer.missionManagerSource(),
                 generatedMissionModel(),
@@ -156,13 +137,13 @@ public class MissionContainer
 
         missionInitializer_ = new MissionInitializer(
                 integrationLayerContainer.missionManagerSource(),
-                flightControllerInitializer_,
-                cameraInitializer_,
+                droneStateContainer_.flightControllerInitializer(),
+                droneStateContainer_.cameraInitializer(),
                 imageTransferContainer.imageTransferModuleInitializer(),
                 waypointMissionCompletionCallback_,
                 missionProgressStatusCallback_,
                 integrationLayerContainer.batterySource(),
-                batteryTemperatureWarningNotifier_);
+                droneStateContainer_.batteryStateUpdateCallback());
         missionExecutor_ = new MissionExecutor(
                 context,
                 missionErrorNotifier,

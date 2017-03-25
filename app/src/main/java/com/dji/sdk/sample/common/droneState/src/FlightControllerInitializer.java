@@ -1,10 +1,10 @@
-package com.dji.sdk.sample.common.mission.src;
+package com.dji.sdk.sample.common.droneState.src;
 
 import android.util.Log;
 
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
-import com.dji.sdk.sample.common.mission.api.I_FlightControllerInitializer;
+import com.dji.sdk.sample.common.droneState.api.I_FlightControllerInitializer;
 
 import dji.common.error.DJIError;
 

@@ -1,8 +1,8 @@
-package com.dji.sdk.sample.common.mission.src;
+package com.dji.sdk.sample.common.droneState.src;
 
 import com.dji.sdk.sample.common.entity.DroneLocationEntity;
 import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
-import com.dji.sdk.sample.common.mission.api.I_DroneLocationUpdater;
+import com.dji.sdk.sample.common.droneState.api.I_DroneLocationUpdater;
 import com.dji.sdk.sample.common.values.Coordinate;
 
 import dji.common.flightcontroller.DJILocationCoordinate2D;

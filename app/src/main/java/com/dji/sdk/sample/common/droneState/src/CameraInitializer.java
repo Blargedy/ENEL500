@@ -1,11 +1,11 @@
-package com.dji.sdk.sample.common.mission.src;
+package com.dji.sdk.sample.common.droneState.src;
 
 import android.util.Log;
 
 import com.dji.sdk.sample.common.entity.CameraSettingsEntity;
 import com.dji.sdk.sample.common.integration.api.I_CameraUpdatedSystemStateCallback;
 import com.dji.sdk.sample.common.integration.api.I_GimbalSource;
-import com.dji.sdk.sample.common.mission.api.I_CameraInitializer;
+import com.dji.sdk.sample.common.droneState.api.I_CameraInitializer;
 import com.dji.sdk.sample.common.integration.api.I_Camera;
 import com.dji.sdk.sample.common.integration.api.I_CameraSource;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;

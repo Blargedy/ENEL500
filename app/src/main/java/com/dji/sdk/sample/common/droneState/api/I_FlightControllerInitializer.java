@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.mission.api;
+package com.dji.sdk.sample.common.droneState.api;
 
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 

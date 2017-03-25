@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.mission.src;
+package com.dji.sdk.sample.common.droneState.src;
 
 import com.dji.sdk.sample.common.integration.api.I_CameraUpdatedSystemStateCallback;
 
