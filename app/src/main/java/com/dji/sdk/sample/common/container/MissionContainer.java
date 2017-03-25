@@ -111,6 +111,7 @@ public class MissionContainer
                 periodicImageTransferInitiator_);
         cameraInitializer_ = new CameraInitializer(
                 integrationLayerContainer.cameraSource(),
+                integrationLayerContainer.gimbalSource(),
                 cameraGeneratedNewMediaFileCallback_ /*investigatingImageTransfer_*/,
                 cameraSystemState_,
                 cameraSettings_);

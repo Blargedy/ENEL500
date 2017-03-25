@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.dji.sdk.sample.common.entity.CameraSettingsEntity;
 import com.dji.sdk.sample.common.integration.api.I_CameraUpdatedSystemStateCallback;
+import com.dji.sdk.sample.common.integration.api.I_GimbalSource;
 import com.dji.sdk.sample.common.mission.api.I_CameraInitializer;
 import com.dji.sdk.sample.common.integration.api.I_Camera;
 import com.dji.sdk.sample.common.integration.api.I_CameraSource;
@@ -28,23 +29,27 @@ public class CameraInitializer implements
         SET_FILE_FORMAT,
         SET_EXPOSURE_MODE,
         SET_ISO,
-        SET_SHUTTER_SPEED }
+        SET_SHUTTER_SPEED,
+        POINT_GIMBAL_DOWN }
 
     private ExpectedCallback expectedCallback_;
     private I_CompletionCallback callback_;
 
     private I_CameraSource cameraSource_;
+    private I_GimbalSource gimbalSource_;
     private I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback_;
     private I_CameraUpdatedSystemStateCallback cameraUpdatedSystemStateCallback_;
     private CameraSettingsEntity cameraSettings_;
 
     public CameraInitializer(
             I_CameraSource cameraSource,
+            I_GimbalSource gimbalSource,
             I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback,
             I_CameraUpdatedSystemStateCallback cameraUpdatedSystemStateCallback,
             CameraSettingsEntity cameraSettings)
     {
         cameraSource_ = cameraSource;
+        gimbalSource_ = gimbalSource;
         cameraGeneratedNewMediaFileCallback_ = cameraGeneratedNewMediaFileCallback;
         cameraUpdatedSystemStateCallback_ = cameraUpdatedSystemStateCallback;
         cameraSettings_ = cameraSettings;
@@ -101,7 +106,13 @@ public class CameraInitializer implements
                     break;
 
                 case SET_SHUTTER_SPEED:
+//                    expectedCallback_ = ExpectedCallback.POINT_GIMBAL_DOWN;
+//                    gimbalSource_.getGimbal().pointGimbalDown(this);
                     callback(null);
+                    break;
+
+                case POINT_GIMBAL_DOWN:
+//                    callback(null);
                     break;
                 
                 default:

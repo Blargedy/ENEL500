@@ -2,6 +2,8 @@ package com.dji.sdk.sample.common.container;
 
 import com.dji.sdk.sample.common.integration.api.I_BatterySource;
 import com.dji.sdk.sample.common.integration.api.I_CameraSource;
+import com.dji.sdk.sample.common.integration.api.I_Gimbal;
+import com.dji.sdk.sample.common.integration.api.I_GimbalSource;
 import com.dji.sdk.sample.common.integration.src.BatterySource;
 import com.dji.sdk.sample.common.integration.src.CameraSource;
 import com.dji.sdk.sample.common.integration.src.FlightControllerSource;
@@ -9,6 +11,7 @@ import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
 import com.dji.sdk.sample.common.integration.api.I_MediaDataFetcher;
 import com.dji.sdk.sample.common.integration.api.I_MediaManagerSource;
 import com.dji.sdk.sample.common.integration.api.I_MissionManagerSource;
+import com.dji.sdk.sample.common.integration.src.GimbalSource;
 import com.dji.sdk.sample.common.integration.src.MediaDataFetcher;
 import com.dji.sdk.sample.common.integration.src.MediaManagerSource;
 import com.dji.sdk.sample.common.integration.src.MissionManagerSource;
@@ -25,6 +28,7 @@ public class IntegrationLayerContainer
     MissionManagerSource missionManagerSource_;
     FlightControllerSource flightControllerSource_;
     BatterySource batterySource_;
+    GimbalSource gimbalSource_;
 
     public IntegrationLayerContainer()
     {
@@ -34,6 +38,7 @@ public class IntegrationLayerContainer
         missionManagerSource_ = new MissionManagerSource();
         flightControllerSource_ = new FlightControllerSource();
         batterySource_ = new BatterySource();
+        gimbalSource_ = new GimbalSource();
     }
 
     public I_MediaManagerSource mediaManagerSource()
@@ -58,5 +63,10 @@ public class IntegrationLayerContainer
     public I_BatterySource batterySource()
     {
         return batterySource_;
+    }
+
+    public I_GimbalSource gimbalSource()
+    {
+        return gimbalSource_;
     }
 }
