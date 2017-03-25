@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,7 +15,7 @@ import com.dji.sdk.sample.R;
  */
 
 public class MainMenuView
-        extends RelativeLayout {
+        extends LinearLayout {
     private Button reconstructLiveButton_;
     private Button reconstructLaterButton_;
     private TextView txtRealTimeQuestion_;

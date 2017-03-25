@@ -19,7 +19,7 @@ import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
  */
 
 public class FlightControlView
-        extends RelativeLayout
+        extends LinearLayout
         implements I_MissionControlsView, I_MapView, I_ErrorConsoleView
 {
     private TextView errorConsole_;

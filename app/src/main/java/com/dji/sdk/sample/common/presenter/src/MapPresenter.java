@@ -364,6 +364,17 @@ public class MapPresenter implements
             }
         });
 
+
+        mMap.setOnMarkerClickListener(
+                new GoogleMap.OnMarkerClickListener() {
+                    boolean doNotMoveCameraToCenterMarker = true;
+
+                    public boolean onMarkerClick(Marker marker) {
+                        return doNotMoveCameraToCenterMarker; // ignore any Marker Click
+                    }
+                });
+
+
         userLocationListener = new
 
                 LocationListener() {
@@ -371,7 +382,7 @@ public class MapPresenter implements
                         lastKnownUserLocation = location;
                         // Called when a new location is found by the network location provider.
                         long timeSinceLastUserPositionUpdate = System.nanoTime() - userGPSStartTime;
-                        if (timeSinceLastUserPositionUpdate > 5000000000l) { // 8 seconds between updates to reduce lag
+                        if (timeSinceLastUserPositionUpdate > 1000000000l) { // 1 second between updates to reduce lag
                             userGPSStartTime = System.nanoTime(); // reset time
                             if (location == null && !introZoomFinished) {
                                 // no GPS position do nothing - cancel.
@@ -441,7 +452,7 @@ public class MapPresenter implements
 
 
         // check if there is no internet, if so - switch to cached map
-        new CountDownTimer(Long.MAX_VALUE, 10000) {
+        new CountDownTimer(Long.MAX_VALUE, 4000) {
             public void onTick(long millisUntilFinished) {
                 if (offLineTileProvider == null) {
                     return;
@@ -521,7 +532,7 @@ public class MapPresenter implements
     private void updateDroneLocation() {
         // if (allowRealTimeDroneGPS) {
         long timeSinceLastDronePositionUpdate = System.nanoTime() - droneGPSStartTime;
-        if (timeSinceLastDronePositionUpdate > 200000000l) { // 8 seconds between updates to reduce lag
+        if (timeSinceLastDronePositionUpdate > 50000000l) { // 8 seconds between updates to reduce lag
             droneGPSStartTime = System.nanoTime(); // reset time
             if (droneLocation_.droneLocation() == null || !introZoomFinished) {
                 // no GPS position do nothing - cancel.
@@ -531,7 +542,7 @@ public class MapPresenter implements
                 //writeToast("Drone Location Acquired.");
                 droneHasNotUsedRealGPSYet = false;
             }
-            droneMarkerIcon = getMarkerIconFromDrawable(droneDrawable, 50 + (int) (130.0f * 1.85f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f)), 50 + (int) (130 * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f))); // aspect ratio = l/w = 1.85
+            droneMarkerIcon = getMarkerIconFromDrawable(droneDrawable, 50 + (int) (70.0f * 1.85f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f)), 50 + (int) (70.0f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f))); // aspect ratio = l/w = 1.85
 
             Marker tempdroneMarker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(droneLocation_.droneLocation().latitude_, droneLocation_.droneLocation().longitude_))
@@ -573,43 +584,26 @@ public class MapPresenter implements
             this.surveyAreaWidthBar.setEnabled(true);
         }
     }
-float layer = 4000.0f;
+
+    float layer = 4000.0f;
+
     private void reachedWaypointAtIndex(int waypointIndex) {
 
         Log.d("MapPresenter", "Waypoint Reached: " + waypointIndex);
-        //clearMap();
         // Make the waypoint circles
         numWaypointsCompleted++;
         layer++;
-       // for (int j = numWaypointsCompleted; j < waypointCircleList.size(); j++) {
-            waypointCircleList.add(mMap.addCircle(new CircleOptions()
-                    .center(new LatLng(waypointCircleList.get(waypointIndex).getCenter().latitude, waypointCircleList.get(waypointIndex).getCenter().longitude))
-                    .radius(3)
-                    .strokeWidth(3)
-                    .zIndex(layer) // above the polylines, below the drone and user edit this PETER
-                    .strokeColor(Color.BLACK)
-                    .fillColor(Color.argb(255, 0, 255, 0)))); // transparent red circles
-       // }
+        waypointCircleList.add(mMap.addCircle(new CircleOptions()
+                .center(new LatLng(waypointCircleList.get(waypointIndex).getCenter().latitude, waypointCircleList.get(waypointIndex).getCenter().longitude))
+                .radius(3)
+                .strokeWidth(3)
+                .zIndex(layer) // above the polylines, below the drone and user edit this PETER
+                .strokeColor(Color.BLACK)
+                .fillColor(Color.argb(255, 0, 255, 0)))); // transparent red circles
 
-
-
-//        Circle temp = waypointCircleList.get(waypointIndex);
-//        waypointCircleList.get(waypointIndex).remove();
-//        waypointCircleList.remove(waypointIndex);
-//
-//        waypointCircleList.add(waypointIndex, mMap.addCircle((new CircleOptions()
-//                .center(new LatLng(temp.getCenter().latitude, temp.getCenter().longitude))
-//                .radius(3)
-//                .strokeWidth(3)
-//                .zIndex(3004.5f) // above the polylines, below the drone and user
-//                .strokeColor(Color.BLACK)
-//                .fillColor(Color.argb(150, 0, 0, 255))))); // transparent blue circles
-//
-//
-//        // waypointCircleList.get(waypointIndex).setFillColor(Color.argb(150, 0, 0, 255)); // change marker to blue
-//        numWaypointsCompleted++; // track mission progress
         percentageCompletion = (int) (100.0d * numWaypointsCompleted / numWaypointsTotal);
         surveyProgressBar.setProgress((int) percentageCompletion);
+
     }
 
 
@@ -674,10 +668,21 @@ float layer = 4000.0f;
 
     void initSurveyBox() {
         // Any tap on the Map calls this listener
+
+//        mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
+//                                           @Override
+//                                           public void onPolygonClick(Polygon polygon) {
+//
+//                                           }
+//                                       }
+//        );
+
+
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng point) {
                 // This if statement runs if user taps map first (not Main Button)
+
                 if (haveAnimatedCameraToUserMarker && missionState.getCurrentMissionState() == MissionStateEnum.SELECT_AREA) {
                     //if (!polySurveyAreaPicked) { // Track if an area selector is already showing
                     polySurveyAreaPicked = true;
@@ -692,9 +697,11 @@ float layer = 4000.0f;
                             .zIndex(3004.0f)
                             .strokeColor(Color.BLACK)
                             .fillColor(Color.argb(125, 0, 0, 0)) // black that is 50% opaque (see through)
-                            .clickable(true));
+                            .clickable(false)
+                    );
                     if (surveyPolygon != null) surveyPolygon.remove();
                     surveyPolygon = temp_surveyPolygon;
+
                     // } else { // User wants to place the rectangle center at another point on the map
                     //    if (surveyPolygon != null) surveyPolygon.remove();
                     //    polySurveyAreaPicked = false;
@@ -703,6 +710,7 @@ float layer = 4000.0f;
             }
 
         });
+
 
         // User changes the survey area height by sliding the seek bar
         surveyAreaHeightBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -713,11 +721,16 @@ float layer = 4000.0f;
                 //    surveyAreaHeightBar.setProgress(20);
                 //    return;
                 // }
+                //Double heightDistance = distance(surveyPolygon.getPoints().get(0).latitude, surveyPolygon.getPoints().get(1).latitude, surveyPolygon.getPoints().get(0).longitude, surveyPolygon.getPoints().get(1).longitude, 0d, 0d);
+//                if (progress >= 150) {
+//                    return;
+//                }
                 if (haveAnimatedCameraToUserMarker) {
                     // Get new scaled height
                     dbl_HeightSeek = (double) progress / dbl_SurveyBoxScaler;
                     // redraw
-                    if (surveyPolygon != null) surveyPolygon.remove(); // remove old area selector
+                    if (surveyPolygon != null)
+                        surveyPolygon.remove(); // remove old area selector
                     if (polySurveyAreaPicked) { // if an area selector is on the map
                         double lati = areaSelectingMaskMidpoint.latitude;
                         double longi = areaSelectingMaskMidpoint.longitude;
@@ -726,7 +739,7 @@ float layer = 4000.0f;
                                 .strokeWidth(2)
                                 .zIndex(3004.0f)
                                 .strokeColor(Color.BLACK)
-                                .clickable(true));
+                                .clickable(false));
                         if (surveyPolygon != null)
                             surveyPolygon.remove(); // remove the old area selector
                         surveyPolygon = temp_surveyPolygon; // save this area but don't fill color
@@ -757,6 +770,10 @@ float layer = 4000.0f;
                 //    surveyAreaWidthBar.setProgress(20);
                 //    return;
                 //}
+//                Double widthDistance = distance(surveyPolygon.getPoints().get(0).latitude, surveyPolygon.getPoints().get(3).latitude, surveyPolygon.getPoints().get(0).longitude, surveyPolygon.getPoints().get(3).longitude, 0d, 0d);
+//                if (widthDistance >= 150) {
+//                    return;
+//                }
                 if (haveAnimatedCameraToUserMarker) {
                     dbl_WidthSeek = (double) progress / dbl_SurveyBoxScaler;
                     // redraw
@@ -768,11 +785,13 @@ float layer = 4000.0f;
                                 .strokeWidth(2)
                                 .zIndex(3004.0f)
                                 .strokeColor(Color.BLACK)
-                                .clickable(true));
+                                .clickable(false));
                         if (surveyPolygon != null) surveyPolygon.remove();
                         surveyPolygon = temp_surveyPolygon;
+
                         Double widthDistance = distance(surveyPolygon.getPoints().get(0).latitude, surveyPolygon.getPoints().get(3).latitude, surveyPolygon.getPoints().get(0).longitude, surveyPolygon.getPoints().get(3).longitude, 0d, 0d);
                         surveyAreaWidthText.setText("Survey Area Width: " + String.valueOf(round(widthDistance, 1)) + " m");
+                        //Log.d("MapPresenter", "Icon Marker Height: " + String.valueOf(drawable.getIntrinsicHeight()));
                     }
                 }
             }
@@ -793,13 +812,13 @@ float layer = 4000.0f;
     //@Override
     public void clearMap() {
 
-        //if (wayPointPolyLineList != null) waypointCircleList.clear();
-        //if (wayPointPolyLineList != null) wayPointPolyLineList.clear();
+        if (wayPointPolyLineList != null) waypointCircleList.clear();
+        if (wayPointPolyLineList != null) wayPointPolyLineList.clear();
         Marker tempAndroidMarker = userMarker;
 
         mMap.clear();
 
-        userMarkerIcon = getMarkerIconFromDrawable(userDrawable, 40 + (int) (70 * ((int) (mMap.getCameraPosition().zoom - 3.00f) / 15.0f)), 40 + (int) (70.0f * ((int) (mMap.getCameraPosition().zoom - 3.00f) / 15.0f)));
+        userMarkerIcon = getMarkerIconFromDrawable(userDrawable, 40 + (int) (70.0f * ((int) (mMap.getCameraPosition().zoom - 3.00f) / 15.0f)), 40 + (int) (70.0f * ((int) (mMap.getCameraPosition().zoom - 3.00f) / 15.0f)));
         Marker tempUserMarker = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(lastKnownUserLocation.getLatitude(), lastKnownUserLocation.getLongitude()))
                 .zIndex(3005.0f)
@@ -807,7 +826,7 @@ float layer = 4000.0f;
         if (userMarker != null) userMarker.remove();
 
         userMarker = tempUserMarker;
-        droneMarkerIcon = getMarkerIconFromDrawable(droneDrawable, 50 + (int) (130.0f * 1.85f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f)), 50 + (int) (130 * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f))); // aspect ratio = l/w = 1.85
+        droneMarkerIcon = getMarkerIconFromDrawable(droneDrawable, 50 + (int) (70.0f * 1.85f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f)), 50 + (int) (70.0f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f))); // aspect ratio = l/w = 1.85
         droneMarker = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(droneLocation_.droneLocation().latitude_, droneLocation_.droneLocation().longitude_))
                 .zIndex(3005.0f)
@@ -819,18 +838,18 @@ float layer = 4000.0f;
         mMap.getUiSettings().setZoomControlsEnabled(false);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         polySurveyAreaPicked = true;
-       dbl_HeightSeek = (double) surveyAreaHeightBar.getProgress() / dbl_SurveyBoxScaler;
+        dbl_HeightSeek = (double) surveyAreaHeightBar.getProgress() / dbl_SurveyBoxScaler;
         dbl_WidthSeek = (double) surveyAreaWidthBar.getProgress() / dbl_SurveyBoxScaler;
-       // double lati = userMarker.getPosition().latitude + 0.0001; // store the latitude of the tap
-       /// double longi = userMarker.getPosition().longitude + 0.001; // store the longitude of the tap
-        //areaSelectingMaskMidpoint = (new LatLng(lati, longi)); // save the tap LatLng globally
-        //surveyPolygon = mMap.addPolygon(new PolygonOptions()
-              //  .add(new LatLng((lati - dbl_areaSS * dbl_HeightSeek), (longi - dbl_areaSS * dbl_WidthSeek)), new LatLng((lati + dbl_areaSS * dbl_HeightSeek), (longi - dbl_areaSS * dbl_WidthSeek)), new LatLng((lati + dbl_areaSS * dbl_HeightSeek), (longi + dbl_areaSS * dbl_WidthSeek)), new LatLng((lati - dbl_areaSS * dbl_HeightSeek), (longi + dbl_areaSS * dbl_WidthSeek)))
-              /////  .strokeWidth(2)
-               // .strokeColor(Color.BLACK)
-              //  .zIndex(3005.0f)
-             //   .fillColor(Color.argb(125, 0, 0, 0)) // black that is 50% opaque (see through)
-               // .clickable(true));
+        double lati = userMarker.getPosition().latitude + 0.0001; // store the latitude of the tap
+        double longi = userMarker.getPosition().longitude + 0.001; // store the longitude of the tap
+        areaSelectingMaskMidpoint = (new LatLng(lati, longi)); // save the tap LatLng globally
+        surveyPolygon = mMap.addPolygon(new PolygonOptions()
+                .add(new LatLng((lati - dbl_areaSS * dbl_HeightSeek), (longi - dbl_areaSS * dbl_WidthSeek)), new LatLng((lati + dbl_areaSS * dbl_HeightSeek), (longi - dbl_areaSS * dbl_WidthSeek)), new LatLng((lati + dbl_areaSS * dbl_HeightSeek), (longi + dbl_areaSS * dbl_WidthSeek)), new LatLng((lati - dbl_areaSS * dbl_HeightSeek), (longi + dbl_areaSS * dbl_WidthSeek)))
+                .strokeWidth(2)
+                .strokeColor(Color.BLACK)
+                .zIndex(3005.0f)
+                .fillColor(Color.argb(125, 0, 0, 0)) // black that is 50% opaque (see through)
+                .clickable(false));
 
         // Go the new GPS coordinates of the user
         Double heightDistance = distance(surveyPolygon.getPoints().get(0).latitude, surveyPolygon.getPoints().get(1).latitude, surveyPolygon.getPoints().get(0).longitude, surveyPolygon.getPoints().get(1).longitude, 0d, 0d);
@@ -839,8 +858,8 @@ float layer = 4000.0f;
         surveyAreaWidthText.setText("Survey Area Width: " + String.valueOf(round(widthDistance, 1)) + " m");
         CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude + 0.001), 18.0f);
         mMap.animateCamera(cu, 3000, MapPresenter.this);
-        this.surveyAreaHeightBar.setEnabled(false);
-        this.surveyAreaWidthBar.setEnabled(false);
+        this.surveyAreaHeightBar.setEnabled(true);
+        this.surveyAreaWidthBar.setEnabled(true);
         return;
     }
 

@@ -4,15 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center_vertical|center_horizontal"
-    android:background="@android:color/transparent"
-    android:gravity="center_vertical|center_horizontal"
     android:orientation="vertical">
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/txt_HydraTitle"
@@ -20,8 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/txtRealTimeQuestion"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"
-        android:layout_weight="1"
+        android:layout_marginBottom="40dp"
         android:alpha="1.0"
         android:text="Hydra Lite"
         android:textAlignment="center"
@@ -36,7 +27,6 @@
         android:layout_above="@+id/btn_reconstruct_live"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="22dp"
-        android:layout_weight="1"
         android:alpha="1.0"
         android:gravity="center"
         android:text="Would you like to perform a real-time reconstruction?"
@@ -49,12 +39,13 @@
 
     <Button
         android:id="@+id/btn_reconstruct_live"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="55dp"
         android:layout_above="@+id/btn_reconstruct_later"
         android:layout_alignStart="@+id/btn_reconstruct_later"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_marginBottom="40dp"
+        android:layout_marginTop="30dp"
         android:alpha="1.0"
         android:background="@drawable/round_btn"
         android:gravity="center_vertical|center_horizontal"
@@ -66,12 +57,12 @@
 
     <Button
         android:id="@+id/btn_reconstruct_later"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="55dp"
         android:layout_above="@+id/imageDroneLogo"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
         android:alpha="1.0"
         android:background="@drawable/round_btn"
         android:gravity="center_vertical|center_horizontal"
@@ -83,8 +74,8 @@
 
     <ImageView
         android:id="@+id/imageDroneLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="420dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:alpha="1.0"
