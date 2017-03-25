@@ -2,10 +2,9 @@ package com.dji.sdk.sample.common.mission.src;
 
 import android.util.Log;
 
-import com.dji.sdk.sample.common.integration.api.I_CameraSource;
-import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_WaypointMissionProgressStatusCallback;
 import com.dji.sdk.sample.common.mission.api.I_DroneLocationUpdater;
+import com.dji.sdk.sample.common.mission.api.I_WaypointImageShooter;
 import com.dji.sdk.sample.common.mission.api.I_WaypointReachedNotifier;
 import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
 
@@ -20,28 +19,25 @@ import static dji.sdk.missionmanager.DJIWaypointMission.DJI_WAYPOINT_MISSION_MAX
  */
 
 public class WaypointMissionProgressStatusCallback implements
-        I_WaypointMissionProgressStatusCallback,
-        I_CompletionCallback
+        I_WaypointMissionProgressStatusCallback
 {
-    private static final String TAG = "HydraWaypointMissionProgressStatusCallback";
-
     private int waypointIndex_;
 
     private I_MissionErrorNotifier missionErrorNotifier_;
     private I_WaypointReachedNotifier waypointReachedNotifier_;
     private I_DroneLocationUpdater droneLocationUpdater_;
-    private I_CameraSource cameraSource_;
+    private I_WaypointImageShooter imageShooter_;
 
     public WaypointMissionProgressStatusCallback(
             I_MissionErrorNotifier missionErrorNotifier,
             I_WaypointReachedNotifier waypointReachedNotifier,
             I_DroneLocationUpdater droneLocationUpdater,
-            I_CameraSource cameraSource)
+            I_WaypointImageShooter imageShooter)
     {
         missionErrorNotifier_ = missionErrorNotifier;
         waypointReachedNotifier_ = waypointReachedNotifier;
         droneLocationUpdater_ = droneLocationUpdater;
-        cameraSource_ = cameraSource;
+        imageShooter_ = imageShooter;
 
         waypointIndex_ = 0;
     }
@@ -65,7 +61,7 @@ public class WaypointMissionProgressStatusCallback implements
             if (isDroneAtNewWaypoint(targetWaypointIndex, isWaypointReached))
             {
                 waypointReachedNotifier_.notifyWaypointAtIndexHasBeenReached(waypointIndex_);
-                cameraSource_.getCamera().shootSinglePhoto(this);
+                imageShooter_.shootPhotoOnWaypoint(waypointIndex_);
                 waypointIndex_++;
             }
 
@@ -77,17 +73,5 @@ public class WaypointMissionProgressStatusCallback implements
     {
         int nextTargetWaypointIndex = (waypointIndex_ + 1) % DJI_WAYPOINT_MISSION_MAXIMUM_WAYPOINT_COUNT;
         return (nextTargetWaypointIndex == missionUpdateTargetWaypoint) && isWaypointReached;
-    }
-
-    @Override
-    public void onResult(DJIError error)
-    {
-        if (error != null)
-        {
-            String errorMessage = "Failed to take image on waypoint " + waypointIndex_ +
-                    " : " + error.getDescription();
-            missionErrorNotifier_.notifyErrorOccurred(errorMessage);
-            Log.e(TAG, errorMessage);
-        }
     }
 }

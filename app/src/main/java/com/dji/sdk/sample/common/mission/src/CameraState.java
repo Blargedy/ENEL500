@@ -8,7 +8,7 @@ import dji.common.camera.CameraSystemState;
  * Created by Julia on 2017-03-20.
  */
 
-public class InvestigativeCameraSystemState implements I_CameraUpdatedSystemStateCallback
+public class CameraState implements I_CameraUpdatedSystemStateCallback
 {
     private CameraSystemState cameraSystemState_;
 

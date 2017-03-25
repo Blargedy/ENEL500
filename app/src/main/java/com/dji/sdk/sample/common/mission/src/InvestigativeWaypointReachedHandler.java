@@ -34,13 +34,13 @@ public class InvestigativeWaypointReachedHandler implements
     private I_CameraSource cameraSource_;
     private I_ImageTransferPathsSource pathsSource_;
 
-    private InvestigativeCameraSystemState cameraSystemState_;
+    private CameraState cameraSystemState_;
     private DJIMedia mediaToDownload_;
 
     public InvestigativeWaypointReachedHandler(
             I_MissionManagerSource missionManagerSource,
             I_CameraSource cameraSource,
-            InvestigativeCameraSystemState cameraSystemState,
+            CameraState cameraSystemState,
             I_ImageTransferPathsSource pathsSource)
     {
         missionManagerSource_ = missionManagerSource;

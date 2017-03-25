@@ -7,15 +7,13 @@ import com.dji.sdk.sample.common.entity.DroneLocationEntity;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
-import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferPathsSource;
 import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferInitiator;
 import com.dji.sdk.sample.common.mission.api.InertMissionPeriodicImageTransferInitiator;
 import com.dji.sdk.sample.common.mission.src.BatteryTemperatureWarningNotifier;
 import com.dji.sdk.sample.common.mission.src.CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.src.CameraInitializer;
 import com.dji.sdk.sample.common.mission.src.FlightControllerInitializer;
-import com.dji.sdk.sample.common.mission.src.InvestigativeCameraSystemState;
-import com.dji.sdk.sample.common.mission.src.InvestigativeWaypointReachedHandler;
+import com.dji.sdk.sample.common.mission.src.CameraState;
 import com.dji.sdk.sample.common.mission.src.MissionGenerator;
 import com.dji.sdk.sample.common.mission.src.DroneLocationUpdater;
 import com.dji.sdk.sample.common.mission.src.MissionCanceller;
@@ -24,6 +22,7 @@ import com.dji.sdk.sample.common.mission.src.MissionInitializer;
 import com.dji.sdk.sample.common.mission.src.MissionPeriodicImageTransferInitiator;
 import com.dji.sdk.sample.common.mission.src.NextWaypointMissionStarter;
 import com.dji.sdk.sample.common.mission.src.SwitchBackPathGenerator;
+import com.dji.sdk.sample.common.mission.src.WaypointImageShooter;
 import com.dji.sdk.sample.common.mission.src.WaypointMissionCompletionCallback;
 import com.dji.sdk.sample.common.mission.src.WaypointMissionProgressStatusCallback;
 import com.dji.sdk.sample.common.mission.src.WaypointReachedNotifier;
@@ -46,7 +45,7 @@ public class MissionContainer
     private WaypointMissionCompletionCallback waypointMissionCompletionCallback_;
 
     private BatteryTemperatureWarningNotifier batteryTemperatureWarningNotifier_;
-    private InvestigativeCameraSystemState cameraSystemState_;
+    private CameraState cameraSystemState_;
 //    private InvestigativeWaypointReachedHandler investigatingImageTransfer_;
 
     private I_MissionPeriodicImageTransferInitiator periodicImageTransferInitiator_;
@@ -54,6 +53,7 @@ public class MissionContainer
     private CameraInitializer cameraInitializer_;
     private FlightControllerInitializer flightControllerInitializer_;
 
+    private WaypointImageShooter waypointImageShooter_;
     private WaypointReachedNotifier waypointReachedNotifier_;
     private DroneLocationUpdater droneLocationUpdater_;
     private WaypointMissionProgressStatusCallback missionProgressStatusCallback_;
@@ -90,7 +90,7 @@ public class MissionContainer
         batteryTemperatureWarningNotifier_ = new BatteryTemperatureWarningNotifier(
                 missionErrorNotifier);
 
-        cameraSystemState_ = new InvestigativeCameraSystemState();
+        cameraSystemState_ = new CameraState();
 //        investigatingImageTransfer_ = new InvestigativeWaypointReachedHandler(
 //                integrationLayerContainer.missionManagerSource(),
 //                integrationLayerContainer.cameraSource(),
@@ -118,6 +118,10 @@ public class MissionContainer
         flightControllerInitializer_ = new FlightControllerInitializer(
                 integrationLayerContainer.flightControllerSource());
 
+        waypointImageShooter_ = new WaypointImageShooter(
+                missionErrorNotifier,
+                integrationLayerContainer.cameraSource(),
+                cameraSystemState_);
         waypointReachedNotifier_ = new WaypointReachedNotifier(context);
         droneLocationUpdater_ = new DroneLocationUpdater(
                 droneLocation_,
@@ -126,7 +130,7 @@ public class MissionContainer
                 missionErrorNotifier,
                 waypointReachedNotifier_ /*investigatingImageTransfer_*/,
                 droneLocationUpdater_,
-                integrationLayerContainer.cameraSource());
+                waypointImageShooter_);
 
         switchBackPathGenerator_ = new SwitchBackPathGenerator(
                 initialMissionModel_);
