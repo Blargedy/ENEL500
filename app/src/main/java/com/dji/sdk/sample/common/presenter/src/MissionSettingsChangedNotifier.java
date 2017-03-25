@@ -16,8 +16,6 @@ import dji.common.camera.DJICameraSettingsDef;
 
 public class MissionSettingsChangedNotifier
 {
-    private static final String TAG = "HydraMissionSettingsChangedNotifier";
-
     private Context context_;
 
     public MissionSettingsChangedNotifier(

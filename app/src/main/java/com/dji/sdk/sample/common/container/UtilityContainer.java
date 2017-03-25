@@ -7,7 +7,6 @@ import com.dji.sdk.sample.common.utility.GoogleMapsConnectionHandler;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
 import com.dji.sdk.sample.common.utility.MissionErrorNotifier;
-import com.dji.sdk.sample.common.utility.UserPermissionRequester;
 
 /**
  * Created by Julia on 2017-03-22.
@@ -15,7 +14,6 @@ import com.dji.sdk.sample.common.utility.UserPermissionRequester;
 
 public class UtilityContainer
 {
-    private UserPermissionRequester permissionRequester_;
     private ApplicationContextManager contextManager_;
     private GoogleMapsConnectionHandler googleMapsConnectionHandler_;
     private MissionErrorNotifier missionErrorNotifier_;
@@ -23,8 +21,6 @@ public class UtilityContainer
     public UtilityContainer(
             FragmentActivity activity)
     {
-        permissionRequester_ = new UserPermissionRequester();
-        permissionRequester_.requestPermissions(activity);
         contextManager_ = new ApplicationContextManager(activity);
         googleMapsConnectionHandler_ = new GoogleMapsConnectionHandler(activity);
         missionErrorNotifier_ = new MissionErrorNotifier(activity);

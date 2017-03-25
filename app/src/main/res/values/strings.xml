@@ -3,7 +3,7 @@
 
     <!-- Main activity UI string -->
     <string name="connection_loose">Status: No Product Connected</string>
-    <string name="sdk_registration_message">SDK Registration Failed. Please check the bundle ID and your network connectivity</string>
+    <string name="sdk_registration_message">SDK Registration Failed. Please check your network connectivity</string>
     <string name="dji_check_fc_gyroscope_reason">NULL</string>
     <string name="dji_check_fc_gyroscope_solution">NULL</string>
     <string name="activity_component_list">Component List</string>

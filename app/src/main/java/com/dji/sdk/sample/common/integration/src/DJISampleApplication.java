@@ -52,16 +52,7 @@ public class DJISampleApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        //Intent intent = new Intent(this,SlashScreenActivity.class);
-       //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-       // startActivity(intent);
-        //this.finish();// here i finish my current activity
-
         mHandler = new Handler(Looper.getMainLooper());
-
-
         DJISDKManager.getInstance().initSDKManager(this, mDJISDKManagerCallback);
     }
 
@@ -89,8 +80,6 @@ public class DJISampleApplication extends Application {
 
         @Override
         public void onProductChanged(DJIBaseProduct oldProduct, DJIBaseProduct newProduct) {
-
-            Log.d("Alex", String.format("onProductChanged oldProduct:%s, newProduct:%s", oldProduct, newProduct));
             mProduct = newProduct;
             if(mProduct != null) {
                 mProduct.setDJIBaseProductListener(mDJIBaseProductListener);

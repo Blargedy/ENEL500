@@ -1,48 +1,30 @@
 package com.dji.sdk.sample.common.activity;
 
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Message;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatCallback;
-import android.util.Log;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
-import com.dji.sdk.sample.R;
-import com.dji.sdk.sample.common.container.ImageTransferContainer;
-import com.dji.sdk.sample.common.container.IntegrationLayerContainer;
 import com.dji.sdk.sample.common.presenter.src.MainMenuPresenter;
-import com.dji.sdk.sample.common.utility.ApplicationContextManager;
+import com.dji.sdk.sample.common.utility.UserPermissionRequester;
 import com.dji.sdk.sample.common.view.src.MainMenuView;
 
 import java.io.File;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 
-import static java.lang.Thread.currentThread;
-
-public class MainMenuActivity extends AppCompatActivity {
+public class MainMenuActivity extends AppCompatActivity
+{
+    private UserPermissionRequester permissionRequester_;
     private MainMenuView mainMenuView_;
     private MainMenuPresenter mainMenuPresenter_;
     volatile float fadeBuffer = 0;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         sendLogsToFile();
+
+        permissionRequester_ = new UserPermissionRequester();
+        permissionRequester_.requestPermissions(this);
 
         mainMenuView_ = new MainMenuView(this);
 
@@ -76,12 +58,10 @@ public class MainMenuActivity extends AppCompatActivity {
         mainMenuView_.reconstructLaterButton().setAlpha(1.0f);
         mainMenuView_.reconstructLiveButton().setAlpha(1.0f);
         handler.post(fadein);
-
-
     }
 
-
-    private void sendLogsToFile() {
+    private void sendLogsToFile()
+    {
         try {
             String path = "/storage/emulated/0/Logging.txt";
             File file = new File(path);
@@ -92,5 +72,4 @@ public class MainMenuActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 }
