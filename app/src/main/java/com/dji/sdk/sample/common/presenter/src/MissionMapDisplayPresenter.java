@@ -24,6 +24,7 @@ public class MissionMapDisplayPresenter {
     private GeneratedMissionModel generatedMissionModel_;
     private BroadcastReceiver receiver_;
     private MapPresenter mapPresenter_;
+    private MissionStateEnum stateBeforeChange;
 
     public MissionMapDisplayPresenter(
             Context context,
@@ -35,7 +36,7 @@ public class MissionMapDisplayPresenter {
         initialMissionModel_ = initialMissionModel;
         generatedMissionModel_ = generatedMissionModel;
         mapPresenter_ = mapPresenter;
-
+        stateBeforeChange = missionState.getCurrentMissionState();
         registerMissionStateChangedReceiver(context);
     }
 
@@ -54,6 +55,7 @@ public class MissionMapDisplayPresenter {
     }
 
     private void missionStateChanged() {
+
         MissionStateEnum currentMissionState = missionState_.getCurrentMissionState();
 
         switch (currentMissionState) {
@@ -61,8 +63,10 @@ public class MissionMapDisplayPresenter {
                 break;
             case SELECT_AREA:
                 mapPresenter_.pbarsShow();
-                mapPresenter_.clearMap();
-                generatedMissionModel_.clearWaypointMissions();
+                if (stateBeforeChange == MissionStateEnum.VIEW_MISSION){
+                    mapPresenter_.clearMap();
+                    generatedMissionModel_.clearWaypointMissions();
+                }
                 break;
             case GENERATE_MISSION_BOUNDARY:
                 MissionBoundary boundary = mapPresenter_.getSurveyAreaBoundary();
@@ -78,5 +82,6 @@ public class MissionMapDisplayPresenter {
             default:
                 break;
         }
+        this.stateBeforeChange = currentMissionState;
     }
 }

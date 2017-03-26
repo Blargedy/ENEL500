@@ -361,8 +361,14 @@ public class MapPresenter implements
         if (waypointCircleList != null) waypointCircleList.clear();
         // if (wayPointPolyLineList != null) wayPointPolyLineList.clear();
         mMap.clear();
-        drawUserUpdate(lastKnownUserLocation);
-        drawDroneUpdate();
+        if (lastKnownUserLocation == null) {
+            drawUserUpdate(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude));
+            drawDroneUpdate();
+        } else {
+            drawUserUpdate(lastKnownUserLocation);
+        }
+
+
         mMap.setOnMapLoadedCallback(null); // don't need anymore since loaded
         disableMapGestures();
         drawAreaSelector(true);
@@ -400,7 +406,7 @@ public class MapPresenter implements
 
                     CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude + 0.001), 18.0f);
                     mMap.animateCamera(cu, 3000, MapPresenter.this);
-                    btnFindMeNow.setVisibility(View.VISIBLE);
+
                 }
             }
         }
@@ -485,9 +491,19 @@ public class MapPresenter implements
         if (timeSinceLastDronePositionUpdate > 50000000l) { // 8 seconds between updates to reduce lag
             droneGPSStartTime = System.nanoTime(); // reset time
             droneMarkerIcon = getMarkerIconFromDrawable(droneDrawable, 50 + (int) (70.0f * 1.85f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f)), 50 + (int) (70.0f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f))); // aspect ratio = l/w = 1.85
-
-            if (droneLocation_.droneLocation() == null && lastKnownUserLocation != null) { // place drone marker next to user
+            if (droneLocation_.droneLocation() == null && lastKnownUserLocation == null) {
+                //LatLng calgaryLatLng = new LatLng(51.0486, -114.0708);
+                //LatLng calgaryUniLatLng = new LatLng(51.079948, -114.125534);
                 droneMarkerIcon = getMarkerIconFromDrawable(droneDrawable, 50 + (int) (70.0f * 1.85f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f)), 50 + (int) (70.0f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f))); // aspect ratio = l/w = 1.85
+                Marker tempdroneMarker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(userMarker.getPosition().latitude - 0.0006, userMarker.getPosition().longitude + 0.001))
+                        .zIndex(10000.0f)
+                        .icon(droneMarkerIcon));
+                if (droneMarker != null) droneMarker.remove(); // no flicker
+                droneMarker = tempdroneMarker;
+                return;
+
+            } else if (droneLocation_.droneLocation() == null && lastKnownUserLocation != null) { // place drone marker next to user
                 Marker tempdroneMarker = mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(lastKnownUserLocation.getLatitude() - 0.0006, lastKnownUserLocation.getLongitude() + 0.001))
                         .zIndex(10000.0f)
@@ -495,15 +511,16 @@ public class MapPresenter implements
                 if (droneMarker != null) droneMarker.remove(); // no flicker
                 droneMarker = tempdroneMarker;
                 return;
+            } else {
+                Marker tempdroneMarker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(droneLocation_.droneLocation().latitude_, droneLocation_.droneLocation().longitude_))
+                        .zIndex(10000.0f)
+                        .icon(droneMarkerIcon));
+                if (droneMarker != null) droneMarker.remove(); // no flicker
+                droneMarker = tempdroneMarker;
             }
-            Marker tempdroneMarker = mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(droneLocation_.droneLocation().latitude_, droneLocation_.droneLocation().longitude_))
-                    .zIndex(10000.0f)
-                    .icon(droneMarkerIcon));
-            if (droneMarker != null) droneMarker.remove(); // no flicker
-            droneMarker = tempdroneMarker;
-        }
 
+        }
     }
 
     private void initCachedMapChecker() {
@@ -666,7 +683,9 @@ public class MapPresenter implements
     public void onFinish() {
         enableMapGestures();
         introZoomFinished = true;
+
         if (missionState.getCurrentMissionState() == MissionStateEnum.INITIALIZING_MAP) {
+            btnFindMeNow.setVisibility(View.VISIBLE);
             missionState.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
             this.surveyAreaHeightBar.setEnabled(true);
             this.surveyAreaWidthBar.setEnabled(true);
@@ -678,6 +697,7 @@ public class MapPresenter implements
         enableMapGestures();
         introZoomFinished = true;
         if (missionState.getCurrentMissionState() == MissionStateEnum.INITIALIZING_MAP) {
+            btnFindMeNow.setVisibility(View.VISIBLE);
             missionState.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
             this.surveyAreaHeightBar.setEnabled(true);
             this.surveyAreaWidthBar.setEnabled(true);
@@ -825,23 +845,26 @@ public class MapPresenter implements
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng pointOfLongClick) {
+
                 if (missionState.getCurrentMissionState() == MissionStateEnum.INITIALIZING_MAP) {
+                    startMission.setText("Demo Mode Activated. Return to the Main Menu to reset.");
                     // Called when a new location is found by the network location provider.
                     userGPSStartTime = System.nanoTime(); // reset time
-                    LatLng calgaryLatLng = new LatLng(51.0486, -114.0708);
-                    drawUserUpdate(calgaryLatLng);
+                    // LatLng calgaryLatLng = new LatLng(51.0486, -114.0708);
+                    LatLng calgaryUniLatLng = new LatLng(51.079948, -114.125534);
+                    drawUserUpdate(calgaryUniLatLng);
                     //Log.d("MapPresenter", "Camera Zoom: " + mMap.getCameraPosition().zoom);
                     if (!haveAnimatedCameraToUserMarker) {
                         haveAnimatedCameraToUserMarker = true;
                         drawDroneUpdate();
                         // writeToast("GPS Signal Acquired.");
                         disableMapGestures();
-                        areaSelectingMaskMidpoint = new LatLng(calgaryLatLng.latitude, calgaryLatLng.longitude + 0.0009);
+                        areaSelectingMaskMidpoint = new LatLng(calgaryUniLatLng.latitude, calgaryUniLatLng.longitude + 0.0009);
                         drawAreaSelector(true);
 
-                        CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(calgaryLatLng.latitude, calgaryLatLng.longitude + 0.001), 18.0f);
+                        CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(calgaryUniLatLng.latitude, calgaryUniLatLng.longitude + 0.001), 18.0f);
                         mMap.animateCamera(cu, 3000, MapPresenter.this);
-                        btnFindMeNow.setVisibility(View.VISIBLE);
+
                     }
 
 
