@@ -171,7 +171,7 @@ public class MissionControlsPresenter implements
                 break;
             case VIEW_MISSION:
                 startMissionButton_.setEnabled(false);
-                startMissionButton_.setText("Please wait.");
+                startMissionButton_.setText("Generating waypoints");
                 acceptAreaButton_.setEnabled(false);
                 cancelButton_.setEnabled(true);
                 acceptAreaButton_.setVisibility(View.GONE);
@@ -187,7 +187,7 @@ public class MissionControlsPresenter implements
                     }
                 };
 
-                handler.postDelayed(enableAfterWaypointsShowing,4000);
+                handler.postDelayed(enableAfterWaypointsShowing,3500);
 
                 break;
             case INITIALIZE_MISSION:
@@ -213,6 +213,9 @@ public class MissionControlsPresenter implements
                 cancelButton_.setEnabled(true);
                 break;
             case GO_HOME:
+                hoverNowToggleButton_.setOnCheckedChangeListener(null);
+                hoverNowToggleButton_.setChecked(false);
+                hoverNowToggleButton_.setOnCheckedChangeListener(this);
                 hoverNowToggleButton_.setEnabled(true);
                 cancelButton_.setEnabled(false);
                 break;

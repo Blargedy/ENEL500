@@ -35,13 +35,13 @@ public class ApplicationSettingsManager
     public float getMinimumPercentImageOverlapFromSettings()
     {
         return PreferenceManager.getDefaultSharedPreferences(context_)
-                .getFloat(ApplicationSettingsKeys.MINIMUM_PERCENT_IMAGE_OVERLAP, 0.8f);
+                .getFloat(ApplicationSettingsKeys.MINIMUM_PERCENT_IMAGE_OVERLAP, 0.88f);
     }
 
     public float getMinimumPercentSwathOverlapFromSettings()
     {
         return PreferenceManager.getDefaultSharedPreferences(context_)
-                .getFloat(ApplicationSettingsKeys.MINIMUM_PERCENT_SWATH_OVERLAP, 0.5f);
+                .getFloat(ApplicationSettingsKeys.MINIMUM_PERCENT_SWATH_OVERLAP, 0.6f);
     }
 
     public boolean getIsCameraInAutomaticModeFromSettings()

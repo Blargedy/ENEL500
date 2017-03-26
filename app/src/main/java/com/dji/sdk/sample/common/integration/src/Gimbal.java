@@ -27,14 +27,12 @@ public class Gimbal implements I_Gimbal
     {
         DJIGimbalAngleRotation pitchRotation = new DJIGimbalAngleRotation(
                 true, -90.0f, DJIGimbalRotateDirection.Clockwise);
-        DJIGimbalAngleRotation yawAndRollRotation = new DJIGimbalAngleRotation(
-                false, 0.0f, DJIGimbalRotateDirection.Clockwise);
 
         gimbal_.rotateGimbalByAngle(
                 DJIGimbalRotateAngleMode.AbsoluteAngle,
                 pitchRotation,
-                yawAndRollRotation,
-                yawAndRollRotation,
+                null,
+                null,
                 callback);
     }
 }

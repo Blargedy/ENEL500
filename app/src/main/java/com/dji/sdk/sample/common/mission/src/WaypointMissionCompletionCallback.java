@@ -9,7 +9,6 @@ import com.dji.sdk.sample.common.mission.api.I_WaypointReachedNotifier;
 import com.dji.sdk.sample.common.utility.I_MissionStatusNotifier;
 
 import dji.common.error.DJIError;
-import dji.sdk.missionmanager.DJIWaypointMission;
 
 /**
  * Created by Julia on 2017-03-10.
@@ -24,8 +23,6 @@ public class WaypointMissionCompletionCallback implements I_CompletionCallback
     private I_NextWaypointMissionStarter nextWaypointMissionStarter_;
     private I_WaypointMissionProgressStatusCallback missionProgressStatusCallback_;
 
-    private DJIWaypointMission.DJIWaypointMissionStatus missionCompletionStatusUpdate_;
-
     public WaypointMissionCompletionCallback(
             I_MissionStatusNotifier missionStatusNotifier,
             I_WaypointReachedNotifier waypointReachedNotifier,
@@ -36,8 +33,6 @@ public class WaypointMissionCompletionCallback implements I_CompletionCallback
         waypointReachedNotifier_ = waypointReachedNotifier;
         nextWaypointMissionStarter_ = nextWaypointMissionStarter;
         missionProgressStatusCallback_ = missionProgressStatusCallback;
-        missionCompletionStatusUpdate_ = new DJIWaypointMission.DJIWaypointMissionStatus(
-                0, true, DJIWaypointMission.DJIWaypointMissionExecutionState.BeginAction, null);
     }
 
     @Override
@@ -45,7 +40,7 @@ public class WaypointMissionCompletionCallback implements I_CompletionCallback
     {
         if (error == null)
         {
-            missionProgressStatusCallback_.missionProgressStatus(missionCompletionStatusUpdate_);
+            missionProgressStatusCallback_.waypointReached();
             nextWaypointMissionStarter_.startNextWaypointMission(null);
         }
         else

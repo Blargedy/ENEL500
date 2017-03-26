@@ -50,13 +50,19 @@ public class WaypointMissionProgressStatusCallback implements
 
             if (isDroneAtNewWaypoint(waypointMissionStatus))
             {
-                waypointReachedNotifier_.notifyWaypointAtIndexHasBeenReached(waypointIndex_);
-                imageShooter_.shootPhotoOnWaypoint(waypointIndex_);
-
-                waypointIndex_++;
-                missionStatusNotifier_.notifyStatusChanged("At waypoint " + waypointIndex_);
+                waypointReached();
             }
         }
+    }
+
+    @Override
+    public void waypointReached()
+    {
+        waypointReachedNotifier_.notifyWaypointAtIndexHasBeenReached(waypointIndex_);
+        imageShooter_.shootPhotoOnWaypoint(waypointIndex_);
+
+        waypointIndex_++;
+        missionStatusNotifier_.notifyStatusChanged("At waypoint " + waypointIndex_);
     }
 
     @Override

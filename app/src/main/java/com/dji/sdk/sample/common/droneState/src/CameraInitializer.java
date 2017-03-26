@@ -10,6 +10,7 @@ import com.dji.sdk.sample.common.integration.api.I_Camera;
 import com.dji.sdk.sample.common.integration.api.I_CameraSource;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_CameraGeneratedNewMediaFileCallback;
+import com.dji.sdk.sample.common.utility.I_MissionStatusNotifier;
 
 import dji.common.camera.DJICameraSettingsDef;
 import dji.common.error.DJIError;
@@ -81,15 +82,22 @@ public class CameraInitializer implements
                     break;
 
                 case SET_FILE_FORMAT:
-                    expectedCallback_ = ExpectedCallback.SET_EXPOSURE_MODE;
+                    expectedCallback_ = ExpectedCallback.POINT_GIMBAL_DOWN;
+                    gimbalSource_.getGimbal().pointGimbalDown(this);
+                    break;
+
+                case POINT_GIMBAL_DOWN:
                     if (!cameraSettings_.isInAutomaticMode())
                     {
+                        expectedCallback_ = ExpectedCallback.SET_EXPOSURE_MODE;
                         cameraSource_.getCamera().setExposureMode(
                                 DJICameraSettingsDef.CameraExposureMode.Manual, this);
                     }
                     else
                     {
-                        callback(null);
+                        expectedCallback_ = ExpectedCallback.SET_SHUTTER_SPEED;
+                        cameraSource_.getCamera().setExposureMode(
+                                DJICameraSettingsDef.CameraExposureMode.Program, this);
                     }
                     break;
 
@@ -104,13 +112,7 @@ public class CameraInitializer implements
                     break;
 
                 case SET_SHUTTER_SPEED:
-//                    expectedCallback_ = ExpectedCallback.POINT_GIMBAL_DOWN;
-//                    gimbalSource_.getGimbal().pointGimbalDown(this);
                     callback(null);
-                    break;
-
-                case POINT_GIMBAL_DOWN:
-//                    callback(null);
                     break;
                 
                 default:
