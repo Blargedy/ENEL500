@@ -69,7 +69,6 @@ public class MissionMapDisplayPresenter {
                 missionState_.setCurrentMissionState(MissionStateEnum.GENERATE_MISSION);
                 break;
             case VIEW_MISSION:
-                mapPresenter_.setallowRealTimeDroneGPS(true);
                 mapPresenter_.displayMissionWaypoints(generatedMissionModel_.waypoints());
                 break;
             default:

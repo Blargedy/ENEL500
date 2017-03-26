@@ -38,6 +38,7 @@
         android:id="@+id/txt_surveyAreaHeight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
         android:text="Survey Area Height"
         android:textStyle="normal|bold" />
 
@@ -46,13 +47,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.05"
-        android:max="100"
-        android:progress="50" />
+        android:max="150"
+        android:progress="75" />
 
     <TextView
         android:id="@+id/txt_surveyAreaWidth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
         android:text="Survey Area Width"
         android:textStyle="normal|bold" />
 
@@ -61,8 +63,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.05"
-        android:max="200"
-        android:progress="100" />
+        android:max="150"
+        android:progress="75" />
 
     <Space
         android:layout_width="match_parent"
@@ -80,7 +82,7 @@
             android:layout_width="150dp"
             android:layout_height="55dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="3dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="3dp"
             android:layout_weight="1"
             android:background="@drawable/round_btn"
@@ -129,7 +131,7 @@
             android:layout_height="55dp"
             android:layout_gravity="center"
             android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="@drawable/round_btn"
             android:enabled="true"

@@ -1,5 +1,6 @@
 package com.dji.sdk.sample.common.activity;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -41,6 +42,12 @@ public class SettingsMenuActivity extends AppCompatActivity implements View.OnCl
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_dialog_screen);
+        if(getResources().getBoolean(R.bool.portrait_only)){
+
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }else{
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        }
 
         missionSettingsChangedNotifier_ = new MissionSettingsChangedNotifier(this);
         settingsManager_ = new ApplicationSettingsManager(this);

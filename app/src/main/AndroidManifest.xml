@@ -80,23 +80,7 @@
             android:name=".common.activity.FlightControlActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
-
-
-
-        </activity>
-        <activity
-            android:name=".common.activity.MainMenuActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait">
-
-        </activity>
-
-
-        <activity
-            android:name=".common.activity.SlashScreenActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait">
+            android:screenOrientation="sensor">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -104,11 +88,27 @@
             </intent-filter>
 
         </activity>
+        <activity
+            android:name=".common.activity.MainMenuActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="sensor">
+
+        </activity>
+
+
+        <activity
+            android:name=".common.activity.SlashScreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="sensor">
+
+
+
+        </activity>
 
         <activity
             android:name=".common.activity.SettingsMenuActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait">
+            android:screenOrientation="sensor">
 
         </activity>
 

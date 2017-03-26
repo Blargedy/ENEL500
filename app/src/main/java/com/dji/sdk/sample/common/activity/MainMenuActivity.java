@@ -1,9 +1,11 @@
 package com.dji.sdk.sample.common.activity;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.dji.sdk.sample.R;
 import com.dji.sdk.sample.common.presenter.src.MainMenuPresenter;
 import com.dji.sdk.sample.common.utility.UserPermissionRequester;
 import com.dji.sdk.sample.common.view.src.MainMenuView;
@@ -22,6 +24,12 @@ public class MainMenuActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         sendLogsToFile();
+
+        if(getResources().getBoolean(R.bool.portrait_only)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }else{
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        }
 
         permissionRequester_ = new UserPermissionRequester();
         permissionRequester_.requestPermissions(this);

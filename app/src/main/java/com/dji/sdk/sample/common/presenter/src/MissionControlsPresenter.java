@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Button;
@@ -77,6 +78,7 @@ public class MissionControlsPresenter implements
     @Override
     public void onClick(View v) {
         if (v.getId() == acceptAreaButton_.getId()) {
+
             missionState_.setCurrentMissionState(MissionStateEnum.GENERATE_MISSION_BOUNDARY);
         } else if (v.getId() == startMissionButton_.getId()) {
             if (DJISampleApplication.isAircraftConnected())
@@ -168,11 +170,25 @@ public class MissionControlsPresenter implements
                 acceptAreaButton_.setEnabled(false);
                 break;
             case VIEW_MISSION:
-                startMissionButton_.setVisibility(View.VISIBLE);
-                startMissionButton_.setEnabled(true);
+                startMissionButton_.setEnabled(false);
+                startMissionButton_.setText("Loading waypoints...");
+                acceptAreaButton_.setEnabled(false);
                 cancelButton_.setEnabled(true);
                 acceptAreaButton_.setVisibility(View.GONE);
                 hoverNowToggleButton_.setVisibility(View.GONE);
+                startMissionButton_.setVisibility(View.VISIBLE);
+
+                final Handler handler = new Handler();
+
+                final Runnable enableAfterWaypointsShowing = new Runnable() {
+                    public void run() {
+                        startMissionButton_.setText("Start Mission");
+                        startMissionButton_.setEnabled(true);
+                    }
+                };
+
+                handler.postDelayed(enableAfterWaypointsShowing,4000);
+
                 break;
             case INITIALIZE_MISSION:
                 startMissionButton_.setEnabled(false);
