@@ -82,7 +82,6 @@ public class FlightControlView
         txtPercentCompleteMap_ = (TextView)findViewById(R.id.txtPercentCompleteMap);
 
         btnFindMeNow_ = (Button)findViewById(R.id.btnFindMeNow);
-
     }
 
     @Override
