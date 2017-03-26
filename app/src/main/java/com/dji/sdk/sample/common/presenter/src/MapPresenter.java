@@ -1008,15 +1008,16 @@ public class MapPresenter implements
 
     @Override
     public void onCameraMoveStarted(int reason) {
+        if (missionState.getCurrentMissionState() == MissionStateEnum.SELECT_AREA) {
+            if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
+                if (polySurveyAreaPicked) {
+                    draggingpoly = true;
+                    LatLng LatLngOfCenterScreen = mMap.getCameraPosition().target;
+                    drawAreaSelector(false, LatLngOfCenterScreen);
+                }
 
-        if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
-            if (polySurveyAreaPicked) {
-                draggingpoly = true;
-                LatLng LatLngOfCenterScreen = mMap.getCameraPosition().target;
-                drawAreaSelector(false, LatLngOfCenterScreen);
+
             }
-
-
         }
     }
 
