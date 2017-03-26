@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.mission.src;
 
+import android.util.Log;
+
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.mission.api.I_MissionGenerator;
@@ -47,7 +49,7 @@ public class MissionGenerator implements I_MissionGenerator
                 }
                 mission = new DJIWaypointMission();
                 mission.needRotateGimbalPitch = true;
-                mission.autoFlightSpeed = 2.5f;
+                mission.autoFlightSpeed = initialMissionModel_.missionSpeed();
             }
 
             DJIWaypoint waypoint = new DJIWaypoint(
@@ -55,6 +57,8 @@ public class MissionGenerator implements I_MissionGenerator
                     waypoints.get(i).longitude_,
                     initialMissionModel_.altitude());
             waypoint.gimbalPitch = -90f;
+            waypoint.speed = initialMissionModel_.missionSpeed();
+
             mission.addWaypoint(waypoint);
         }
         generatedMissionModel_.addWaypointMission(mission);

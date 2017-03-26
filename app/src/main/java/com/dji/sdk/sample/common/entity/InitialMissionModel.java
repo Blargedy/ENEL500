@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.dji.sdk.sample.common.utility.ApplicationSettingsManager;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
@@ -18,6 +19,7 @@ public class InitialMissionModel
 {
     private MissionBoundary missionBoundary_;
     private float altitude_;
+    private float missionSpeed_;
     private double minimumPercentImageOverlap_;
     private double minimumPercentSwathOverlap_;
 
@@ -63,6 +65,11 @@ public class InitialMissionModel
         return altitude_;
     }
 
+    public float missionSpeed()
+    {
+        return missionSpeed_;
+    }
+
     public double minimumPercentImageOverlap()
     {
         return minimumPercentImageOverlap_;
@@ -76,6 +83,7 @@ public class InitialMissionModel
     private void retrieveSettingsFromSettingsManager()
     {
         altitude_ = applicationSettingsManager_.getAltitudeFromSettings();
+        missionSpeed_ = applicationSettingsManager_.getMissionSpeedFromSettings();
         minimumPercentImageOverlap_ = applicationSettingsManager_.getMinimumPercentImageOverlapFromSettings();
         minimumPercentSwathOverlap_ = applicationSettingsManager_.getMinimumPercentSwathOverlapFromSettings();
     }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 
@@ -21,12 +22,14 @@ import dji.common.camera.DJICameraSettingsDef;
  * Created by Peter on 2017-03-23.
  */
 
-public class SettingsMenuActivity extends AppCompatActivity implements View.OnClickListener
+public class SettingsMenuActivity extends AppCompatActivity
+        implements View.OnClickListener, CompoundButton.OnCheckedChangeListener
 {
     private MissionSettingsChangedNotifier missionSettingsChangedNotifier_;
     private ApplicationSettingsManager settingsManager_;
 
     private NumberPicker numPickerAltitude_;
+    private NumberPicker numPickerFlightSpeed_;
     private NumberPicker numPickerImageOverlap_;
     private NumberPicker numPickerSwathOverlap_;
     private Spinner spinnerCameraISO_;
@@ -61,6 +64,7 @@ public class SettingsMenuActivity extends AppCompatActivity implements View.OnCl
     private void initializeViewElements()
     {
         numPickerAltitude_ = (NumberPicker) findViewById(R.id.numPickerAltitude);
+        numPickerFlightSpeed_ = (NumberPicker) findViewById(R.id.numPickerMissionSpeed);
         numPickerImageOverlap_ = (NumberPicker) findViewById(R.id.imageOverlap);
         numPickerSwathOverlap_ = (NumberPicker) findViewById(R.id.swathOverlap);
         spinnerCameraISO_ = (Spinner) findViewById(R.id.spinnerCameraISO);
@@ -74,11 +78,16 @@ public class SettingsMenuActivity extends AppCompatActivity implements View.OnCl
         numPickerAltitude_.setMinValue(10);
         numPickerAltitude_.setMaxValue(90);
 
+        numPickerFlightSpeed_.setMinValue(1);
+        numPickerFlightSpeed_.setMaxValue(10);
+
         numPickerImageOverlap_.setMinValue(30);
         numPickerImageOverlap_.setMaxValue(90);
 
         numPickerSwathOverlap_.setMinValue(30);
         numPickerSwathOverlap_.setMaxValue(90);
+
+        chkCameraAuto_.setOnCheckedChangeListener(this);
     }
 
     private void populateIsoComboBox()
@@ -112,6 +121,7 @@ public class SettingsMenuActivity extends AppCompatActivity implements View.OnCl
     private void restoreSettingsFromLastSession()
     {
         numPickerAltitude_.setValue((int) settingsManager_.getAltitudeFromSettings());
+        numPickerFlightSpeed_.setValue((int) settingsManager_.getMissionSpeedFromSettings());
         numPickerImageOverlap_.setValue(
                 (int)(settingsManager_.getMinimumPercentImageOverlapFromSettings() * 100));
         numPickerSwathOverlap_.setValue(
@@ -131,6 +141,7 @@ public class SettingsMenuActivity extends AppCompatActivity implements View.OnCl
     private void persistSettingsForNextSession()
     {
         settingsManager_.saveAltitudeToSettings(numPickerAltitude_.getValue());
+        settingsManager_.saveMissionSpeedToSettings(numPickerFlightSpeed_.getValue());
         settingsManager_.saveMinimumPercentImageOverlapToSettings(
                 numPickerImageOverlap_.getValue() / 100.0f);
         settingsManager_.saveMinimumPercentSwathOverlapToSettings(
@@ -140,7 +151,7 @@ public class SettingsMenuActivity extends AppCompatActivity implements View.OnCl
 
         DJICameraSettingsDef.CameraISO cameraISO = DJICameraSettingsDef.CameraISO.valueOf(
                 spinnerCameraISO_.getSelectedItem().toString());
-        settingsManager_.saveCamerIsoToSettings(cameraISO);
+        settingsManager_.saveCameraIsoToSettings(cameraISO);
 
         DJICameraSettingsDef.CameraShutterSpeed shutterSpeed = DJICameraSettingsDef.CameraShutterSpeed
                 .valueOf(spinnerCameraShutter_.getSelectedItem().toString());
@@ -156,4 +167,18 @@ public class SettingsMenuActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+    {
+        if (buttonView.getId() == chkCameraAuto_.getId())
+        {
+            changeCameraSettingsEnabledProperty(!isChecked);
+        }
+    }
+
+    private void changeCameraSettingsEnabledProperty(boolean arePropertiesEnabled)
+    {
+        spinnerCameraISO_.setEnabled(arePropertiesEnabled);
+        spinnerCameraShutter_.setEnabled(arePropertiesEnabled);
+    }
 }
