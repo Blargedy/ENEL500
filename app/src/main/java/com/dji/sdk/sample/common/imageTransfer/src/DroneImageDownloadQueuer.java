@@ -37,4 +37,10 @@ public class DroneImageDownloadQueuer implements
     {
         return imagesToDownload_;
     }
+
+    @Override
+    public int imageCount()
+    {
+        return imagesToDownload_.size();
+    }
 }

@@ -2,7 +2,7 @@ package com.dji.sdk.sample.common.mission.src;
 
 import android.util.Log;
 
-import com.dji.sdk.sample.common.droneState.src.CameraState;
+import com.dji.sdk.sample.common.integration.src.CameraState;
 import com.dji.sdk.sample.common.integration.api.I_CameraSource;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_WaypointImageShooter;

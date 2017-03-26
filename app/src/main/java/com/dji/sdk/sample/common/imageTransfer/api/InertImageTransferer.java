@@ -11,6 +11,9 @@ public class InertImageTransferer implements I_ImageTransferer
     @Override
     public void transferNewImagesFromDrone(I_CompletionCallback callback)
     {
-        callback.onResult(null);
+        if (callback != null)
+        {
+            callback.onResult(null);
+        }
     }
 }

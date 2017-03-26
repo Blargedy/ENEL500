@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.mission.api;
+package com.dji.sdk.sample.common.imageTransfer.api;
 
 import com.dji.sdk.sample.common.integration.api.I_CameraGeneratedNewMediaFileCallback;
 
@@ -12,11 +12,6 @@ public class InertCameraGeneratedNewMediaFileCallback implements I_CameraGenerat
 {
     @Override
     public void onResult(DJIMedia media)
-    {
-    }
-
-    @Override
-    public void resetImageCount()
     {
     }
 }

@@ -6,7 +6,7 @@ import com.dji.sdk.sample.common.droneState.api.I_CameraInitializer;
 import com.dji.sdk.sample.common.droneState.api.I_FlightControllerInitializer;
 import com.dji.sdk.sample.common.droneState.src.BatteryTemperatureWarningNotifier;
 import com.dji.sdk.sample.common.droneState.src.CameraInitializer;
-import com.dji.sdk.sample.common.droneState.src.CameraState;
+import com.dji.sdk.sample.common.integration.src.CameraState;
 import com.dji.sdk.sample.common.droneState.src.FlightControllerInitializer;
 import com.dji.sdk.sample.common.droneState.src.FlightControllerUpdateSystemStateCallback;
 import com.dji.sdk.sample.common.droneState.src.ProductConnectionChangedDetector;
@@ -24,7 +24,6 @@ public class DroneStateContainer
 {
     private BatteryTemperatureWarningNotifier batteryTemperatureWarningNotifier_;
 
-    private CameraState cameraState_;
     private CameraInitializer cameraInitializer_;
 
     private FlightControllerUpdateSystemStateCallback flightControllerUpdateSystemStateCallback_;
@@ -42,12 +41,11 @@ public class DroneStateContainer
         batteryTemperatureWarningNotifier_ = new BatteryTemperatureWarningNotifier(
                 missionStatusNotifier);
 
-        cameraState_ = new CameraState();
         cameraInitializer_ = new CameraInitializer(
                 integrationLayerContainer.cameraSource(),
                 integrationLayerContainer.gimbalSource(),
                 cameraGeneratedNewMediaFileCallback,
-                cameraState_,
+                integrationLayerContainer.cameraState(),
                 cameraSettings);
 
         flightControllerUpdateSystemStateCallback_ = new FlightControllerUpdateSystemStateCallback(
@@ -60,11 +58,6 @@ public class DroneStateContainer
                 context,
                 missionStatusNotifier,
                 flightControllerInitializer_);
-    }
-
-    public CameraState cameraState()
-    {
-        return cameraState_;
     }
 
     public I_BatteryStateUpdateCallback batteryStateUpdateCallback()

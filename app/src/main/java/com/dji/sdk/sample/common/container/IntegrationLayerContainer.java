@@ -6,6 +6,7 @@ import com.dji.sdk.sample.common.integration.api.I_Gimbal;
 import com.dji.sdk.sample.common.integration.api.I_GimbalSource;
 import com.dji.sdk.sample.common.integration.src.BatterySource;
 import com.dji.sdk.sample.common.integration.src.CameraSource;
+import com.dji.sdk.sample.common.integration.src.CameraState;
 import com.dji.sdk.sample.common.integration.src.FlightControllerSource;
 import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
 import com.dji.sdk.sample.common.integration.api.I_MediaDataFetcher;
@@ -30,6 +31,8 @@ public class IntegrationLayerContainer
     BatterySource batterySource_;
     GimbalSource gimbalSource_;
 
+    CameraState cameraState_;
+
     public IntegrationLayerContainer()
     {
         mediaManagerSource_ = new MediaManagerSource();
@@ -39,6 +42,8 @@ public class IntegrationLayerContainer
         flightControllerSource_ = new FlightControllerSource();
         batterySource_ = new BatterySource();
         gimbalSource_ = new GimbalSource();
+
+        cameraState_ = new CameraState();
     }
 
     public I_MediaManagerSource mediaManagerSource()
@@ -68,5 +73,10 @@ public class IntegrationLayerContainer
     public I_GimbalSource gimbalSource()
     {
         return gimbalSource_;
+    }
+
+    public CameraState cameraState()
+    {
+        return cameraState_;
     }
 }

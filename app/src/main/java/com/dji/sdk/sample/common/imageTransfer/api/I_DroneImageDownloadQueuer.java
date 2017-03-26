@@ -12,5 +12,6 @@ public interface I_DroneImageDownloadQueuer
 {
     void addImageToDownloadQueue(DJIMedia image);
     ArrayList<DJIMedia> getListOfImagesToDownload();
+    int imageCount();
     void clearQueue();
 }

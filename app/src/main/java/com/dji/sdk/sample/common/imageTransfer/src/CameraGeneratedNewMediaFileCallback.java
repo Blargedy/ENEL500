@@ -1,11 +1,13 @@
-package com.dji.sdk.sample.common.mission.src;
+package com.dji.sdk.sample.common.imageTransfer.src;
 
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadQueuer;
+import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
 import com.dji.sdk.sample.common.integration.api.I_CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferInitiator;
 
 import dji.sdk.camera.DJIMedia;
 
+import static com.dji.sdk.sample.common.utility.MissionParameters.WAYPOINTS_PER_MISSION;
 import static dji.sdk.camera.DJIMedia.MediaType.JPG;
 
 /**
@@ -14,20 +16,15 @@ import static dji.sdk.camera.DJIMedia.MediaType.JPG;
 
 public class CameraGeneratedNewMediaFileCallback implements I_CameraGeneratedNewMediaFileCallback
 {
-    private static final int IMAGE_TRANSFER_DELAY = 5;
-    private int imageCount_;
-
-    private I_MissionPeriodicImageTransferInitiator imageTransferInitiator_;
     private I_DroneImageDownloadQueuer imageDownloadQueuer_;
+    private I_ImageTransferer imageTransferer_;
 
     public CameraGeneratedNewMediaFileCallback(
             I_DroneImageDownloadQueuer imageDownloadQueuer,
-            I_MissionPeriodicImageTransferInitiator imageTransferInitiator)
+            I_ImageTransferer imageTransferer)
     {
         imageDownloadQueuer_ = imageDownloadQueuer;
-        imageTransferInitiator_ = imageTransferInitiator;
-
-        imageCount_ = 0;
+        imageTransferer_ = imageTransferer;
     }
 
     @Override
@@ -36,18 +33,11 @@ public class CameraGeneratedNewMediaFileCallback implements I_CameraGeneratedNew
         if (media.getMediaType() == JPG)
         {
             imageDownloadQueuer_.addImageToDownloadQueue(media);
-            imageCount_++;
         }
 
-        if (imageCount_ % IMAGE_TRANSFER_DELAY == 0)
+        if (imageDownloadQueuer_.imageCount() % WAYPOINTS_PER_MISSION == 0)
         {
-            imageTransferInitiator_.initiateImageTransfer();
+            imageTransferer_.transferNewImagesFromDrone(null);
         }
-    }
-
-    @Override
-    public void resetImageCount()
-    {
-        imageCount_ = 0;
     }
 }

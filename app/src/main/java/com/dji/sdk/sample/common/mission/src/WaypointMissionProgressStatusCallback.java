@@ -61,8 +61,8 @@ public class WaypointMissionProgressStatusCallback implements
         waypointReachedNotifier_.notifyWaypointAtIndexHasBeenReached(waypointIndex_);
         imageShooter_.shootPhotoOnWaypoint(waypointIndex_);
 
-        waypointIndex_++;
         missionStatusNotifier_.notifyStatusChanged("At waypoint " + waypointIndex_);
+        waypointIndex_++;
     }
 
     @Override

@@ -22,6 +22,12 @@ public class InertDroneImageDownloadQueuer implements I_DroneImageDownloadQueuer
     }
 
     @Override
+    public int imageCount()
+    {
+        return 0;
+    }
+
+    @Override
     public void clearQueue()
     {
     }

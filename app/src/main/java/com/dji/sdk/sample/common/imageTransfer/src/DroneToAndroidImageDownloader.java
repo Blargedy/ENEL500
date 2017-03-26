@@ -1,7 +1,5 @@
 package com.dji.sdk.sample.common.imageTransfer.src;
 
-import android.util.Log;
-
 import com.dji.sdk.sample.common.imageTransfer.api.I_AndroidToPcImageCopier;
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneToAndroidImageDownloader;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferPathsSource;

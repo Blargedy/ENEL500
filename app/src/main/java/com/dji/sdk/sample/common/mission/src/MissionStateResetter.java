@@ -15,7 +15,6 @@ public class MissionStateResetter implements I_MissionStateResetter
 {
     private GeneratedMissionModel generatedMissionModel_;
     private I_WaypointMissionProgressStatusCallback missionProgressStatusCallback_;
-    private I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback_;
     private I_ImageTransferModuleEnder imageTransferModuleEnder_;
     private I_BatteryStateUpdateCallback batteryStateUpdateCallback_;
 
@@ -23,13 +22,11 @@ public class MissionStateResetter implements I_MissionStateResetter
     public MissionStateResetter(
             GeneratedMissionModel generatedMissionModel,
             I_WaypointMissionProgressStatusCallback missionProgressStatusCallback,
-            I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback,
             I_ImageTransferModuleEnder imageTransferModuleEnder,
             I_BatteryStateUpdateCallback batteryStateUpdateCallback)
     {
         generatedMissionModel_ = generatedMissionModel;
         missionProgressStatusCallback_ = missionProgressStatusCallback;
-        cameraGeneratedNewMediaFileCallback_ = cameraGeneratedNewMediaFileCallback;
         imageTransferModuleEnder_ = imageTransferModuleEnder;
         batteryStateUpdateCallback_ = batteryStateUpdateCallback;
     }
@@ -39,7 +36,6 @@ public class MissionStateResetter implements I_MissionStateResetter
     {
         generatedMissionModel_.clearWaypointMissions();
         missionProgressStatusCallback_.resetWaypointCount();
-        cameraGeneratedNewMediaFileCallback_.resetImageCount();
         imageTransferModuleEnder_.endImageTransfer(null);
         batteryStateUpdateCallback_.resetIfWarningHasBeenShown();
     }

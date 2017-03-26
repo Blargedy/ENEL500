@@ -7,16 +7,10 @@ import com.dji.sdk.sample.common.entity.DroneLocationEntity;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
-import com.dji.sdk.sample.common.integration.api.I_CameraGeneratedNewMediaFileCallback;
-import com.dji.sdk.sample.common.mission.api.I_MissionPeriodicImageTransferInitiator;
-import com.dji.sdk.sample.common.mission.api.InertCameraGeneratedNewMediaFileCallback;
-import com.dji.sdk.sample.common.mission.api.InertMissionPeriodicImageTransferInitiator;
-import com.dji.sdk.sample.common.mission.src.CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.mission.src.MissionGenerator;
 import com.dji.sdk.sample.common.mission.src.MissionCanceller;
 import com.dji.sdk.sample.common.mission.src.MissionExecutor;
 import com.dji.sdk.sample.common.mission.src.MissionInitializer;
-import com.dji.sdk.sample.common.mission.src.MissionPeriodicImageTransferInitiator;
 import com.dji.sdk.sample.common.mission.src.MissionStateResetter;
 import com.dji.sdk.sample.common.mission.src.NextWaypointMissionStarter;
 import com.dji.sdk.sample.common.mission.src.SwitchBackPathGenerator;
@@ -38,9 +32,6 @@ public class MissionContainer
     private GeneratedMissionModel generatedMissionModel_;
     private MissionStateEntity missionState_;
     private DroneLocationEntity droneLocation_;
-
-    private I_MissionPeriodicImageTransferInitiator periodicImageTransferInitiator_;
-    private I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback_;
 
     private DroneStateContainer droneStateContainer_;
 
@@ -64,8 +55,7 @@ public class MissionContainer
             I_MissionStatusNotifier missionStatusNotifier,
             ApplicationSettingsManager applicationSettingsManager,
             IntegrationLayerContainer integrationLayerContainer,
-            ImageTransferContainer imageTransferContainer,
-            boolean isLiveModeEnabled)
+            ImageTransferContainer imageTransferContainer)
     {
         cameraSettings_ = new CameraSettingsEntity(context, applicationSettingsManager);
         initialMissionModel_ = new InitialMissionModel(context, applicationSettingsManager);
@@ -73,32 +63,18 @@ public class MissionContainer
         missionState_ = new MissionStateEntity(context);
         droneLocation_ = new DroneLocationEntity(context);
 
-        if (isLiveModeEnabled){
-            periodicImageTransferInitiator_ = new MissionPeriodicImageTransferInitiator(
-                    missionStatusNotifier,
-                    integrationLayerContainer.missionManagerSource(),
-                    imageTransferContainer.imageTransferer(),
-                    imageTransferContainer.droneImageDownloadQueuer());
-            cameraGeneratedNewMediaFileCallback_ = new CameraGeneratedNewMediaFileCallback(
-                    imageTransferContainer.droneImageDownloadQueuer(),
-                    periodicImageTransferInitiator_);
-        } else{
-            periodicImageTransferInitiator_ = new InertMissionPeriodicImageTransferInitiator();
-            cameraGeneratedNewMediaFileCallback_ = new InertCameraGeneratedNewMediaFileCallback();
-        }
-
         droneStateContainer_ = new DroneStateContainer(
                 context,
                 missionStatusNotifier,
                 integrationLayerContainer,
-                cameraGeneratedNewMediaFileCallback_,
+                imageTransferContainer.cameraGeneratedNewMediaFileCallback(),
                 cameraSettings_,
                 droneLocation_);
 
         waypointImageShooter_ = new WaypointImageShooter(
                 missionStatusNotifier,
                 integrationLayerContainer.cameraSource(),
-                droneStateContainer_.cameraState());
+                integrationLayerContainer.cameraState());
         waypointReachedNotifier_ = new WaypointReachedNotifier(context);
 
         missionProgressStatusCallback_ = new WaypointMissionProgressStatusCallback(
@@ -109,7 +85,6 @@ public class MissionContainer
         missionStateResetter_ = new MissionStateResetter(
                 generatedMissionModel_,
                 missionProgressStatusCallback_,
-                cameraGeneratedNewMediaFileCallback_,
                 imageTransferContainer.imageTransferModuleEnder(),
                 droneStateContainer_.batteryStateUpdateCallback());
         nextWaypointMissionStarter_ = new NextWaypointMissionStarter(
@@ -118,7 +93,6 @@ public class MissionContainer
                 missionState_);
         waypointMissionCompletionCallback_ = new WaypointMissionCompletionCallback(
                 missionStatusNotifier,
-                waypointReachedNotifier_,
                 nextWaypointMissionStarter_,
                 missionProgressStatusCallback_);
 

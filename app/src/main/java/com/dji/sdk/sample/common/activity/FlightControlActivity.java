@@ -53,8 +53,7 @@ public class FlightControlActivity extends FragmentActivity
                 utilityContainer_.missionStatusNotifier(),
                 utilityContainer_.applicationSettingsManager(),
                 integrationLayerContainer_,
-                imageTransferContainer_,
-                isLiveModeEnabled);
+                imageTransferContainer_);
 
         presenterContainer_ = new PresenterContainer(
                 this,

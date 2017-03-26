@@ -2,12 +2,13 @@ package com.dji.sdk.sample.common.container;
 
 import com.dji.sdk.sample.common.imageTransfer.api.I_DroneImageDownloadQueuer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleEnder;
-import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferPathsSource;
+import com.dji.sdk.sample.common.imageTransfer.api.InertCameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.imageTransfer.api.InertDroneImageDownloadQueuer;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.src.AndroidToPcImageCopier;
+import com.dji.sdk.sample.common.imageTransfer.src.CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.imageTransfer.src.DroneImageDownloadQueuer;
 import com.dji.sdk.sample.common.imageTransfer.src.DroneToAndroidImageDownloader;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
@@ -16,6 +17,7 @@ import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferCoordinator;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferPathsSource;
+import com.dji.sdk.sample.common.integration.api.I_CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 import com.dji.sdk.sample.common.utility.I_MissionStatusNotifier;
 
@@ -30,11 +32,12 @@ public class ImageTransferContainer
     private DroneToAndroidImageDownloader droneToAndroidImageDownloader_;
 
     private I_DroneImageDownloadQueuer droneImageDownloadQueuer_;
-
     private I_ImageTransferer imageTransferer_;
+    private I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback_;
 
     private I_ImageTransferModuleInitializer imageTransferModuleInitializer_;
     private I_ImageTransferModuleEnder imageTransferModuleEnder_;
+
 
     public ImageTransferContainer(
             I_ApplicationContextManager contextManager,
@@ -61,7 +64,12 @@ public class ImageTransferContainer
                     missionStatusNotifier,
                     integrationLayerContainer.cameraSource(),
                     droneImageDownloadQueuer_,
-                    droneToAndroidImageDownloader_);
+                    droneToAndroidImageDownloader_,
+                    integrationLayerContainer.cameraState());
+
+            cameraGeneratedNewMediaFileCallback_ = new CameraGeneratedNewMediaFileCallback(
+                    droneImageDownloadQueuer_,
+                    imageTransferer_);
 
             imageTransferModuleInitializer_ = new ImageTransferModuleInitializer(
                     androidToPcImageCopier_);
@@ -74,14 +82,10 @@ public class ImageTransferContainer
         {
             droneImageDownloadQueuer_ = new InertDroneImageDownloadQueuer();
             imageTransferer_ = new InertImageTransferer();
+            cameraGeneratedNewMediaFileCallback_ = new InertCameraGeneratedNewMediaFileCallback();
             imageTransferModuleInitializer_ = new InertImageTransferModuleInitializer();
             imageTransferModuleEnder_ = new InertImageTransferModuleEnder();
         }
-    }
-
-    public I_ImageTransferer imageTransferer()
-    {
-        return imageTransferer_;
     }
 
     public I_ImageTransferModuleInitializer imageTransferModuleInitializer()
@@ -94,13 +98,8 @@ public class ImageTransferContainer
         return imageTransferModuleEnder_;
     }
 
-    public I_DroneImageDownloadQueuer droneImageDownloadQueuer()
+    public I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback()
     {
-        return droneImageDownloadQueuer_;
-    }
-
-    public I_ImageTransferPathsSource imageTransferPathsSource()
-    {
-        return pathsSource_;
+        return cameraGeneratedNewMediaFileCallback_;
     }
 }
