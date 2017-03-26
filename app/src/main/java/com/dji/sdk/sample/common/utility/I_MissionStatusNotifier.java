@@ -4,7 +4,7 @@ package com.dji.sdk.sample.common.utility;
  * Created by Julia on 2017-03-22.
  */
 
-public interface I_MissionErrorNotifier
+public interface I_MissionStatusNotifier
 {
-    void notifyErrorOccurred(String error);
+    void notifyStatusChanged(String error);
 }

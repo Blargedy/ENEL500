@@ -2,12 +2,11 @@ package com.dji.sdk.sample.common.container;
 
 import android.support.v4.app.FragmentActivity;
 
-import com.dji.sdk.sample.common.activity.SettingsMenuActivity;
 import com.dji.sdk.sample.common.presenter.src.ErrorConsolePresenter;
 import com.dji.sdk.sample.common.presenter.src.MapPresenter;
 import com.dji.sdk.sample.common.presenter.src.MissionControlsPresenter;
 import com.dji.sdk.sample.common.presenter.src.MissionMapDisplayPresenter;
-import com.dji.sdk.sample.common.presenter.src.ProductConnectionPresenter;
+import com.dji.sdk.sample.common.droneState.src.ProductConnectionChangedDetector;
 import com.dji.sdk.sample.common.presenter.src.MissionSettingsPresenter;
 import com.dji.sdk.sample.common.utility.GoogleMapsConnectionHandler;
 import com.dji.sdk.sample.common.view.src.FlightControlView;
@@ -23,7 +22,6 @@ public class PresenterContainer
     private MissionMapDisplayPresenter missionMapDisplayPresenter_;
     private MissionSettingsPresenter missionSettingsPresenter_;
     private ErrorConsolePresenter errorConsolePresenter_;
-    private ProductConnectionPresenter productConnectionPresenter_;
 
     public PresenterContainer(
             FragmentActivity activity,
@@ -53,9 +51,5 @@ public class PresenterContainer
         errorConsolePresenter_ = new ErrorConsolePresenter(
                 activity,
                 flightControlView);
-        productConnectionPresenter_ = new ProductConnectionPresenter(
-                activity,
-                flightControlView,
-                missionContainer.flightControllerInitializer());
     }
 }

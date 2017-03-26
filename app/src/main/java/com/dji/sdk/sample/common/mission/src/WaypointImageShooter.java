@@ -6,7 +6,7 @@ import com.dji.sdk.sample.common.droneState.src.CameraState;
 import com.dji.sdk.sample.common.integration.api.I_CameraSource;
 import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.mission.api.I_WaypointImageShooter;
-import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
+import com.dji.sdk.sample.common.utility.I_MissionStatusNotifier;
 
 import dji.common.error.DJIError;
 
@@ -20,18 +20,18 @@ public class WaypointImageShooter implements
 {
     private static final String TAG = "HydraWaypointImageShooter";
 
-    private I_MissionErrorNotifier missionErrorNotifier_;
+    private I_MissionStatusNotifier missionStatusNotifier_;
     private I_CameraSource cameraSource_;
     private CameraState cameraState_;
 
     private int waypointIndex_;
 
     public WaypointImageShooter(
-            I_MissionErrorNotifier missionErrorNotifier,
+            I_MissionStatusNotifier missionStatusNotifier,
         I_CameraSource cameraSource,
         CameraState cameraState)
     {
-        missionErrorNotifier_ = missionErrorNotifier;
+        missionStatusNotifier_ = missionStatusNotifier;
         cameraSource_ = cameraSource;
         cameraState_ = cameraState;
     }
@@ -44,7 +44,6 @@ public class WaypointImageShooter implements
         {
         }
 
-        missionErrorNotifier_.notifyErrorOccurred("Shooting photo on Waypoint " + waypointIndex);
         waypointIndex_ = waypointIndex;
         cameraSource_.getCamera().shootSinglePhoto(this);
     }
@@ -56,7 +55,7 @@ public class WaypointImageShooter implements
         {
             String message = "Failed to take photo on waypoint " + waypointIndex_ + " : " + error.getDescription();
             Log.d(TAG, message);
-            missionErrorNotifier_.notifyErrorOccurred(message);
+            missionStatusNotifier_.notifyStatusChanged(message);
         }
     }
 }

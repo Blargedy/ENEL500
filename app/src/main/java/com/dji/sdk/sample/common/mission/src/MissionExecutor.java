@@ -15,7 +15,7 @@ import com.dji.sdk.sample.common.mission.api.I_MissionInitializer;
 import com.dji.sdk.sample.common.mission.api.I_NextWaypointMissionStarter;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
-import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
+import com.dji.sdk.sample.common.utility.I_MissionStatusNotifier;
 
 import dji.common.error.DJIError;
 
@@ -29,7 +29,7 @@ public class MissionExecutor implements I_CompletionCallback
 
     private BroadcastReceiver receiver_;
 
-    private I_MissionErrorNotifier missionErrorNotifier_;
+    private I_MissionStatusNotifier missionStatusNotifier_;
     private I_MissionGenerator missionGenerator_;
     private I_NextWaypointMissionStarter nextWaypointMissionStarter_;
     private I_MissionInitializer missionInitializer_;
@@ -38,14 +38,14 @@ public class MissionExecutor implements I_CompletionCallback
 
     public MissionExecutor(
             Context context,
-            I_MissionErrorNotifier missionErrorNotifier,
+            I_MissionStatusNotifier missionStatusNotifier,
             I_MissionGenerator missionGenerator,
             I_NextWaypointMissionStarter nextWaypointMissionStarter,
             I_MissionInitializer missionInitializer,
             I_MissionManagerSource missionManagerSource,
             MissionStateEntity missionState)
     {
-        missionErrorNotifier_ = missionErrorNotifier;
+        missionStatusNotifier_ = missionStatusNotifier;
         missionGenerator_ = missionGenerator;
         nextWaypointMissionStarter_ = nextWaypointMissionStarter;
         missionInitializer_ = missionInitializer;
@@ -80,6 +80,7 @@ public class MissionExecutor implements I_CompletionCallback
                 break;
 
             case INITIALIZE_MISSION:
+                missionStatusNotifier_.notifyStatusChanged("Starting mission...");
                 missionInitializer_.initializeMissionPriorToTakeoff(this);
                 break;
 
@@ -110,7 +111,7 @@ public class MissionExecutor implements I_CompletionCallback
         else
         {
             Log.e(TAG, error.getDescription());
-            missionErrorNotifier_.notifyErrorOccurred(error.getDescription());
+            missionStatusNotifier_.notifyStatusChanged(error.getDescription());
             changeMissionStateAfterCommandFails();
         }
     }
@@ -124,14 +125,17 @@ public class MissionExecutor implements I_CompletionCallback
                 break;
 
             case START_MISSION:
+                missionStatusNotifier_.notifyStatusChanged("Mission started");
                 missionState_.setCurrentMissionState(MissionStateEnum.MISSION_EXECUTING);
                 break;
 
             case HOVER_NOW:
+                missionStatusNotifier_.notifyStatusChanged("Hovering");
                 missionState_.setCurrentMissionState(MissionStateEnum.HOVERING);
                 break;
 
             case RESUME_MISSION:
+                missionStatusNotifier_.notifyStatusChanged("Mission resumed");
                 missionState_.setCurrentMissionState(MissionStateEnum.MISSION_EXECUTING);
                 break;
 

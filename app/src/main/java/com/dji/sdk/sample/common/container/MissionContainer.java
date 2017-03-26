@@ -2,7 +2,6 @@ package com.dji.sdk.sample.common.container;
 
 import android.content.Context;
 
-import com.dji.sdk.sample.common.droneState.api.I_FlightControllerInitializer;
 import com.dji.sdk.sample.common.entity.CameraSettingsEntity;
 import com.dji.sdk.sample.common.entity.DroneLocationEntity;
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
@@ -26,7 +25,7 @@ import com.dji.sdk.sample.common.mission.src.WaypointMissionCompletionCallback;
 import com.dji.sdk.sample.common.mission.src.WaypointMissionProgressStatusCallback;
 import com.dji.sdk.sample.common.mission.src.WaypointReachedNotifier;
 import com.dji.sdk.sample.common.utility.ApplicationSettingsManager;
-import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
+import com.dji.sdk.sample.common.utility.I_MissionStatusNotifier;
 
 /**
  * Created by Julia on 2017-02-04.
@@ -62,7 +61,7 @@ public class MissionContainer
 
     public MissionContainer(
             Context context,
-            I_MissionErrorNotifier missionErrorNotifier,
+            I_MissionStatusNotifier missionStatusNotifier,
             ApplicationSettingsManager applicationSettingsManager,
             IntegrationLayerContainer integrationLayerContainer,
             ImageTransferContainer imageTransferContainer,
@@ -76,7 +75,7 @@ public class MissionContainer
 
         if (isLiveModeEnabled){
             periodicImageTransferInitiator_ = new MissionPeriodicImageTransferInitiator(
-                    missionErrorNotifier,
+                    missionStatusNotifier,
                     integrationLayerContainer.missionManagerSource(),
                     imageTransferContainer.imageTransferer(),
                     imageTransferContainer.droneImageDownloadQueuer());
@@ -90,20 +89,20 @@ public class MissionContainer
 
         droneStateContainer_ = new DroneStateContainer(
                 context,
-                missionErrorNotifier,
+                missionStatusNotifier,
                 integrationLayerContainer,
                 cameraGeneratedNewMediaFileCallback_,
                 cameraSettings_,
                 droneLocation_);
 
         waypointImageShooter_ = new WaypointImageShooter(
-                missionErrorNotifier,
+                missionStatusNotifier,
                 integrationLayerContainer.cameraSource(),
                 droneStateContainer_.cameraState());
         waypointReachedNotifier_ = new WaypointReachedNotifier(context);
 
         missionProgressStatusCallback_ = new WaypointMissionProgressStatusCallback(
-                missionErrorNotifier,
+                missionStatusNotifier,
                 waypointReachedNotifier_,
                 waypointImageShooter_);
 
@@ -118,7 +117,7 @@ public class MissionContainer
                 generatedMissionModel(),
                 missionState_);
         waypointMissionCompletionCallback_ = new WaypointMissionCompletionCallback(
-                missionErrorNotifier,
+                missionStatusNotifier,
                 waypointReachedNotifier_,
                 nextWaypointMissionStarter_,
                 missionProgressStatusCallback_);
@@ -141,7 +140,7 @@ public class MissionContainer
                 droneStateContainer_.batteryStateUpdateCallback());
         missionExecutor_ = new MissionExecutor(
                 context,
-                missionErrorNotifier,
+                missionStatusNotifier,
                 missionGenerator_,
                 nextWaypointMissionStarter_,
                 missionInitializer_,
@@ -149,7 +148,7 @@ public class MissionContainer
                 missionState_);
         missionCanceller_ = new MissionCanceller(
                 context,
-                missionErrorNotifier,
+                missionStatusNotifier,
                 missionState_,
                 integrationLayerContainer.flightControllerSource(),
                 missionStateResetter_);
@@ -173,10 +172,5 @@ public class MissionContainer
     public DroneLocationEntity droneLocation()
     {
         return droneLocation_;
-    }
-
-    public I_FlightControllerInitializer flightControllerInitializer()
-    {
-        return droneStateContainer_.flightControllerInitializer();
     }
 }

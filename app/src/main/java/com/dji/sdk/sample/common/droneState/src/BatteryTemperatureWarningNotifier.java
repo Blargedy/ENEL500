@@ -1,7 +1,7 @@
 package com.dji.sdk.sample.common.droneState.src;
 
 import com.dji.sdk.sample.common.integration.api.I_BatteryStateUpdateCallback;
-import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
+import com.dji.sdk.sample.common.utility.I_MissionStatusNotifier;
 
 import dji.common.battery.DJIBatteryState;
 
@@ -13,13 +13,13 @@ public class BatteryTemperatureWarningNotifier implements I_BatteryStateUpdateCa
 {
     private static final int BATTERY_TEMPERATURE_THRESHOLD = 15;
     private static final String BATTERY_TEMPERATURE_WARNING_MESSAGE = "Warning: Battery temperature is below 15 degrees celsius";
-    private I_MissionErrorNotifier missionErrorNotifier_;
+    private I_MissionStatusNotifier missionStatusNotifier_;
     private boolean hasErrorBeenShown_;
 
     public BatteryTemperatureWarningNotifier(
-            I_MissionErrorNotifier missionErrorNotifier)
+            I_MissionStatusNotifier missionStatusNotifier)
     {
-        missionErrorNotifier_ = missionErrorNotifier;
+        missionStatusNotifier_ = missionStatusNotifier;
         hasErrorBeenShown_ = false;
     }
 
@@ -30,7 +30,7 @@ public class BatteryTemperatureWarningNotifier implements I_BatteryStateUpdateCa
         {
             if (state.getBatteryTemperature() < BATTERY_TEMPERATURE_THRESHOLD)
             {
-                missionErrorNotifier_.notifyErrorOccurred(BATTERY_TEMPERATURE_WARNING_MESSAGE);
+                missionStatusNotifier_.notifyStatusChanged(BATTERY_TEMPERATURE_WARNING_MESSAGE);
                 hasErrorBeenShown_ = true;
             }
         }

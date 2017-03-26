@@ -6,8 +6,8 @@ import com.dji.sdk.sample.common.utility.ApplicationContextManager;
 import com.dji.sdk.sample.common.utility.ApplicationSettingsManager;
 import com.dji.sdk.sample.common.utility.GoogleMapsConnectionHandler;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
-import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
-import com.dji.sdk.sample.common.utility.MissionErrorNotifier;
+import com.dji.sdk.sample.common.utility.I_MissionStatusNotifier;
+import com.dji.sdk.sample.common.utility.MissionStatusNotifier;
 
 /**
  * Created by Julia on 2017-03-22.
@@ -17,7 +17,7 @@ public class UtilityContainer
 {
     private ApplicationContextManager contextManager_;
     private GoogleMapsConnectionHandler googleMapsConnectionHandler_;
-    private MissionErrorNotifier missionErrorNotifier_;
+    private MissionStatusNotifier missionErrorNotifier_;
     private ApplicationSettingsManager applicationSettingsManager_;
 
     public UtilityContainer(
@@ -25,7 +25,7 @@ public class UtilityContainer
     {
         contextManager_ = new ApplicationContextManager(activity);
         googleMapsConnectionHandler_ = new GoogleMapsConnectionHandler(activity);
-        missionErrorNotifier_ = new MissionErrorNotifier(activity);
+        missionErrorNotifier_ = new MissionStatusNotifier(activity);
         applicationSettingsManager_ = new ApplicationSettingsManager(activity);
     }
 
@@ -39,7 +39,7 @@ public class UtilityContainer
         return contextManager_;
     }
 
-    public I_MissionErrorNotifier missionErrorNotifier()
+    public I_MissionStatusNotifier missionStatusNotifier()
     {
         return missionErrorNotifier_;
     }

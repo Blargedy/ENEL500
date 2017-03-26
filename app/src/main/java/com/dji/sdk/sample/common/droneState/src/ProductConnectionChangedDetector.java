@@ -1,4 +1,4 @@
-package com.dji.sdk.sample.common.presenter.src;
+package com.dji.sdk.sample.common.droneState.src;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,12 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.dji.sdk.sample.common.droneState.api.I_FlightControllerInitializer;
-import com.dji.sdk.sample.common.integration.api.I_FlightController;
-import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
-import com.dji.sdk.sample.common.integration.api.I_FlightControllerUpdateSystemStateCallback;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.integration.src.DJISampleApplication;
-import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
+import com.dji.sdk.sample.common.utility.I_MissionStatusNotifier;
 
 import dji.sdk.base.DJIBaseProduct;
 
@@ -19,19 +16,19 @@ import dji.sdk.base.DJIBaseProduct;
  * Created by Julia on 2017-02-04.
  */
 
-public class ProductConnectionPresenter
+public class ProductConnectionChangedDetector
 {
-    private I_MissionControlsView missionControlsView_;
+    private I_MissionStatusNotifier missionStatusNotifier_;
     private I_FlightControllerInitializer flightControllerInitializer_;
 
     private BroadcastReceiver receiver_;
 
-    public ProductConnectionPresenter(
+    public ProductConnectionChangedDetector(
             Context context,
-            I_MissionControlsView missionControlsView,
+            I_MissionStatusNotifier missionStatusNotifier,
             I_FlightControllerInitializer flightControllerInitializer)
     {
-        missionControlsView_ = missionControlsView;
+        missionStatusNotifier_ = missionStatusNotifier;
         flightControllerInitializer_ = flightControllerInitializer;
 
         registerConnectionChangedReceiver(context);
@@ -58,10 +55,12 @@ public class ProductConnectionPresenter
         DJIBaseProduct product = DJISampleApplication.getProductInstance();
         if (product != null && product.isConnected())
         {
+            missionStatusNotifier_.notifyStatusChanged("Product Connected");
             flightControllerInitializer_.initializeFlightController(null);
         }
         else
         {
+            missionStatusNotifier_.notifyStatusChanged("Product disconnected");
         }
     }
 }

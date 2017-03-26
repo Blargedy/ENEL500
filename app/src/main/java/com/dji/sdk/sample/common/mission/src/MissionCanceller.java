@@ -13,7 +13,7 @@ import com.dji.sdk.sample.common.integration.api.I_CompletionCallback;
 import com.dji.sdk.sample.common.integration.api.I_FlightControllerSource;
 import com.dji.sdk.sample.common.mission.api.I_MissionStateResetter;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
-import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
+import com.dji.sdk.sample.common.utility.I_MissionStatusNotifier;
 
 import dji.common.error.DJIError;
 
@@ -25,7 +25,7 @@ public class MissionCanceller implements I_CompletionCallback
 {
     private static final String TAG = "HydraMissionCanceller";
 
-    private I_MissionErrorNotifier missionErrorNotifier_;
+    private I_MissionStatusNotifier missionStatusNotifier_;
     private MissionStateEntity missionState_;
     private I_FlightControllerSource flightControllerSource_;
     private I_MissionStateResetter missionStateResetter_;
@@ -35,12 +35,12 @@ public class MissionCanceller implements I_CompletionCallback
 
     public MissionCanceller(
             Context context,
-            I_MissionErrorNotifier missionErrorNotifier,
+            I_MissionStatusNotifier missionStatusNotifier,
             MissionStateEntity missionState,
             I_FlightControllerSource flightControllerSource,
             I_MissionStateResetter missionStateResetter)
     {
-        missionErrorNotifier_ = missionErrorNotifier;
+        missionStatusNotifier_ = missionStatusNotifier;
         missionState_ = missionState;
         flightControllerSource_ = flightControllerSource;
         missionStateResetter_ = missionStateResetter;
@@ -84,11 +84,13 @@ public class MissionCanceller implements I_CompletionCallback
         switch (missionState_.getCurrentMissionState())
         {
             case GO_HOME:
+                missionStatusNotifier_.notifyStatusChanged("Going home...");
                 missionStateResetter_.resetMissionState();
                 flightControllerSource_.getFlightController().goHome(this);
                 break;
 
             case PAUSE_GO_HOME:
+                missionStatusNotifier_.notifyStatusChanged("Hovering");
                 flightControllerSource_.getFlightController().cancelGoHome(this);
                 break;
 
@@ -110,12 +112,13 @@ public class MissionCanceller implements I_CompletionCallback
         else
         {
             Log.e(TAG, error.getDescription());
-            missionErrorNotifier_.notifyErrorOccurred(error.getDescription());
+            missionStatusNotifier_.notifyStatusChanged(error.getDescription());
         }
     }
 
     private void droneReachedHome()
     {
+        missionStatusNotifier_.notifyStatusChanged("Arrived home - Select another mission");
         missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
     }
 }

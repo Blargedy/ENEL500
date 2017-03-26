@@ -3,7 +3,7 @@ package com.dji.sdk.sample.common.mission.src;
 import com.dji.sdk.sample.common.integration.api.I_WaypointMissionProgressStatusCallback;
 import com.dji.sdk.sample.common.mission.api.I_WaypointImageShooter;
 import com.dji.sdk.sample.common.mission.api.I_WaypointReachedNotifier;
-import com.dji.sdk.sample.common.utility.I_MissionErrorNotifier;
+import com.dji.sdk.sample.common.utility.I_MissionStatusNotifier;
 
 import dji.sdk.missionmanager.DJIMission;
 import dji.sdk.missionmanager.DJIWaypointMission;
@@ -19,16 +19,16 @@ public class WaypointMissionProgressStatusCallback implements
 {
     private int waypointIndex_;
 
-    private I_MissionErrorNotifier missionErrorNotifier_;
+    private I_MissionStatusNotifier missionStatusNotifier_;
     private I_WaypointReachedNotifier waypointReachedNotifier_;
     private I_WaypointImageShooter imageShooter_;
 
     public WaypointMissionProgressStatusCallback(
-            I_MissionErrorNotifier missionErrorNotifier,
+            I_MissionStatusNotifier missionStatusNotifier,
             I_WaypointReachedNotifier waypointReachedNotifier,
             I_WaypointImageShooter imageShooter)
     {
-        missionErrorNotifier_ = missionErrorNotifier;
+        missionStatusNotifier_ = missionStatusNotifier;
         waypointReachedNotifier_ = waypointReachedNotifier;
         imageShooter_ = imageShooter;
 
@@ -40,7 +40,7 @@ public class WaypointMissionProgressStatusCallback implements
     {
         if (progressStatus.getError() != null)
         {
-            missionErrorNotifier_.notifyErrorOccurred(progressStatus.getError().getDescription());
+            missionStatusNotifier_.notifyStatusChanged(progressStatus.getError().getDescription());
         }
 
         if (progressStatus instanceof DJIWaypointMission.DJIWaypointMissionStatus)
@@ -52,7 +52,9 @@ public class WaypointMissionProgressStatusCallback implements
             {
                 waypointReachedNotifier_.notifyWaypointAtIndexHasBeenReached(waypointIndex_);
                 imageShooter_.shootPhotoOnWaypoint(waypointIndex_);
+
                 waypointIndex_++;
+                missionStatusNotifier_.notifyStatusChanged("At waypoint " + waypointIndex_);
             }
         }
     }

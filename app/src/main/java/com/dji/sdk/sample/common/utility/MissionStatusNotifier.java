@@ -8,18 +8,18 @@ import android.support.v4.content.LocalBroadcastManager;
  * Created by Julia on 2017-03-22.
  */
 
-public class MissionErrorNotifier implements I_MissionErrorNotifier
+public class MissionStatusNotifier implements I_MissionStatusNotifier
 {
     private Context context_;
 
-    public MissionErrorNotifier(
+    public MissionStatusNotifier(
             Context context)
     {
         context_ = context;
     }
 
     @Override
-    public void notifyErrorOccurred(String error)
+    public void notifyStatusChanged(String error)
     {
         Intent intent = new Intent(BroadcastIntentNames.ERROR_OCCURRED);
         intent.putExtra(IntentExtraKeys.ERROR_MESSAGE, error);
