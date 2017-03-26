@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.dji.sdk.sample.R;
 import com.dji.sdk.sample.common.presenter.src.MainMenuPresenter;
@@ -28,9 +29,10 @@ public class MainMenuActivity extends AppCompatActivity
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
-
+        Log.d("MapPresenter", "BEFORE PERMISSIONS");
         permissionRequester_ = new UserPermissionRequester();
         permissionRequester_.requestPermissions(this);
+        Log.d("MapPresenter", "AFTER PERMISSIONS");
 
         mainMenuView_ = new MainMenuView(this);
 
