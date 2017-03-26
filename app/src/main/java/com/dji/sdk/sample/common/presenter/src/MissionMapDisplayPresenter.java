@@ -60,6 +60,7 @@ public class MissionMapDisplayPresenter {
             case INITIALIZING_MAP:
                 break;
             case SELECT_AREA:
+                mapPresenter_.pbarsShow();
                 mapPresenter_.clearMap();
                 generatedMissionModel_.clearWaypointMissions();
                 break;
@@ -70,6 +71,9 @@ public class MissionMapDisplayPresenter {
                 break;
             case VIEW_MISSION:
                 mapPresenter_.displayMissionWaypoints(generatedMissionModel_.waypoints());
+                break;
+            case MISSION_EXECUTING:
+                mapPresenter_.pbarsHide();
                 break;
             default:
                 break;

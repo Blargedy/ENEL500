@@ -6,6 +6,8 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.android.gms.vision.text.Text;
+
 /**
  * Created by Julia on 2017-03-08.
  */
@@ -19,4 +21,6 @@ public interface I_MapView
     SeekBar surveyAreaWidthBar();
     LinearLayout linearLayoutMainV();
     Button startMissionButton();
+    TextView txtPercentCompleteMap();
+    Button btnFindMeNow();
 }

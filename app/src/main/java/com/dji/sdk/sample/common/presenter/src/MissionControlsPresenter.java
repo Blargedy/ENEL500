@@ -171,7 +171,7 @@ public class MissionControlsPresenter implements
                 break;
             case VIEW_MISSION:
                 startMissionButton_.setEnabled(false);
-                startMissionButton_.setText("Loading waypoints...");
+                startMissionButton_.setText("Please wait.");
                 acceptAreaButton_.setEnabled(false);
                 cancelButton_.setEnabled(true);
                 acceptAreaButton_.setVisibility(View.GONE);

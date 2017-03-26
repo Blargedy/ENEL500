@@ -24,7 +24,38 @@
         android:layout_height="258dp"
         android:layout_gravity="center"
         android:layout_weight="0.82"
-        tools:context=".FlightControlActivity" />
+        tools:context=".FlightControlActivity">
+
+    <TextView
+        android:id="@+id/txtPercentCompleteMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:textSize="20sp"
+        android:layout_weight="1"
+        android:text="0.00% complete."
+        android:layout_gravity="top|right"
+        android:textStyle="normal|bold" />
+
+        <Button
+            android:id="@+id/btnFindMeNow"
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:layout_gravity="bottom|left"
+            android:alpha="0.9"
+            android:layout_marginEnd="55dp"
+            android:layout_marginBottom="35dp"
+            android:layout_weight="1"
+            android:background="@drawable/round_btn"
+            android:enabled="true"
+            android:text="Find Me"
+            android:textAllCaps="false"
+            android:textColor="@color/common_text_color"
+            android:textSize="15dp" />
+
+
+
+        </fragment>
 
     <SeekBar
         android:id="@+id/surveyProgressBar"

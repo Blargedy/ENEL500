@@ -58,7 +58,6 @@ public class MainMenuView
     public ImageView droneLogo() {return droneLogo_;
     }
 
-
     public TextView txt_HydraTitle() {
         return txt_HydraTitle_;
     }

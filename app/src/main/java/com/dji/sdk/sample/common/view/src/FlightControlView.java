@@ -30,12 +30,14 @@ public class FlightControlView
     private TextView surveyAreaWidthText_;
     private SeekBar surveyAreaWidthBar_;
     private LinearLayout linearLayoutMainV_;
+    private TextView txtPercentCompleteMap_;
 
     private Button acceptAreaButton_;
     private Button startMissionButton_;
     private Button cancelButton_;
     private ToggleButton hoverNowToggleButton_;
     private Button settingsButton_;
+    private Button btnFindMeNow_;
 
     public FlightControlView(
             Context context) {
@@ -76,6 +78,11 @@ public class FlightControlView
         cancelButton_ = (Button) findViewById(R.id.btn_cancel);
         hoverNowToggleButton_ = (ToggleButton) findViewById(R.id.btn_toggle_hover_now);
         settingsButton_ = (Button) findViewById(R.id.btn_settings);
+
+        txtPercentCompleteMap_ = (TextView)findViewById(R.id.txtPercentCompleteMap);
+
+        btnFindMeNow_ = (Button)findViewById(R.id.btnFindMeNow);
+
     }
 
     @Override
@@ -140,4 +147,19 @@ public class FlightControlView
     {
         return errorConsole_;
     }
+
+    @Override
+    public TextView txtPercentCompleteMap()
+    {
+        return txtPercentCompleteMap_;
+    }
+
+    @Override
+    public Button btnFindMeNow()
+    {
+        return btnFindMeNow_;
+    }
+
+
+
 }

@@ -22,6 +22,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ import com.dji.sdk.sample.common.utility.CachedMapNotifyingThread;
 import com.dji.sdk.sample.common.utility.I_CachedMapThreadCompletedListener;
 import com.dji.sdk.sample.common.values.Coordinate;
 import com.dji.sdk.sample.common.view.api.I_MapView;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -67,8 +69,12 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import static com.dji.sdk.sample.R.id.map;
+import static com.dji.sdk.sample.R.id.progressBar;
+import static com.dji.sdk.sample.R.id.txt_surveyAreaHeight;
+import static com.dji.sdk.sample.R.id.txt_surveyAreaWidth;
 import static com.dji.sdk.sample.common.utility.IntentExtraKeys.WAYPOINT_INDEX;
 import static java.lang.Thread.currentThread;
+import static java.lang.Thread.sleep;
 
 public class MapPresenter implements
         I_MapPresenter,
@@ -97,6 +103,8 @@ public class MapPresenter implements
     private TextView surveyAreaWidthText;
     private SeekBar surveyAreaWidthBar;
     private Button startMission;
+    private TextView txtPercentCompleteMap;
+    private Button btnFindMeNow;
     // Lists
     static ArrayList<Circle> waypointCircleList;
     // Progress Tracking
@@ -134,7 +142,6 @@ public class MapPresenter implements
 
     // TO DO
 
-// mMap.setOnMapLongClickListener = ClickListener(new GoogleMap.OnMapLongClickListener() {
 
     public MapPresenter(
             FragmentActivity fragmentActivity,
@@ -154,6 +161,8 @@ public class MapPresenter implements
         this.surveyAreaHeightBar.setEnabled(false);
         this.surveyAreaWidthBar.setEnabled(false);
         this.surveyProgressBar.setEnabled(false);
+        btnFindMeNow.setVisibility(View.INVISIBLE);
+
 
         droneDrawable = fragmentActivity.getResources().getDrawable(R.drawable.drone_marker);
         userDrawable = fragmentActivity.getResources().getDrawable(R.drawable.android_marker);
@@ -187,6 +196,8 @@ public class MapPresenter implements
         mMap.setMaxZoomPreference(25.0f);
         mMap.getUiSettings().setTiltGesturesEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
+        txtPercentCompleteMap.setText("0.00% complete.");
+
         disableMapGestures();
         initSurveyBox();
         initCachedMap();
@@ -275,7 +286,7 @@ public class MapPresenter implements
 
         percentageCompletion = (int) (100.0d * numWaypointsCompleted / numWaypointsTotal);
         surveyProgressBar.setProgress((int) percentageCompletion);
-
+        txtPercentCompleteMap.setText(percentageCompletion + "% complete.");
     }
 
     void initSurveyBox() {
@@ -357,11 +368,52 @@ public class MapPresenter implements
         drawAreaSelector(true);
         CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude + 0.001), 18.0f);
         mMap.animateCamera(cu, 3000, MapPresenter.this);
+        surveyProgressBar.setProgress(0);
+        numWaypointsCompleted = 0;
+        numWaypointsTotal = 0;
         surveyAreaWidthBar.setEnabled(true);
         surveyAreaHeightBar.setEnabled(true);
+        txtPercentCompleteMap.setText("0.00% complete.");
         return;
     }
 
+    public class GPSSignalListener implements android.location.LocationListener {
+        public void onLocationChanged(Location location) {
+            lastKnownUserLocation = location;
+            // Called when a new location is found by the network location provider.
+            long timeSinceLastUserPositionUpdate = System.nanoTime() - userGPSStartTime;
+            if (timeSinceLastUserPositionUpdate > 100000000l) { // 1 second between updates to reduce lag
+                userGPSStartTime = System.nanoTime(); // reset time
+                if (location == null && !introZoomFinished) {
+                    return;
+                }
+                drawUserUpdate(location);
+                //Log.d("MapPresenter", "Camera Zoom: " + mMap.getCameraPosition().zoom);
+                if (!haveAnimatedCameraToUserMarker) {
+                    haveAnimatedCameraToUserMarker = true;
+                    drawDroneUpdate();
+                    mMap.setOnMapLoadedCallback(null); // don't need anymore since loaded
+                    // writeToast("GPS Signal Acquired.");
+                    disableMapGestures();
+                    areaSelectingMaskMidpoint = new LatLng(location.getLatitude(), location.getLongitude() + 0.0009);
+                    drawAreaSelector(true);
+
+                    CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude + 0.001), 18.0f);
+                    mMap.animateCamera(cu, 3000, MapPresenter.this);
+                    btnFindMeNow.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+    }
 
     // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -373,6 +425,17 @@ public class MapPresenter implements
         userMarkerIcon = getMarkerIconFromDrawable(userDrawable, 40 + (int) (70 * ((int) (mMap.getCameraPosition().zoom - 3.00f) / 15.0f)), 40 + (int) (70.0f * ((int) (mMap.getCameraPosition().zoom - 3.00f) / 15.0f)));
         Marker tempUserMarker = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                .zIndex(10010.0f)
+                .icon(userMarkerIcon));
+        if (userMarker != null) userMarker.remove();
+
+        userMarker = tempUserMarker;
+    }
+
+    private void drawUserUpdate(LatLng position) {
+        userMarkerIcon = getMarkerIconFromDrawable(userDrawable, 40 + (int) (70 * ((int) (mMap.getCameraPosition().zoom - 3.00f) / 15.0f)), 40 + (int) (70.0f * ((int) (mMap.getCameraPosition().zoom - 3.00f) / 15.0f)));
+        Marker tempUserMarker = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(position.latitude, position.longitude))
                 .zIndex(10010.0f)
                 .icon(userMarkerIcon));
         if (userMarker != null) userMarker.remove();
@@ -655,6 +718,8 @@ public class MapPresenter implements
         surveyAreaWidthText = mapView.surveyAreaWidthText();
         surveyAreaWidthBar = mapView.surveyAreaWidthBar();
         startMission = mapView.startMissionButton();
+        txtPercentCompleteMap = mapView.txtPercentCompleteMap();
+        btnFindMeNow = mapView.btnFindMeNow();
     }
 
     void initAndroidGPS() {
@@ -727,6 +792,20 @@ public class MapPresenter implements
 
 
     void initMiscMapListeners() {
+
+        btnFindMeNow.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                if (userMarker == null) return; // can't find... user marker not showing on map
+                                                CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude + 0.001), 18.0f);
+                                                mMap.animateCamera(cu, 3000, MapPresenter.this);
+
+
+                                            }
+                                        }
+        );
+
+
         mMap.setOnMarkerClickListener(
                 new GoogleMap.OnMarkerClickListener() {
                     boolean doNotMoveCameraToCenterMarker = true;
@@ -743,47 +822,52 @@ public class MapPresenter implements
             }
         });
 
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng pointOfLongClick) {
+                if (missionState.getCurrentMissionState() == MissionStateEnum.INITIALIZING_MAP) {
+                    // Called when a new location is found by the network location provider.
+                    userGPSStartTime = System.nanoTime(); // reset time
+                    LatLng calgaryLatLng = new LatLng(51.0486, -114.0708);
+                    drawUserUpdate(calgaryLatLng);
+                    //Log.d("MapPresenter", "Camera Zoom: " + mMap.getCameraPosition().zoom);
+                    if (!haveAnimatedCameraToUserMarker) {
+                        haveAnimatedCameraToUserMarker = true;
+                        drawDroneUpdate();
+                        // writeToast("GPS Signal Acquired.");
+                        disableMapGestures();
+                        areaSelectingMaskMidpoint = new LatLng(calgaryLatLng.latitude, calgaryLatLng.longitude + 0.0009);
+                        drawAreaSelector(true);
 
-    }
+                        CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(calgaryLatLng.latitude, calgaryLatLng.longitude + 0.001), 18.0f);
+                        mMap.animateCamera(cu, 3000, MapPresenter.this);
+                        btnFindMeNow.setVisibility(View.VISIBLE);
+                    }
 
-
-    public class GPSSignalListener implements android.location.LocationListener {
-        public void onLocationChanged(Location location) {
-            lastKnownUserLocation = location;
-            // Called when a new location is found by the network location provider.
-            long timeSinceLastUserPositionUpdate = System.nanoTime() - userGPSStartTime;
-            if (timeSinceLastUserPositionUpdate > 100000000l) { // 1 second between updates to reduce lag
-                userGPSStartTime = System.nanoTime(); // reset time
-                if (location == null && !introZoomFinished) {
-                    return;
-                }
-                drawUserUpdate(location);
-                //Log.d("MapPresenter", "Camera Zoom: " + mMap.getCameraPosition().zoom);
-                if (!haveAnimatedCameraToUserMarker) {
-                    haveAnimatedCameraToUserMarker = true;
-                    drawDroneUpdate();
-                    mMap.setOnMapLoadedCallback(null); // don't need anymore since loaded
-                    // writeToast("GPS Signal Acquired.");
-                    disableMapGestures();
-                    areaSelectingMaskMidpoint = new LatLng(location.getLatitude(), location.getLongitude() + 0.0009);
-                    drawAreaSelector(true);
-
-                    CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude + 0.001), 18.0f);
-                    mMap.animateCamera(cu, 3000, MapPresenter.this);
 
                 }
+
+
             }
-        }
 
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
 
-        public void onProviderEnabled(String provider) {
-        }
+        });
 
-        public void onProviderDisabled(String provider) {
-        }
+
     }
 
+    public void pbarsHide() {
+        surveyAreaHeightBar.setVisibility(View.GONE);
+        surveyAreaWidthBar.setVisibility(View.GONE);
+        surveyAreaHeightText.setVisibility(View.GONE);
+        surveyAreaWidthText.setVisibility(View.GONE);
+    }
+
+    public void pbarsShow() {
+        surveyAreaHeightBar.setVisibility(View.VISIBLE);
+        surveyAreaWidthBar.setVisibility(View.VISIBLE);
+        surveyAreaHeightText.setVisibility(View.VISIBLE);
+        surveyAreaWidthText.setVisibility(View.VISIBLE);
+    }
 
 }
