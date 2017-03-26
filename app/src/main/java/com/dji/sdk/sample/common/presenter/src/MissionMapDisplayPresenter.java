@@ -4,7 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.View;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
@@ -74,7 +76,15 @@ public class MissionMapDisplayPresenter {
                 missionState_.setCurrentMissionState(MissionStateEnum.GENERATE_MISSION);
                 break;
             case VIEW_MISSION:
-                mapPresenter_.displayMissionWaypoints(generatedMissionModel_.waypoints());
+                final Handler handler = new Handler();
+
+                final Runnable drawWaypoints = new Runnable() {
+                    public void run() {
+                        mapPresenter_.displayMissionWaypoints(generatedMissionModel_.waypoints());
+                    }
+                };
+                handler.post(drawWaypoints);
+
                 break;
             case MISSION_EXECUTING:
                 mapPresenter_.pbarsHide();

@@ -1,6 +1,7 @@
 package com.dji.sdk.sample.common.activity;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import com.dji.sdk.sample.common.imageTransfer.src.AndroidPcConnectionTester;
@@ -24,6 +25,8 @@ public class AndroidPcConnectionActivity extends Activity
         super.onCreate(savedInstanceState);
 
         connectionView_ = new AndroidPcConnectionView(this);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         connectionTester_ = new AndroidPcConnectionTester();
         connectionPresenter_ = new AndroidPcConnectionPresenter(

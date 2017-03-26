@@ -77,7 +77,7 @@ public class ApplicationSettingsManager
     public float getWaypointSizeFromSettings()
     {
         return PreferenceManager.getDefaultSharedPreferences(context_)
-                .getFloat(ApplicationSettingsKeys.WAYPOINT_SIZE, 3.0f);
+                .getFloat(ApplicationSettingsKeys.WAYPOINT_SIZE, 1.0f);
     }
 
     public void saveAltitudeToSettings(float altitude)

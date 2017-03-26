@@ -3,6 +3,7 @@ package com.dji.sdk.sample.common.view.api;
 
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -23,4 +24,5 @@ public interface I_MapView
     Button startMissionButton();
     TextView txtPercentCompleteMap();
     Button btnFindMeNow();
+
 }

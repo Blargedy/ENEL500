@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -38,6 +39,8 @@ public class FlightControlView
     private ToggleButton hoverNowToggleButton_;
     private Button settingsButton_;
     private Button btnFindMeNow_;
+
+    private ProgressBar loadingProgressAnimation_;
 
     public FlightControlView(
             Context context) {
@@ -82,6 +85,7 @@ public class FlightControlView
         txtPercentCompleteMap_ = (TextView)findViewById(R.id.txtPercentCompleteMap);
 
         btnFindMeNow_ = (Button)findViewById(R.id.btnFindMeNow);
+        loadingProgressAnimation_ = (ProgressBar)findViewById(R.id.loadingProgressAnimation);
     }
 
     @Override
@@ -159,6 +163,11 @@ public class FlightControlView
         return btnFindMeNow_;
     }
 
+    @Override
+    public ProgressBar loadingProgressAnimation()
+    {
+        return loadingProgressAnimation_;
+    }
 
 
 }

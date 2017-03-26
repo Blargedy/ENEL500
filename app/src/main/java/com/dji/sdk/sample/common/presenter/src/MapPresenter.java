@@ -33,6 +33,7 @@ import com.dji.sdk.sample.R;
 import com.dji.sdk.sample.common.entity.DroneLocationEntity;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
+import com.dji.sdk.sample.common.utility.ApplicationSettingsManager;
 import com.dji.sdk.sample.common.values.MissionBoundary;
 import com.dji.sdk.sample.common.presenter.api.I_MapPresenter;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
@@ -58,6 +59,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
@@ -68,6 +71,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import static com.dji.sdk.sample.R.id.loadingProgressAnimation;
 import static com.dji.sdk.sample.R.id.map;
 import static com.dji.sdk.sample.R.id.progressBar;
 import static com.dji.sdk.sample.R.id.txt_surveyAreaHeight;
@@ -107,11 +111,14 @@ public class MapPresenter implements
     private Button btnFindMeNow;
     // Lists
     static ArrayList<Circle> waypointCircleList;
+    static ArrayList<Polyline> wayPointPolyLineList;
     // Progress Tracking
     private float zlayer = 4000.0f;
     private double percentageCompletion = 0.00d;
     private int numWaypointsTotal = 0;
     private int numWaypointsCompleted = 0;
+    private float wayPointCircleRadius = 1.0f;
+    ApplicationSettingsManager myASM;
     // GPS Drone
     private BroadcastReceiver droneLocationChangedReceiver_;
     private DroneLocationEntity droneLocation_;
@@ -156,6 +163,7 @@ public class MapPresenter implements
         client = googleApiClient;
         // Get GUI View Handles
         getViews(mapView);
+
 
         // Prepare GUI
         this.surveyAreaHeightBar.setEnabled(false);
@@ -216,6 +224,8 @@ public class MapPresenter implements
         this.surveyAreaHeightBar.setEnabled(false);
         this.surveyAreaWidthBar.setEnabled(false);
         if (surveyPolygon != null) surveyPolygon.remove(); //no longer needed
+        myASM = new ApplicationSettingsManager(fragmentActivity);
+        wayPointCircleRadius = myASM.getWaypointSizeFromSettings();
         // check if swatch up down or left right
         // then when lat changes for up down add polyline, or
         // when long changes for left right add polyine.
@@ -226,7 +236,7 @@ public class MapPresenter implements
             if (j == 0) {
                 waypointCircleList.add(mMap.addCircle(new CircleOptions()
                         .center(new LatLng(waypoints.get(j).latitude_, waypoints.get(j).longitude_))
-                        .radius(6)
+                        .radius(wayPointCircleRadius + 3.0f)
                         .strokeWidth(3)
                         .zIndex(zlayer + 5000.1f) // above the polylines, below the drone and user
                         .strokeColor(Color.BLACK)
@@ -237,7 +247,7 @@ public class MapPresenter implements
             if (j == (waypoints.size() - 1)) {
                 waypointCircleList.add(mMap.addCircle(new CircleOptions()
                         .center(new LatLng(waypoints.get(j).latitude_, waypoints.get(j).longitude_))
-                        .radius(6)
+                        .radius(wayPointCircleRadius + 3.0f)
                         .strokeWidth(3)
                         .zIndex(zlayer + 5000.0f) // above the polylines, below the drone and user
                         .strokeColor(Color.BLACK)
@@ -247,7 +257,7 @@ public class MapPresenter implements
 
             waypointCircleList.add(mMap.addCircle(new CircleOptions()
                     .center(new LatLng(waypoints.get(j).latitude_, waypoints.get(j).longitude_))
-                    .radius(3)
+                    .radius(wayPointCircleRadius)
                     .strokeWidth(3)
                     .zIndex(zlayer)
                     .strokeColor(Color.BLACK)
@@ -255,12 +265,62 @@ public class MapPresenter implements
         }
         numWaypointsTotal = waypoints.size(); // do not use polyline size (1 extra)
 
+        // add the poly line between swaths
+
+        double latWayPointZero = waypoints.get(0).latitude_;
+        double longWayPointZero = waypoints.get(0).longitude_;
+        double latWayPointOne = waypoints.get(1).latitude_;
+        double longWayPointOne = waypoints.get(1).longitude_;
+
+        boolean switchBackIsUpDown = false;
+        if (latWayPointZero != latWayPointOne) {
+            switchBackIsUpDown = true;
+        } else {
+            switchBackIsUpDown = false;
+        }
+
+        wayPointPolyLineList = new ArrayList<Polyline>();
+        if (switchBackIsUpDown) {
+            // look for changes in long
+            double currentLong = waypoints.get(0).longitude_;
+            for (int j = 1; j < waypoints.size()-1 ; j++) {
+                if (waypoints.get(j).longitude_ != currentLong){
+
+                    // Connect drone to first waypoint
+                    wayPointPolyLineList.add(mMap.addPolyline(new PolylineOptions()
+                            .add(new LatLng(waypoints.get(j-1).latitude_, waypoints.get(j-1).longitude_), new LatLng(waypoints.get(j).latitude_, waypoints.get(j).longitude_))
+                            .width(wayPointCircleRadius+3.0f)
+                            .zIndex(3004.0f)
+                            .color(Color.BLACK)));
+                }else{
+                    currentLong = waypoints.get(j).longitude_;
+                }
+            }
+        }else{
+            // look for changes in long
+            double currentLat = waypoints.get(0).latitude_;
+            for (int j = 1; j < waypoints.size()-1; j++) {
+                if (waypoints.get(j).latitude_ != currentLat){
+
+                    // Connect drone to first waypoint
+                    wayPointPolyLineList.add(mMap.addPolyline(new PolylineOptions()
+                            .add(new LatLng(waypoints.get(j-1).latitude_, waypoints.get(j-1).longitude_), new LatLng(waypoints.get(j).latitude_, waypoints.get(j).longitude_))
+                            .width(wayPointCircleRadius+3.0f)
+                            .zIndex(3004.0f)
+                            .color(Color.BLACK)));
+                    currentLat = waypoints.get(j).latitude_;
+                }else{
+                    currentLat = waypoints.get(j).latitude_;
+                }
+            }
+        }
+
 
     }
 
-
     private void reachedWaypointAtIndex(int waypointIndex) {
-
+        myASM = new ApplicationSettingsManager(fragmentActivity);
+        wayPointCircleRadius = myASM.getWaypointSizeFromSettings();
         Log.d("MapPresenter", "Waypoint Reached: " + waypointIndex);
         // Make the waypoint circles
         numWaypointsCompleted++;
@@ -268,7 +328,17 @@ public class MapPresenter implements
         if (waypointIndex == (waypointCircleList.size() - 2)) { // if second last print last as well
             mMap.addCircle(new CircleOptions()
                     .center(new LatLng(waypointCircleList.get(waypointIndex + 1).getCenter().latitude, waypointCircleList.get(waypointIndex + 1).getCenter().longitude))
-                    .radius(3)
+                    .radius(wayPointCircleRadius + 3.0d)
+                    .strokeWidth(3)
+                    .zIndex(zlayer)
+                    .strokeColor(Color.BLACK)
+                    .clickable(false)
+                    .fillColor(Color.argb(255, 0, 255, 0))); // green for completed waypoint
+        }
+        if (waypointIndex == 0) {
+            mMap.addCircle(new CircleOptions()
+                    .center(new LatLng(waypointCircleList.get(waypointIndex).getCenter().latitude, waypointCircleList.get(waypointIndex).getCenter().longitude))
+                    .radius(wayPointCircleRadius + 3.0d)
                     .strokeWidth(3)
                     .zIndex(zlayer)
                     .strokeColor(Color.BLACK)
@@ -277,7 +347,7 @@ public class MapPresenter implements
         }
         mMap.addCircle(new CircleOptions()
                 .center(new LatLng(waypointCircleList.get(waypointIndex).getCenter().latitude, waypointCircleList.get(waypointIndex).getCenter().longitude))
-                .radius(3)
+                .radius(wayPointCircleRadius)
                 .strokeWidth(3)
                 .zIndex(zlayer)
                 .strokeColor(Color.BLACK)
@@ -359,7 +429,7 @@ public class MapPresenter implements
     //@Override
     public void clearMap() {
         if (waypointCircleList != null) waypointCircleList.clear();
-        // if (wayPointPolyLineList != null) wayPointPolyLineList.clear();
+        if (wayPointPolyLineList != null) wayPointPolyLineList.clear();
         mMap.clear();
         if (lastKnownUserLocation == null) {
             drawUserUpdate(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude));
@@ -525,7 +595,7 @@ public class MapPresenter implements
 
     private void initCachedMapChecker() {
         // check if there is no internet, if so - switch to cached map
-        new CountDownTimer(Long.MAX_VALUE, 4000) {
+        new CountDownTimer(Long.MAX_VALUE, 10000) {
             public void onTick(long millisUntilFinished) {
                 if (offLineTileProvider == null) {
                     return;
@@ -540,8 +610,12 @@ public class MapPresenter implements
                     Log.d("MapPresenter", "Detected no internet connection. Therefore, since the Cached Map data is ready - switching to Cached Map mode.");
                     offlineOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(offLineTileProvider).zIndex(0).transparency(0.0f));
                     mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
-                    if (mMap.getCameraPosition().zoom < 17.0f) {
-                        mMap.moveCamera(CameraUpdateFactory.zoomTo(14.0f));
+                    if (mMap.getCameraPosition().zoom > 17.0f) {
+                        if (userMarker != null){
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude), 14.0f));
+                        }else{
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.0486, -114.0708), 14.0f));
+                        }
                         mMap.setMaxZoomPreference(17.0f);
                     }
 
@@ -551,6 +625,11 @@ public class MapPresenter implements
                 if (isNetworkAvailable() && usingCachedMap) {
                     usingCachedMap = false;
                     mMap.setMaxZoomPreference(25.0f);
+                    if (userMarker != null){
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude), 14.0f));
+                    }else{
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.0486, -114.0708), 14.0f));
+                    }
                     Log.d("MapPresenter", "Internet Connection Found. Switching back to Google Hybrid Map");
                     if (offlineOverlay != null) offlineOverlay.remove();
                     mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);

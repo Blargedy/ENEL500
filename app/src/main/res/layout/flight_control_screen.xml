@@ -17,6 +17,7 @@
         tools:textSize="36sp"
         tools:textStyle="bold" />
 
+
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -25,6 +26,16 @@
         android:layout_gravity="center"
         android:layout_weight="0.82"
         tools:context=".FlightControlActivity">
+
+
+        <ProgressBar
+            android:id="@+id/loadingProgressAnimation"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1" />
+
 
         <TextView
             android:id="@+id/txtPercentCompleteMap"
@@ -39,22 +50,22 @@
 
         <Button
             android:id="@+id/btnFindMeNow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="bottom|left"
             android:layout_marginBottom="5dp"
-            android:layout_marginStart="245dp"
+            android:layout_marginStart="270dp"
             android:layout_weight="1"
-            android:alpha="0.7"
-            android:background="@drawable/round_btn"
+            android:alpha="1.0"
+            android:background="@drawable/gps"
             android:enabled="true"
-            android:text="Find Me"
             android:textAllCaps="false"
             android:textColor="@color/common_text_color"
             android:textSize="15dp" />
 
 
     </fragment>
+
 
     <SeekBar
         android:id="@+id/surveyProgressBar"

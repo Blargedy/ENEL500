@@ -29,11 +29,7 @@ public class FlightControlActivity extends FragmentActivity
     {
         super.onCreate(savedInstanceState);
 
-        if(getResources().getBoolean(R.bool.portrait_only)){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }else{
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        }
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         Boolean isLiveModeEnabled = getIntent().getBooleanExtra(IS_LIVE_MODE_ENABLED, false);
         String pcIpAddress = getIntent().getStringExtra(PC_IP_ADDRESS);

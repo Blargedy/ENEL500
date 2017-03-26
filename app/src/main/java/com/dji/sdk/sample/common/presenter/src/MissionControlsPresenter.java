@@ -11,6 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.ToggleButton;
 
 import com.dji.sdk.sample.R;
@@ -33,7 +34,7 @@ public class MissionControlsPresenter implements
     private Button startMissionButton_;
     private Button cancelButton_;
     private ToggleButton hoverNowToggleButton_;
-
+    private ProgressBar loadingProgressAnimation_;
     private MissionStateEntity missionState_;
     private BroadcastReceiver receiver_;
     private Context context_;
@@ -45,9 +46,10 @@ public class MissionControlsPresenter implements
         acceptAreaButton_ = view.acceptAreaButton();
         startMissionButton_ = view.startMissionButton();
         cancelButton_ = view.cancelButton();
+        loadingProgressAnimation_=view.loadingProgressAnimation();
         hoverNowToggleButton_ = view.hoverNowToggleButton();
         missionState_ = missionState;
-
+        loadingProgressAnimation_.setVisibility(View.INVISIBLE);
         setButtonOnClickListeners();
         registerMissionStateChangedReceiver(context);
         setViewBasedOnMissionState();
@@ -78,15 +80,11 @@ public class MissionControlsPresenter implements
     @Override
     public void onClick(View v) {
         if (v.getId() == acceptAreaButton_.getId()) {
-
             missionState_.setCurrentMissionState(MissionStateEnum.GENERATE_MISSION_BOUNDARY);
         } else if (v.getId() == startMissionButton_.getId()) {
-            if (DJISampleApplication.isAircraftConnected())
-            {
+            if (DJISampleApplication.isAircraftConnected()) {
                 missionState_.setCurrentMissionState(MissionStateEnum.INITIALIZE_MISSION);
-            }
-            else
-            {
+            } else {
                 warnUserThatDroneIsNotConnected();
             }
         } else if (v.getId() == cancelButton_.getId()) {
@@ -152,6 +150,7 @@ public class MissionControlsPresenter implements
     private void setViewBasedOnMissionState() {
         switch (missionState_.getCurrentMissionState()) {
             case INITIALIZING_MAP:
+                loadingProgressAnimation_.setVisibility(View.VISIBLE);
                 acceptAreaButton_.setVisibility(View.VISIBLE);
                 acceptAreaButton_.setEnabled(false);
                 cancelButton_.setVisibility(View.VISIBLE);
@@ -160,6 +159,7 @@ public class MissionControlsPresenter implements
                 hoverNowToggleButton_.setVisibility(View.GONE);
                 break;
             case SELECT_AREA:
+                loadingProgressAnimation_.setVisibility(View.INVISIBLE);
                 acceptAreaButton_.setVisibility(View.VISIBLE);
                 acceptAreaButton_.setEnabled(true);
                 cancelButton_.setEnabled(true);
@@ -167,9 +167,11 @@ public class MissionControlsPresenter implements
                 hoverNowToggleButton_.setVisibility(View.GONE);
                 break;
             case GENERATE_MISSION_BOUNDARY:
+                loadingProgressAnimation_.setVisibility(View.VISIBLE);
                 acceptAreaButton_.setEnabled(false);
                 break;
             case VIEW_MISSION:
+                loadingProgressAnimation_.setVisibility(View.VISIBLE);
                 startMissionButton_.setEnabled(false);
                 if (!startMissionButton_.getText().equals("Demo Mode Activated. Return to the Main Menu to reset.")) {
                     startMissionButton_.setText("Please wait...");
@@ -184,26 +186,30 @@ public class MissionControlsPresenter implements
 
                 final Runnable enableAfterWaypointsShowing = new Runnable() {
                     public void run() {
-                        if (!startMissionButton_.getText().equals("Demo Mode Activated. Return to the Main Menu to reset.")){
+                        if (!startMissionButton_.getText().equals("Demo Mode Activated. Return to the Main Menu to reset.")) {
                             startMissionButton_.setText("Start Mission");
                             startMissionButton_.setEnabled(true);
                             cancelButton_.setEnabled(true);
-                        }else{
+                            loadingProgressAnimation_.setVisibility(View.INVISIBLE);
+                        } else {
                             startMissionButton_.setText("Demo Mode Activated. Return to the Main Menu to reset.");
                             startMissionButton_.setEnabled(false);
                             cancelButton_.setEnabled(true);
+                            loadingProgressAnimation_.setVisibility(View.INVISIBLE);
                         }
                     }
                 };
 
-                handler.postDelayed(enableAfterWaypointsShowing,3000);
+                handler.postDelayed(enableAfterWaypointsShowing, 3000);
 
                 break;
             case INITIALIZE_MISSION:
+                loadingProgressAnimation_.setVisibility(View.VISIBLE);
                 startMissionButton_.setEnabled(false);
                 cancelButton_.setEnabled(false);
                 break;
             case MISSION_EXECUTING:
+                loadingProgressAnimation_.setVisibility(View.INVISIBLE);
                 hoverNowToggleButton_.setVisibility(View.VISIBLE);
                 hoverNowToggleButton_.setEnabled(true);
                 cancelButton_.setEnabled(true);
@@ -240,8 +246,7 @@ public class MissionControlsPresenter implements
         }
     }
 
-    private void askUserIfTheyAreSureTheyWantToCancel()
-    {
+    private void askUserIfTheyAreSureTheyWantToCancel() {
         AlertDialog.Builder alert = new AlertDialog.Builder(context_);
 
         alert.setTitle("Cancel Mission");
@@ -250,14 +255,14 @@ public class MissionControlsPresenter implements
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME);
-            }});
+            }
+        });
         alert.setNegativeButton("Cancel", null);
 
         alert.show();
     }
 
-    private void warnUserThatDroneIsNotConnected()
-    {
+    private void warnUserThatDroneIsNotConnected() {
         AlertDialog.Builder alert = new AlertDialog.Builder(context_);
 
         alert.setTitle("Drone Not Connected");

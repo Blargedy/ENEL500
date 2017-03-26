@@ -1,6 +1,7 @@
 package com.dji.sdk.sample.common.view.api;
 
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.ToggleButton;
 
 /**
@@ -14,4 +15,5 @@ public interface I_MissionControlsView
     Button cancelButton();
     ToggleButton hoverNowToggleButton();
     Button settingsButton();
+    ProgressBar loadingProgressAnimation();
 }

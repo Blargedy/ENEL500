@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -9,257 +9,199 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
         android:text="Mission Options"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="30sp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="15dp" />
-
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="55dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/altitudeLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Altitude (m):              "
-            android:textColor="@color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Space
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+            <TextView
+                android:id="@+id/altitudeLabel"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="Altitude (m):              "
+                android:textColor="@color/white" />
 
             <NumberPicker
                 android:id="@+id/numPickerAltitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:clickable="true" />
 
-            <Space
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="55dp"
-        android:orientation="horizontal">
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
-        <TextView
-            android:id="@+id/missionSpeedLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Flight speed (m/s):              "
-            android:textColor="@color/white" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal">
 
-            <Space
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+            <TextView
+                android:id="@+id/missionSpeedLabel"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="Flight speed (m/s):              "
+                android:textColor="@color/white" />
 
             <NumberPicker
                 android:id="@+id/numPickerMissionSpeed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:clickable="true" />
 
-            <Space
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
         </LinearLayout>
     </LinearLayout>
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="55dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/imageOverlapLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Image Overlap (%):   "
-            android:textColor="@color/white" />
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal">
 
-            <Space
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+            <TextView
+                android:id="@+id/imageOverlapLabel"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="Image Overlap (%):   "
+                android:textColor="@color/white" />
 
             <NumberPicker
                 android:id="@+id/imageOverlap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:clickable="true" />
 
-            <Space
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
         </LinearLayout>
     </LinearLayout>
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="55dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/swathOverlapLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:clickable="true"
-            android:text="Swath Overlap (%):   "
-            android:textColor="@color/white" />
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal">
 
-            <Space
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+            <TextView
+                android:id="@+id/swathOverlapLabel"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:text="Swath Overlap (%):   "
+                android:textColor="@color/white" />
 
             <NumberPicker
                 android:id="@+id/swathOverlap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:hapticFeedbackEnabled="true" />
 
-            <Space
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="55dp"
-        android:orientation="horizontal">
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
-        <TextView
-            android:id="@+id/waypointSizeLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Waypoint size on map (m):              "
-            android:textColor="@color/white" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal">
 
-            <Space
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+            <TextView
+                android:id="@+id/waypointSizeLabel"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="Waypoint size on map (m):              "
+                android:textColor="@color/white" />
 
             <NumberPicker
                 android:id="@+id/numPickerWaypointSize"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:clickable="true" />
 
-            <Space
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/chkCameraAuto"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center_horizontal|center"
-            android:layout_weight="1"
-            android:text="Camera Auto" />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/cameraISOLabel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="1">
-
-        <TextView
-            android:id="@+id/cameraISOLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight=".33"
-            android:clickable="true"
-            android:text="Camera ISO"
-            android:textColor="@color/white" />
-
-    </LinearLayout>
+        android:layout_weight="1"
+        android:clickable="true"
+        android:text="Camera ISO"
+        android:textColor="@color/white" />
 
     <Spinner
         android:id="@+id/spinnerCameraISO"
         android:layout_width="match_parent"
-        android:layout_height="31dp"
+        android:layout_height="20dp"
         android:elevation="1dp"
         android:hapticFeedbackEnabled="true"
         android:textAlignment="center" />
@@ -267,7 +209,7 @@
     <TextView
         android:id="@+id/cameraShutterLabel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_gravity="center"
         android:clickable="true"
         android:text="Camera Shutter"
@@ -281,7 +223,7 @@
         <Spinner
             android:id="@+id/spinnerCameraShutter"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.75"
             android:hapticFeedbackEnabled="true"
@@ -292,37 +234,38 @@
     <TextView
         android:id="@+id/imageTypeLabel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_gravity="center"
         android:clickable="true"
         android:text="Image Type"
         android:textColor="@color/white" />
 
-    <LinearLayout
+    <Spinner
+        android:id="@+id/spinnerImageType"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.75"
+        android:hapticFeedbackEnabled="true"
+        android:textAlignment="center" />
 
-        <Spinner
-            android:id="@+id/spinnerImageType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0.75"
-            android:hapticFeedbackEnabled="true"
-            android:textAlignment="center" />
-
-    </LinearLayout>
+    <CheckBox
+        android:id="@+id/chkCameraAuto"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical|center_horizontal|center"
+        android:layout_weight="1"
+        android:text="Camera Auto" />
 
     <Button
         android:id="@+id/btnAcceptOK"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/round_btn"
         android:enabled="true"
         android:hapticFeedbackEnabled="true"
-        android:background="@drawable/round_btn"
+        android:text="Ok"
         android:textAllCaps="false"
-        android:textColor="@color/common_text_color"
-        android:text="Ok" />
+        android:textColor="@color/common_text_color" />
 
 </LinearLayout>

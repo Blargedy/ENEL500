@@ -33,11 +33,7 @@ public class SlashScreenActivity extends Activity {
         setContentView(R.layout.splash_screen);
 
 
-        if(getResources().getBoolean(R.bool.portrait_only)){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }else{
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        }
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         ucLogo = (ImageView) findViewById(R.id.imageucLogo);
         lockheedLogo = (ImageView) findViewById(R.id.imagelockheedLogo);
