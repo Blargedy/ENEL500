@@ -171,13 +171,9 @@ public class MissionControlsPresenter implements
                 break;
             case VIEW_MISSION:
                 startMissionButton_.setEnabled(false);
-<<<<<<< HEAD
-                startMissionButton_.setText("Generating waypoints");
-=======
                 if (!startMissionButton_.getText().equals("Demo Mode Activated. Return to the Main Menu to reset.")) {
                     startMissionButton_.setText("Please wait...");
                 }
->>>>>>> Changes
                 acceptAreaButton_.setEnabled(false);
                 cancelButton_.setEnabled(false);
                 acceptAreaButton_.setVisibility(View.GONE);
@@ -188,27 +184,19 @@ public class MissionControlsPresenter implements
 
                 final Runnable enableAfterWaypointsShowing = new Runnable() {
                     public void run() {
-<<<<<<< HEAD
-                        startMissionButton_.setText("Start Mission");
-                        startMissionButton_.setEnabled(true);
-                        cancelButton_.setEnabled(true);
-                    }
-                };
-
-                handler.postDelayed(enableAfterWaypointsShowing,3500);
-=======
                         if (!startMissionButton_.getText().equals("Demo Mode Activated. Return to the Main Menu to reset.")){
                             startMissionButton_.setText("Start Mission");
                             startMissionButton_.setEnabled(true);
+                            cancelButton_.setEnabled(true);
                         }else{
                             startMissionButton_.setText("Demo Mode Activated. Return to the Main Menu to reset.");
                             startMissionButton_.setEnabled(false);
+                            cancelButton_.setEnabled(true);
                         }
                     }
                 };
 
                 handler.postDelayed(enableAfterWaypointsShowing,3000);
->>>>>>> Changes
 
                 break;
             case INITIALIZE_MISSION:
