@@ -17,6 +17,7 @@ import com.dji.sdk.sample.common.activity.FlightControlActivity;
 import com.dji.sdk.sample.common.activity.MainMenuActivity;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
+import com.dji.sdk.sample.common.integration.src.DJISampleApplication;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 import com.dji.sdk.sample.common.view.api.I_MissionControlsView;
 
@@ -78,7 +79,14 @@ public class MissionControlsPresenter implements
         if (v.getId() == acceptAreaButton_.getId()) {
             missionState_.setCurrentMissionState(MissionStateEnum.GENERATE_MISSION_BOUNDARY);
         } else if (v.getId() == startMissionButton_.getId()) {
-            missionState_.setCurrentMissionState(MissionStateEnum.INITIALIZE_MISSION);
+            if (DJISampleApplication.isAircraftConnected())
+            {
+                missionState_.setCurrentMissionState(MissionStateEnum.INITIALIZE_MISSION);
+            }
+            else
+            {
+                warnUserThatDroneIsNotConnected();
+            }
         } else if (v.getId() == cancelButton_.getId()) {
             cancelButtonPressed();
         }
@@ -215,6 +223,17 @@ public class MissionControlsPresenter implements
                 missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME);
             }});
         alert.setNegativeButton("Cancel", null);
+
+        alert.show();
+    }
+
+    private void warnUserThatDroneIsNotConnected()
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context_);
+
+        alert.setTitle("Drone Not Connected");
+        alert.setMessage("Please connect the drone before starting the mission");
+        alert.setPositiveButton("Ok", null);
 
         alert.show();
     }
