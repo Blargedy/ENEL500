@@ -13,4 +13,5 @@ public class ApplicationSettingsKeys
     public static final String IS_CAMERA_AUTOMATIC_MODE = "IS_CAMERA_AUTOMATIC_MODE";
     public static final String CAMERA_ISO = "CAMERA_ISO";
     public static final String CAMERA_SHUTTER_SPEED = "CAMERA_SHUTTER_SPEED";
+    public static final String WAYPOINT_SIZE = "WAYPOINT_SIZE";
 }

@@ -32,6 +32,7 @@ public class SettingsMenuActivity extends AppCompatActivity
     private NumberPicker numPickerFlightSpeed_;
     private NumberPicker numPickerImageOverlap_;
     private NumberPicker numPickerSwathOverlap_;
+    private NumberPicker numPickerWayointSize_;
     private Spinner spinnerCameraISO_;
     private Spinner spinnerCameraShutter_;
     private Button btnAcceptOK_;
@@ -67,6 +68,7 @@ public class SettingsMenuActivity extends AppCompatActivity
         numPickerFlightSpeed_ = (NumberPicker) findViewById(R.id.numPickerMissionSpeed);
         numPickerImageOverlap_ = (NumberPicker) findViewById(R.id.imageOverlap);
         numPickerSwathOverlap_ = (NumberPicker) findViewById(R.id.swathOverlap);
+        numPickerWayointSize_ = (NumberPicker) findViewById(R.id.numPickerWaypointSize);
         spinnerCameraISO_ = (Spinner) findViewById(R.id.spinnerCameraISO);
         spinnerCameraShutter_ = (Spinner) findViewById(R.id.spinnerCameraShutter);
         chkCameraAuto_ = (CheckBox) findViewById(R.id.chkCameraAuto);
@@ -86,6 +88,9 @@ public class SettingsMenuActivity extends AppCompatActivity
 
         numPickerSwathOverlap_.setMinValue(30);
         numPickerSwathOverlap_.setMaxValue(90);
+
+        numPickerWayointSize_.setMinValue(1);
+        numPickerWayointSize_.setMaxValue(10);
 
         chkCameraAuto_.setOnCheckedChangeListener(this);
     }
@@ -126,6 +131,7 @@ public class SettingsMenuActivity extends AppCompatActivity
                 (int)(settingsManager_.getMinimumPercentImageOverlapFromSettings() * 100));
         numPickerSwathOverlap_.setValue(
                 (int)(settingsManager_.getMinimumPercentSwathOverlapFromSettings() * 100));
+        numPickerWayointSize_.setValue((int) settingsManager_.getWaypointSizeFromSettings());
 
         chkCameraAuto_.setChecked(settingsManager_.getIsCameraInAutomaticModeFromSettings());
 
@@ -146,6 +152,7 @@ public class SettingsMenuActivity extends AppCompatActivity
                 numPickerImageOverlap_.getValue() / 100.0f);
         settingsManager_.saveMinimumPercentSwathOverlapToSettings(
                 numPickerSwathOverlap_.getValue() / 100.0f);
+        settingsManager_.saveWaypointSizeToSettings(numPickerWayointSize_.getValue());
 
         settingsManager_.saveIsCameraInAutomaticModeToSettings(chkCameraAuto_.isChecked());
 

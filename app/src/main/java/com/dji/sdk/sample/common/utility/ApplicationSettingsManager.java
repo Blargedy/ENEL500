@@ -69,6 +69,12 @@ public class ApplicationSettingsManager
                     DJICameraSettingsDef.CameraShutterSpeed.ShutterSpeed1_1000.name());
     }
 
+    public float getWaypointSizeFromSettings()
+    {
+        return PreferenceManager.getDefaultSharedPreferences(context_)
+                .getFloat(ApplicationSettingsKeys.WAYPOINT_SIZE, 3.0f);
+    }
+
     public void saveAltitudeToSettings(float altitude)
     {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context_).edit();
@@ -117,6 +123,13 @@ public class ApplicationSettingsManager
     {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context_).edit();
         editor.putString(ApplicationSettingsKeys.CAMERA_SHUTTER_SPEED, cameraShutterSpeed.name());
+        editor.commit();
+    }
+
+    public void saveWaypointSizeToSettings(float waypointSize)
+    {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context_).edit();
+        editor.putFloat(ApplicationSettingsKeys.WAYPOINT_SIZE, waypointSize);
         editor.commit();
     }
 }
