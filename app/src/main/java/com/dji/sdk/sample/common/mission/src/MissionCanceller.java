@@ -26,10 +26,12 @@ public class MissionCanceller implements I_CompletionCallback
     private static final String TAG = "HydraMissionCanceller";
 
     private I_MissionErrorNotifier missionErrorNotifier_;
-    private BroadcastReceiver receiver_;
     private MissionStateEntity missionState_;
     private I_FlightControllerSource flightControllerSource_;
     private I_MissionStateResetter missionStateResetter_;
+
+    private BroadcastReceiver missionStateChangedReceiver_;
+    private BroadcastReceiver droneReachedHomeReceiver_;
 
     public MissionCanceller(
             Context context,
@@ -44,6 +46,7 @@ public class MissionCanceller implements I_CompletionCallback
         missionStateResetter_ = missionStateResetter;
 
         registerMissionStateChangedReceiver(context);
+        registerDroneReachedHomeReceiver(context);
     }
 
     private void registerMissionStateChangedReceiver(Context context)
@@ -51,14 +54,29 @@ public class MissionCanceller implements I_CompletionCallback
         IntentFilter filter = new IntentFilter();
         filter.addAction(BroadcastIntentNames.MISSION_STATE_CHANGED);
 
-        receiver_ = new BroadcastReceiver() {
+        missionStateChangedReceiver_ = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 missionStateChanged();
             }
         };
 
-        LocalBroadcastManager.getInstance(context).registerReceiver(receiver_, filter);
+        LocalBroadcastManager.getInstance(context).registerReceiver(missionStateChangedReceiver_, filter);
+    }
+
+    private void registerDroneReachedHomeReceiver(Context context)
+    {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BroadcastIntentNames.DRONE_REACHED_HOME);
+
+        droneReachedHomeReceiver_ = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                droneReachedHome();
+            }
+        };
+
+        LocalBroadcastManager.getInstance(context).registerReceiver(droneReachedHomeReceiver_, filter);
     }
 
     private void missionStateChanged()
@@ -84,7 +102,10 @@ public class MissionCanceller implements I_CompletionCallback
     {
         if (error == null)
         {
-            changeMissionStateAfterCommandIsExecutedSuccessfully();
+            if (missionState_.getCurrentMissionState() == MissionStateEnum.PAUSE_GO_HOME)
+            {
+                missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME_PAUSED);
+            }
         }
         else
         {
@@ -93,20 +114,8 @@ public class MissionCanceller implements I_CompletionCallback
         }
     }
 
-    private void changeMissionStateAfterCommandIsExecutedSuccessfully()
+    private void droneReachedHome()
     {
-        switch (missionState_.getCurrentMissionState())
-        {
-            case GO_HOME:
-                missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
-                break;
-
-            case PAUSE_GO_HOME:
-                missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME_PAUSED);
-                break;
-
-            default:
-                break;
-        }
+        missionState_.setCurrentMissionState(MissionStateEnum.SELECT_AREA);
     }
 }

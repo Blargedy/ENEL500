@@ -89,6 +89,7 @@ public class MissionContainer
         }
 
         droneStateContainer_ = new DroneStateContainer(
+                context,
                 missionErrorNotifier,
                 integrationLayerContainer,
                 cameraGeneratedNewMediaFileCallback_,

@@ -1,5 +1,7 @@
 package com.dji.sdk.sample.common.container;
 
+import android.content.Context;
+
 import com.dji.sdk.sample.common.droneState.api.I_CameraInitializer;
 import com.dji.sdk.sample.common.droneState.api.I_FlightControllerInitializer;
 import com.dji.sdk.sample.common.droneState.src.BatteryTemperatureWarningNotifier;
@@ -28,6 +30,7 @@ public class DroneStateContainer
     private FlightControllerInitializer flightControllerInitializer_;
 
     public DroneStateContainer(
+            Context context,
             I_MissionErrorNotifier missionErrorNotifier,
             IntegrationLayerContainer integrationLayerContainer,
             I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback,
@@ -46,7 +49,8 @@ public class DroneStateContainer
                 cameraSettings);
 
         flightControllerUpdateSystemStateCallback_ = new FlightControllerUpdateSystemStateCallback(
-                droneLocationEntity);
+                droneLocationEntity,
+                context);
 
         flightControllerInitializer_ = new FlightControllerInitializer(
                 integrationLayerContainer.flightControllerSource(),
