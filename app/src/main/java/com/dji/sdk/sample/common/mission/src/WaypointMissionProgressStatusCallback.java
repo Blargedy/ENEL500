@@ -48,10 +48,7 @@ public class WaypointMissionProgressStatusCallback implements
             DJIWaypointMission.DJIWaypointMissionStatus waypointMissionStatus =
                     (DJIWaypointMission.DJIWaypointMissionStatus) progressStatus;
 
-            int targetWaypointIndex = waypointMissionStatus.getTargetWaypointIndex();
-            boolean isWaypointReached = waypointMissionStatus.isWaypointReached();
-
-            if (isDroneAtNewWaypoint(targetWaypointIndex, isWaypointReached))
+            if (isDroneAtNewWaypoint(waypointMissionStatus))
             {
                 waypointReachedNotifier_.notifyWaypointAtIndexHasBeenReached(waypointIndex_);
                 imageShooter_.shootPhotoOnWaypoint(waypointIndex_);
@@ -66,9 +63,10 @@ public class WaypointMissionProgressStatusCallback implements
         waypointIndex_ = 0;
     }
 
-    private boolean isDroneAtNewWaypoint(int missionUpdateTargetWaypoint, boolean isWaypointReached)
+    private boolean isDroneAtNewWaypoint(DJIWaypointMission.DJIWaypointMissionStatus status)
     {
         int nextTargetWaypointIndex = (waypointIndex_ + 1) % WAYPOINTS_PER_MISSION;
-        return (nextTargetWaypointIndex == missionUpdateTargetWaypoint) && isWaypointReached;
+        return (nextTargetWaypointIndex == status.getTargetWaypointIndex())
+                && status.isWaypointReached();
     }
 }

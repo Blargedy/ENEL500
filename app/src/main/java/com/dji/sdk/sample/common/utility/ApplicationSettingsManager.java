@@ -1,10 +1,8 @@
 package com.dji.sdk.sample.common.utility;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import dji.common.camera.DJICameraSettingsDef;
 
@@ -15,7 +13,6 @@ import dji.common.camera.DJICameraSettingsDef;
 public class ApplicationSettingsManager
 {
     Context context_;
-    Activity activity_;
 
     public ApplicationSettingsManager(
             Context context)
@@ -67,6 +64,14 @@ public class ApplicationSettingsManager
                 .getString(
                     ApplicationSettingsKeys.CAMERA_SHUTTER_SPEED,
                     DJICameraSettingsDef.CameraShutterSpeed.ShutterSpeed1_1000.name());
+    }
+
+    public String getImageTypeFromSettings()
+    {
+        return PreferenceManager.getDefaultSharedPreferences(context_)
+                .getString(
+                        ApplicationSettingsKeys.IMAGE_TYPE,
+                        DJICameraSettingsDef.CameraPhotoFileFormat.JPEG.name());
     }
 
     public float getWaypointSizeFromSettings()
@@ -123,6 +128,13 @@ public class ApplicationSettingsManager
     {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context_).edit();
         editor.putString(ApplicationSettingsKeys.CAMERA_SHUTTER_SPEED, cameraShutterSpeed.name());
+        editor.commit();
+    }
+
+    public void saveImageTypeToSettings(DJICameraSettingsDef.CameraPhotoFileFormat imageType)
+    {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context_).edit();
+        editor.putString(ApplicationSettingsKeys.IMAGE_TYPE, imageType.name());
         editor.commit();
     }
 

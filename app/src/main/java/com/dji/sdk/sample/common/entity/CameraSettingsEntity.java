@@ -20,6 +20,7 @@ public class CameraSettingsEntity
     private boolean isInAutomaticMode_;
     private DJICameraSettingsDef.CameraISO cameraISO_;
     private DJICameraSettingsDef.CameraShutterSpeed cameraShutterSpeed_;
+    private DJICameraSettingsDef.CameraPhotoFileFormat imageType_;
 
     private BroadcastReceiver receiver_;
     private ApplicationSettingsManager applicationSettingsManager_;
@@ -63,6 +64,11 @@ public class CameraSettingsEntity
         return cameraShutterSpeed_;
     }
 
+    public DJICameraSettingsDef.CameraPhotoFileFormat imageType()
+    {
+        return imageType_;
+    }
+
     private void retrieveSettingsFromSettingsManager()
     {
         isInAutomaticMode_ = applicationSettingsManager_.getIsCameraInAutomaticModeFromSettings();
@@ -72,5 +78,8 @@ public class CameraSettingsEntity
 
         cameraShutterSpeed_ = DJICameraSettingsDef.CameraShutterSpeed.valueOf(
                 applicationSettingsManager_.getCameraShutterSpeedFromSettings());
+
+        imageType_ = DJICameraSettingsDef.CameraPhotoFileFormat.valueOf(
+                applicationSettingsManager_.getImageTypeFromSettings());
     }
 }

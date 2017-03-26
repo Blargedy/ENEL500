@@ -35,11 +35,13 @@ public class SettingsMenuActivity extends AppCompatActivity
     private NumberPicker numPickerWayointSize_;
     private Spinner spinnerCameraISO_;
     private Spinner spinnerCameraShutter_;
+    private Spinner spinnerImageType_;
     private Button btnAcceptOK_;
     private CheckBox chkCameraAuto_;
 
     private ArrayAdapter<String> isoAdapter_;
     private ArrayAdapter<String> shutterAdapter_;
+    private ArrayAdapter<String> imageTypeAdapter_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,6 +61,7 @@ public class SettingsMenuActivity extends AppCompatActivity
         initializeViewElements();
         populateIsoComboBox();
         populateShutterSpeedComboBox();
+        populateImageTypeComboBox();
         restoreSettingsFromLastSession();
     }
 
@@ -71,6 +74,7 @@ public class SettingsMenuActivity extends AppCompatActivity
         numPickerWayointSize_ = (NumberPicker) findViewById(R.id.numPickerWaypointSize);
         spinnerCameraISO_ = (Spinner) findViewById(R.id.spinnerCameraISO);
         spinnerCameraShutter_ = (Spinner) findViewById(R.id.spinnerCameraShutter);
+        spinnerImageType_ = (Spinner) findViewById(R.id.spinnerImageType);
         chkCameraAuto_ = (CheckBox) findViewById(R.id.chkCameraAuto);
         btnAcceptOK_ = (Button) findViewById(R.id.btnAcceptOK);
 
@@ -123,6 +127,17 @@ public class SettingsMenuActivity extends AppCompatActivity
         spinnerCameraShutter_.setAdapter(shutterAdapter_);
     }
 
+    private void populateImageTypeComboBox()
+    {
+        String[] imageTypes = new String[2];
+        imageTypes[0] = DJICameraSettingsDef.CameraPhotoFileFormat.JPEG.name();
+        imageTypes[1] = DJICameraSettingsDef.CameraPhotoFileFormat.RAW.name();
+
+        imageTypeAdapter_ = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, imageTypes);
+        spinnerImageType_.setAdapter(imageTypeAdapter_);
+    }
+
     private void restoreSettingsFromLastSession()
     {
         numPickerAltitude_.setValue((int) settingsManager_.getAltitudeFromSettings());
@@ -139,9 +154,13 @@ public class SettingsMenuActivity extends AppCompatActivity
                 settingsManager_.getCameraIsoFromSettings());
         spinnerCameraISO_.setSelection(isoSpinnerPosition);
 
-        int shutterSpeedSpinnerPosition = isoAdapter_.getPosition(
+        int shutterSpeedSpinnerPosition = shutterAdapter_.getPosition(
                 settingsManager_.getCameraShutterSpeedFromSettings());
         spinnerCameraShutter_.setSelection(shutterSpeedSpinnerPosition);
+
+        int imageTypeSpinnerPosition = imageTypeAdapter_.getPosition(
+                settingsManager_.getImageTypeFromSettings());
+        spinnerImageType_.setSelection(imageTypeSpinnerPosition);
     }
 
     private void persistSettingsForNextSession()
@@ -163,6 +182,10 @@ public class SettingsMenuActivity extends AppCompatActivity
         DJICameraSettingsDef.CameraShutterSpeed shutterSpeed = DJICameraSettingsDef.CameraShutterSpeed
                 .valueOf(spinnerCameraShutter_.getSelectedItem().toString());
         settingsManager_.saveCameraShutterSpeedToSettings(shutterSpeed);
+
+        DJICameraSettingsDef.CameraPhotoFileFormat imageType = DJICameraSettingsDef.CameraPhotoFileFormat
+                .valueOf(spinnerImageType_.getSelectedItem().toString());
+        settingsManager_.saveImageTypeToSettings(imageType);
     }
 
     @Override

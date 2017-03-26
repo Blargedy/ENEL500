@@ -123,7 +123,7 @@ public class MissionControlsPresenter implements
                 askUserIfTheyAreSureTheyWantToCancel();
                 break;
             case HOVERING:
-                missionState_.setCurrentMissionState(MissionStateEnum.GO_HOME);
+                askUserIfTheyAreSureTheyWantToCancel();
                 break;
             default:
                 break;

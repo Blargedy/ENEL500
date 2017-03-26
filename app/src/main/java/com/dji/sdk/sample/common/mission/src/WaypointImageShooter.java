@@ -44,6 +44,7 @@ public class WaypointImageShooter implements
         {
         }
 
+        missionErrorNotifier_.notifyErrorOccurred("Shooting photo on Waypoint " + waypointIndex);
         waypointIndex_ = waypointIndex;
         cameraSource_.getCamera().shootSinglePhoto(this);
     }
@@ -53,7 +54,9 @@ public class WaypointImageShooter implements
     {
         if (error != null)
         {
-            Log.d(TAG, "Failed to take photo on waypoint " + waypointIndex_ + " : " + error.getDescription());
+            String message = "Failed to take photo on waypoint " + waypointIndex_ + " : " + error.getDescription();
+            Log.d(TAG, message);
+            missionErrorNotifier_.notifyErrorOccurred(message);
         }
     }
 }

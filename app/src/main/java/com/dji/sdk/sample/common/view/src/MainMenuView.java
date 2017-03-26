@@ -68,6 +68,8 @@ public class MainMenuView
         reconstructLiveButton_ = (Button) findViewById(R.id.btn_reconstruct_live);
         reconstructLaterButton_ = (Button) findViewById(R.id.btn_reconstruct_later);
 
+        reconstructLiveButton_.setEnabled(false);
+
         txtRealTimeQuestion_ = (TextView) findViewById(R.id.txtRealTimeQuestion);
         droneLogo_ = (ImageView) findViewById(R.id.imageDroneLogo);
         txt_HydraTitle_ = (TextView)findViewById(R.id.txt_HydraTitle);

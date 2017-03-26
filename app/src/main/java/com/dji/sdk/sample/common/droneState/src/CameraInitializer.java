@@ -77,9 +77,7 @@ public class CameraInitializer implements
             {
                 case SET_CAMERA_MODE:
                     expectedCallback_ = ExpectedCallback.SET_FILE_FORMAT;
-                    cameraSource_.getCamera().setPhotoFileFormat(
-                            DJICameraSettingsDef.CameraPhotoFileFormat.JPEG,
-                            this);
+                    cameraSource_.getCamera().setPhotoFileFormat(cameraSettings_.imageType(), this);
                     break;
 
                 case SET_FILE_FORMAT:

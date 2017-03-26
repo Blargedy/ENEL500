@@ -12,7 +12,7 @@
         android:text="Mission Options"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="36sp" />
+        android:textSize="30sp" />
 
     <Space
         android:layout_width="match_parent"
@@ -58,10 +58,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="15dp" />
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="55dp"
@@ -101,10 +97,6 @@
 
         </LinearLayout>
     </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -146,10 +138,6 @@
 
         </LinearLayout>
     </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -193,10 +181,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="15dp" />
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="55dp"
@@ -237,10 +221,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="24dp" />
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -256,10 +236,6 @@
             android:text="Camera Auto" />
 
     </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -288,10 +264,6 @@
         android:hapticFeedbackEnabled="true"
         android:textAlignment="center" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp" />
-
     <TextView
         android:id="@+id/cameraShutterLabel"
         android:layout_width="match_parent"
@@ -317,9 +289,30 @@
 
     </LinearLayout>
 
-    <Space
+    <TextView
+        android:id="@+id/imageTypeLabel"
         android:layout_width="match_parent"
-        android:layout_height="10dp" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:text="Image Type"
+        android:textColor="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spinnerImageType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.75"
+            android:hapticFeedbackEnabled="true"
+            android:textAlignment="center" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnAcceptOK"
