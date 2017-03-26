@@ -173,7 +173,7 @@ public class MissionControlsPresenter implements
                 startMissionButton_.setEnabled(false);
                 startMissionButton_.setText("Generating waypoints");
                 acceptAreaButton_.setEnabled(false);
-                cancelButton_.setEnabled(true);
+                cancelButton_.setEnabled(false);
                 acceptAreaButton_.setVisibility(View.GONE);
                 hoverNowToggleButton_.setVisibility(View.GONE);
                 startMissionButton_.setVisibility(View.VISIBLE);
@@ -184,6 +184,7 @@ public class MissionControlsPresenter implements
                     public void run() {
                         startMissionButton_.setText("Start Mission");
                         startMissionButton_.setEnabled(true);
+                        cancelButton_.setEnabled(true);
                     }
                 };
 
@@ -192,6 +193,7 @@ public class MissionControlsPresenter implements
                 break;
             case INITIALIZE_MISSION:
                 startMissionButton_.setEnabled(false);
+                cancelButton_.setEnabled(false);
                 break;
             case MISSION_EXECUTING:
                 hoverNowToggleButton_.setVisibility(View.VISIBLE);
