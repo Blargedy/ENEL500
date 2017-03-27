@@ -134,6 +134,8 @@ public class MapPresenter implements
     private final Drawable userDrawable;
     private BitmapDescriptor userMarkerIcon;
     private Location lastKnownUserLocation;
+    // (Capstone in Oval): Latitude: 51.076833 Longitude: -114.135641
+    private final LatLng calgaryUniLatLng = new LatLng(51.077123, -114.129412);
     // Cached Map
     private CachedMapNotifyingThread cachedMapLoadNotifier;
     private CachedMapLoaderThread cachedMapLoaderThread;
@@ -145,10 +147,6 @@ public class MapPresenter implements
     private Intent starterIntent;
     private FragmentActivity fragmentActivity;
     private MissionStateEntity missionState;
-
-
-    // TO DO
-
 
     public MapPresenter(
             FragmentActivity fragmentActivity,
@@ -265,55 +263,64 @@ public class MapPresenter implements
         }
         numWaypointsTotal = waypoints.size(); // do not use polyline size (1 extra)
 
-        // add the poly line between swaths
-
-        double latWayPointZero = waypoints.get(0).latitude_;
-        double longWayPointZero = waypoints.get(0).longitude_;
-        double latWayPointOne = waypoints.get(1).latitude_;
-        double longWayPointOne = waypoints.get(1).longitude_;
-
-        boolean switchBackIsUpDown = false;
-        if (latWayPointZero != latWayPointOne) {
-            switchBackIsUpDown = true;
-        } else {
-            switchBackIsUpDown = false;
-        }
-
+        // Add line between each waypoint
         wayPointPolyLineList = new ArrayList<Polyline>();
-        if (switchBackIsUpDown) {
-            // look for changes in long
-            double currentLong = waypoints.get(0).longitude_;
-            for (int j = 1; j < waypoints.size() - 1; j++) {
-                if (waypoints.get(j).longitude_ != currentLong) {
 
-                    // Connect drone to first waypoint
-                    wayPointPolyLineList.add(mMap.addPolyline(new PolylineOptions()
-                            .add(new LatLng(waypoints.get(j - 1).latitude_, waypoints.get(j - 1).longitude_), new LatLng(waypoints.get(j).latitude_, waypoints.get(j).longitude_))
-                            .width(wayPointCircleRadius + 3.0f)
-                            .zIndex(3004.0f)
-                            .color(Color.BLACK)));
-                } else {
-                    currentLong = waypoints.get(j).longitude_;
-                }
-            }
-        } else {
-            // look for changes in long
-            double currentLat = waypoints.get(0).latitude_;
-            for (int j = 1; j < waypoints.size() - 1; j++) {
-                if (waypoints.get(j).latitude_ != currentLat) {
-
-                    // Connect drone to first waypoint
-                    wayPointPolyLineList.add(mMap.addPolyline(new PolylineOptions()
-                            .add(new LatLng(waypoints.get(j - 1).latitude_, waypoints.get(j - 1).longitude_), new LatLng(waypoints.get(j).latitude_, waypoints.get(j).longitude_))
-                            .width(wayPointCircleRadius + 3.0f)
-                            .zIndex(3004.0f)
-                            .color(Color.BLACK)));
-                    currentLat = waypoints.get(j).latitude_;
-                } else {
-                    currentLat = waypoints.get(j).latitude_;
-                }
-            }
+        for (int j = 2; j < waypoints.size() - 1; j++) {
+            // Connect drone to first waypoint
+            wayPointPolyLineList.add(mMap.addPolyline(new PolylineOptions()
+                    .add(new LatLng(waypoints.get(j - 1).latitude_, waypoints.get(j - 1).longitude_), new LatLng(waypoints.get(j).latitude_, waypoints.get(j).longitude_))
+                    .width(wayPointCircleRadius + 3.0f)
+                    .zIndex(2000.0f)
+                    .color(Color.BLACK)));
         }
+
+//        add the poly line between swaths
+//        double latWayPointZero = waypoints.get(0).latitude_;
+//        double latWayPointOne = waypoints.get(1).latitude_;
+//
+//        boolean switchBackIsUpDown = false;
+//        if (latWayPointZero != latWayPointOne) {
+//            switchBackIsUpDown = true;
+//        } else {
+//            switchBackIsUpDown = false;
+//        }
+
+//        wayPointPolyLineList = new ArrayList<Polyline>();
+//        if (switchBackIsUpDown) {
+//            // look for changes in long
+//            double currentLong = waypoints.get(0).longitude_;
+//            for (int j = 1; j < waypoints.size() - 1; j++) {
+//                if (waypoints.get(j).longitude_ != currentLong) {
+//
+//                    // Connect drone to first waypoint
+//                    wayPointPolyLineList.add(mMap.addPolyline(new PolylineOptions()
+//                            .add(new LatLng(waypoints.get(j - 1).latitude_, waypoints.get(j - 1).longitude_), new LatLng(waypoints.get(j).latitude_, waypoints.get(j).longitude_))
+//                            .width(wayPointCircleRadius + 3.0f)
+//                            .zIndex(3004.0f)
+//                            .color(Color.BLACK)));
+//                } else {
+//                    currentLong = waypoints.get(j).longitude_;
+//                }
+//            }
+//        } else {
+//            // look for changes in long
+//            double currentLat = waypoints.get(0).latitude_;
+//            for (int j = 1; j < waypoints.size() - 1; j++) {
+//                if (waypoints.get(j).latitude_ != currentLat) {
+//
+//                    // Connect drone to first waypoint
+//                    wayPointPolyLineList.add(mMap.addPolyline(new PolylineOptions()
+//                            .add(new LatLng(waypoints.get(j - 1).latitude_, waypoints.get(j - 1).longitude_), new LatLng(waypoints.get(j).latitude_, waypoints.get(j).longitude_))
+//                            .width(wayPointCircleRadius + 3.0f)
+//                            .zIndex(3004.0f)
+//                            .color(Color.BLACK)));
+//                    currentLat = waypoints.get(j).latitude_;
+//                } else {
+//                    currentLat = waypoints.get(j).latitude_;
+//                }
+//            }
+//        }
 
 
     }
@@ -416,8 +423,13 @@ public class MapPresenter implements
         });
     }
 
+    public void resetPercentageText(){
+        txtPercentCompleteMap.setText("0.00% complete.");
+    }
+
     //@Override
     public void clearMap() {
+        txtPercentCompleteMap.setText("0.00% complete.");
         if (waypointCircleList != null) waypointCircleList.clear();
         if (wayPointPolyLineList != null) wayPointPolyLineList.clear();
         mMap.clear();
@@ -589,7 +601,6 @@ public class MapPresenter implements
             droneMarkerIcon = getMarkerIconFromDrawable(droneDrawable, 50 + (int) (70.0f * 1.85f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f)), 50 + (int) (70.0f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f))); // aspect ratio = l/w = 1.85
             if (droneLocation_.droneLocation() == null && lastKnownUserLocation == null) {
                 //LatLng calgaryLatLng = new LatLng(51.0486, -114.0708);
-                //LatLng calgaryUniLatLng = new LatLng(51.079948, -114.125534);
                 droneMarkerIcon = getMarkerIconFromDrawable(droneDrawable, 50 + (int) (70.0f * 1.85f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f)), 50 + (int) (70.0f * ((mMap.getCameraPosition().zoom - 3.00f) / 15.0f))); // aspect ratio = l/w = 1.85
                 Marker tempdroneMarker = mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(userMarker.getPosition().latitude - 0.0006, userMarker.getPosition().longitude + 0.001))
@@ -974,7 +985,6 @@ public class MapPresenter implements
                     // Called when a new location is found by the network location provider.
                     userGPSStartTime = System.nanoTime(); // reset time
                     // LatLng calgaryLatLng = new LatLng(51.0486, -114.0708);
-                    LatLng calgaryUniLatLng = new LatLng(51.079948, -114.125534);
                     drawUserUpdate(calgaryUniLatLng);
                     //Log.d("MapPresenter", "Camera Zoom: " + mMap.getCameraPosition().zoom);
                     if (!haveAnimatedCameraToUserMarker) {

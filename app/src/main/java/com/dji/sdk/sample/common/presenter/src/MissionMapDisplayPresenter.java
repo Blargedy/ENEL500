@@ -62,20 +62,25 @@ public class MissionMapDisplayPresenter {
 
         switch (currentMissionState) {
             case INITIALIZING_MAP:
+                mapPresenter_.resetPercentageText();
                 break;
             case SELECT_AREA:
+                mapPresenter_.resetPercentageText();
                 mapPresenter_.pbarsShow();
-                if (stateBeforeChange == MissionStateEnum.VIEW_MISSION){
-                    mapPresenter_.clearMap();
+                if (stateBeforeChange == MissionStateEnum.VIEW_MISSION) {
                     generatedMissionModel_.clearWaypointMissions();
+                    mapPresenter_.clearMap();
+                    mapPresenter_.resetPercentageText();
                 }
                 break;
             case GENERATE_MISSION_BOUNDARY:
+                mapPresenter_.resetPercentageText();
                 MissionBoundary boundary = mapPresenter_.getSurveyAreaBoundary();
                 initialMissionModel_.setMissionBoundary(boundary);
                 missionState_.setCurrentMissionState(MissionStateEnum.GENERATE_MISSION);
                 break;
             case VIEW_MISSION:
+                mapPresenter_.resetPercentageText();
                 final Handler handler = new Handler();
 
                 final Runnable drawWaypoints = new Runnable() {
@@ -88,6 +93,18 @@ public class MissionMapDisplayPresenter {
                 break;
             case MISSION_EXECUTING:
                 mapPresenter_.pbarsHide();
+                break;
+            case GO_HOME:
+                mapPresenter_.resetPercentageText();
+                mapPresenter_.clearMap();
+                break;
+            case GO_HOME_PAUSED:
+                mapPresenter_.resetPercentageText();
+                mapPresenter_.clearMap();
+                break;
+            case PAUSE_GO_HOME:
+                mapPresenter_.resetPercentageText();
+                mapPresenter_.clearMap();
                 break;
             default:
                 break;

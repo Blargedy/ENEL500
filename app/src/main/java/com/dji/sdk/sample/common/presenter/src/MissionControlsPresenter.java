@@ -186,17 +186,10 @@ public class MissionControlsPresenter implements
 
                 final Runnable enableAfterWaypointsShowing = new Runnable() {
                     public void run() {
-                        //if (!startMissionButton_.getText().equals("Demo Mode Activated. Return to the Main Menu to reset.")) {
                         startMissionButton_.setText("Start Mission");
                         startMissionButton_.setEnabled(true);
                         cancelButton_.setEnabled(true);
                         loadingProgressAnimation_.setVisibility(View.INVISIBLE);
-                        //} else {
-                        //   startMissionButton_.setText("Demo Mode Activated. Return to the Main Menu to reset.");
-                        // startMissionButton_.setEnabled(false);
-                        // cancelButton_.setEnabled(true);
-                        //  loadingProgressAnimation_.setVisibility(View.INVISIBLE);
-                        // }
                     }
                 };
 
