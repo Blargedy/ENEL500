@@ -20,6 +20,12 @@ public class ApplicationSettingsManager
         context_ = context;
     }
 
+    public String getPcIpAddressFromSettings()
+    {
+        return PreferenceManager.getDefaultSharedPreferences(context_)
+                .getString(ApplicationSettingsKeys.PC_IP_ADDRESS, "0.0.0.0");
+    }
+
     public float getAltitudeFromSettings()
     {
         return PreferenceManager.getDefaultSharedPreferences(context_)
@@ -78,6 +84,13 @@ public class ApplicationSettingsManager
     {
         return PreferenceManager.getDefaultSharedPreferences(context_)
                 .getFloat(ApplicationSettingsKeys.WAYPOINT_SIZE, 1.0f);
+    }
+
+    public void savePcIpAddress(String pcIpAddress)
+    {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context_).edit();
+        editor.putString(ApplicationSettingsKeys.PC_IP_ADDRESS, pcIpAddress);
+        editor.commit();
     }
 
     public void saveAltitudeToSettings(float altitude)

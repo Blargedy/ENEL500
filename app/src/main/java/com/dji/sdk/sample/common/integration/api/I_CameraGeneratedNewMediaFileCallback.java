@@ -10,4 +10,5 @@ import dji.sdk.camera.DJIMedia;
 public interface I_CameraGeneratedNewMediaFileCallback extends DJICamera.CameraGeneratedNewMediaFileCallback
 {
     void onResult(DJIMedia media);
+    void reset();
 }

@@ -8,15 +8,14 @@ import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleEnder
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.InertImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.src.AndroidToPcImageCopier;
-import com.dji.sdk.sample.common.imageTransfer.src.CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.imageTransfer.src.DroneImageDownloadQueuer;
 import com.dji.sdk.sample.common.imageTransfer.src.DroneToAndroidImageDownloader;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_ImageTransferer;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferCoordinator;
-import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferModuleEnder;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferModuleInitializer;
 import com.dji.sdk.sample.common.imageTransfer.src.ImageTransferPathsSource;
+import com.dji.sdk.sample.common.imageTransfer.src.SimulatedCameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.integration.api.I_CameraGeneratedNewMediaFileCallback;
 import com.dji.sdk.sample.common.utility.I_ApplicationContextManager;
 import com.dji.sdk.sample.common.utility.I_MissionStatusNotifier;
@@ -36,21 +35,18 @@ public class ImageTransferContainer
     private I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback_;
 
     private I_ImageTransferModuleInitializer imageTransferModuleInitializer_;
-    private I_ImageTransferModuleEnder imageTransferModuleEnder_;
-
 
     public ImageTransferContainer(
             I_ApplicationContextManager contextManager,
             I_MissionStatusNotifier missionStatusNotifier,
             IntegrationLayerContainer integrationLayerContainer,
-            String pcIpAddress,
+            UtilityContainer utilityContainer,
             boolean isLiveModeEnabled)
     {
-
         pathsSource_ = new ImageTransferPathsSource(
                 contextManager);
         androidToPcImageCopier_ = new AndroidToPcImageCopier(
-                pcIpAddress);
+                utilityContainer.applicationSettingsManager());
         droneToAndroidImageDownloader_ = new DroneToAndroidImageDownloader(
                 pathsSource_,
                 integrationLayerContainer.mediaDataFetcher(),
@@ -67,15 +63,15 @@ public class ImageTransferContainer
                     droneToAndroidImageDownloader_,
                     integrationLayerContainer.cameraState());
 
-            cameraGeneratedNewMediaFileCallback_ = new CameraGeneratedNewMediaFileCallback(
-                    droneImageDownloadQueuer_,
-                    imageTransferer_);
+//            cameraGeneratedNewMediaFileCallback_ = new CameraGeneratedNewMediaFileCallback(
+//                    droneImageDownloadQueuer_,
+//                    imageTransferer_);
 
-            imageTransferModuleInitializer_ = new ImageTransferModuleInitializer(
+            cameraGeneratedNewMediaFileCallback_ = new SimulatedCameraGeneratedNewMediaFileCallback(
+                    pathsSource_,
                     androidToPcImageCopier_);
 
-            imageTransferModuleEnder_ = new ImageTransferModuleEnder(
-                    imageTransferer_,
+            imageTransferModuleInitializer_ = new ImageTransferModuleInitializer(
                     androidToPcImageCopier_);
         }
         else
@@ -84,7 +80,6 @@ public class ImageTransferContainer
             imageTransferer_ = new InertImageTransferer();
             cameraGeneratedNewMediaFileCallback_ = new InertCameraGeneratedNewMediaFileCallback();
             imageTransferModuleInitializer_ = new InertImageTransferModuleInitializer();
-            imageTransferModuleEnder_ = new InertImageTransferModuleEnder();
         }
     }
 
@@ -95,7 +90,7 @@ public class ImageTransferContainer
 
     public I_ImageTransferModuleEnder imageTransferModuleEnder()
     {
-        return imageTransferModuleEnder_;
+        return new InertImageTransferModuleEnder();
     }
 
     public I_CameraGeneratedNewMediaFileCallback cameraGeneratedNewMediaFileCallback()

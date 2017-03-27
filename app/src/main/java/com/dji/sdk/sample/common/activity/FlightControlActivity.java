@@ -4,7 +4,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.dji.sdk.sample.R;
 import com.dji.sdk.sample.common.container.ImageTransferContainer;
 import com.dji.sdk.sample.common.container.IntegrationLayerContainer;
 import com.dji.sdk.sample.common.container.MissionContainer;
@@ -32,7 +31,6 @@ public class FlightControlActivity extends FragmentActivity
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         Boolean isLiveModeEnabled = getIntent().getBooleanExtra(IS_LIVE_MODE_ENABLED, false);
-        String pcIpAddress = getIntent().getStringExtra(PC_IP_ADDRESS);
 
         flightControlView_ = new FlightControlView(this);
 
@@ -42,7 +40,7 @@ public class FlightControlActivity extends FragmentActivity
                 utilityContainer_.contextManager(),
                 utilityContainer_.missionStatusNotifier(),
                 integrationLayerContainer_,
-                pcIpAddress,
+                utilityContainer_,
                 isLiveModeEnabled);
         missionContainer_ = new MissionContainer(
                 this,

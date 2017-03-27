@@ -6,6 +6,8 @@ package com.dji.sdk.sample.common.utility;
 
 public class ApplicationSettingsKeys
 {
+    public static final String PC_IP_ADDRESS  = "PC_IP_ADDRESS";
+
     public static final String ALTITUDE  = "ALTITUDE";
     public static final String MISSION_SPEED  = "MISSION_SPEED";
     public static final String MINIMUM_PERCENT_IMAGE_OVERLAP = "MINIMUM_PERCENT_IMAGE_OVERLAP";

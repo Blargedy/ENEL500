@@ -4,6 +4,7 @@ package com.dji.sdk.sample.common.imageTransfer.src;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 /**
@@ -19,7 +20,8 @@ public class AndroidPcConnectionTester implements Runnable
     public void run()
     {
         try {
-            Socket socket = new Socket(pcIpAddress_, 6789);
+            Socket socket = new Socket();
+            socket.connect(new InetSocketAddress(pcIpAddress_, 6789), 2000);
 
             OutputStream out = socket.getOutputStream();
             DataOutputStream dataOutputStream = new DataOutputStream(out);
@@ -28,7 +30,7 @@ public class AndroidPcConnectionTester implements Runnable
             out.close();
             socket.close();
             isConnectionSuccessful_ = true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             isConnectionSuccessful_ = false;
         }

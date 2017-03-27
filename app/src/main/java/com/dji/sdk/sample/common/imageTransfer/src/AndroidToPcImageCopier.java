@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.dji.sdk.sample.common.container.ImageTransferContainer;
 import com.dji.sdk.sample.common.imageTransfer.api.I_AndroidToPcImageCopier;
+import com.dji.sdk.sample.common.utility.ApplicationSettingsManager;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -20,7 +21,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Created by Julia on 2017-03-01.
  */
 
-public class AndroidToPcImageCopier extends Thread implements I_AndroidToPcImageCopier
+public class AndroidToPcImageCopier implements I_AndroidToPcImageCopier
 {
     private static final String TAG = "DroneToAndroidImageDownloader";
 
@@ -28,9 +29,9 @@ public class AndroidToPcImageCopier extends Thread implements I_AndroidToPcImage
     private Queue<String> imagesToTransfer_;
 
     public AndroidToPcImageCopier(
-            String pcIpAddress)
+            ApplicationSettingsManager applicationSettingsManager)
     {
-        pcIpAddress_ = pcIpAddress;
+        pcIpAddress_ = applicationSettingsManager.getPcIpAddressFromSettings();
         imagesToTransfer_ = new ConcurrentLinkedQueue<>();
     }
 

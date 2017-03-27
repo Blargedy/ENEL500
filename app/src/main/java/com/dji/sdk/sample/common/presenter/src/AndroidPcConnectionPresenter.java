@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.dji.sdk.sample.common.activity.FlightControlActivity;
 import com.dji.sdk.sample.common.imageTransfer.src.AndroidPcConnectionTester;
+import com.dji.sdk.sample.common.utility.ApplicationSettingsManager;
 import com.dji.sdk.sample.common.utility.IntentExtraKeys;
 import com.dji.sdk.sample.common.view.src.AndroidPcConnectionView;
 
@@ -18,17 +19,22 @@ public class AndroidPcConnectionPresenter implements View.OnClickListener
     private Context context_;
     private AndroidPcConnectionView view_;
     private AndroidPcConnectionTester connectionTester_;
+    private ApplicationSettingsManager settingsManager_;
 
     private String pcIpAddress_;
 
     public AndroidPcConnectionPresenter(
             Context context,
             AndroidPcConnectionView view,
-            AndroidPcConnectionTester connectionTester)
+            AndroidPcConnectionTester connectionTester,
+            ApplicationSettingsManager settingsManager)
     {
         context_ = context;
         view_ = view;
         connectionTester_ = connectionTester;
+        settingsManager_ = settingsManager;
+
+        view.pcIpAddress().setText(settingsManager.getPcIpAddressFromSettings());
 
         setOnClickListeners();
     }
@@ -71,6 +77,8 @@ public class AndroidPcConnectionPresenter implements View.OnClickListener
             view_.testConnectionButton().setVisibility(View.GONE);
             view_.continueButton().setVisibility(View.VISIBLE);
             view_.connectionStatus().setText("Connection successful!");
+
+            settingsManager_.savePcIpAddress(pcIpAddress_);
         }
         else
         {
@@ -82,7 +90,6 @@ public class AndroidPcConnectionPresenter implements View.OnClickListener
     {
         Intent reconstructNowIntent = new Intent(context_, FlightControlActivity.class);
         reconstructNowIntent.putExtra(IntentExtraKeys.IS_LIVE_MODE_ENABLED, new Boolean(true));
-        reconstructNowIntent.putExtra(IntentExtraKeys.PC_IP_ADDRESS, pcIpAddress_);
 
         context_.startActivity(reconstructNowIntent);
     }

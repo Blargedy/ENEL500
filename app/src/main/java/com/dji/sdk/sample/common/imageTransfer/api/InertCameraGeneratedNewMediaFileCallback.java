@@ -14,4 +14,9 @@ public class InertCameraGeneratedNewMediaFileCallback implements I_CameraGenerat
     public void onResult(DJIMedia media)
     {
     }
+
+    @Override
+    public void reset()
+    {
+    }
 }

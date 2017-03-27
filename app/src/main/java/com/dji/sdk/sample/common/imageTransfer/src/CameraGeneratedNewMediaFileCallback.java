@@ -40,4 +40,9 @@ public class CameraGeneratedNewMediaFileCallback implements I_CameraGeneratedNew
             imageTransferer_.transferNewImagesFromDrone(null);
         }
     }
+
+    @Override
+    public void reset()
+    {
+    }
 }
