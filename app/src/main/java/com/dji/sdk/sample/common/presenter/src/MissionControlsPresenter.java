@@ -46,7 +46,7 @@ public class MissionControlsPresenter implements
         acceptAreaButton_ = view.acceptAreaButton();
         startMissionButton_ = view.startMissionButton();
         cancelButton_ = view.cancelButton();
-        loadingProgressAnimation_=view.loadingProgressAnimation();
+        loadingProgressAnimation_ = view.loadingProgressAnimation();
         hoverNowToggleButton_ = view.hoverNowToggleButton();
         missionState_ = missionState;
         loadingProgressAnimation_.setVisibility(View.INVISIBLE);
@@ -173,9 +173,9 @@ public class MissionControlsPresenter implements
             case VIEW_MISSION:
                 loadingProgressAnimation_.setVisibility(View.VISIBLE);
                 startMissionButton_.setEnabled(false);
-                if (!startMissionButton_.getText().equals("Demo Mode Activated. Return to the Main Menu to reset.")) {
-                    startMissionButton_.setText("Please wait...");
-                }
+                // if (!startMissionButton_.getText().equals("Demo Mode Activated. Return to the Main Menu to reset.")) {
+                //    startMissionButton_.setText("Please wait...");
+                // }
                 acceptAreaButton_.setEnabled(false);
                 cancelButton_.setEnabled(false);
                 acceptAreaButton_.setVisibility(View.GONE);
@@ -186,17 +186,17 @@ public class MissionControlsPresenter implements
 
                 final Runnable enableAfterWaypointsShowing = new Runnable() {
                     public void run() {
-                        if (!startMissionButton_.getText().equals("Demo Mode Activated. Return to the Main Menu to reset.")) {
-                            startMissionButton_.setText("Start Mission");
-                            startMissionButton_.setEnabled(true);
-                            cancelButton_.setEnabled(true);
-                            loadingProgressAnimation_.setVisibility(View.INVISIBLE);
-                        } else {
-                            startMissionButton_.setText("Demo Mode Activated. Return to the Main Menu to reset.");
-                            startMissionButton_.setEnabled(false);
-                            cancelButton_.setEnabled(true);
-                            loadingProgressAnimation_.setVisibility(View.INVISIBLE);
-                        }
+                        //if (!startMissionButton_.getText().equals("Demo Mode Activated. Return to the Main Menu to reset.")) {
+                        startMissionButton_.setText("Start Mission");
+                        startMissionButton_.setEnabled(true);
+                        cancelButton_.setEnabled(true);
+                        loadingProgressAnimation_.setVisibility(View.INVISIBLE);
+                        //} else {
+                        //   startMissionButton_.setText("Demo Mode Activated. Return to the Main Menu to reset.");
+                        // startMissionButton_.setEnabled(false);
+                        // cancelButton_.setEnabled(true);
+                        //  loadingProgressAnimation_.setVisibility(View.INVISIBLE);
+                        // }
                     }
                 };
 

@@ -970,7 +970,7 @@ public class MapPresenter implements
             public void onMapLongClick(LatLng pointOfLongClick) {
 
                 if (missionState.getCurrentMissionState() == MissionStateEnum.INITIALIZING_MAP) {
-                    startMission.setText("Demo Mode Activated. Return to the Main Menu to reset.");
+                    //startMission.setText("Demo Mode Activated. Return to the Main Menu to reset.");
                     // Called when a new location is found by the network location provider.
                     userGPSStartTime = System.nanoTime(); // reset time
                     // LatLng calgaryLatLng = new LatLng(51.0486, -114.0708);
