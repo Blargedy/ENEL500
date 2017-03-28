@@ -71,6 +71,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import static com.dji.sdk.sample.R.id.btn_accept_area;
 import static com.dji.sdk.sample.R.id.loadingProgressAnimation;
 import static com.dji.sdk.sample.R.id.map;
 import static com.dji.sdk.sample.R.id.progressBar;
@@ -109,6 +110,7 @@ public class MapPresenter implements
     private Button startMission;
     private TextView txtPercentCompleteMap;
     private Button btnFindMeNow;
+    private Button btnAcceptArea;
     // Lists
     static ArrayList<Circle> waypointCircleList;
     static ArrayList<Polyline> wayPointPolyLineList;
@@ -423,7 +425,7 @@ public class MapPresenter implements
         });
     }
 
-    public void resetPercentageText(){
+    public void resetPercentageText() {
         txtPercentCompleteMap.setText("0.00% complete.");
     }
 
@@ -531,22 +533,50 @@ public class MapPresenter implements
 
         double lati = areaSelectingMaskMidpoint.latitude; // store the latitude of the tap
         double longi = areaSelectingMaskMidpoint.longitude; // store the longitude of the tap
+
+        Double distanceFromUser = distance(lati, userMarker.getPosition().latitude, longi, userMarker.getPosition().longitude, 0d, 0d);
+        Boolean surveyAreaTooFarAwayUser = (distanceFromUser >= 500.0d);
         Polygon temp_surveyPolygon;
         if (fillColor) {
-            temp_surveyPolygon = mMap.addPolygon(new PolygonOptions()
-                    .add(new LatLng((lati - dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi + dbl_WidthSeek)), new LatLng((lati - dbl_HeightSeek), (longi + dbl_WidthSeek)))
-                    .strokeWidth(2)
-                    .strokeColor(Color.BLACK)
-                    .zIndex(3005.0f)
-                    .fillColor(Color.argb(125, 0, 0, 0))
-                    .clickable(false));
+            if (surveyAreaTooFarAwayUser) {
+                btnAcceptArea.setEnabled(false);
+                temp_surveyPolygon = mMap.addPolygon(new PolygonOptions()
+                        .add(new LatLng((lati - dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi + dbl_WidthSeek)), new LatLng((lati - dbl_HeightSeek), (longi + dbl_WidthSeek)))
+                        .strokeWidth(2)
+                        .strokeColor(Color.RED)
+                        .zIndex(3005.0f)
+                        .fillColor(Color.argb(125, 255, 0, 0))
+                        .clickable(false));
+
+            } else {
+                btnAcceptArea.setEnabled(true);
+                temp_surveyPolygon = mMap.addPolygon(new PolygonOptions()
+                        .add(new LatLng((lati - dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi + dbl_WidthSeek)), new LatLng((lati - dbl_HeightSeek), (longi + dbl_WidthSeek)))
+                        .strokeWidth(2)
+                        .strokeColor(Color.BLACK)
+                        .zIndex(3005.0f)
+                        .fillColor(Color.argb(125, 0, 0, 0))
+                        .clickable(false));
+            }
         } else {
-            temp_surveyPolygon = mMap.addPolygon(new PolygonOptions()
-                    .add(new LatLng((lati - dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi + dbl_WidthSeek)), new LatLng((lati - dbl_HeightSeek), (longi + dbl_WidthSeek)))
-                    .strokeWidth(2)
-                    .strokeColor(Color.BLACK)
-                    .zIndex(3005.0f)
-                    .clickable(false));
+            if (surveyAreaTooFarAwayUser) {
+                btnAcceptArea.setEnabled(false);
+                temp_surveyPolygon = mMap.addPolygon(new PolygonOptions()
+                        .add(new LatLng((lati - dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi + dbl_WidthSeek)), new LatLng((lati - dbl_HeightSeek), (longi + dbl_WidthSeek)))
+                        .strokeWidth(2)
+                        .strokeColor(Color.RED)
+                        .zIndex(3005.0f)
+                        .clickable(false));
+
+            } else {
+                btnAcceptArea.setEnabled(true);
+                temp_surveyPolygon = mMap.addPolygon(new PolygonOptions()
+                        .add(new LatLng((lati - dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi + dbl_WidthSeek)), new LatLng((lati - dbl_HeightSeek), (longi + dbl_WidthSeek)))
+                        .strokeWidth(2)
+                        .strokeColor(Color.BLACK)
+                        .zIndex(3005.0f)
+                        .clickable(false));
+            }
         }
         if (surveyPolygon != null) surveyPolygon.remove();
         surveyPolygon = temp_surveyPolygon;
@@ -556,6 +586,7 @@ public class MapPresenter implements
         Double widthDistance = distance(surveyPolygon.getPoints().get(0).latitude, surveyPolygon.getPoints().get(3).latitude, surveyPolygon.getPoints().get(0).longitude, surveyPolygon.getPoints().get(3).longitude, 0d, 0d);
         surveyAreaWidthText.setText("Survey Area Width: " + String.valueOf(round(widthDistance, 0)) + " m");
     }
+
 
     private void drawAreaSelector(Boolean fillColor, LatLng CenterScreen) {
 
@@ -568,21 +599,48 @@ public class MapPresenter implements
         double lati = areaSelectingMaskMidpoint.latitude; // store the latitude of the tap
         double longi = areaSelectingMaskMidpoint.longitude; // store the longitude of the tap
         Polygon temp_surveyPolygon;
+        Double distanceFromUser = distance(lati, userMarker.getPosition().latitude, longi, userMarker.getPosition().longitude, 0d, 0d);
+        Boolean surveyAreaTooFarAwayUser = (distanceFromUser >= 500.0d);
         if (fillColor) {
-            temp_surveyPolygon = mMap.addPolygon(new PolygonOptions()
-                    .add(new LatLng((lati - dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi + dbl_WidthSeek)), new LatLng((lati - dbl_HeightSeek), (longi + dbl_WidthSeek)))
-                    .strokeWidth(2)
-                    .strokeColor(Color.BLACK)
-                    .zIndex(3005.0f)
-                    .fillColor(Color.argb(125, 0, 0, 0))
-                    .clickable(false));
+            if (surveyAreaTooFarAwayUser) {
+                btnAcceptArea.setEnabled(false);
+                temp_surveyPolygon = mMap.addPolygon(new PolygonOptions()
+                        .add(new LatLng((lati - dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi + dbl_WidthSeek)), new LatLng((lati - dbl_HeightSeek), (longi + dbl_WidthSeek)))
+                        .strokeWidth(2)
+                        .strokeColor(Color.RED)
+                        .zIndex(3005.0f)
+                        .fillColor(Color.argb(125, 255, 0, 0))
+                        .clickable(false));
+
+            } else {
+                btnAcceptArea.setEnabled(true);
+                temp_surveyPolygon = mMap.addPolygon(new PolygonOptions()
+                        .add(new LatLng((lati - dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi + dbl_WidthSeek)), new LatLng((lati - dbl_HeightSeek), (longi + dbl_WidthSeek)))
+                        .strokeWidth(2)
+                        .strokeColor(Color.BLACK)
+                        .zIndex(3005.0f)
+                        .fillColor(Color.argb(125, 0, 0, 0))
+                        .clickable(false));
+            }
         } else {
-            temp_surveyPolygon = mMap.addPolygon(new PolygonOptions()
-                    .add(new LatLng((lati - dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi + dbl_WidthSeek)), new LatLng((lati - dbl_HeightSeek), (longi + dbl_WidthSeek)))
-                    .strokeWidth(2)
-                    .strokeColor(Color.BLACK)
-                    .zIndex(3005.0f)
-                    .clickable(false));
+            if (surveyAreaTooFarAwayUser) {
+                btnAcceptArea.setEnabled(false);
+                temp_surveyPolygon = mMap.addPolygon(new PolygonOptions()
+                        .add(new LatLng((lati - dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi + dbl_WidthSeek)), new LatLng((lati - dbl_HeightSeek), (longi + dbl_WidthSeek)))
+                        .strokeWidth(2)
+                        .strokeColor(Color.RED)
+                        .zIndex(3005.0f)
+                        .clickable(false));
+
+            } else {
+                btnAcceptArea.setEnabled(true);
+                temp_surveyPolygon = mMap.addPolygon(new PolygonOptions()
+                        .add(new LatLng((lati - dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi - dbl_WidthSeek)), new LatLng((lati + dbl_HeightSeek), (longi + dbl_WidthSeek)), new LatLng((lati - dbl_HeightSeek), (longi + dbl_WidthSeek)))
+                        .strokeWidth(2)
+                        .strokeColor(Color.BLACK)
+                        .zIndex(3005.0f)
+                        .clickable(false));
+            }
         }
         if (surveyPolygon != null) surveyPolygon.remove();
         surveyPolygon = temp_surveyPolygon;
@@ -856,6 +914,7 @@ public class MapPresenter implements
         startMission = mapView.startMissionButton();
         txtPercentCompleteMap = mapView.txtPercentCompleteMap();
         btnFindMeNow = mapView.btnFindMeNow();
+        btnAcceptArea = mapView.acceptAreaButton();
     }
 
     void initAndroidGPS() {

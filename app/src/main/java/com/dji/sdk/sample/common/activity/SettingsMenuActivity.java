@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.dji.sdk.sample.R;
 import com.dji.sdk.sample.common.presenter.src.MissionSettingsChangedNotifier;
@@ -35,6 +36,8 @@ public class SettingsMenuActivity extends AppCompatActivity
     private NumberPicker numPickerWayointSize_;
     private Spinner spinnerCameraISO_;
     private Spinner spinnerCameraShutter_;
+    private TextView cameraISOLabel;
+    private TextView cameraShutterLabel;
     private Spinner spinnerImageType_;
     private Button btnAcceptOK_;
     private CheckBox chkCameraAuto_;
@@ -73,7 +76,8 @@ public class SettingsMenuActivity extends AppCompatActivity
         spinnerImageType_ = (Spinner) findViewById(R.id.spinnerImageType);
         chkCameraAuto_ = (CheckBox) findViewById(R.id.chkCameraAuto);
         btnAcceptOK_ = (Button) findViewById(R.id.btnAcceptOK);
-
+        cameraShutterLabel = (TextView)findViewById(R.id.cameraShutterLabel);
+        cameraISOLabel = (TextView)findViewById(R.id.cameraISOLabel);
         btnAcceptOK_.setEnabled(true);
         btnAcceptOK_.setOnClickListener(this);
 
@@ -157,6 +161,19 @@ public class SettingsMenuActivity extends AppCompatActivity
         int imageTypeSpinnerPosition = imageTypeAdapter_.getPosition(
                 settingsManager_.getImageTypeFromSettings());
         spinnerImageType_.setSelection(imageTypeSpinnerPosition);
+
+
+            if (chkCameraAuto_.isChecked()) {
+                spinnerCameraISO_.setVisibility(View.GONE);
+                spinnerCameraShutter_.setVisibility(View.GONE);
+                cameraShutterLabel.setVisibility(View.GONE);
+                cameraISOLabel.setVisibility(View.GONE);
+            }else{
+                spinnerCameraISO_.setVisibility(View.VISIBLE);
+                spinnerCameraShutter_.setVisibility(View.VISIBLE);
+                cameraShutterLabel.setVisibility(View.VISIBLE);
+                cameraISOLabel.setVisibility(View.VISIBLE);
+            }
     }
 
     private void persistSettingsForNextSession()
@@ -204,7 +221,17 @@ public class SettingsMenuActivity extends AppCompatActivity
 
     private void changeCameraSettingsEnabledProperty(boolean arePropertiesEnabled)
     {
-        spinnerCameraISO_.setEnabled(arePropertiesEnabled);
-        spinnerCameraShutter_.setEnabled(arePropertiesEnabled);
+        if (arePropertiesEnabled) {
+            spinnerCameraISO_.setVisibility(View.VISIBLE);
+            spinnerCameraShutter_.setVisibility(View.VISIBLE);
+            cameraShutterLabel.setVisibility(View.VISIBLE);
+            cameraISOLabel.setVisibility(View.VISIBLE);
+
+        }else{
+            spinnerCameraISO_.setVisibility(View.GONE);
+            spinnerCameraShutter_.setVisibility(View.GONE);
+            cameraShutterLabel.setVisibility(View.GONE);
+            cameraISOLabel.setVisibility(View.GONE);
+        }
     }
 }

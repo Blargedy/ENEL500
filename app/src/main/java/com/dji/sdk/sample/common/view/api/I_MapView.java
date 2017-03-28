@@ -24,5 +24,6 @@ public interface I_MapView
     Button startMissionButton();
     TextView txtPercentCompleteMap();
     Button btnFindMeNow();
+    Button acceptAreaButton();
 
 }

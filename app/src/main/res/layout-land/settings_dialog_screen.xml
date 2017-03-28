@@ -187,6 +187,15 @@
         </LinearLayout>
     </LinearLayout>
 
+    <CheckBox
+        android:id="@+id/chkCameraAuto"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center_vertical|center_horizontal|center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Camera Auto" />
+
     <TextView
         android:id="@+id/cameraISOLabel"
         android:layout_width="match_parent"
@@ -244,15 +253,6 @@
         android:layout_weight="1"
         android:hapticFeedbackEnabled="true"
         android:textAlignment="center" />
-
-    <CheckBox
-        android:id="@+id/chkCameraAuto"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_gravity="center_vertical|center_horizontal|center"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="Camera Auto" />
 
     <Button
         android:id="@+id/btnAcceptOK"
