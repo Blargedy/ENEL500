@@ -44,12 +44,17 @@
         android:textAlignment="center"
         android:textSize="18sp" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".25"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_weight="2">
 
         <TextView
             android:id="@+id/txt_ipAddressLabel"
@@ -111,16 +116,5 @@
         android:textAlignment="center"
         android:textSize="18sp"
         android:layout_weight="1" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="4"
-        android:visibility="visible"
-        app:srcCompat="@drawable/drone_marker" />
 
 </LinearLayout>

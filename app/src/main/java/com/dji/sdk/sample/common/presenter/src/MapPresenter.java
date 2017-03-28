@@ -435,6 +435,9 @@ public class MapPresenter implements
         if (waypointCircleList != null) waypointCircleList.clear();
         if (wayPointPolyLineList != null) wayPointPolyLineList.clear();
         mMap.clear();
+        if (usingCachedMap && offlineOverlay!=null){
+            offlineOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(offLineTileProvider).zIndex(0).transparency(0.0f));
+        }
         if (lastKnownUserLocation == null) {
             drawUserUpdate(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude));
             drawDroneUpdate();
@@ -690,7 +693,7 @@ public class MapPresenter implements
 
     private void initCachedMapChecker() {
         // check if there is no internet, if so - switch to cached map
-        new CountDownTimer(Long.MAX_VALUE, 10000) {
+        new CountDownTimer(Long.MAX_VALUE, 3000) {
             public void onTick(long millisUntilFinished) {
                 if (offLineTileProvider == null) {
                     return;
@@ -707,9 +710,9 @@ public class MapPresenter implements
                     mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
                     if (mMap.getCameraPosition().zoom > 17.0f) {
                         if (userMarker != null) {
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude), 14.0f));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude), 12.0f));
                         } else {
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.0486, -114.0708), 14.0f));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.0486, -114.0708), 12.0f));
                         }
                         mMap.setMaxZoomPreference(17.0f);
                     }
@@ -721,9 +724,9 @@ public class MapPresenter implements
                     usingCachedMap = false;
                     mMap.setMaxZoomPreference(25.0f);
                     if (userMarker != null) {
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude), 14.0f));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude), 12.0f));
                     } else {
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.0486, -114.0708), 14.0f));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.0486, -114.0708), 12.0f));
                     }
                     Log.d("MapPresenter", "Internet Connection Found. Switching back to Google Hybrid Map");
                     if (offlineOverlay != null) offlineOverlay.remove();
