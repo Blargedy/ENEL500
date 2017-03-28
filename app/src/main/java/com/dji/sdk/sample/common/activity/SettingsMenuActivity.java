@@ -1,6 +1,8 @@
 package com.dji.sdk.sample.common.activity;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -52,7 +54,11 @@ public class SettingsMenuActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_dialog_screen);
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        if (isLargeDevice(getBaseContext())) {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        } else {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
 
         missionSettingsChangedNotifier_ = new MissionSettingsChangedNotifier(this);
         settingsManager_ = new ApplicationSettingsManager(this);
@@ -234,4 +240,22 @@ public class SettingsMenuActivity extends AppCompatActivity
             cameraISOLabel.setVisibility(View.GONE);
         }
     }
+
+
+    private boolean isLargeDevice(Context context) {
+        int screenLayout = context.getResources().getConfiguration().screenLayout;
+        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+
+        switch (screenLayout) {
+            case Configuration.SCREENLAYOUT_SIZE_SMALL:
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                return false;
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
 }

@@ -33,13 +33,13 @@
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".25" />
+        android:layout_weight=".20" />
 
     <TextView
         android:id="@+id/txt_command"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.5"
+        android:layout_weight="1"
         android:text="java -jar HydraImageServer.jar"
         android:textAlignment="center"
         android:textSize="18sp" />
@@ -49,7 +49,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_weight="1.5">
 
         <TextView
             android:id="@+id/txt_ipAddressLabel"
@@ -108,19 +108,19 @@
         android:id="@+id/txt_connectionStatus"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
         android:textAlignment="center"
-        android:textSize="18sp"
-        android:layout_weight="1" />
+        android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/imageView"
+        android:layout_width="387dp"
+        android:layout_height="200dp"
+        android:background="@drawable/drone_marker" />
+
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="4"
-        android:visibility="visible"
-        app:srcCompat="@drawable/drone_marker" />
+
+        android:layout_height="0dp" />
 
 </LinearLayout>

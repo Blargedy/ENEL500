@@ -1,6 +1,8 @@
 package com.dji.sdk.sample.common.activity;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +29,11 @@ public class MainMenuActivity extends AppCompatActivity
         sendLogsToFile();
 
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        if (isLargeDevice(getBaseContext())) {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        } else {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
 
         Log.d("MapPresenter", "BEFORE PERMISSIONS");
         permissionRequester_ = new UserPermissionRequester();
@@ -78,6 +84,23 @@ public class MainMenuActivity extends AppCompatActivity
             process = Runtime.getRuntime().exec("logcat -f " + path);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+
+    private boolean isLargeDevice(Context context) {
+        int screenLayout = context.getResources().getConfiguration().screenLayout;
+        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+
+        switch (screenLayout) {
+            case Configuration.SCREENLAYOUT_SIZE_SMALL:
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                return false;
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                return true;
+            default:
+                return false;
         }
     }
 }

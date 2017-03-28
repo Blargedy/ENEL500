@@ -5,8 +5,10 @@ package com.dji.sdk.sample.common.activity;
  */
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -32,8 +34,11 @@ public class SlashScreenActivity extends Activity {
         super.onCreate(icicle);
         setContentView(R.layout.splash_screen);
 
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        if (isLargeDevice(getBaseContext())) {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        } else {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
 
         ucLogo = (ImageView) findViewById(R.id.imageucLogo);
         lockheedLogo = (ImageView) findViewById(R.id.imagelockheedLogo);
@@ -76,5 +81,21 @@ public class SlashScreenActivity extends Activity {
 
     }
 
+
+    private boolean isLargeDevice(Context context) {
+        int screenLayout = context.getResources().getConfiguration().screenLayout;
+        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+
+        switch (screenLayout) {
+            case Configuration.SCREENLAYOUT_SIZE_SMALL:
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                return false;
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                return true;
+            default:
+                return false;
+        }
+    }
 
 }
