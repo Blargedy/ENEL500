@@ -1127,7 +1127,9 @@ public class MapPresenter implements
 
     public void pbarsShow() {
         surveyAreaHeightBar.setVisibility(View.VISIBLE);
+        surveyAreaHeightBar.setEnabled(true);
         surveyAreaWidthBar.setVisibility(View.VISIBLE);
+        surveyAreaWidthBar.setEnabled(true);
         surveyAreaHeightText.setVisibility(View.VISIBLE);
         surveyAreaWidthText.setVisibility(View.VISIBLE);
     }

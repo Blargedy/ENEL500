@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.View;
 
 import com.dji.sdk.sample.common.entity.GeneratedMissionModel;
 import com.dji.sdk.sample.common.entity.InitialMissionModel;
 import com.dji.sdk.sample.common.entity.MissionStateEntity;
 import com.dji.sdk.sample.common.entity.MissionStateEnum;
-import com.dji.sdk.sample.common.mission.api.I_MissionStateResetter;
 import com.dji.sdk.sample.common.values.MissionBoundary;
 import com.dji.sdk.sample.common.utility.BroadcastIntentNames;
 
@@ -26,7 +24,6 @@ public class MissionMapDisplayPresenter {
     private GeneratedMissionModel generatedMissionModel_;
     private BroadcastReceiver receiver_;
     private MapPresenter mapPresenter_;
-    private MissionStateEnum stateBeforeChange;
 
     public MissionMapDisplayPresenter(
             Context context,
@@ -38,7 +35,6 @@ public class MissionMapDisplayPresenter {
         initialMissionModel_ = initialMissionModel;
         generatedMissionModel_ = generatedMissionModel;
         mapPresenter_ = mapPresenter;
-        stateBeforeChange = missionState.getCurrentMissionState();
         registerMissionStateChangedReceiver(context);
     }
 
@@ -58,20 +54,15 @@ public class MissionMapDisplayPresenter {
 
     private void missionStateChanged() {
 
-        MissionStateEnum currentMissionState = missionState_.getCurrentMissionState();
-
-        switch (currentMissionState) {
+        switch (missionState_.getCurrentMissionState()) {
             case INITIALIZING_MAP:
                 mapPresenter_.resetPercentageText();
                 break;
             case SELECT_AREA:
                 mapPresenter_.resetPercentageText();
                 mapPresenter_.pbarsShow();
-                if (stateBeforeChange == MissionStateEnum.VIEW_MISSION) {
-                    generatedMissionModel_.clearWaypointMissions();
-                    mapPresenter_.clearMap();
-                    mapPresenter_.resetPercentageText();
-                }
+                generatedMissionModel_.clearWaypointMissions();
+                mapPresenter_.clearMap();
                 break;
             case GENERATE_MISSION_BOUNDARY:
                 mapPresenter_.resetPercentageText();
@@ -94,21 +85,8 @@ public class MissionMapDisplayPresenter {
             case MISSION_EXECUTING:
                 mapPresenter_.pbarsHide();
                 break;
-            case GO_HOME:
-                mapPresenter_.resetPercentageText();
-                mapPresenter_.clearMap();
-                break;
-            case GO_HOME_PAUSED:
-                mapPresenter_.resetPercentageText();
-                mapPresenter_.clearMap();
-                break;
-            case PAUSE_GO_HOME:
-                mapPresenter_.resetPercentageText();
-                mapPresenter_.clearMap();
-                break;
             default:
                 break;
         }
-        this.stateBeforeChange = currentMissionState;
     }
 }
