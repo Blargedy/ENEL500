@@ -19,31 +19,33 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/altitudeLabel"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="Altitude (m):              "
+                android:text="Altitude (m): "
+                android:textAlignment="textEnd"
                 android:textColor="@color/white" />
 
             <NumberPicker
                 android:id="@+id/numPickerAltitude"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:theme="@style/AppTheme" />
+                android:theme="@style/Theme.AppCompat" />
 
         </LinearLayout>
     </LinearLayout>
@@ -56,11 +58,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal">
@@ -71,7 +74,8 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="Flight speed (m/s):              "
+                android:text="Flight speed (m/s): "
+                android:textAlignment="textEnd"
                 android:textColor="@color/white" />
 
             <NumberPicker
@@ -91,16 +95,14 @@
         android:layout_weight="1" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -109,7 +111,8 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="Image Overlap (%):   "
+                android:text="Image Overlap (%): "
+                android:textAlignment="textEnd"
                 android:textColor="@color/white" />
 
             <NumberPicker
@@ -129,16 +132,16 @@
         android:layout_weight="1" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="end"
             android:orientation="horizontal">
 
             <TextView
@@ -148,7 +151,8 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:text="Swath Overlap (%):   "
+                android:text="Swath Overlap (%): "
+                android:textAlignment="textEnd"
                 android:textColor="@color/white" />
 
             <NumberPicker
@@ -168,10 +172,11 @@
         android:layout_weight="1" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -185,7 +190,8 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="Waypoint size on map (m):              "
+                android:text="Waypoint size on map (m): "
+                android:textAlignment="textEnd"
                 android:textColor="@color/white" />
 
             <NumberPicker
@@ -194,7 +200,8 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:clickable="true" />
+                android:clickable="true"
+                android:textAlignment="textStart" />
 
         </LinearLayout>
     </LinearLayout>
