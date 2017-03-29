@@ -247,6 +247,7 @@
         android:layout_gravity="center"
         android:layout_weight="1"
         android:clickable="true"
+        android:paddingLeft="10dp"
         android:text="Camera ISO"
         android:textColor="@color/white" />
 
@@ -265,10 +266,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
+        android:layout_weight="1"
         android:clickable="true"
+        android:paddingLeft="10dp"
         android:text="Camera Shutter"
-        android:textColor="@color/white"
-        android:layout_weight="1" />
+        android:textColor="@color/white" />
 
     <Spinner
         android:id="@+id/spinnerCameraShutter"
@@ -284,10 +286,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
+        android:layout_weight="1"
         android:clickable="true"
+        android:paddingLeft="10dp"
         android:text="Image Type"
-        android:textColor="@color/white"
-        android:layout_weight="1" />
+        android:textColor="@color/white" />
 
     <Spinner
         android:id="@+id/spinnerImageType"
