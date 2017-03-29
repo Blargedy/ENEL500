@@ -264,6 +264,9 @@ public class MapPresenter implements
                     .fillColor(Color.argb(255, 255, 0, 0)))); // red circles
         }
         numWaypointsTotal = waypoints.size(); // do not use polyline size (1 extra)
+        if (waypoints.size() != waypointCircleList.size()) {
+            Log.e("MapPresenter", "Error in displayWayPoints, waypoints has different size than wayPointCircleList! BAD");
+        }
 
         // Add line between each waypoint
         wayPointPolyLineList = new ArrayList<Polyline>();
@@ -334,38 +337,33 @@ public class MapPresenter implements
         // Make the waypoint circles
         numWaypointsCompleted++;
         zlayer++;
-        if (waypointIndex == (waypointCircleList.size() - 2)) { // if second last print last as well
-            mMap.addCircle(new CircleOptions()
-                    .center(new LatLng(waypointCircleList.get(waypointIndex + 1).getCenter().latitude, waypointCircleList.get(waypointIndex + 1).getCenter().longitude))
-                    .radius(wayPointCircleRadius + 3.0d)
-                    .strokeWidth(3)
-                    .zIndex(zlayer)
-                    .strokeColor(Color.BLACK)
-                    .clickable(false)
-                    .fillColor(Color.argb(255, 0, 255, 0))); // green for completed waypoint
-        }
-        if (waypointIndex == 0) {
-            mMap.addCircle(new CircleOptions()
-                    .center(new LatLng(waypointCircleList.get(waypointIndex).getCenter().latitude, waypointCircleList.get(waypointIndex).getCenter().longitude))
-                    .radius(wayPointCircleRadius + 3.0d)
-                    .strokeWidth(3)
-                    .zIndex(zlayer)
-                    .strokeColor(Color.BLACK)
-                    .clickable(false)
-                    .fillColor(Color.argb(255, 0, 255, 0))); // green for completed waypoint
-        }
-        mMap.addCircle(new CircleOptions()
-                .center(new LatLng(waypointCircleList.get(waypointIndex).getCenter().latitude, waypointCircleList.get(waypointIndex).getCenter().longitude))
-                .radius(wayPointCircleRadius)
-                .strokeWidth(3)
-                .zIndex(zlayer)
-                .strokeColor(Color.BLACK)
-                .clickable(false)
-                .fillColor(Color.argb(255, 0, 255, 0))); // green for completed waypoint
+        if (waypointCircleList.isEmpty()) {
+            Log.e("MapPresenter", "Error in reachedWaypointAtIndex number: " + waypointIndex);
+        } else {
+            if (waypointIndex == (waypointCircleList.size() - 1) || waypointIndex == 0) { // first or last (larger circle)
+                mMap.addCircle(new CircleOptions()
+                        .center(new LatLng(waypointCircleList.get(waypointIndex).getCenter().latitude, waypointCircleList.get(waypointIndex).getCenter().longitude))
+                        .radius(wayPointCircleRadius + 3.0d)
+                        .strokeWidth(3)
+                        .zIndex(zlayer)
+                        .strokeColor(Color.BLACK)
+                        .clickable(false)
+                        .fillColor(Color.argb(255, 0, 255, 0))); // green for completed waypoint
+            } else { // any middle waypoint
+                mMap.addCircle(new CircleOptions()
+                        .center(new LatLng(waypointCircleList.get(waypointIndex).getCenter().latitude, waypointCircleList.get(waypointIndex).getCenter().longitude))
+                        .radius(wayPointCircleRadius)
+                        .strokeWidth(3)
+                        .zIndex(zlayer)
+                        .strokeColor(Color.BLACK)
+                        .clickable(false)
+                        .fillColor(Color.argb(255, 0, 255, 0))); // green for completed waypoint
 
-        percentageCompletion = (int) (100.0d * numWaypointsCompleted / numWaypointsTotal);
-        surveyProgressBar.setProgress((int) percentageCompletion);
-        txtPercentCompleteMap.setText(percentageCompletion + "% complete.");
+                percentageCompletion = (int) (100.0d * numWaypointsCompleted / numWaypointsTotal);
+                surveyProgressBar.setProgress((int) percentageCompletion);
+                txtPercentCompleteMap.setText(percentageCompletion + "% complete.");
+            }
+        }
     }
 
     void initSurveyBox() {
@@ -435,7 +433,7 @@ public class MapPresenter implements
         if (waypointCircleList != null) waypointCircleList.clear();
         if (wayPointPolyLineList != null) wayPointPolyLineList.clear();
         mMap.clear();
-        if (usingCachedMap && offlineOverlay!=null){
+        if (usingCachedMap && offlineOverlay != null) {
             offlineOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(offLineTileProvider).zIndex(0).transparency(0.0f));
         }
         if (lastKnownUserLocation == null) {
