@@ -41,7 +41,8 @@ public class DJISampleApplication extends Application {
     }
 
     public static boolean isAircraftConnected() {
-        return getProductInstance() != null && getProductInstance() instanceof DJIAircraft;
+        return getProductInstance() != null && getProductInstance() instanceof DJIAircraft
+                && mProduct.isConnected();
     }
 
     public static synchronized DJIAircraft getAircraftInstance() {
