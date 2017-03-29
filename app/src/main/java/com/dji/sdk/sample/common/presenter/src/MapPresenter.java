@@ -335,7 +335,7 @@ public class MapPresenter implements
         wayPointCircleRadius = myASM.getWaypointSizeFromSettings();
         Log.d("MapPresenter", "Waypoint Reached: " + waypointIndex);
         // Make the waypoint circles
-        numWaypointsCompleted++;
+
         zlayer++;
         if (waypointCircleList.isEmpty()) {
             Log.e("MapPresenter", "Error in reachedWaypointAtIndex number: " + waypointIndex);
@@ -359,10 +359,12 @@ public class MapPresenter implements
                         .clickable(false)
                         .fillColor(Color.argb(255, 0, 255, 0))); // green for completed waypoint
 
-                percentageCompletion = (int) (100.0d * numWaypointsCompleted / numWaypointsTotal);
-                surveyProgressBar.setProgress((int) percentageCompletion);
-                txtPercentCompleteMap.setText(percentageCompletion + "% complete.");
+
             }
+            numWaypointsCompleted++;
+            percentageCompletion = (int) (100.0d * numWaypointsCompleted / numWaypointsTotal);
+            surveyProgressBar.setProgress((int) percentageCompletion);
+            txtPercentCompleteMap.setText(percentageCompletion + "% complete.");
         }
     }
 
@@ -993,7 +995,7 @@ public class MapPresenter implements
                                             @Override
                                             public void onClick(View view) {
                                                 if (userMarker == null) return; // can't find... user marker not showing on map
-                                                CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude + 0.001), 18.0f);
+                                                CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(userMarker.getPosition().latitude, userMarker.getPosition().longitude), 17.0f);
                                                 mMap.animateCamera(cu, 3000, MapPresenter.this);
 
 

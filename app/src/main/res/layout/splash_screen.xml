@@ -13,10 +13,10 @@
 
     <ImageView
         android:id="@+id/imagelockheedLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="344dp"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
         android:layout_weight="50"
-        android:src="@drawable/lockheedlogo"
+        android:src="@drawable/uofcenglogo"
         android:visibility="gone" />
 
     <ImageView
